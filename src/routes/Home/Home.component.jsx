@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import './App.styles.scss';
-import {Card} from './components/Card/Card.component.jsx';
-import {SearchBox} from './components/SearchBox/SearchBox.component.jsx';
+import { useState } from 'react';
+import './Home.styles.scss';
+import { SearchBox } from '../../components/SearchBox/SearchBox.component.jsx';
+import { Card } from '../../components/Card/Card.component.jsx';
 
- export const App = () => {
+ export const Home = () => {
 
   const data = [
     {

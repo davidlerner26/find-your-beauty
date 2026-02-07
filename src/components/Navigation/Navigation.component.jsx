@@ -1,4 +1,5 @@
-import { NavLink, Outlet } from "react-router"
+import { NavLink, Outlet } from "react-router";
+import './navigation.styles.scss';
 
 export const Navigation = () => {
     return (

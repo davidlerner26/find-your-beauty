@@ -1,4 +1,4 @@
-import './Card.styles.scss';
+import './card.styles.scss';
 
 export const Card = ({name, location,image}) => {
     return (

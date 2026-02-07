@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import './Home.styles.scss';
-import { SearchBox } from '../../components/SearchBox/SearchBox.component.jsx';
-import { Card } from '../../components/Card/Card.component.jsx';
+import './home.styles.scss';
+import { SearchBox } from '../../components/search-box/search-box.component.jsx';
+import { Card } from '../../components/card/card.component.jsx';
 
  export const Home = () => {
 

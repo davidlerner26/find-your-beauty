@@ -1,20 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.scss'
-import { BrowserRouter,Routes,Route } from "react-router";
-import { Navigation } from './components/navigation/navigation.component';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router';
+import { Navigation } from './components/Navigation/Navigation.component';
+import './index.scss';
 import { Home } from './routes/home/home.component';
-import { Profile } from './routes/profile/profile.component';
+import { SignIn } from './routes/sign-in/sign-in.component';
+import { SignUp } from './routes/sign-up/sign-up.component';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigation />}>
-          <Route index element={<Home/>}/>
-          <Route path='profile' element={<Profile/>}/>
+          <Route index element={<Home />} />
+          <Route path="sign-in" element={<SignIn />} />
+          <Route path="sign-up" element={<SignUp />} />
         </Route>
       </Routes>
     </BrowserRouter>
-  </StrictMode>
-)
+  </StrictMode>,
+);

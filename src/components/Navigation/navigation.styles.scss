@@ -1,0 +1,13 @@
+nav {
+  padding: 2rem;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+
+  NavLink {
+    padding: 0 1rem;
+  }
+}

@@ -1,6 +1,7 @@
 import './search-box.styles.scss';
 
-export const SearchBox = ({ onInputChange }) => {
+export const SearchBox = () => {
+  const onInputChange = () => {};
   const onButtonSearchClick = () => {};
 
   return (

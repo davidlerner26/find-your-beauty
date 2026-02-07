@@ -6,9 +6,20 @@
   align-items: center;
   justify-content: center;
   &-content {
-    max-width: 50vw;
+    max-width: 60vw;
     h3 {
       padding-top: 1rem;
+    }
+    &-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .home-button {
+      width: 40vw;
+      margin-top: 2rem;
+      height: 45px;
     }
   }
 }

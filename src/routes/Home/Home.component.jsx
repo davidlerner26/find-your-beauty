@@ -46,7 +46,7 @@ export const Home = () => {
   };
 
   return (
-    <p>home</p>
+    <p></p>
     // <div className='find-your-beauty'>
     //   <SearchBox onInputChange={onInputChange} />
     //   <div className='find-your-beauty__container'>

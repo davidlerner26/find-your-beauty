@@ -1,13 +1,18 @@
-nav {
-  padding: 2rem;
+.nav {
+  padding: 0 2rem;
   width: 100vw;
+  height: 4rem;
   position: fixed;
   top: 0;
   left: 0;
   display: flex;
   justify-content: space-between;
-
-  NavLink {
+  align-items: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  &-logo {
+    width: 3rem;
+  }
+  &-item {
     padding: 0 1rem;
   }
 }

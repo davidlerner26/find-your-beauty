@@ -1,9 +1,20 @@
-input {
-  display: block;
-  margin: 20px auto;
-  min-width: 250px;
-  height: 40px;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 16px;
+.input-field {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  input {
+    display: block;
+    min-width: 40vw;
+    height: 40px;
+    border-radius: 4px 0 0 4px;
+    padding: 1rem;
+    font-size: 16px;
+    border-right: 0;
+    border-width: 1px;
+  }
+  button {
+    min-width: 100px;
+    height: 40px;
+    border-radius: 0 4px 4px 0;
+  }
 }

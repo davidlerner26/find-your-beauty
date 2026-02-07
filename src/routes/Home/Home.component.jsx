@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './home.styles.scss';
 import { SearchBox } from '../../components/search-box/search-box.component';
-import { Card } from '../../components/card/card.component';
 
 export const Home = () => {
   const data = [
@@ -23,12 +22,6 @@ export const Home = () => {
       image:
         'https://lh3.googleusercontent.com/p/AF1QipPYQq4qgOnW7icCofPpr6BwdWqpT56pRAyYo2Uz=w408-h544-k-no',
     },
-    {
-      name: 'Concept Prime Hair',
-      location: 'Botafogo | Rio de Janeiro',
-      image:
-        'https://lh3.googleusercontent.com/p/AF1QipOZQyyymJXoPTbFF9UIDd23TcfMk_Xax3mSUymN=w408-h725-k-no',
-    },
   ];
 
   const [filteredData, setFilteredData] = useState(data);
@@ -46,16 +39,14 @@ export const Home = () => {
   };
 
   return (
-    <p></p>
-    // <div className='find-your-beauty'>
-    //   <SearchBox onInputChange={onInputChange} />
-    //   <div className='find-your-beauty__container'>
-    //     {
-    //     filteredData.map(({name, location, image}, idx) =>{
-    //     return <Card key={idx} image={image} name={name} location={location}/>
-    //     })
-    //   }
-    //   </div>
-    // </div>
+    <>
+      <div className="home">
+        <div className="home-content">
+          <h1>Find makeup artists and hairstylists near you.</h1>
+          <h3>Discover beauty professionals in your area.</h3>
+          <SearchBox onInputChange={onInputChange} />
+        </div>
+      </div>
+    </>
   );
 };

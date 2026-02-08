@@ -1,6 +1,7 @@
 import './home.styles.scss';
 import { SearchBox } from '../../components/search-box/search-box.component';
 import { Card } from '../../components/card/card.component';
+import Button from '@mui/material/Button';
 
 export const Home = () => {
   const cards = [
@@ -32,9 +33,14 @@ export const Home = () => {
               return <Card key={idx} name={name} icon={icon} />;
             })}
           </div>
-          <button className="home-button" onClick={findProfessionalsNearMe}>
+          <Button
+            color="secondary"
+            variant="contained"
+            size="large"
+            onClick={findProfessionalsNearMe}
+          >
             Encontrar profissionais perto de mim
-          </button>
+          </Button>
         </div>
       </div>
     </>

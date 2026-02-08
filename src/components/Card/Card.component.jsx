@@ -1,26 +1,32 @@
 import './card.styles.scss';
-import { FaHome } from 'react-icons/fa';
-import { WiDayCloudy } from 'react-icons/wi';
-import { DiApple } from 'react-icons/di';
+import BrushIcon from '@mui/icons-material/Brush';
+import HomeIcon from '@mui/icons-material/Home';
+import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import Button from '@mui/material/Button';
 
 export const Card = ({ name, icon }) => {
   const renderIcon = () => {
     switch (icon) {
       case 'home':
-        return <FaHome />;
+        return <HomeIcon />;
       case 'cloud':
-        return <WiDayCloudy />;
+        return <BrushIcon />;
       case 'apple':
-        return <DiApple />;
+        return <WatchLaterIcon />;
       default:
         throw new Error('Icon does not exist.');
     }
   };
 
   return (
-    <div className="card">
-      {renderIcon()}
-      <p>{name}</p>
-    </div>
+    <Button
+      className="card"
+      color="secondary"
+      variant="contained"
+      size="large"
+      startIcon={renderIcon()}
+    >
+      {name}
+    </Button>
   );
 };

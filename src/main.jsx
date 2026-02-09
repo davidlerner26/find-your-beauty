@@ -6,6 +6,7 @@ import './index.scss';
 import { Home } from './routes/home/home.component';
 import { SignIn } from './routes/sign-in/sign-in.component';
 import { SignUp } from './routes/sign-up/sign-up.component';
+import './utils/firebase.utils';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

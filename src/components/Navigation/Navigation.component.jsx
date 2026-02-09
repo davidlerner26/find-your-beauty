@@ -11,10 +11,10 @@ export const Navigation = () => {
         </NavLink>
       </div>
       <div>
-        <NavLink className="nav-item" to="/">
+        <NavLink className="nav-item" to="/sign-in">
           Sign In
         </NavLink>
-        <NavLink className="nav-item" to="/">
+        <NavLink className="nav-item" to="/sign-up">
           Create an account
         </NavLink>
       </div>

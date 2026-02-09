@@ -39,7 +39,7 @@ export const Home = () => {
             size="large"
             onClick={findProfessionalsNearMe}
           >
-            Encontrar profissionais perto de mim
+            Find professionals near me
           </Button>
         </div>
       </div>

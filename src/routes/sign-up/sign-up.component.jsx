@@ -1,14 +1,10 @@
+import { Button } from '@mui/material';
 import './sign-up.styles.scss';
 
 export const SignUp = () => {
-  const onCreateAccount = () => {};
   return (
-    <>
-      <h2>Create an account</h2>
-      <form onSubmit={onCreateAccount}>
-        {/* <input name='name' value={} /> */}
-        <button type="submit">Create</button>
-      </form>
-    </>
+    <section className="sign-up">
+      <Button variant="contained">Sign up with Google</Button>
+    </section>
   );
 };

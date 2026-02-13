@@ -3,10 +3,8 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
-  onAuthStateChanged,
+  signOut,
 } from 'firebase/auth';
-import { useContext } from 'react';
-import { UserContext } from '../contexts/user-context';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBGcq0sRf1RW7h4v9M-ZU-hR2RYstQnUzM',
@@ -21,7 +19,7 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth();
+export const auth = getAuth();
 
 export const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
@@ -41,7 +39,4 @@ export const signInWithGoogle = () => {
     });
 };
 
-onAuthStateChanged(auth, (user) => {
-  const { setIsUserLoggedIn } = useContext(UserContext);
-  setIsUserLoggedIn(user);
-});
+export const signOutUser = async () => await signOut(auth);

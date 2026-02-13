@@ -7,17 +7,20 @@ import { Home } from './routes/home/home.component';
 import { SignIn } from './routes/sign-in/sign-in.component';
 import { SignUp } from './routes/sign-up/sign-up.component';
 import './utils/firebase.utils';
+import { UserProvider } from './contexts/user.context';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Wrapper />}>
-          <Route index element={<Home />} />
-          <Route path="sign-in" element={<SignIn />} />
-          <Route path="sign-up" element={<SignUp />} />
-        </Route>
-      </Routes>
+      <UserProvider>
+        <Routes>
+          <Route path="/" element={<Wrapper />}>
+            <Route index element={<Home />} />
+            <Route path="sign-in" element={<SignIn />} />
+            <Route path="sign-up" element={<SignUp />} />
+          </Route>
+        </Routes>
+      </UserProvider>
     </BrowserRouter>
   </StrictMode>,
 );

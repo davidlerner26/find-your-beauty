@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   signOut,
 } from 'firebase/auth';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBGcq0sRf1RW7h4v9M-ZU-hR2RYstQnUzM',
@@ -16,9 +17,12 @@ const firebaseConfig = {
   measurementId: 'G-RJ4BYTFWDV',
 };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
 
 const provider = new GoogleAuthProvider();
+
 export const auth = getAuth();
 
 export const signInWithGoogle = () => {
@@ -40,3 +44,11 @@ export const signInWithGoogle = () => {
 };
 
 export const signOutUser = async () => await signOut(auth);
+
+export const createAccount = async ({ name, email }) => {
+  try {
+    await addDoc(collection(db, 'users'), { name, email });
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+};

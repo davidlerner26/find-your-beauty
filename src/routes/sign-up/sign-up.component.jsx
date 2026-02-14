@@ -18,7 +18,7 @@ export const SignUp = () => {
   return (
     <section className="sign-up">
       <form onSubmit={handleSubmit((data) => createAccount(data))}>
-        <FormControl sx={{ m: 1 }}>
+        <FormControl>
           <InputLabel htmlFor="name">Name</InputLabel>
           <OutlinedInput
             name="name"
@@ -30,7 +30,7 @@ export const SignUp = () => {
         </FormControl>
         <p>{errors?.name?.message}</p>
 
-        <FormControl sx={{ m: 1 }}>
+        <FormControl>
           <InputLabel htmlFor="email">Email</InputLabel>
           <OutlinedInput
             type="email"

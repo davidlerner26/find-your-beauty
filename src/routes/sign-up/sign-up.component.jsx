@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import './sign-up.styles.scss';
 import { useForm } from 'react-hook-form';
 import { createAccount } from '../../utils/firebase.utils';
@@ -18,20 +18,31 @@ export const SignUp = () => {
   return (
     <section className="sign-up">
       <form onSubmit={handleSubmit((data) => createAccount(data))}>
-        <input
-          name="name"
-          placeholder="Name"
-          {...register('name', { required: 'Name is required' })}
-        />
+        <FormControl sx={{ m: 1 }}>
+          <InputLabel htmlFor="name">Name</InputLabel>
+          <OutlinedInput
+            name="name"
+            placeholder="Name"
+            {...register('name', { required: 'Name is required' })}
+            id="name"
+            label="Amount"
+          />
+        </FormControl>
         <p>{errors?.name?.message}</p>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          {...register('email', { required: 'Email is required' })}
-        />
-        <p>{errors?.name?.message}</p>
+        <FormControl sx={{ m: 1 }}>
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <OutlinedInput
+            type="email"
+            name="email"
+            placeholder="Email"
+            {...register('email', { required: 'Email is required' })}
+            id="email"
+            label="Amount"
+          />
+        </FormControl>
+        <p>{errors?.email?.message}</p>
+
         <Button variant="contained" type="submit">
           Create an account
         </Button>

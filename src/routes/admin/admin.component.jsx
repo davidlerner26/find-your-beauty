@@ -2,38 +2,36 @@ import { Alert } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import './admin.styles.scss';
 import { useState } from 'react';
-import { useReducer } from 'react';
-import { listReducer } from '../../reducers/list.reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addSchedule,
+  removeSchedule,
+} from '../../store/schedules/schedules.action';
+import { addAlert } from '../../store/alerts/alerts.action';
+import { selectSchedules } from '../../store/schedules/schedules.selector';
+import { selectAlerts } from '../../store/alerts/alerts.selector';
 
 export const Admin = () => {
-  const [alerts, setAlerts] = useState([]);
+  const schedules = useSelector(selectSchedules);
+  const alerts = useSelector(selectAlerts);
+  const dispatch = useDispatch();
+
   const [input, setInput] = useState('');
-  const initialList = [{ name: 'Isadora' }, { name: 'David' }];
-  const [list, dispatch] = useReducer(listReducer, initialList);
 
   const approve = (item) => {
-    removeItem(item, 'approved');
+    dispatch(removeSchedule(item));
+    dispatch(addAlert(`${item.name} was approved successfuly.`));
   };
 
   const disapprove = (item) => {
-    removeItem(item, 'deleted');
-  };
-
-  const removeItem = (item, action) => {
-    setAlerts((prev) => [...prev, `${item.name} was ${action} successfuly.`]);
-    dispatch({
-      type: 'remove',
-      item,
-    });
+    dispatch(removeSchedule(item));
+    dispatch(addAlert(`${item.name} was disapproved successfuly.`));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (input !== '') {
-      dispatch({
-        type: 'add',
-        input,
-      });
+      dispatch(addSchedule(input));
     }
   };
 
@@ -62,7 +60,7 @@ export const Admin = () => {
       </form>
 
       <ul>
-        {list.map((item, idx) => {
+        {schedules?.map((item, idx) => {
           return (
             <li key={idx}>
               <p>{item.name}</p>

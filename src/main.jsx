@@ -6,23 +6,27 @@ import './index.scss';
 import { Home } from './routes/home/home.component';
 import { SignIn } from './routes/sign-in/sign-in.component';
 import { SignUp } from './routes/sign-up/sign-up.component';
-import './utils/firebase.utils';
+import './utils/firebase/firebase.utils';
 import { UserProvider } from './contexts/user.context';
 import { Admin } from './routes/admin/admin.component';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <UserProvider>
-        <Routes>
-          <Route path="/" element={<Wrapper />}>
-            <Route index element={<Home />} />
-            <Route path="sign-in" element={<SignIn />} />
-            <Route path="sign-up" element={<SignUp />} />
-            <Route path="admin" element={<Admin />} />
-          </Route>
-        </Routes>
-      </UserProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <UserProvider>
+          <Routes>
+            <Route path="/" element={<Wrapper />}>
+              <Route index element={<Home />} />
+              <Route path="sign-in" element={<SignIn />} />
+              <Route path="sign-up" element={<SignUp />} />
+              <Route path="admin" element={<Admin />} />
+            </Route>
+          </Routes>
+        </UserProvider>
+      </BrowserRouter>
+    </Provider>
   </StrictMode>,
 );

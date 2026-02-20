@@ -1,6 +1,6 @@
 import './sign-in.styles.scss';
 import { Button } from '@mui/material';
-import { signInWithGoogle } from '../../utils/firebase.utils';
+import { signInWithGoogle } from '../../utils/firebase/firebase.utils';
 
 export const SignIn = () => {
   return (

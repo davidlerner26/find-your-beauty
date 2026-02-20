@@ -4,7 +4,7 @@ import Logo from '../../assets/svg/logo.svg?react';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/user.context';
 import { Button } from '@mui/material';
-import { signOutUser } from '../../utils/firebase.utils';
+import { signOutUser } from '../../utils/firebase/firebase.utils';
 
 export const Navigation = () => {
   const { isUserLoggedIn } = useContext(UserContext);

@@ -1,7 +1,7 @@
-import './home.styles.scss';
-import { SearchBox } from '../../components/search-box/search-box.component';
-import { Card } from '../../components/card/card.component';
+import { SearchBox } from '../../components/search-box/search-box.component.jsx';
+import { Card } from '../../components/card/card.component.jsx';
 import Button from '@mui/material/Button';
+import { HomeWrapper, HomeSubTitle, HomeCards } from './home.styles.jsx';
 
 export const Home = () => {
   const cards = [
@@ -22,27 +22,25 @@ export const Home = () => {
   const findProfessionalsNearMe = () => {};
 
   return (
-    <>
-      <div className="home">
-        <div className="home-content">
-          <h1>Find makeup artists and hairstylists near you.</h1>
-          <h3>Discover beauty professionals in your area.</h3>
-          <SearchBox />
-          <div className="home-content-cards">
-            {cards.map(({ name, icon }, idx) => {
-              return <Card key={idx} name={name} icon={icon} />;
-            })}
-          </div>
-          <Button
-            color="secondary"
-            variant="contained"
-            size="large"
-            onClick={findProfessionalsNearMe}
-          >
-            Find professionals near me
-          </Button>
-        </div>
+    <HomeWrapper>
+      <div>
+        <h1>Find makeup artists and hairstylists near you.</h1>
+        <HomeSubTitle>Discover beauty professionals in your area.</HomeSubTitle>
+        <SearchBox />
+        <HomeCards className="home-content-cards">
+          {cards.map(({ name, icon }, idx) => {
+            return <Card key={idx} name={name} icon={icon} />;
+          })}
+        </HomeCards>
+        <Button
+          color="secondary"
+          variant="contained"
+          size="large"
+          onClick={findProfessionalsNearMe}
+        >
+          Find professionals near me
+        </Button>
       </div>
-    </>
+    </HomeWrapper>
   );
 };

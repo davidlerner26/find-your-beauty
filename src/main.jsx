@@ -11,6 +11,7 @@ import { Admin } from './routes/admin/admin.component';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { Home } from './routes/home/Home.component';
+import { SearchResults } from './routes/search-results/search-results.component';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
           <Routes>
             <Route path="/" element={<Wrapper />}>
               <Route index element={<Home />} />
+              <Route path="professionals" element={<SearchResults />} />
               <Route path="sign-in" element={<SignIn />} />
               <Route path="sign-up" element={<SignUp />} />
               <Route path="admin" element={<Admin />} />

@@ -10,7 +10,34 @@ export const SearchBox = () => {
 
   return (
     <>
-      <FormControl fullWidth sx={{ m: 1 }}>
+      <FormControl
+        fullWidth
+        sx={{
+          // text typed
+          '& .MuiInputBase-input': { color: '#fff' },
+
+          // label
+          '& .MuiInputLabel-root': { color: '#ddd' },
+          '& .MuiInputLabel-root.Mui-focused': { color: '#fff' },
+
+          // outline border
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'rgba(255,255,255,.5)',
+          },
+          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#fff',
+          },
+          '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
+            {
+              borderColor: '#fff',
+            },
+
+          // when typing / focused / shrunk label position (more space)
+          '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+            transform: 'translate(14px, -10px) scale(0.85)',
+          },
+        }}
+      >
         <InputLabel htmlFor="outlined-adornment-amount">
           Type your location
         </InputLabel>
@@ -18,7 +45,10 @@ export const SearchBox = () => {
           id="outlined-adornment-amount"
           endAdornment={
             <InputAdornment position="end">
-              <SearchIcon onClick={onButtonSearchClick} />
+              <SearchIcon
+                sx={{ color: '#fff', cursor: 'pointer' }}
+                onClick={onButtonSearchClick}
+              />
             </InputAdornment>
           }
           label="Amount"

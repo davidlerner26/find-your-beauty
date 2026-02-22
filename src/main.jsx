@@ -9,26 +9,29 @@ import './utils/firebase/firebase.utils';
 import { UserProvider } from './contexts/user.context';
 import { Admin } from './routes/admin/admin.component';
 import { Provider } from 'react-redux';
-import { store } from './store/store';
+import { persistor, store } from './store/store';
 import { Home } from './routes/home/Home.component';
 import { SearchResults } from './routes/search-results/search-results.component';
+import { PersistGate } from 'redux-persist/integration/react';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <UserProvider>
-          <Routes>
-            <Route path="/" element={<Wrapper />}>
-              <Route index element={<Home />} />
-              <Route path="professionals" element={<SearchResults />} />
-              <Route path="sign-in" element={<SignIn />} />
-              <Route path="sign-up" element={<SignUp />} />
-              <Route path="admin" element={<Admin />} />
-            </Route>
-          </Routes>
-        </UserProvider>
-      </BrowserRouter>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <UserProvider>
+            <Routes>
+              <Route path="/" element={<Wrapper />}>
+                <Route index element={<Home />} />
+                <Route path="professionals" element={<SearchResults />} />
+                <Route path="sign-in" element={<SignIn />} />
+                <Route path="sign-up" element={<SignUp />} />
+                <Route path="admin" element={<Admin />} />
+              </Route>
+            </Routes>
+          </UserProvider>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </StrictMode>,
 );

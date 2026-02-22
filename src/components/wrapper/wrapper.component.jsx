@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router';
-import { Navigation } from '../Navigation/Navigation.component';
+import { Navigation } from '../navigation/navigation.component';
 import './wrapper.styles.scss';
 
 export const Wrapper = () => {

@@ -2,6 +2,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
 import { auth } from '../utils/firebase/firebase.utils';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext({
   isUserLoggedIn: false,
   setIsUserLoggedIn: () => {},

@@ -10,16 +10,14 @@ const persistConfig = {
   backlist: ['user'],
 };
 
+const production = import.meta.env.PROD;
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const middlewares = [process.env.NODE_ENV !== 'production' && logger].filter(
-  Boolean,
-);
+const middlewares = [!production && logger].filter(Boolean);
 
 const componseEnhancer =
-  (process.env.NODE_ENV !== 'production' &&
-    window &&
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+  (!production && window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
   compose;
 
 const composedEnhancers = componseEnhancer(applyMiddleware(...middlewares));

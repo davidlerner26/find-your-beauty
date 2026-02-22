@@ -1,18 +1,18 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router';
-import { Wrapper } from './components/wrapper/wrapper.component';
-import './index.scss';
-import { SignIn } from './routes/sign-in/sign-in.component';
-import { SignUp } from './routes/sign-up/sign-up.component';
-import './utils/firebase/firebase.utils';
-import { UserProvider } from './contexts/user.context';
-import { Admin } from './routes/admin/admin.component';
 import { Provider } from 'react-redux';
-import { persistor, store } from './store/store';
+import { BrowserRouter, Route, Routes } from 'react-router';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Wrapper } from './components/wrapper/wrapper.component';
+import { UserProvider } from './contexts/user.context';
+import './index.scss';
+import { Admin } from './routes/admin/admin.component';
 import { Home } from './routes/home/home.component';
 import { SearchResults } from './routes/search-results/search-results.component';
-import { PersistGate } from 'redux-persist/integration/react';
+import { SignIn } from './routes/sign-in/sign-in.component';
+import { SignUp } from './routes/sign-up/sign-up.component';
+import { persistor, store } from './store/store';
+import './utils/firebase/firebase.utils';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

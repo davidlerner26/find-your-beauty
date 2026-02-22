@@ -10,7 +10,7 @@ import { UserProvider } from './contexts/user.context';
 import { Admin } from './routes/admin/admin.component';
 import { Provider } from 'react-redux';
 import { persistor, store } from './store/store';
-import { Home } from './routes/home/Home.component';
+import { Home } from './routes/home/home.component';
 import { SearchResults } from './routes/search-results/search-results.component';
 import { PersistGate } from 'redux-persist/integration/react';
 

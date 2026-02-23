@@ -19,7 +19,7 @@ export const fetchProfessionalsStartAsync = () => {
     dispatch(fetchProfessionalsStart());
     try {
       const professionalsArray = await getProfessionalsAndDocuments();
-      fetchProfessionalsSuccess(professionalsArray);
+      dispatch(fetchProfessionalsSuccess(professionalsArray));
     } catch (error) {
       dispatch(fetchProfessionalsFailure(error));
     }

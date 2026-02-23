@@ -9,5 +9,5 @@ export const selectProfessionals = createSelector(
 
 export const selectIsLoading = createSelector(
   [selectProfessionalsReducer],
-  (categoriesSlice) => categoriesSlice.isLoading,
+  (professionalsSlice) => professionalsSlice.isLoading,
 );

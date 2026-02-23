@@ -1,13 +1,13 @@
 import { PROFESSIONALS_ACTION_TYPES } from './professionals.types';
 
-export const CATEGORIES_INITIAL_STATE = {
+export const PROFESSIONALS_INITIAL_STATE = {
   professionals: [],
   isLoading: false,
   error: null,
 };
 
 export const professionalsReducer = (
-  state = CATEGORIES_INITIAL_STATE,
+  state = PROFESSIONALS_INITIAL_STATE,
   action = {},
 ) => {
   const { type, payload } = action;

@@ -8,7 +8,7 @@ import { UserProvider } from './contexts/user.context';
 import './index.scss';
 import { Admin } from './routes/admin/admin.component';
 import { Home } from './routes/home/home.component';
-import { SearchResults } from './routes/search-results/search-results.component';
+import { Professionals } from './routes/professionals/professionals.component';
 import { SignIn } from './routes/sign-in/sign-in.component';
 import { SignUp } from './routes/sign-up/sign-up.component';
 import { persistor, store } from './store/store';
@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')).render(
             <Routes>
               <Route path="/" element={<Wrapper />}>
                 <Route index element={<Home />} />
-                <Route path="professionals" element={<SearchResults />} />
+                <Route path="professionals" element={<Professionals />} />
                 <Route path="sign-in" element={<SignIn />} />
                 <Route path="sign-up" element={<SignUp />} />
                 <Route path="admin" element={<Admin />} />

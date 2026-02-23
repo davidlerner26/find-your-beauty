@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export const SearchResultsWrapper = styled.section``;
+export const ProfessionalsWrapper = styled.section``;
 
-export const SearchResultsFilter = styled.div`
+export const ProfessionalsFilter = styled.div`
   margin: 1.5rem 0;
   display: flex;
   justify-content: center;

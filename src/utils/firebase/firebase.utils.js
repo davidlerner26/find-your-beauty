@@ -5,7 +5,13 @@ import {
   GoogleAuthProvider,
   signOut,
 } from 'firebase/auth';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  query,
+  getDocs,
+} from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBGcq0sRf1RW7h4v9M-ZU-hR2RYstQnUzM',
@@ -51,4 +57,12 @@ export const createAccount = async ({ name, email }) => {
   } catch (e) {
     console.error('Error adding document: ', e);
   }
+};
+
+export const getProfessionalsAndDocuments = async () => {
+  const collectionRef = collection(db, 'professionals');
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };

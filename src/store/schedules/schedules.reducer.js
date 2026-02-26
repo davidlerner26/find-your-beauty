@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SCHEDULES_ACTION_TYPES } from './schedules.types';
 
 export const SCHEDULES_INITIAL_STATE = {
   schedules: [{ name: 'Isadora' }, { name: 'David' }],

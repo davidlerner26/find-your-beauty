@@ -1,21 +1,25 @@
+import { createSlice } from '@reduxjs/toolkit';
 import { SCHEDULES_ACTION_TYPES } from './schedules.types';
 
-export const INITIAL_STATE = {
+export const SCHEDULES_INITIAL_STATE = {
   schedules: [{ name: 'Isadora' }, { name: 'David' }],
 };
 
-export const schedulesReducer = (state = INITIAL_STATE, action) => {
-  const { type, payload } = action;
+export const schedulesSlice = createSlice({
+  name: 'schedules',
+  initialState: SCHEDULES_INITIAL_STATE,
+  reducers: {
+    addSchedule(state, action) {
+      state.schedules = [...state.schedules, { name: action.payload }];
+    },
+    removeSchedule(state, action) {
+      state.schedules = state.schedules.filter(
+        (i) => i.name !== action.payload.name,
+      );
+    },
+  },
+});
 
-  switch (type) {
-    case SCHEDULES_ACTION_TYPES.ADD_SCHEDULE:
-      return { ...state, schedules: [...state.schedules, { name: payload }] };
-    case SCHEDULES_ACTION_TYPES.REMOVE_SCHEDULE:
-      return {
-        ...state,
-        schedules: state.schedules.filter((i) => i.name !== payload.name),
-      };
-    default:
-      return state;
-  }
-};
+export const { addSchedule, removeSchedule } = schedulesSlice.actions;
+
+export const schedulesReducer = schedulesSlice.reducer;

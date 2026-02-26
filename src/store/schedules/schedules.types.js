@@ -1,4 +1,0 @@
-export const SCHEDULES_ACTION_TYPES = {
-  ADD_SCHEDULE: 'schedule/ADD_SCHEDULE',
-  REMOVE_SCHEDULE: 'schedule/REMOVE_SCHEDULE',
-};

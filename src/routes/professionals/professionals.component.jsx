@@ -7,7 +7,7 @@ import {
 import { Card } from '../../components/card/card.component';
 import { ProfessionalCard } from '../../components/professional-card/professional-card.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProfessionalsStartAsync } from '../../store/professionals/professionals.action';
+import { fetchProfessionalsStartAsync } from '../../store/professionals/professionals.reducer';
 import {
   selectIsLoading,
   selectProfessionals,

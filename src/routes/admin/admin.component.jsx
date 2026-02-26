@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addSchedule,
   removeSchedule,
-} from '../../store/schedules/schedules.action';
-import { addAlert } from '../../store/alerts/alerts.action';
+} from '../../store/schedules/schedules.reducer';
+import { addAlert } from '../../store/alerts/alerts.reducer';
 import { selectSchedules } from '../../store/schedules/schedules.selector';
 import { selectAlerts } from '../../store/alerts/alerts.selector';
 

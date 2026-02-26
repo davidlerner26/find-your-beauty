@@ -1,16 +1,19 @@
-import { SCHEDULES_ACTION_TYPES } from './alerts.types';
+import { createSlice } from '@reduxjs/toolkit';
 
 export const INITIAL_STATE = {
   alerts: [],
 };
 
-export const alertsReducer = (state = INITIAL_STATE, action) => {
-  const { type, payload } = action;
+export const alertsSlice = createSlice({
+  name: 'alerts',
+  initialState: INITIAL_STATE,
+  reducers: {
+    addAlert(state, action) {
+      state.alerts = [...state.alerts, ...action.payload];
+    },
+  },
+});
 
-  switch (type) {
-    case SCHEDULES_ACTION_TYPES.ADD_ALERT:
-      return { ...state, alerts: [...state.alerts, payload] };
-    default:
-      return state;
-  }
-};
+export const { addAlert } = alertsSlice.actions;
+
+export const alertsReducer = alertsSlice.reducer;

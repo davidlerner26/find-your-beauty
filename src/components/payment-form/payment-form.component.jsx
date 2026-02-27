@@ -15,7 +15,6 @@ const PaymentForm = () => {
   useEffect(() => {
     async function retrievetCurrentUser() {
       const user = await getCurrentUser();
-      console.log(user);
       setCurrentUser(user);
     }
     retrievetCurrentUser();
@@ -32,7 +31,7 @@ const PaymentForm = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ amount: 100 }),
+      body: JSON.stringify({ amount: 1 }),
     }).then((res) => {
       return res.json();
     });
@@ -43,7 +42,7 @@ const PaymentForm = () => {
       payment_method: {
         card: elements.getElement(CardElement),
         billing_details: {
-          name: currentUser ? currentUser.displayName : 'Yihua Zhang',
+          name: currentUser.displayName ?? '',
         },
       },
     });

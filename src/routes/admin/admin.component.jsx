@@ -10,6 +10,7 @@ import {
 import { addAlert } from '../../store/alerts/alerts.reducer';
 import { selectSchedules } from '../../store/schedules/schedules.selector';
 import { selectAlerts } from '../../store/alerts/alerts.selector';
+import PaymentForm from '../../components/payment-form/payment-form.component';
 
 export const Admin = () => {
   const schedules = useSelector(selectSchedules);
@@ -70,6 +71,8 @@ export const Admin = () => {
           );
         })}
       </ul>
+
+      <PaymentForm />
     </section>
   );
 };

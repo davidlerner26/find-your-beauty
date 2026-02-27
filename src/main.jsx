@@ -13,25 +13,29 @@ import { SignIn } from './routes/sign-in/sign-in.component';
 import { SignUp } from './routes/sign-up/sign-up.component';
 import { persistor, store } from './store/store';
 import './utils/firebase/firebase.utils';
+import { Elements } from '@stripe/react-stripe-js';
+import { stripePromise } from './utils/stripe/stripe.utils';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter>
-          <UserProvider>
-            <Routes>
-              <Route path="/" element={<Wrapper />}>
-                <Route index element={<Home />} />
-                <Route path="professionals" element={<Professionals />} />
-                <Route path="sign-in" element={<SignIn />} />
-                <Route path="sign-up" element={<SignUp />} />
-                <Route path="admin" element={<Admin />} />
-              </Route>
-            </Routes>
-          </UserProvider>
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
+    <Elements stripe={stripePromise}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <BrowserRouter>
+            <UserProvider>
+              <Routes>
+                <Route path="/" element={<Wrapper />}>
+                  <Route index element={<Home />} />
+                  <Route path="professionals" element={<Professionals />} />
+                  <Route path="sign-in" element={<SignIn />} />
+                  <Route path="sign-up" element={<SignUp />} />
+                  <Route path="admin" element={<Admin />} />
+                </Route>
+              </Routes>
+            </UserProvider>
+          </BrowserRouter>
+        </PersistGate>
+      </Provider>
+    </Elements>
   </StrictMode>,
 );

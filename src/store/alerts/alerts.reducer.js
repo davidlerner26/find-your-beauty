@@ -9,7 +9,7 @@ export const alertsSlice = createSlice({
   initialState: INITIAL_STATE,
   reducers: {
     addAlert(state, action) {
-      state.alerts = [...state.alerts, ...action.payload];
+      state.alerts = [...state.alerts, action.payload];
     },
   },
 });

@@ -7,7 +7,7 @@ import { Wrapper } from './components/wrapper/wrapper.component';
 import { UserProvider } from './contexts/user.context';
 import './index.scss';
 import { Admin } from './routes/admin/admin.component';
-import { Home } from './routes/home/home.component';
+import Home from './routes/home/home.component';
 import { Professionals } from './routes/professionals/professionals.component';
 import { SignIn } from './routes/sign-in/sign-in.component';
 import { SignUp } from './routes/sign-up/sign-up.component';

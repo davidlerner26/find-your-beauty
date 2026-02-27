@@ -8,7 +8,7 @@ import {
   HomeContent,
 } from './home.styles.jsx';
 
-export const Home = () => {
+export default function Home() {
   const cards = [
     {
       name: 'Atendimento domiciliar',
@@ -48,4 +48,4 @@ export const Home = () => {
       </HomeContent>
     </HomeWrapper>
   );
-};
+}

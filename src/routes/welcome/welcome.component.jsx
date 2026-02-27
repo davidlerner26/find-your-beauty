@@ -2,13 +2,13 @@ import { SearchBox } from '../../components/search-box/search-box.component.jsx'
 import { Card } from '../../components/card/card.component.jsx';
 import Button from '@mui/material/Button';
 import {
-  HomeWrapper,
-  HomeSubTitle,
-  HomeCards,
-  HomeContent,
-} from './home.styles.jsx';
+  WelcomeWrapper,
+  WelcomeSubTitle,
+  WelcomeCards,
+  WelcomeContent,
+} from './welcome.styles.jsx';
 
-export default function Home() {
+export const Welcome = () => {
   const cards = [
     {
       name: 'Atendimento domiciliar',
@@ -27,16 +27,18 @@ export default function Home() {
   const findProfessionalsNearMe = () => {};
 
   return (
-    <HomeWrapper>
-      <HomeContent>
+    <WelcomeWrapper>
+      <WelcomeContent>
         <h1>Find makeup artists and hairstylists near you.</h1>
-        <HomeSubTitle>Discover beauty professionals in your area.</HomeSubTitle>
+        <WelcomeSubTitle>
+          Discover beauty professionals in your area.
+        </WelcomeSubTitle>
         <SearchBox />
-        <HomeCards className="home-content-cards">
+        <WelcomeCards>
           {cards.map(({ name, icon }, idx) => {
             return <Card key={idx} name={name} icon={icon} />;
           })}
-        </HomeCards>
+        </WelcomeCards>
         <Button
           color="secondary"
           variant="contained"
@@ -45,7 +47,7 @@ export default function Home() {
         >
           Find professionals near me
         </Button>
-      </HomeContent>
-    </HomeWrapper>
+      </WelcomeContent>
+    </WelcomeWrapper>
   );
-}
+};

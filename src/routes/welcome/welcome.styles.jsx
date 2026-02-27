@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const HomeWrapper = styled.section`
+export const WelcomeWrapper = styled.section`
   color: white;
   position: relative;
   z-index: 1;
@@ -22,17 +22,17 @@ export const HomeWrapper = styled.section`
   }
 `;
 
-export const HomeContent = styled.div`
+export const WelcomeContent = styled.div`
   padding: 2rem;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 12px;
 `;
 
-export const HomeSubTitle = styled.h3`
+export const WelcomeSubTitle = styled.h3`
   padding: 1rem 0 2rem;
 `;
 
-export const HomeCards = styled.div`
+export const WelcomeCards = styled.div`
   display: flex;
   gap: 1rem;
   margin-top: 2rem;

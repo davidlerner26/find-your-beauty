@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Wrapper } from './components/wrapper/wrapper.component';
 import { UserProvider } from './contexts/user.context';
-import './index.scss';
+import { GlobalStyles } from './global.styles';
 import { Admin } from './routes/admin/admin.component';
 import { Professionals } from './routes/professionals/professionals.component';
 import { SignIn } from './routes/sign-in/sign-in.component';
@@ -18,6 +18,7 @@ import { Welcome } from './routes/welcome/welcome.component';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <GlobalStyles />
     <Elements stripe={stripePromise}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

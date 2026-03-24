@@ -1,12 +1,12 @@
-import { SearchBox } from '../../components/search-box/search-box.component.jsx';
-import { Card } from '../../components/card/card.component.jsx';
+import { SearchBox } from '../../components/search-box/search-box.component';
+import { Card } from '../../components/card/card.component';
 import Button from '@mui/material/Button';
 import {
   WelcomeWrapper,
   WelcomeSubTitle,
   WelcomeCards,
   WelcomeContent,
-} from './welcome.styles.jsx';
+} from './welcome.styles';
 
 export const Welcome = () => {
   const cards = [

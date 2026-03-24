@@ -4,7 +4,6 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 const manifestForPlugin = {
   registerType: 'prompt',
-  includeAssets: ['favicon.ico', 'apple-touc-icon.png', 'masked-icon.svg'],
   manifest: {
     name: 'Crown-clothing',
     short_name: 'crown-clothing',
@@ -16,14 +15,14 @@ const manifestForPlugin = {
         type: 'image/x-icon',
       },
       {
-        src: 'logo-192x192.png',
-        type: 'image/png',
+        src: 'logo-192x192.svg',
+        type: 'image/svg',
         sizes: '192x192',
         purpose: 'any maskable',
       },
       {
-        src: 'logo-512x512.png',
-        type: 'image/png',
+        src: 'logo-512x512.svg',
+        type: 'image/svg',
         sizes: '512x512',
         purpose: 'any maskable',
       },

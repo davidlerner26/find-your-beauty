@@ -10,7 +10,7 @@ const manifestForPlugin = {
     description: 'Shop your favorite clothes without leaving your house.',
     icons: [
       {
-        src: 'favicon.ico',
+        src: 'favicon.svg',
         sizes: '64x64 32x32 24x24 16x16',
         type: 'image/x-icon',
       },

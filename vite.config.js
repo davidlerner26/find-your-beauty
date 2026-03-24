@@ -16,13 +16,13 @@ const manifestForPlugin = {
       },
       {
         src: 'logo-192x192.svg',
-        type: 'image/svg',
+        type: 'image/svg+xml',
         sizes: '192x192',
         purpose: 'any maskable',
       },
       {
         src: 'logo-512x512.svg',
-        type: 'image/svg',
+        type: 'image/svg+xml',
         sizes: '512x512',
         purpose: 'any maskable',
       },

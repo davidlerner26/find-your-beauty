@@ -18,10 +18,10 @@ import './main.scss';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Elements stripe={stripePromise}>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <BrowserRouter>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <Elements stripe={stripePromise}>
             <UserProvider>
               <Routes>
                 <Route path="/" element={<Wrapper />}>
@@ -33,9 +33,9 @@ createRoot(document.getElementById('root')).render(
                 </Route>
               </Routes>
             </UserProvider>
-          </BrowserRouter>
-        </PersistGate>
-      </Provider>
-    </Elements>
+          </Elements>
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
   </StrictMode>,
 );

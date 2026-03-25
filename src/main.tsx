@@ -1,5 +1,5 @@
 import { lazy, StrictMode, Suspense } from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, type Container } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -20,7 +20,7 @@ const SignIn = lazy(() => import('./routes/sign-in/sign-in.component'));
 const SignUp = lazy(() => import('./routes/sign-up/sign-up.component'));
 const Admin = lazy(() => import('./routes/admin/admin.component'));
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById('root') as Container).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

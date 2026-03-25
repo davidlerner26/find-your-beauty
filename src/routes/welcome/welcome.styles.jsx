@@ -10,8 +10,7 @@ export const WelcomeWrapper = styled.section`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url(../../src/assets/img/beauty_salon_bg.jpeg) no-repeat center
-    center;
+  background: url(/beauty_salon_bg.jpeg) no-repeat center center;
   &:before {
     content: '';
     position: absolute;

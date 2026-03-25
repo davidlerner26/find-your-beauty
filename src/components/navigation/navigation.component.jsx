@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router';
 import './navigation.styles.scss';
-import Logo from '../../assets/svg/logo.svg?react';
+import Logo from '../../assets/svg/logo.svg';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/user.context';
 import { Button } from '@mui/material';
@@ -13,7 +13,7 @@ export const Navigation = () => {
     <nav className="nav">
       <div>
         <NavLink to="/">
-          <Logo className="nav-logo" />
+          <img src={Logo} alt="Find your beauty logo" className="nav-logo" />
         </NavLink>
       </div>
       <div>

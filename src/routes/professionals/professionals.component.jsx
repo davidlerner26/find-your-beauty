@@ -14,7 +14,7 @@ import {
 } from '../../store/professionals/professionals.selector';
 import { Spinner } from '../../components/spinner/spinner.component';
 
-export const Professionals = () => {
+const Professionals = () => {
   const [filters] = useState([
     { icon: 'home', name: 'Maquiagem leve' },
     { icon: 'cloud', name: 'Cabelo' },
@@ -63,3 +63,5 @@ export const Professionals = () => {
     </>
   );
 };
+
+export default Professionals;

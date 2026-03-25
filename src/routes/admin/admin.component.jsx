@@ -12,7 +12,7 @@ import { selectSchedules } from '../../store/schedules/schedules.selector';
 import { selectAlerts } from '../../store/alerts/alerts.selector';
 import PaymentForm from '../../components/payment-form/payment-form.component';
 
-export const Admin = () => {
+const Admin = () => {
   const schedules = useSelector(selectSchedules);
   const alerts = useSelector(selectAlerts);
   const dispatch = useDispatch();
@@ -76,3 +76,5 @@ export const Admin = () => {
     </section>
   );
 };
+
+export default Admin;

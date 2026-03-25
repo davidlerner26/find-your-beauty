@@ -1,20 +1,24 @@
-import { StrictMode } from 'react';
+import { lazy, StrictMode, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { PersistGate } from 'redux-persist/integration/react';
-import { Wrapper } from './components/wrapper/wrapper.component';
 import { UserProvider } from './contexts/user.context';
-import { Admin } from './routes/admin/admin.component';
-import { Professionals } from './routes/professionals/professionals.component';
-import { SignIn } from './routes/sign-in/sign-in.component';
-import { SignUp } from './routes/sign-up/sign-up.component';
 import { persistor, store } from './store/store';
 import './utils/firebase/firebase.utils';
 import { Elements } from '@stripe/react-stripe-js';
 import { stripePromise } from './utils/stripe/stripe.utils';
-import { Welcome } from './routes/welcome/welcome.component';
 import './main.scss';
+import { Spinner } from './components/spinner/spinner.component';
+import { Wrapper } from './components/wrapper/wrapper.component';
+
+const Welcome = lazy(() => import('./routes/welcome/welcome.component'));
+const Professionals = lazy(
+  () => import('./routes/professionals/professionals.component'),
+);
+const SignIn = lazy(() => import('./routes/sign-in/sign-in.component'));
+const SignUp = lazy(() => import('./routes/sign-up/sign-up.component'));
+const Admin = lazy(() => import('./routes/admin/admin.component'));
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -23,15 +27,17 @@ createRoot(document.getElementById('root')).render(
         <BrowserRouter>
           <Elements stripe={stripePromise}>
             <UserProvider>
-              <Routes>
-                <Route path="/" element={<Wrapper />}>
-                  <Route index element={<Welcome />} />
-                  <Route path="professionals" element={<Professionals />} />
-                  <Route path="sign-in" element={<SignIn />} />
-                  <Route path="sign-up" element={<SignUp />} />
-                  <Route path="admin" element={<Admin />} />
-                </Route>
-              </Routes>
+              <Suspense fallback={<Spinner />}>
+                <Routes>
+                  <Route path="/" element={<Wrapper />}>
+                    <Route index element={<Welcome />} />
+                    <Route path="professionals" element={<Professionals />} />
+                    <Route path="sign-in" element={<SignIn />} />
+                    <Route path="sign-up" element={<SignUp />} />
+                    <Route path="admin" element={<Admin />} />
+                  </Route>
+                </Routes>
+              </Suspense>
             </UserProvider>
           </Elements>
         </BrowserRouter>

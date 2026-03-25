@@ -8,7 +8,7 @@ import {
   WelcomeContent,
 } from './welcome.styles';
 
-export const Welcome = () => {
+const Welcome = () => {
   const cards = [
     {
       name: 'Atendimento domiciliar',
@@ -51,3 +51,5 @@ export const Welcome = () => {
     </WelcomeWrapper>
   );
 };
+
+export default Welcome;

@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Wrapper } from './components/wrapper/wrapper.component';
 import { UserProvider } from './contexts/user.context';
-import { GlobalStyles } from './global.styles';
 import { Admin } from './routes/admin/admin.component';
 import { Professionals } from './routes/professionals/professionals.component';
 import { SignIn } from './routes/sign-in/sign-in.component';
@@ -15,10 +14,10 @@ import './utils/firebase/firebase.utils';
 import { Elements } from '@stripe/react-stripe-js';
 import { stripePromise } from './utils/stripe/stripe.utils';
 import { Welcome } from './routes/welcome/welcome.component';
+import './main.scss';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <GlobalStyles />
     <Elements stripe={stripePromise}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

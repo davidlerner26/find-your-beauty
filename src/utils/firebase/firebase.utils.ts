@@ -52,7 +52,13 @@ export const signInWithGoogle = () => {
 
 export const signOutUser = async () => await signOut(auth);
 
-export const createAccount = async ({ name, email }) => {
+export const createAccount = async ({
+  name,
+  email,
+}: {
+  name: string;
+  email: string;
+}) => {
   try {
     await addDoc(collection(db, 'users'), { name, email });
   } catch (e) {

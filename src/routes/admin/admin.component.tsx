@@ -37,7 +37,7 @@ const Admin = () => {
   };
 
   return (
-    <section className="admin">
+    <section>
       {alerts?.length > 0 &&
         alerts.map((alert, idx) => {
           return (

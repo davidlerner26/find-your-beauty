@@ -15,7 +15,7 @@ const SignUp = () => {
   });
 
   return (
-    <section className="sign-up">
+    <section>
       <form onSubmit={handleSubmit((data) => createAccount(data))}>
         <FormControl>
           <InputLabel htmlFor="name">Name</InputLabel>

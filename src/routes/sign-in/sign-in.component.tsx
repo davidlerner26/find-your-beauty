@@ -4,7 +4,7 @@ import { SignInWrapper } from './sign-in.styles';
 
 const SignIn = () => {
   return (
-    <SignInWrapper className="sign-in">
+    <SignInWrapper>
       <Button variant="contained" onClick={() => signInWithGoogle()}>
         Sign in with Google
       </Button>

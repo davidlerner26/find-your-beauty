@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { UserContext } from '../../contexts/user.context';
 import { Button } from '@mui/material';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
-import { Nav } from './navigation.styles';
+import { Nav, NavLinkItem, NavLinkLogo } from './navigation.styles';
 
 export const Navigation = () => {
   const { isUserLoggedIn } = useContext(UserContext);
@@ -12,11 +12,7 @@ export const Navigation = () => {
     <Nav>
       <div>
         <NavLink to="/">
-          <img
-            src="/logo.svg"
-            alt="Find your beauty logo"
-            className="nav-logo"
-          />
+          <NavLinkLogo src="/logo.svg" alt="Find your beauty logo" />
         </NavLink>
       </div>
       <div>
@@ -24,12 +20,8 @@ export const Navigation = () => {
           <Button onClick={signOutUser}>Sign Out</Button>
         ) : (
           <>
-            <NavLink className="nav-item" to="/sign-in">
-              Sign In
-            </NavLink>
-            <NavLink className="nav-item" to="/sign-up">
-              Create an account
-            </NavLink>
+            <NavLinkItem to="/sign-in">Sign In</NavLinkItem>
+            <NavLinkItem to="/sign-up">Create an account</NavLinkItem>
           </>
         )}
       </div>

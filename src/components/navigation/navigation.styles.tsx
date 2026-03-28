@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router';
 import styled from 'styled-components';
 
 export const Nav = styled.nav`
@@ -11,11 +12,13 @@ export const Nav = styled.nav`
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  &-logo {
-    width: 3rem;
-    height: 64px;
-  }
-  &-item {
-    padding: 0 1rem;
-  }
+`;
+
+export const NavLinkLogo = styled.img`
+  width: 3rem;
+  height: 64px;
+`;
+
+export const NavLinkItem = styled(NavLink)`
+  padding: 0 1rem;
 `;

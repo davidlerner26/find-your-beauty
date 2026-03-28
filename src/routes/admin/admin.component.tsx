@@ -1,6 +1,5 @@
 import { Alert } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import './admin.styles.scss';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -11,6 +10,7 @@ import { addAlert } from '../../store/alerts/alerts.reducer';
 import { selectSchedules } from '../../store/schedules/schedules.selector';
 import { selectAlerts } from '../../store/alerts/alerts.selector';
 import PaymentForm from '../../components/payment-form/payment-form.component';
+import { AdminList } from './admin.styles';
 
 const Admin = () => {
   const schedules = useSelector(selectSchedules);
@@ -60,7 +60,7 @@ const Admin = () => {
         <button type="submit">Submit</button>
       </form>
 
-      <ul>
+      <AdminList>
         {schedules?.map((item, idx) => {
           return (
             <li key={idx}>
@@ -70,7 +70,7 @@ const Admin = () => {
             </li>
           );
         })}
-      </ul>
+      </AdminList>
 
       <PaymentForm />
     </section>

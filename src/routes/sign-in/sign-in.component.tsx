@@ -1,14 +1,14 @@
-import './sign-in.styles.scss';
 import { Button } from '@mui/material';
 import { signInWithGoogle } from '../../utils/firebase/firebase.utils';
+import { SignInWrapper } from './sign-in.styles';
 
 const SignIn = () => {
   return (
-    <section className="sign-in">
+    <SignInWrapper className="sign-in">
       <Button variant="contained" onClick={() => signInWithGoogle()}>
         Sign in with Google
       </Button>
-    </section>
+    </SignInWrapper>
   );
 };
 

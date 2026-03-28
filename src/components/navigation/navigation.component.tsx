@@ -1,19 +1,22 @@
 import { NavLink } from 'react-router';
-import './navigation.styles.scss';
-import Logo from '../../assets/svg/logo.svg';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/user.context';
 import { Button } from '@mui/material';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
+import { Nav } from './navigation.styles';
 
 export const Navigation = () => {
   const { isUserLoggedIn } = useContext(UserContext);
 
   return (
-    <nav className="nav">
+    <Nav>
       <div>
         <NavLink to="/">
-          <img src={Logo} alt="Find your beauty logo" className="nav-logo" />
+          <img
+            src="/logo.svg"
+            alt="Find your beauty logo"
+            className="nav-logo"
+          />
         </NavLink>
       </div>
       <div>
@@ -30,6 +33,6 @@ export const Navigation = () => {
           </>
         )}
       </div>
-    </nav>
+    </Nav>
   );
 };

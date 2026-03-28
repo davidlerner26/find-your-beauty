@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router';
 import { Navigation } from '../navigation/navigation.component';
-import './wrapper.styles.scss';
+import { Main } from './wrapper.styles';
 
 export const Wrapper = () => {
   return (
     <>
       <Navigation />
-      <main>
+      <Main>
         <Outlet />
-      </main>
+      </Main>
     </>
   );
 };

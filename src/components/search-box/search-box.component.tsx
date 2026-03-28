@@ -1,4 +1,3 @@
-import './search-box.styles.scss';
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';

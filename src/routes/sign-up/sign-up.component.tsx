@@ -1,5 +1,4 @@
 import { Button, FormControl, InputLabel, OutlinedInput } from '@mui/material';
-import './sign-up.styles.scss';
 import { useForm } from 'react-hook-form';
 import { createAccount } from '../../utils/firebase/firebase.utils';
 

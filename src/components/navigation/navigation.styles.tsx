@@ -1,4 +1,6 @@
-.nav {
+import styled from 'styled-components';
+
+export const Nav = styled.nav`
   padding: 0 2rem;
   width: 100vw;
   height: 4rem;
@@ -16,4 +18,4 @@
   &-item {
     padding: 0 1rem;
   }
-}
+`;

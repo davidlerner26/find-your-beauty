@@ -4,7 +4,7 @@ import {
   ProfessionalsWrapper,
   ProfessionalsContainer,
 } from './professionals.styles';
-import { Card } from '../../components/card/card.component';
+import Card from '../../components/card/card.component';
 import { ProfessionalCard } from '../../components/professional-card/professional-card.component';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfessionalsStartAsync } from '../../store/professionals/professionals.reducer';

@@ -3,8 +3,14 @@ import HomeIcon from '@mui/icons-material/Home';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import StarIcon from '@mui/icons-material/Star';
 import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
+import { FC } from 'react';
 
-export const Icon = ({ icon, color }) => {
+type IconProps = {
+  icon: string;
+  color?: string;
+};
+
+export const Icon: FC<IconProps> = ({ icon, color }: IconProps) => {
   const iconProps = color ? { sx: { color } } : {};
 
   const renderIcon = () => {

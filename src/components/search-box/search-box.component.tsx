@@ -3,8 +3,9 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
+import { FC } from 'react';
 
-export const SearchBox = () => {
+export const SearchBox: FC = () => {
   const onButtonSearchClick = () => {};
 
   return (

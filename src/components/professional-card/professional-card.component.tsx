@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { Icon } from '../icon/icon.component';
 import './professional-card.styles';
 import {
@@ -9,7 +10,15 @@ import {
   Stars,
 } from './professional-card.styles';
 
-export const ProfessionalCard = ({
+type ProfessionalCardProps = {
+  name: string;
+  stars: number;
+  speciality: string;
+  image: string;
+  services: any[];
+};
+
+export const ProfessionalCard: FC<ProfessionalCardProps> = ({
   name,
   stars,
   speciality,

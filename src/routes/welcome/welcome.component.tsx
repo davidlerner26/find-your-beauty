@@ -1,5 +1,5 @@
 import { SearchBox } from '../../components/search-box/search-box.component';
-import { Card } from '../../components/card/card.component';
+import Card from '../../components/card/card.component';
 import Button from '@mui/material/Button';
 import {
   WelcomeWrapper,

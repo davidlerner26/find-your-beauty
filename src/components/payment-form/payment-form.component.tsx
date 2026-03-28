@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, SubmitEvent, useEffect, useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import { FormContainer } from './payment-form.styles';
@@ -6,7 +6,7 @@ import { FormContainer } from './payment-form.styles';
 import { PaymentButton, PaymentFormContainer } from './payment-form.styles';
 import { getCurrentUser } from '../../utils/firebase/firebase.utils';
 
-const PaymentForm = () => {
+const PaymentForm: FC = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
@@ -20,7 +20,7 @@ const PaymentForm = () => {
     retrievetCurrentUser();
   }, []);
 
-  const paymentHandler = async (e) => {
+  const paymentHandler = async (e: SubmitEvent) => {
     e.preventDefault();
     if (!stripe || !elements) {
       return;

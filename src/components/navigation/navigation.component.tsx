@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router';
-import { useContext } from 'react';
+import { FC, useContext } from 'react';
 import { UserContext } from '../../contexts/user.context';
 import { Button } from '@mui/material';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
 import { Nav, NavLinkItem, NavLinkLogo } from './navigation.styles';
 
-export const Navigation = () => {
+const Navigation: FC = () => {
   const { isUserLoggedIn } = useContext(UserContext);
 
   return (
@@ -28,3 +28,5 @@ export const Navigation = () => {
     </Nav>
   );
 };
+
+export default Navigation;

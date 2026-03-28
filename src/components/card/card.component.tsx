@@ -1,9 +1,14 @@
+import { FC } from 'react';
 import { Icon } from '../icon/icon.component';
 import './card.styles.tsx';
-import Button from '@mui/material/Button';
 import { CardButton } from './card.styles.tsx';
 
-export const Card = ({ name, icon }) => {
+type CardProps = {
+  name: string;
+  icon: string;
+};
+
+const Card: FC<CardProps> = ({ name, icon }) => {
   const renderIcon = () => {
     return <Icon icon={icon} />;
   };
@@ -19,3 +24,5 @@ export const Card = ({ name, icon }) => {
     </CardButton>
   );
 };
+
+export default Card;

@@ -1,12 +1,24 @@
 import { NavLink } from 'react-router';
-import { FC, useContext } from 'react';
-import { UserContext } from '../../contexts/user.context';
+import { FC, useEffect } from 'react';
 import { Button } from '@mui/material';
-import { signOutUser } from '../../utils/firebase/firebase.utils';
+import { auth, signOutUser } from '../../utils/firebase/firebase.utils';
 import { Nav, NavLinkItem, NavLinkLogo } from './navigation.styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsUserLoggedIn } from '../../store/user/user.selector';
+import { setIsUserLoggedIn } from '../../store/user/user.reducer';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Navigation: FC = () => {
-  const { isUserLoggedIn } = useContext(UserContext);
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      dispatch(setIsUserLoggedIn(user ? true : false));
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <Nav>

@@ -3,7 +3,6 @@ import { createRoot, type Container } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { PersistGate } from 'redux-persist/integration/react';
-import { UserProvider } from './contexts/user.context';
 import { persistor, store } from './store/store';
 import './utils/firebase/firebase.utils';
 import { Elements } from '@stripe/react-stripe-js';
@@ -26,19 +25,17 @@ createRoot(document.getElementById('root') as Container).render(
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
           <Elements stripe={stripePromise}>
-            <UserProvider>
-              <Suspense fallback={<Spinner />}>
-                <Routes>
-                  <Route path="/" element={<Wrapper />}>
-                    <Route index element={<Welcome />} />
-                    <Route path="professionals" element={<Professionals />} />
-                    <Route path="sign-in" element={<SignIn />} />
-                    <Route path="sign-up" element={<SignUp />} />
-                    <Route path="admin" element={<Admin />} />
-                  </Route>
-                </Routes>
-              </Suspense>
-            </UserProvider>
+            <Suspense fallback={<Spinner />}>
+              <Routes>
+                <Route path="/" element={<Wrapper />}>
+                  <Route index element={<Welcome />} />
+                  <Route path="professionals" element={<Professionals />} />
+                  <Route path="sign-in" element={<SignIn />} />
+                  <Route path="sign-up" element={<SignUp />} />
+                  <Route path="admin" element={<Admin />} />
+                </Route>
+              </Routes>
+            </Suspense>
           </Elements>
         </BrowserRouter>
       </PersistGate>

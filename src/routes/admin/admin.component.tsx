@@ -29,7 +29,7 @@ const Admin = () => {
     dispatch(addAlert(`${item.name} was disapproved successfuly.`));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
     if (input !== '') {
       dispatch(addSchedule(input));

@@ -34,5 +34,5 @@ export const WelcomeSubTitle = styled.h3`
 export const WelcomeCards = styled.div`
   display: flex;
   gap: 1rem;
-  margin-top: 2rem;
+  margin: 2rem 0;
 `;

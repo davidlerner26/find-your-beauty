@@ -9,4 +9,13 @@ export const routes: Routes = [
     path: 'explore',
     loadComponent: () => import('./pages/explore/explore').then((m) => m.Explore),
   },
+  {
+    path: 'maquiadores/:id',
+    loadComponent: () =>
+      import('./pages/artist-details/artist-details').then((m) => m.ArtistDetails),
+  },
+  {
+    path: 'maquiadores/:id/agendar',
+    loadComponent: () => import('./pages/booking/booking').then((m) => m.Booking),
+  },
 ];

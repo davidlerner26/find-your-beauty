@@ -42,7 +42,7 @@
     </div>
     <div class="cards">
       @for (salon of featuredSalons; track salon.name) {
-        <article class="card">
+        <article class="card" [routerLink]="['/maquiadores', salon.id]">
           <div class="card-image" [style.background-image]="'url(' + salon.image + ')'">
             <button type="button" class="heart" aria-label="Favoritar">♡</button>
           </div>
@@ -73,7 +73,7 @@
     </div>
     <div class="offers">
       @for (offer of nearbyOffers; track offer.name) {
-        <article class="offer">
+        <article class="offer" [routerLink]="['/maquiadores', offer.id]">
           <div class="offer-image" [style.background-image]="'url(' + offer.image + ')'">
             <span class="distance">{{ offer.distance }}</span>
           </div>

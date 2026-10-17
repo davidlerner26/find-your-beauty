@@ -68,7 +68,7 @@
 
   <div class="results">
     @for (salon of visibleSalons; track salon.name; let i = $index) {
-      <article class="offer" [class.selected]="i === selected()" (click)="selectSalon(i)">
+      <article class="offer" [class.selected]="i === selected()" [routerLink]="['/maquiadores', salon.id]">
         <div class="offer-image" [style.background-image]="'url(' + salon.image + ')'">
           <span class="distance">{{ salon.distance }}</span>
         </div>

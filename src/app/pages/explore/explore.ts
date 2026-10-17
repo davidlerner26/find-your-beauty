@@ -1,9 +1,11 @@
+import { RouterLink } from '@angular/router';
 import { Component, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { environment } from '../../../environments/environment';
 
 type Salon = {
+  id: string;
   tags: string[];
   name: string;
   image: string;
@@ -23,7 +25,7 @@ const pin = (color: string) =>
 
 @Component({
   selector: 'app-explore',
-  imports: [GoogleMap, MapMarker, MapCircle],
+  imports: [GoogleMap, MapMarker, MapCircle, RouterLink],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })
@@ -55,6 +57,7 @@ export class Explore implements OnInit {
   protected readonly salons: Salon[] = [
     {
       tags: ['Cabelo', 'Facial'],
+      id: 'fernanda-lima',
       name: 'Fernanda Lima',
       image: 'images/makeup/1.jpg',
       address: 'Rua Constante Ramos, 35 - Copacabana',
@@ -66,6 +69,7 @@ export class Explore implements OnInit {
     },
     {
       tags: ['Cabelo', 'Unhas', 'Facial'],
+      id: 'camila-torres',
       name: 'Camila Torres',
       image: 'images/makeup/2.jpg',
       address: 'Rua Visconde de Pirajá, 550 - Ipanema',
@@ -77,6 +81,7 @@ export class Explore implements OnInit {
     },
     {
       tags: ['Cabelo', 'Facial'],
+      id: 'rafaela-duarte',
       name: 'Rafaela Duarte',
       image: 'images/makeup/3.jpg',
       address: 'Rua Farme de Amoedo, 20 - Ipanema',
@@ -88,6 +93,7 @@ export class Explore implements OnInit {
     },
     {
       tags: ['Maquiagem', 'Coloração'],
+      id: 'mariana-costa',
       name: 'Mariana Costa',
       image: 'images/makeup/4.jpg',
       address: 'Rua Barão da Torre, 411 - Ipanema',
@@ -99,6 +105,7 @@ export class Explore implements OnInit {
     },
     {
       tags: ['Unhas'],
+      id: 'juliana-prado',
       name: 'Juliana Prado',
       image: 'images/makeup/5.jpg',
       address: 'Rua Dias Ferreira, 233 - Leblon',

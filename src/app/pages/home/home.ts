@@ -1,6 +1,8 @@
+import { RouterLink } from '@angular/router';
 import { Component } from '@angular/core';
 
 type Salon = {
+  id: string;
   tags: string;
   name: string;
   image: string;
@@ -13,6 +15,7 @@ type Offer = Salon & { distance: string };
 
 @Component({
   selector: 'app-home',
+  imports: [RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -46,6 +49,7 @@ export class Home {
   protected readonly featuredSalons: Salon[] = [
     {
       tags: 'Cabelo . Unhas . Facial',
+      id: 'camila-torres',
       name: 'Camila Torres',
       image: 'images/makeup/1.jpg',
       address: 'Rua Visconde de Pirajá, 550 - Ipanema, Rio de Janeiro',
@@ -54,6 +58,7 @@ export class Home {
     },
     {
       tags: 'Cabelo . Facial . 2+',
+      id: 'beatriz-almeida',
       name: 'Beatriz Almeida',
       image: 'images/makeup/2.jpg',
       address: 'Av. Atlântica, 1702 - Copacabana, Rio de Janeiro',
@@ -62,6 +67,7 @@ export class Home {
     },
     {
       tags: 'Cabelo . Unhas',
+      id: 'juliana-prado',
       name: 'Juliana Prado',
       image: 'images/makeup/3.jpg',
       address: 'Rua Dias Ferreira, 233 - Leblon, Rio de Janeiro',
@@ -70,6 +76,7 @@ export class Home {
     },
     {
       tags: 'Maquiagem . Facial',
+      id: 'larissa-menezes',
       name: 'Larissa Menezes',
       image: 'images/makeup/4.jpg',
       address: 'Rua Garcia DÁvila, 76 - Ipanema, Rio de Janeiro',
@@ -83,6 +90,7 @@ export class Home {
   protected readonly nearbyOffers: Offer[] = [
     {
       tags: 'Cabelo . Facial',
+      id: 'fernanda-lima',
       name: 'Fernanda Lima',
       image: 'images/makeup/5.jpg',
       address: 'Rua Constante Ramos, 35 - Copacabana, Rio de Janeiro',
@@ -92,6 +100,7 @@ export class Home {
     },
     {
       tags: 'Unhas . Spa',
+      id: 'rafaela-duarte',
       name: 'Rafaela Duarte',
       image: 'images/makeup/6.jpg',
       address: 'Rua Farme de Amoedo, 20 - Ipanema, Rio de Janeiro',
@@ -101,6 +110,7 @@ export class Home {
     },
     {
       tags: 'Maquiagem . Cabelo',
+      id: 'mariana-costa',
       name: 'Mariana Costa',
       image: 'images/makeup/7.jpg',
       address: 'Rua Barão da Torre, 411 - Ipanema, Rio de Janeiro',

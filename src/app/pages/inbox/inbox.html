@@ -1,0 +1,91 @@
+<div class="inbox">
+  <div class="tabs">
+    <a routerLink="/mensagens" [class.active]="tab() === 'mensagens'">Mensagens</a>
+    <a routerLink="/notificacoes" [class.active]="tab() === 'notificacoes'">Notificações</a>
+  </div>
+
+  @if (tab() === 'mensagens') {
+    <label class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.500-3.500" />
+      </svg>
+      <input type="search" placeholder="Buscar mensagens ou maquiadora" [(ngModel)]="search" name="search" />
+    </label>
+
+    <ul class="list">
+      @for (item of filteredConversations; track item.artistId) {
+        <li>
+          <a class="conversation" [routerLink]="['/mensagens', item.artistId]">
+            <img [src]="item.artist.image" [alt]="item.artist.name" />
+            <div class="conversation-body">
+              <h3>{{ item.artist.name }}</h3>
+              <p class="muted">{{ item.lastMessage }}</p>
+            </div>
+            <div class="conversation-meta">
+              <span class="muted">{{ item.time }}</span>
+              @if (item.unread) {
+                <span class="badge">{{ item.unread }}</span>
+              }
+            </div>
+          </a>
+        </li>
+      } @empty {
+        <li class="empty muted">Nenhuma conversa encontrada.</li>
+      }
+    </ul>
+  } @else {
+    <h2>Novas</h2>
+    <ul class="list">
+      @for (notification of newNotifications; track $index) {
+        <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
+      }
+    </ul>
+
+    <h2>Anteriores</h2>
+    <ul class="list">
+      @for (notification of earlierNotifications; track $index) {
+        <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
+      }
+    </ul>
+  }
+</div>
+
+<ng-template #row let-notification>
+  <li class="notification">
+    <span class="icon">
+      @switch (notification.icon) {
+        @case ('calendar') {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 3v4M15 3v4" />
+          </svg>
+        }
+        @case ('payment') {
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round">
+            <path d="M12 3v18M16 7.500C15 6.500 13.700 6 12 6c-2 0-3.500 1-3.500 2.500S10 11 12 11.500 15.500 13 15.500 14.500 14 18 12 18c-1.700 0-3-.5-4-1.500" />
+          </svg>
+        }
+        @case ('offer') {
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 12V4h8l10 10-8 8zm4-5a1.500 1.500 0 1 0 0 3 1.500 1.500 0 0 0 0-3z" />
+          </svg>
+        }
+      }
+    </span>
+    <p class="notification-text">
+      @for (part of notification.text; track $index) {
+        @if (part.bold) {
+          <strong>{{ part.text }}</strong>
+        } @else {
+          {{ part.text }}
+        }
+      }
+    </p>
+    <div class="notification-meta">
+      <span class="muted">{{ notification.time }}</span>
+      @if (notification.unread) {
+        <span class="dot"></span>
+      }
+    </div>
+  </li>
+</ng-template>

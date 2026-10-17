@@ -1,0 +1,72 @@
+<form class="auth" (ngSubmit)="submit()" novalidate>
+  <h1>Crie uma conta,</h1>
+  <p class="subtitle">Preencha todas as informações abaixo para criar sua conta.</p>
+
+  <label class="field" [class.invalid]="submitted() && !name.trim()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4.500 4.500 0 1 0 0-9 4.500 4.500 0 0 0 0 9zm0 2c-4 0-8 2-8 5v2h16v-2c0-3-4-5-8-5z" /></svg>
+    <input name="name" placeholder="Nome" autocomplete="name" [(ngModel)]="name" />
+  </label>
+  @if (submitted() && !name.trim()) {
+    <p class="error">Digite seu nome.</p>
+  }
+
+  <label class="field" [class.invalid]="submitted() && !emailValid">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.500L4 7.200V8l8 5 8-5v-.8z" /></svg>
+    <input type="email" name="email" placeholder="E-mail" autocomplete="email" [(ngModel)]="email" />
+  </label>
+  @if (submitted() && !emailValid) {
+    <p class="error">Digite um e-mail válido.</p>
+  }
+
+  <label class="field" [class.invalid]="submitted() && !phoneValid">
+    <select name="countryCode" aria-label="Código do país" [(ngModel)]="countryCode">
+      @for (code of countryCodes; track code) {
+        <option [value]="code">{{ code }}</option>
+      }
+    </select>
+    <input type="tel" name="phone" placeholder="Celular" autocomplete="tel-national" [(ngModel)]="phone" />
+  </label>
+  @if (submitted() && !phoneValid) {
+    <p class="error">Digite um celular válido.</p>
+  }
+
+  <label class="field" [class.invalid]="submitted() && !passwordValid">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9zm-8-2a3 3 0 0 1 6 0v2H9z" /></svg>
+    <input
+      name="password"
+      placeholder="Senha"
+      autocomplete="new-password"
+      [type]="showPassword() ? 'text' : 'password'"
+      [(ngModel)]="password"
+    />
+    <button type="button" class="toggle" aria-label="Mostrar senha" (click)="showPassword.set(!showPassword())">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.500-7 10-7 10 7 10 7-3.500 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" />@if (showPassword()) {<path d="M4 4l16 16" />}</svg>
+    </button>
+  </label>
+  @if (submitted() && !passwordValid) {
+    <p class="error">A senha precisa ter pelo menos 6 caracteres.</p>
+  }
+
+  <p class="terms">
+    Ao se cadastrar, você concorda com os <a href="#">Termos de uso e privacidade</a>.
+  </p>
+
+  <button type="submit" class="primary">Cadastrar</button>
+
+  <p class="divider">ou</p>
+
+  <button type="button" class="google" (click)="signInWithGoogle()">
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+        <path fill="#EA4335" d="M24 9.500c3.540 0 6.710 1.220 9.210 3.600l6.850-6.850C35.900 2.380 30.470 0 24 0 14.620 0 6.510 5.380 2.560 13.220l7.980 6.190C12.430 13.720 17.740 9.500 24 9.500z" />
+        <path fill="#4285F4" d="M46.980 24.550c0-1.570-.15-3.090-.38-4.550H24v9.020h12.940c-.58 2.960-2.260 5.480-4.780 7.180l7.730 6c4.510-4.180 7.090-10.360 7.090-17.650z" />
+        <path fill="#FBBC05" d="M10.530 28.590c-.48-1.450-.76-2.990-.76-4.590s.27-3.140.76-4.590l-7.980-6.190C.92 16.460 0 20.120 0 24c0 3.880.92 7.540 2.560 10.780l7.970-6.190z" />
+        <path fill="#34A853" d="M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z" />
+      </svg>
+    Cadastrar com Google
+  </button>
+  @if (googleError()) {
+    <p class="error">{{ googleError() }}</p>
+  }
+
+  <p class="switch">Já tem uma conta? <a routerLink="/entrar">Entrar</a></p>
+</form>

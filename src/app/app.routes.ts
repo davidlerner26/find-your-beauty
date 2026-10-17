@@ -22,4 +22,27 @@ export const routes: Routes = [
     path: 'boas-vindas',
     loadComponent: () => import('./pages/onboarding/onboarding').then((m) => m.Onboarding),
   },
+  {
+    path: 'entrar',
+    loadComponent: () => import('./pages/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'cadastro',
+    loadComponent: () => import('./pages/signup/signup').then((m) => m.Signup),
+  },
+  {
+    path: 'mensagens',
+    data: { tab: 'mensagens' },
+    loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
+  },
+  {
+    path: 'notificacoes',
+    data: { tab: 'notificacoes' },
+    loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
+  },
+  {
+    path: 'mensagens/:id',
+    loadComponent: () => import('./pages/chat/chat').then((m) => m.Chat),
+  },
+  { path: '**', redirectTo: '' },
 ];

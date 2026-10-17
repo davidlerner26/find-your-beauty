@@ -21,7 +21,7 @@
         {{ isBeforeLast() ? 'Começar' : 'Próximo' }}
       </button>
     } @else {
-      <button type="button" class="google">
+      <button type="button" class="google" (click)="signInWithGoogle()">
         <svg viewBox="0 0 48 48" aria-hidden="true">
           <path fill="#EA4335" d="M24 9.500c3.540 0 6.710 1.220 9.210 3.600l6.850-6.850C35.900 2.380 30.470 0 24 0 14.620 0 6.510 5.380 2.560 13.220l7.980 6.190C12.430 13.720 17.740 9.500 24 9.500z" />
           <path fill="#4285F4" d="M46.980 24.550c0-1.570-.15-3.090-.38-4.550H24v9.020h12.940c-.58 2.960-2.260 5.480-4.780 7.180l7.730 6c4.510-4.180 7.090-10.360 7.090-17.650z" />
@@ -30,14 +30,14 @@
         </svg>
         Entrar com Google
       </button>
-      <button type="button" class="primary">
+      <a class="primary" routerLink="/cadastro">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.500L4 7.200V8l8 5 8-5v-.8z" />
         </svg>
         Entrar com e-mail
-      </button>
+      </a>
     }
 
-    <p class="signin">Já tem uma conta? <a href="#">Entrar</a></p>
+    <p class="signin">Já tem uma conta? <a routerLink="/entrar">Entrar</a></p>
   </div>
 </section>

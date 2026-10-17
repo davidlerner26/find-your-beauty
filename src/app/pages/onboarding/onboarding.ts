@@ -1,9 +1,12 @@
 import { Component, computed, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../../services/auth';
 
 type Step = { title: string; description: string; image: string };
 
 @Component({
   selector: 'app-onboarding',
+  imports: [RouterLink],
   templateUrl: './onboarding.html',
   styleUrl: './onboarding.scss',
 })
@@ -37,6 +40,20 @@ export class Onboarding {
   protected readonly step = computed(() => this.steps[this.current()]);
   protected readonly isLast = computed(() => this.current() === this.steps.length - 1);
   protected readonly isBeforeLast = computed(() => this.current() === this.steps.length - 2);
+
+  constructor(
+    private readonly auth: Auth,
+    private readonly router: Router,
+  ) {}
+
+  protected async signInWithGoogle() {
+    try {
+      await this.auth.signInWithGoogle();
+      this.router.navigateByUrl('/');
+    } catch {
+      // popup closed or failed: stay on the page
+    }
+  }
 
   protected next() {
     this.current.update((current) => Math.min(current + 1, this.steps.length - 1));

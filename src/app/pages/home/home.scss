@@ -70,22 +70,6 @@ a {
   padding: 1.1rem;
 }
 
-.followed {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  padding: 4px;
-
-  img {
-    width: 5rem;
-    height: 5rem;
-    flex: none;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--primary);
-  }
-}
-
 .section-head {
   display: flex;
   justify-content: space-between;
@@ -109,6 +93,7 @@ a {
 }
 
 .card-image {
+  background-color: var(--primary-light);
   height: 15rem;
   border-radius: 12px;
   margin-bottom: 0.75rem;
@@ -174,6 +159,7 @@ a {
 }
 
 .offer-image {
+  background-color: var(--primary-light);
   width: 9rem;
   flex: none;
   background-size: cover;

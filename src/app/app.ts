@@ -7,13 +7,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   template: `
     <nav>
       <a routerLink="/">
-        <img src="logo.svg" alt="Find your beauty logo" />
+        <img src="logo.svg" alt="Logo Find your beauty" />
       </a>
       <div>
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          Home
+          Início
         </a>
-        <a routerLink="/explore" routerLinkActive="active">Explore</a>
+        <a routerLink="/explore" routerLinkActive="active">Explorar</a>
       </div>
     </nav>
     <router-outlet />

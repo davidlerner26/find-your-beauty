@@ -1,8 +1,8 @@
 <div class="explore">
   @if (!hasKey) {
     <p class="notice">
-      Set <code>googleMapsApiKey</code> in <code>src/environments/environment.ts</code> to
-      load the map.
+      Defina <code>googleMapsApiKey</code> em <code>src/environments/environment.ts</code> para
+      carregar o mapa.
     </p>
   } @else if (loaded()) {
     <google-map
@@ -13,7 +13,9 @@
       [zoom]="zoom"
       [options]="mapOptions"
     >
-      <map-circle [center]="center()" [radius]="350" [options]="circleOptions" />
+      @if (userPosition(); as position) {
+        <map-circle [center]="position" [radius]="350" [options]="circleOptions" />
+      }
       @for (salon of visibleSalons; track salon.name; let i = $index) {
         <map-marker
           [position]="salon.position"
@@ -29,10 +31,10 @@
       <svg viewBox="0 0 24 24" fill="#2f6b7a">
         <path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.500a2.500 2.500 0 0 1 0 5z" />
       </svg>
-      <input type="text" placeholder="Type your location" value="360 Stillwater Rd. Palm" />
-      <button type="button" aria-label="Clear">✕</button>
+      <input type="text" placeholder="Digite sua localização" />
+      <button type="button" aria-label="Limpar">✕</button>
     </div>
-    <button type="button" class="round" aria-label="Filters">
+    <button type="button" class="round" aria-label="Filtros">
       <svg viewBox="0 0 24 24" fill="none" stroke="#2f6b7a" stroke-width="2" stroke-linecap="round">
         <path d="M4 7h16M7 12h10M10 17h4" />
       </svg>
@@ -53,10 +55,10 @@
   </div>
 
   <div class="controls">
-    <button type="button" class="round primary" aria-label="Directions">
+    <button type="button" class="round primary" aria-label="Rotas">
       <svg viewBox="0 0 24 24" fill="#fff"><path d="M21 3 3 10.500l7 3 3 7z" /></svg>
     </button>
-    <button type="button" class="round" aria-label="My location" (click)="locateMe()">
+    <button type="button" class="round" aria-label="Minha localização" (click)="locateMe()">
       <svg viewBox="0 0 24 24" fill="none" stroke="#2f6b7a" stroke-width="2" stroke-linecap="round">
         <circle cx="12" cy="12" r="4" />
         <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
@@ -67,7 +69,7 @@
   <div class="results">
     @for (salon of visibleSalons; track salon.name; let i = $index) {
       <article class="offer" [class.selected]="i === selected()" (click)="selectSalon(i)">
-        <div class="offer-image" [style.background-image]="'url(' + image + ')'">
+        <div class="offer-image" [style.background-image]="'url(' + salon.image + ')'">
           <span class="distance">{{ salon.distance }}</span>
         </div>
         <div class="offer-info">

@@ -1,10 +1,10 @@
 <main class="container">
   <section class="hero">
     <div>
-      <h1>Hello, Samantha</h1>
-      <p class="muted">Find the service you want, and treat yourself</p>
+      <h1>Olá, David</h1>
+      <p class="muted">Encontre o serviço que você quer e se cuide</p>
     </div>
-    <button class="search-btn" type="button" aria-label="Search">
+    <button class="search-btn" type="button" aria-label="Buscar">
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
         <circle cx="11" cy="11" r="7" />
         <path d="m20 20-3.5-3.5" />
@@ -13,12 +13,19 @@
   </section>
 
   <section>
-    <h2>What do you want to do?</h2>
+    <h2>O que você quer fazer?</h2>
     <div class="services">
       @for (service of services; track service.name) {
         <button type="button" class="service">
           <span class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path [attr.d]="service.icon" />
             </svg>
           </span>
@@ -29,31 +36,21 @@
   </section>
 
   <section>
-    <h2>Salon you follow</h2>
-    <div class="followed">
-      @for (salon of followedSalons; track salon) {
-        <img [src]="image" alt="Followed salon" />
-      }
-    </div>
-  </section>
-
-  <section>
     <div class="section-head">
-      <h2>Featured Salon</h2>
-      <a href="#">View all</a>
+      <h2>Maquiadoras em destaque</h2>
+      <a href="#">Ver todos</a>
     </div>
     <div class="cards">
       @for (salon of featuredSalons; track salon.name) {
         <article class="card">
-          <div class="card-image" [style.background-image]="'url(' + image + ')'">
-            <button type="button" class="heart" aria-label="Favorite">♡</button>
+          <div class="card-image" [style.background-image]="'url(' + salon.image + ')'">
+            <button type="button" class="heart" aria-label="Favoritar">♡</button>
           </div>
           <p class="tags">{{ salon.tags }}</p>
           <h3>{{ salon.name }}</h3>
           <p class="muted">{{ salon.address }}</p>
           <p class="rating">
-            <span class="star">★</span> <strong>{{ salon.rating }}</strong>
-            ({{ salon.reviews }})
+            <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{ salon.reviews }})
           </p>
         </article>
       }
@@ -61,7 +58,7 @@
   </section>
 
   <section>
-    <h2>Most Search Interest</h2>
+    <h2>Mais buscados</h2>
     <div class="interests">
       @for (interest of interests; track interest) {
         <button type="button" class="chip">{{ interest }}</button>
@@ -71,13 +68,13 @@
 
   <section>
     <div class="section-head">
-      <h2>Nearby Offers</h2>
-      <a href="#">View all</a>
+      <h2>Maquiadoras próximas</h2>
+      <a href="#">Ver todos</a>
     </div>
     <div class="offers">
       @for (offer of nearbyOffers; track offer.name) {
         <article class="offer">
-          <div class="offer-image" [style.background-image]="'url(' + image + ')'">
+          <div class="offer-image" [style.background-image]="'url(' + offer.image + ')'">
             <span class="distance">{{ offer.distance }}</span>
           </div>
           <div class="offer-info">
@@ -85,8 +82,7 @@
             <h3>{{ offer.name }}</h3>
             <p class="muted">{{ offer.address }}</p>
             <p class="rating">
-              <span class="star">★</span> <strong>{{ offer.rating }}</strong>
-              ({{ offer.reviews }})
+              <span class="star">★</span> <strong>{{ offer.rating }}</strong> ({{ offer.reviews }})
             </p>
           </div>
         </article>

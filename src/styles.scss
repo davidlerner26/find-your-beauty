@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 * {
   box-sizing: border-box;
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Mulish', sans-serif;
 }
 
 img {
@@ -13,4 +13,17 @@ img {
 a {
   text-decoration: none;
   color: black;
+}
+
+:root {
+  --primary: #2f6b7a;
+  --primary-light: #e3f4f7;
+  --accent: #ee8b2e;
+  --text: #1c1c1c;
+  --muted: #6b6b6b;
+}
+
+body {
+  color: var(--text);
+  background: #fff;
 }

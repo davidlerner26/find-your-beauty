@@ -1,0 +1,85 @@
+<div class="explore">
+  @if (!hasKey) {
+    <p class="notice">
+      Set <code>googleMapsApiKey</code> in <code>src/environments/environment.ts</code> to
+      load the map.
+    </p>
+  } @else if (loaded()) {
+    <google-map
+      class="map"
+      height="100%"
+      width="100%"
+      [center]="center()"
+      [zoom]="zoom"
+      [options]="mapOptions"
+    >
+      <map-circle [center]="center()" [radius]="350" [options]="circleOptions" />
+      @for (salon of visibleSalons; track salon.name; let i = $index) {
+        <map-marker
+          [position]="salon.position"
+          [icon]="markerIcon(i)"
+          (mapClick)="selectSalon(i)"
+        />
+      }
+    </google-map>
+  }
+
+  <div class="top">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="#2f6b7a">
+        <path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.500a2.500 2.500 0 0 1 0 5z" />
+      </svg>
+      <input type="text" placeholder="Type your location" value="360 Stillwater Rd. Palm" />
+      <button type="button" aria-label="Clear">✕</button>
+    </div>
+    <button type="button" class="round" aria-label="Filters">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#2f6b7a" stroke-width="2" stroke-linecap="round">
+        <path d="M4 7h16M7 12h10M10 17h4" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="filters">
+    @for (filter of filters; track filter) {
+      <button
+        type="button"
+        class="filter"
+        [class.active]="activeFilters().includes(filter)"
+        (click)="toggleFilter(filter)"
+      >
+        {{ filter }}
+      </button>
+    }
+  </div>
+
+  <div class="controls">
+    <button type="button" class="round primary" aria-label="Directions">
+      <svg viewBox="0 0 24 24" fill="#fff"><path d="M21 3 3 10.500l7 3 3 7z" /></svg>
+    </button>
+    <button type="button" class="round" aria-label="My location" (click)="locateMe()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#2f6b7a" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="results">
+    @for (salon of visibleSalons; track salon.name; let i = $index) {
+      <article class="offer" [class.selected]="i === selected()" (click)="selectSalon(i)">
+        <div class="offer-image" [style.background-image]="'url(' + image + ')'">
+          <span class="distance">{{ salon.distance }}</span>
+        </div>
+        <div class="offer-info">
+          <p class="tags">{{ salon.tags.join(' . ') }}</p>
+          <h3>{{ salon.name }}</h3>
+          <p class="muted">{{ salon.address }}</p>
+          <p class="rating">
+            <span class="star">★</span> <strong>{{ salon.rating }}</strong>
+            ({{ salon.reviews }}) <span class="discount">{{ salon.discount }}</span>
+          </p>
+        </div>
+      </article>
+    }
+  </div>
+</div>

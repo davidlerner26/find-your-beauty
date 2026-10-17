@@ -18,4 +18,8 @@ export const routes: Routes = [
     path: 'maquiadores/:id/agendar',
     loadComponent: () => import('./pages/booking/booking').then((m) => m.Booking),
   },
+  {
+    path: 'boas-vindas',
+    loadComponent: () => import('./pages/onboarding/onboarding').then((m) => m.Onboarding),
+  },
 ];

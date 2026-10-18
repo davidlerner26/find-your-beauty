@@ -70,7 +70,9 @@
     @for (salon of visibleSalons; track salon.name; let i = $index) {
       <article class="offer" [class.selected]="i === selected()" [routerLink]="['/maquiadores', salon.id]">
         <div class="offer-image" [style.background-image]="'url(' + salon.image + ')'">
-          <span class="distance">{{ salon.distance }}</span>
+          @if (salon.distance) {
+            <span class="distance">{{ salon.distance }}</span>
+          }
         </div>
         <div class="offer-info">
           <p class="tags">{{ salon.tags.join(' . ') }}</p>
@@ -78,7 +80,7 @@
           <p class="muted">{{ salon.address }}</p>
           <p class="rating">
             <span class="star">★</span> <strong>{{ salon.rating }}</strong>
-            ({{ salon.reviews }}) <span class="discount">{{ salon.discount }}</span>
+            ({{ salon.reviewsCount }})
           </p>
         </div>
       </article>

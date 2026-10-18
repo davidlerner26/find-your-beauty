@@ -8,7 +8,7 @@
       <a [routerLink]="tab.path" [class.active]="isActive(tab)" [attr.aria-label]="tab.label">
         <span class="icon">
           <svg viewBox="0 0 24 24" fill="currentColor"><path [attr.d]="tab.icon" /></svg>
-          @if (tab.badge) {
+          @if (tab.badge && messages.unreadTotal() > 0) {
             <span class="badge"></span>
           }
         </span>

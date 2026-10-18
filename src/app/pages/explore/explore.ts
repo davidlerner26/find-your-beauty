@@ -2,20 +2,9 @@ import { RouterLink } from '@angular/router';
 import { Component, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
+import { Professionals } from '../../services/professionals';
+import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
-
-type Salon = {
-  id: string;
-  tags: string[];
-  name: string;
-  image: string;
-  address: string;
-  rating: number;
-  reviews: string;
-  distance: string;
-  discount: string;
-  position: google.maps.LatLngLiteral;
-};
 
 const pin = (color: string) =>
   'data:image/svg+xml;utf8,' +
@@ -54,70 +43,10 @@ export class Explore implements OnInit {
   protected readonly activeFilters = signal<string[]>(['Cabelo', 'Facial']);
   protected readonly selected = signal(0);
 
-  protected readonly salons: Salon[] = [
-    {
-      tags: ['Cabelo', 'Facial'],
-      id: 'fernanda-lima',
-      name: 'Fernanda Lima',
-      image: 'images/makeup/1.jpg',
-      address: 'Rua Constante Ramos, 35 - Copacabana',
-      rating: 4.7,
-      reviews: '2.7k',
-      distance: '1,1km',
-      discount: '-58%',
-      position: { lat: -22.9687, lng: -43.1868 },
-    },
-    {
-      tags: ['Cabelo', 'Unhas', 'Facial'],
-      id: 'camila-torres',
-      name: 'Camila Torres',
-      image: 'images/makeup/2.jpg',
-      address: 'Rua Visconde de Pirajá, 550 - Ipanema',
-      rating: 4.8,
-      reviews: '3.1k',
-      distance: '1,4km',
-      discount: '-20%',
-      position: { lat: -22.984, lng: -43.2075 },
-    },
-    {
-      tags: ['Cabelo', 'Facial'],
-      id: 'rafaela-duarte',
-      name: 'Rafaela Duarte',
-      image: 'images/makeup/3.jpg',
-      address: 'Rua Farme de Amoedo, 20 - Ipanema',
-      rating: 4.7,
-      reviews: '2.7k',
-      distance: '2,0km',
-      discount: '-15%',
-      position: { lat: -22.9856, lng: -43.204 },
-    },
-    {
-      tags: ['Maquiagem', 'Coloração'],
-      id: 'mariana-costa',
-      name: 'Mariana Costa',
-      image: 'images/makeup/4.jpg',
-      address: 'Rua Barão da Torre, 411 - Ipanema',
-      rating: 4.9,
-      reviews: '4.2k',
-      distance: '2,6km',
-      discount: '-30%',
-      position: { lat: -22.985, lng: -43.207 },
-    },
-    {
-      tags: ['Unhas'],
-      id: 'juliana-prado',
-      name: 'Juliana Prado',
-      image: 'images/makeup/5.jpg',
-      address: 'Rua Dias Ferreira, 233 - Leblon',
-      rating: 4.5,
-      reviews: '1.2k',
-      distance: '2,3km',
-      discount: '-10%',
-      position: { lat: -22.986, lng: -43.223 },
-    },
-  ];
-
-  constructor(private readonly loader: GoogleMapsLoader) {}
+  constructor(
+    private readonly loader: GoogleMapsLoader,
+    protected readonly professionals: Professionals,
+  ) {}
 
   ngOnInit() {
     this.locateMe();
@@ -127,9 +56,15 @@ export class Explore implements OnInit {
 
   protected get visibleSalons() {
     const active = this.activeFilters();
-    return this.salons.filter(
-      (salon) => !active.length || salon.tags.some((tag) => active.includes(tag)),
-    );
+    const user = this.userPosition();
+
+    return this.professionals
+      .list()
+      .filter((salon) => !active.length || salon.tags.some((tag) => active.includes(tag)))
+      .map((salon) => ({
+        ...salon,
+        distance: user ? formatDistance(distanceKm(user, salon.position)) : null,
+      }));
   }
 
   protected toggleFilter(filter: string) {

@@ -177,3 +177,16 @@
   padding: 2rem;
   text-align: center;
 }
+
+.empty,
+.login-hint {
+  margin: auto;
+  padding: 1rem;
+  text-align: center;
+  color: var(--muted);
+
+  a {
+    color: var(--primary);
+    font-weight: 600;
+  }
+}

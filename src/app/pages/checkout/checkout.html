@@ -44,8 +44,28 @@
       </button>
     </section>
 
-    <button type="button" class="pay">Pagar agora</button>
+    @if (confirmed()) {
+      <div class="confirmed">
+        <strong>Agendamento confirmado!</strong>
+        <p>Enviamos uma notificação com os detalhes.</p>
+        <a class="pay" routerLink="/">Voltar ao início</a>
+      </div>
+    } @else if (!auth.user()) {
+      <p class="hint">Entre na sua conta para finalizar o agendamento.</p>
+      <a class="pay" routerLink="/entrar">Entrar</a>
+    } @else {
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+      <button type="button" class="pay" [disabled]="paying()" (click)="pay()">
+        {{ paying() ? 'Confirmando...' : 'Pagar agora' }}
+      </button>
+    }
   </div>
+} @else if (professionals.status() === 'loading') {
+  <p class="not-found">Carregando...</p>
+} @else if (professionals.status() === 'error') {
+  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {
   <p class="not-found">Maquiadora não encontrada.</p>
 }

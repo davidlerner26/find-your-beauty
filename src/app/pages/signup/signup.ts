@@ -78,7 +78,13 @@ export class Signup {
     this.formError.set('');
     this.submitting.set(true);
     try {
-      await this.auth.signUpWithEmail(`${this.firstName.trim()} ${this.lastName.trim()}`, this.email, this.password);
+      await this.auth.signUpWithEmail({
+        firstName: this.firstName,
+        lastName: this.lastName,
+        email: this.email,
+        phone: this.phone,
+        password: this.password,
+      });
       this.router.navigateByUrl('/');
     } catch (error) {
       this.formError.set(authErrorMessage(error));

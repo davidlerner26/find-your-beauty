@@ -2,8 +2,11 @@ import { Component, computed, input } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MAKEUP_ARTISTS } from '../../data/makeup-artists';
-import { CONVERSATIONS, EARLIER_NOTIFICATIONS, NEW_NOTIFICATIONS } from '../../data/inbox';
+import { Auth } from '../../services/auth';
+import { Messages } from '../../services/messages';
+import { Notifications } from '../../services/notifications';
+import { Professionals } from '../../services/professionals';
+import { formatRelative } from '../../utils/format-date';
 
 @Component({
   selector: 'app-inbox',
@@ -14,17 +17,30 @@ import { CONVERSATIONS, EARLIER_NOTIFICATIONS, NEW_NOTIFICATIONS } from '../../d
 export class Inbox {
   readonly tab = input<'mensagens' | 'notificacoes'>('mensagens');
 
-  protected readonly newNotifications = NEW_NOTIFICATIONS;
-  protected readonly earlierNotifications = EARLIER_NOTIFICATIONS;
+  protected readonly relative = formatRelative;
+
+  protected readonly newNotifications = computed(() =>
+    this.notifications.list().filter((notification) => notification.unread),
+  );
+  protected readonly earlierNotifications = computed(() =>
+    this.notifications.list().filter((notification) => !notification.unread),
+  );
 
   protected readonly conversations = computed(() =>
-    CONVERSATIONS.flatMap((conversation) => {
-      const artist = MAKEUP_ARTISTS.find((a) => a.id === conversation.artistId);
+    this.messages.conversations().flatMap((conversation) => {
+      const artist = this.professionals.byId(conversation.professionalId);
       return artist ? [{ ...conversation, artist }] : [];
     }),
   );
 
   protected search = '';
+
+  constructor(
+    protected readonly auth: Auth,
+    protected readonly notifications: Notifications,
+    private readonly messages: Messages,
+    private readonly professionals: Professionals,
+  ) {}
 
   protected get filteredConversations() {
     const term = this.search.trim().toLowerCase();

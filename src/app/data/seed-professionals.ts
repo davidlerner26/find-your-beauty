@@ -1,37 +1,6 @@
-export type Review = {
-  author: string;
-  daysAgo: number;
-  stars: number;
-  text: string;
-};
+import { Professional, Review, Service } from '../models/professional';
 
-export type ServiceCategory = 'Maquiagem' | 'Cabelo' | 'Facial';
-
-export type Service = {
-  id: string;
-  name: string;
-  category: ServiceCategory;
-  price: number;
-  durationMinutes: number;
-  description: string;
-  image: string;
-};
-
-export type MakeupArtist = {
-  id: string;
-  name: string;
-  image: string;
-  address: string;
-  tags: string[];
-  rating: number;
-  reviewsCount: string;
-  views: string;
-  about: string[];
-  services: Service[];
-  gallery: string[];
-  reviews: Review[];
-};
-
+// Initial data for the `professionals` collection (see the /seed page)
 const gallery = [1, 2, 3, 4, 5, 6, 7].map((n) => `images/makeup/${n}.jpg`);
 
 const services: Service[] = [
@@ -121,7 +90,8 @@ const artist = (
   rating: number,
   reviewsCount: string,
   views: string,
-): MakeupArtist => ({
+  position: { lat: number; lng: number },
+): Professional => ({
   id,
   name,
   image: `images/makeup/${image}.jpg`,
@@ -136,18 +106,16 @@ const artist = (
   ],
   services,
   gallery,
+  position,
   reviews,
 });
 
-export const MAKEUP_ARTISTS: MakeupArtist[] = [
-  artist('fernanda-lima', 'Fernanda Lima', 1, 'Rua Constante Ramos, 35 - Copacabana, Rio de Janeiro', ['Cabelo', 'Facial'], 4.7, '2.7k', '10 mil'),
-  artist('camila-torres', 'Camila Torres', 2, 'Rua Visconde de Pirajá, 550 - Ipanema, Rio de Janeiro', ['Cabelo', 'Unhas', 'Facial'], 4.8, '3.1k', '12 mil'),
-  artist('rafaela-duarte', 'Rafaela Duarte', 3, 'Rua Farme de Amoedo, 20 - Ipanema, Rio de Janeiro', ['Unhas', 'Spa'], 4.5, '1.2k', '6 mil'),
-  artist('mariana-costa', 'Mariana Costa', 4, 'Rua Barão da Torre, 411 - Ipanema, Rio de Janeiro', ['Maquiagem', 'Cabelo'], 4.9, '4.2k', '18 mil'),
-  artist('juliana-prado', 'Juliana Prado', 5, 'Rua Dias Ferreira, 233 - Leblon, Rio de Janeiro', ['Cabelo', 'Unhas'], 4.6, '1.9k', '8 mil'),
-  artist('beatriz-almeida', 'Beatriz Almeida', 6, 'Av. Atlântica, 1702 - Copacabana, Rio de Janeiro', ['Cabelo', 'Facial'], 4.7, '2.7k', '9 mil'),
-  artist('larissa-menezes', 'Larissa Menezes', 7, 'Rua Nascimento Silva, 76 - Ipanema, Rio de Janeiro', ['Maquiagem', 'Facial'], 4.6, '1.5k', '7 mil'),
+export const SEED_PROFESSIONALS: Professional[] = [
+  artist('fernanda-lima', 'Fernanda Lima', 1, 'Rua Constante Ramos, 35 - Copacabana, Rio de Janeiro', ['Cabelo', 'Facial'], 4.7, '2.7k', '10 mil', { lat: -22.9687, lng: -43.1868 }),
+  artist('camila-torres', 'Camila Torres', 2, 'Rua Visconde de Pirajá, 550 - Ipanema, Rio de Janeiro', ['Cabelo', 'Unhas', 'Facial'], 4.8, '3.1k', '12 mil', { lat: -22.984, lng: -43.2075 }),
+  artist('rafaela-duarte', 'Rafaela Duarte', 3, 'Rua Farme de Amoedo, 20 - Ipanema, Rio de Janeiro', ['Unhas', 'Spa'], 4.5, '1.2k', '6 mil', { lat: -22.9856, lng: -43.204 }),
+  artist('mariana-costa', 'Mariana Costa', 4, 'Rua Barão da Torre, 411 - Ipanema, Rio de Janeiro', ['Maquiagem', 'Cabelo'], 4.9, '4.2k', '18 mil', { lat: -22.985, lng: -43.207 }),
+  artist('juliana-prado', 'Juliana Prado', 5, 'Rua Dias Ferreira, 233 - Leblon, Rio de Janeiro', ['Cabelo', 'Unhas'], 4.6, '1.9k', '8 mil', { lat: -22.986, lng: -43.223 }),
+  artist('beatriz-almeida', 'Beatriz Almeida', 6, 'Av. Atlântica, 1702 - Copacabana, Rio de Janeiro', ['Cabelo', 'Facial'], 4.7, '2.7k', '9 mil', { lat: -22.971, lng: -43.185 }),
+  artist('larissa-menezes', 'Larissa Menezes', 7, 'Rua Nascimento Silva, 76 - Ipanema, Rio de Janeiro', ['Maquiagem', 'Facial'], 4.6, '1.5k', '7 mil', { lat: -22.9855, lng: -43.205 }),
 ];
-
-export const formatDuration = (minutes: number) =>
-  `${(minutes / 60).toLocaleString('pt-BR')} h`;

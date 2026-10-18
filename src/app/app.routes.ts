@@ -1,3 +1,4 @@
+import { isDevMode } from '@angular/core';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -56,6 +57,12 @@ export const routes: Routes = [
   {
     path: 'perfil',
     loadComponent: () => import('./pages/profile/profile').then((m) => m.Profile),
+  },
+  {
+    // Dev only: fills the `professionals` collection with the initial data
+    path: 'seed',
+    canMatch: [() => isDevMode()],
+    loadComponent: () => import('./pages/seed/seed').then((m) => m.Seed),
   },
   { path: '**', redirectTo: '' },
 ];

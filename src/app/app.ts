@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { Messages } from './services/messages';
 
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean };
 
@@ -44,7 +45,10 @@ export class App {
 
   protected readonly url = signal('/');
 
-  constructor(router: Router) {
+  constructor(
+    router: Router,
+    protected readonly messages: Messages,
+  ) {
     this.url.set(this.pathOf(router.url));
     router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))

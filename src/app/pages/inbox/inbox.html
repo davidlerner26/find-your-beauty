@@ -4,7 +4,14 @@
     <a routerLink="/notificacoes" [class.active]="tab() === 'notificacoes'">Notificações</a>
   </div>
 
-  @if (tab() === 'mensagens') {
+  @if (!auth.ready()) {
+    <p class="empty muted">Carregando...</p>
+  } @else if (!auth.user()) {
+    <div class="empty">
+      <p class="muted">Entre na sua conta para ver {{ tab() === 'mensagens' ? 'suas mensagens' : 'suas notificações' }}.</p>
+      <a class="signin" routerLink="/entrar">Entrar</a>
+    </div>
+  } @else if (tab() === 'mensagens') {
     <label class="search">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
         <circle cx="11" cy="11" r="7" />
@@ -14,16 +21,16 @@
     </label>
 
     <ul class="list">
-      @for (item of filteredConversations; track item.artistId) {
+      @for (item of filteredConversations; track item.professionalId) {
         <li>
-          <a class="conversation" [routerLink]="['/mensagens', item.artistId]">
+          <a class="conversation" [routerLink]="['/mensagens', item.professionalId]">
             <img [src]="item.artist.image" [alt]="item.artist.name" />
             <div class="conversation-body">
               <h3>{{ item.artist.name }}</h3>
               <p class="muted">{{ item.lastMessage }}</p>
             </div>
             <div class="conversation-meta">
-              <span class="muted">{{ item.time }}</span>
+              <span class="muted">{{ relative(item.lastMessageAt) }}</span>
               @if (item.unread) {
                 <span class="badge">{{ item.unread }}</span>
               }
@@ -31,23 +38,33 @@
           </a>
         </li>
       } @empty {
-        <li class="empty muted">Nenhuma conversa encontrada.</li>
+        <li class="empty muted">Você ainda não tem conversas. Abra o perfil de uma maquiadora para começar uma.</li>
       }
     </ul>
+  } @else if (notifications.loading()) {
+    <p class="empty muted">Carregando...</p>
   } @else {
-    <h2>Novas</h2>
-    <ul class="list">
-      @for (notification of newNotifications; track $index) {
-        <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
-      }
-    </ul>
+    @if (newNotifications().length) {
+      <h2>Novas</h2>
+      <ul class="list">
+        @for (notification of newNotifications(); track notification.id) {
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
+        }
+      </ul>
+    }
 
-    <h2>Anteriores</h2>
-    <ul class="list">
-      @for (notification of earlierNotifications; track $index) {
-        <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
-      }
-    </ul>
+    @if (earlierNotifications().length) {
+      <h2>Anteriores</h2>
+      <ul class="list">
+        @for (notification of earlierNotifications(); track notification.id) {
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
+        }
+      </ul>
+    }
+
+    @if (!notifications.list().length) {
+      <p class="empty muted">Você não tem notificações.</p>
+    }
   }
 </div>
 
@@ -82,7 +99,7 @@
       }
     </p>
     <div class="notification-meta">
-      <span class="muted">{{ notification.time }}</span>
+      <span class="muted">{{ relative(notification.createdAt) }}</span>
       @if (notification.unread) {
         <span class="dot"></span>
       }

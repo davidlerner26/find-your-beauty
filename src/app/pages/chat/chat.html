@@ -23,9 +23,9 @@
   </header>
 
   <div class="messages">
-    @for (message of messages(); track $index) {
-      <div class="row" [class.mine]="message.from === 'me'">
-        @if (message.from === 'artist') {
+    @for (message of messages(); track message.id) {
+      <div class="row" [class.mine]="message.from === 'user'">
+        @if (message.from === 'professional') {
           <img class="avatar small" [src]="artist.image" [alt]="artist.name" />
         }
         <div class="stack">
@@ -36,21 +36,15 @@
               {{ message.text }}
             }
           </div>
-          <span class="time">
-            {{ message.time }}
-            @if (message.read) {
-              <span class="read">✓✓</span>
-            }
-          </span>
+          <span class="time">{{ clock(message.createdAt) }}</span>
         </div>
       </div>
+    } @empty {
+      <p class="empty">Envie uma mensagem para {{ artist.name }}.</p>
     }
-    <div class="row">
-      <img class="avatar small" [src]="artist.image" [alt]="artist.name" />
-      <div class="bubble typing"><span></span><span></span><span></span></div>
-    </div>
   </div>
 
+  @if (auth.user()) {
   <form class="composer" (ngSubmit)="send()">
     <button type="button" class="icon-btn" aria-label="Anexar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -64,6 +58,15 @@
       </svg>
     </button>
   </form>
+  } @else if (auth.ready()) {
+    <p class="login-hint">
+      <a routerLink="/entrar">Entre</a> na sua conta para enviar mensagens.
+    </p>
+  }
+} @else if (professionals.status() === 'loading') {
+  <p class="not-found">Carregando...</p>
+} @else if (professionals.status() === 'error') {
+  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {
   <p class="not-found">Conversa não encontrada.</p>
 }

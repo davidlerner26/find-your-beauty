@@ -150,14 +150,18 @@
       <p class="price">R$ {{ total() }}</p>
     </div>
     <div class="book-actions">
-      <button type="button" class="chat" aria-label="Conversar">
+      <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar">
         <svg viewBox="0 0 24 24" fill="currentColor">
           <circle cx="7" cy="12" r="1.600" /><circle cx="12" cy="12" r="1.600" /><circle cx="17" cy="12" r="1.600" />
         </svg>
-      </button>
+      </a>
       <button type="button" class="book" [disabled]="!selectedServices().length" (click)="book()">Agendar</button>
     </div>
   </footer>
+} @else if (professionals.status() === 'loading') {
+  <p class="not-found">Carregando...</p>
+} @else if (professionals.status() === 'error') {
+  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {
   <p class="not-found">Maquiadora não encontrada.</p>
 }

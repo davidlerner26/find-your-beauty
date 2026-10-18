@@ -166,6 +166,9 @@ textarea {
 }
 
 .chat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 3.25rem;
   height: 3.25rem;
   padding: 0.8rem;

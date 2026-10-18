@@ -1,14 +1,14 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MAKEUP_ARTISTS } from '../../data/makeup-artists';
+import { Router, RouterLink } from '@angular/router';
+import { Professionals } from '../../services/professionals';
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
 @Component({
   selector: 'app-booking',
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './booking.html',
   styleUrl: './booking.scss',
 })
@@ -17,7 +17,7 @@ export class Booking {
   readonly servicos = input<string>('');
 
   protected readonly artist = computed(() =>
-    MAKEUP_ARTISTS.find((artist) => artist.id === this.id()),
+    this.professionals.byId(this.id()),
   );
 
   protected readonly selectedServices = computed(() => {
@@ -65,6 +65,7 @@ export class Booking {
   constructor(
     private readonly location: Location,
     private readonly router: Router,
+    protected readonly professionals: Professionals,
   ) {}
 
   protected checkout() {
@@ -76,7 +77,12 @@ export class Booking {
     const data = `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
 
     this.router.navigate(['/maquiadores', this.id(), 'pagamento'], {
-      queryParams: { servicos: this.servicos(), data, horario: time },
+      queryParams: {
+        servicos: this.servicos(),
+        data,
+        horario: time,
+        notas: this.notes.trim() || null,
+      },
     });
   }
 

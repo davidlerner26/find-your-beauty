@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, resource } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { Users } from '../../services/users';
 
 @Component({
   selector: 'app-profile',
@@ -9,8 +10,15 @@ import { Auth } from '../../services/auth';
   styleUrl: './profile.scss',
 })
 export class Profile {
+  // Loads the `users/{uid}` document whenever the logged in user changes
+  protected readonly profile = resource({
+    params: () => this.auth.user()?.uid,
+    loader: ({ params: uid }) => this.users.get(uid),
+  });
+
   constructor(
     protected readonly auth: Auth,
+    private readonly users: Users,
     private readonly router: Router,
   ) {}
 

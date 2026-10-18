@@ -1,6 +1,9 @@
 import { RouterLink } from '@angular/router';
-import { Component, computed } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { Auth } from '../../services/auth';
+import { Professional } from '../../models/professional';
+import { Professionals } from '../../services/professionals';
+import { distanceKm, formatDistance } from '../../utils/geo';
 
 type Salon = {
   id: string;
@@ -10,9 +13,10 @@ type Salon = {
   address: string;
   rating: number;
   reviews: string;
+  distance: string | null;
+  distanceKm: number | null;
 };
 
-type Offer = Salon & { distance: string };
 
 @Component({
   selector: 'app-home',
@@ -25,7 +29,47 @@ export class Home {
     () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || null,
   );
 
-  constructor(private readonly auth: Auth) {}
+  private readonly userPosition = signal<{ lat: number; lng: number } | null>(null);
+
+  private readonly salons = computed<Salon[]>(() =>
+    this.professionals.list().map((professional) => this.toSalon(professional)),
+  );
+
+  protected readonly featuredSalons = computed(() =>
+    [...this.salons()].sort((a, b) => b.rating - a.rating).slice(0, 4),
+  );
+
+  protected readonly nearbyOffers = computed(() =>
+    [...this.salons()]
+      .sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity))
+      .slice(0, 3),
+  );
+
+  constructor(
+    private readonly auth: Auth,
+    protected readonly professionals: Professionals,
+  ) {
+    navigator.geolocation?.getCurrentPosition(({ coords }) =>
+      this.userPosition.set({ lat: coords.latitude, lng: coords.longitude }),
+    );
+  }
+
+  private toSalon(professional: Professional): Salon {
+    const position = this.userPosition();
+    const km = position ? distanceKm(position, professional.position) : null;
+
+    return {
+      id: professional.id,
+      name: professional.name,
+      image: professional.image,
+      address: professional.address,
+      rating: professional.rating,
+      reviews: professional.reviewsCount,
+      tags: professional.tags.join(' . '),
+      distance: km === null ? null : formatDistance(km),
+      distanceKm: km,
+    };
+  }
 
   protected readonly services = [
     {
@@ -53,77 +97,6 @@ export class Home {
     },
   ];
 
-  protected readonly featuredSalons: Salon[] = [
-    {
-      tags: 'Cabelo . Unhas . Facial',
-      id: 'camila-torres',
-      name: 'Camila Torres',
-      image: 'images/makeup/1.jpg',
-      address: 'Rua Visconde de Pirajá, 550 - Ipanema, Rio de Janeiro',
-      rating: 4.8,
-      reviews: '3.1k',
-    },
-    {
-      tags: 'Cabelo . Facial . 2+',
-      id: 'beatriz-almeida',
-      name: 'Beatriz Almeida',
-      image: 'images/makeup/2.jpg',
-      address: 'Av. Atlântica, 1702 - Copacabana, Rio de Janeiro',
-      rating: 4.7,
-      reviews: '2.7k',
-    },
-    {
-      tags: 'Cabelo . Unhas',
-      id: 'juliana-prado',
-      name: 'Juliana Prado',
-      image: 'images/makeup/3.jpg',
-      address: 'Rua Dias Ferreira, 233 - Leblon, Rio de Janeiro',
-      rating: 4.6,
-      reviews: '1.9k',
-    },
-    {
-      tags: 'Maquiagem . Facial',
-      id: 'larissa-menezes',
-      name: 'Larissa Menezes',
-      image: 'images/makeup/4.jpg',
-      address: 'Rua Garcia DÁvila, 76 - Ipanema, Rio de Janeiro',
-      rating: 4.9,
-      reviews: '4.2k',
-    },
-  ];
-
   protected readonly interests = ['Cabelo', 'Maquiagem'];
 
-  protected readonly nearbyOffers: Offer[] = [
-    {
-      tags: 'Cabelo . Facial',
-      id: 'fernanda-lima',
-      name: 'Fernanda Lima',
-      image: 'images/makeup/5.jpg',
-      address: 'Rua Constante Ramos, 35 - Copacabana, Rio de Janeiro',
-      rating: 4.7,
-      reviews: '2.7k',
-      distance: '1,1km',
-    },
-    {
-      tags: 'Unhas . Spa',
-      id: 'rafaela-duarte',
-      name: 'Rafaela Duarte',
-      image: 'images/makeup/6.jpg',
-      address: 'Rua Farme de Amoedo, 20 - Ipanema, Rio de Janeiro',
-      rating: 4.5,
-      reviews: '1.2k',
-      distance: '2,3km',
-    },
-    {
-      tags: 'Maquiagem . Cabelo',
-      id: 'mariana-costa',
-      name: 'Mariana Costa',
-      image: 'images/makeup/7.jpg',
-      address: 'Rua Barão da Torre, 411 - Ipanema, Rio de Janeiro',
-      rating: 4.9,
-      reviews: '4.2k',
-      distance: '2,8km',
-    },
-  ];
 }

@@ -88,3 +88,38 @@ h1 {
   background: var(--primary);
   color: #fff;
 }
+
+.details {
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  dl {
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  dl div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  dt {
+    color: var(--muted);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+    text-align: right;
+  }
+}
+
+.error {
+  color: #e5484d;
+}

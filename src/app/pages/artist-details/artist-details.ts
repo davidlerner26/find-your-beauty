@@ -3,10 +3,10 @@ import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import {
   formatDuration,
-  MAKEUP_ARTISTS,
   Service,
   ServiceCategory,
-} from '../../data/makeup-artists';
+} from '../../models/professional';
+import { Professionals } from '../../services/professionals';
 
 @Component({
   selector: 'app-artist-details',
@@ -18,7 +18,7 @@ export class ArtistDetails {
   readonly id = input.required<string>();
 
   protected readonly artist = computed(() =>
-    MAKEUP_ARTISTS.find((artist) => artist.id === this.id()),
+    this.professionals.byId(this.id()),
   );
   protected readonly favorite = signal(false);
   protected readonly aboutExpanded = signal(false);
@@ -57,6 +57,7 @@ export class ArtistDetails {
   constructor(
     private readonly location: Location,
     private readonly router: Router,
+    protected readonly professionals: Professionals,
   ) {}
 
   protected goBack() {

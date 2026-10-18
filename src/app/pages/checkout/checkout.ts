@@ -1,9 +1,14 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
 import { Location } from '@angular/common';
-import { formatDuration, MAKEUP_ARTISTS } from '../../data/makeup-artists';
+import { RouterLink } from '@angular/router';
+import { formatDuration } from '../../models/professional';
+import { Auth } from '../../services/auth';
+import { Bookings } from '../../services/bookings';
+import { Professionals } from '../../services/professionals';
 
 @Component({
   selector: 'app-checkout',
+  imports: [RouterLink],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })
@@ -12,9 +17,10 @@ export class Checkout {
   readonly servicos = input<string>('');
   readonly data = input<string>('');
   readonly horario = input<string>('');
+  readonly notas = input<string>('');
 
   protected readonly artist = computed(() =>
-    MAKEUP_ARTISTS.find((artist) => artist.id === this.id()),
+    this.professionals.byId(this.id()),
   );
 
   protected readonly services = computed(() => {
@@ -41,7 +47,55 @@ export class Checkout {
   // Sample payment method until payments are integrated
   protected readonly card = { holder: 'Samantha Martin', number: '3124325***' };
 
-  constructor(private readonly location: Location) {}
+  protected readonly paying = signal(false);
+  protected readonly confirmed = signal(false);
+  protected readonly error = signal('');
+
+  constructor(
+    private readonly location: Location,
+    private readonly bookings: Bookings,
+    protected readonly auth: Auth,
+    protected readonly professionals: Professionals,
+  ) {}
+
+  protected async pay() {
+    const artist = this.artist();
+    const services = this.services();
+    const [year, month, day] = this.data().split('-').map(Number);
+    const [hour, minute] = this.horario().split(':').map(Number);
+
+    if (!artist || !services.length || !year || Number.isNaN(hour)) {
+      this.error.set('Dados do agendamento incompletos. Volte e escolha os serviços, o dia e o horário.');
+      return;
+    }
+
+    this.error.set('');
+    this.paying.set(true);
+    try {
+      await this.bookings.create({
+        professionalId: artist.id,
+        professionalName: artist.name,
+        services: services.map(({ id, name, price, durationMinutes }) => ({
+          id,
+          name,
+          price,
+          durationMinutes,
+        })),
+        startsAt: new Date(year, month - 1, day, hour, minute),
+        durationMinutes: services.reduce((sum, service) => sum + service.durationMinutes, 0),
+        total: this.total(),
+        notes: this.notas(),
+        status: 'confirmed',
+        paymentStatus: 'pending',
+      });
+      this.confirmed.set(true);
+    } catch (error) {
+      console.error('Failed to create booking', error);
+      this.error.set('Não foi possível confirmar o agendamento. Tente novamente.');
+    } finally {
+      this.paying.set(false);
+    }
+  }
 
   protected goBack() {
     this.location.back();

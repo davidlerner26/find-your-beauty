@@ -1,0 +1,186 @@
+:host {
+  display: block;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.top {
+  position: relative;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #f0f0f0;
+
+  h1 {
+    font-size: 1.25rem;
+  }
+}
+
+.back {
+  position: absolute;
+  left: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.content {
+  padding: 1.5rem;
+}
+
+.ticket {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: 24px;
+  background: #e4f3f8;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 1rem;
+  margin: 0;
+
+  dt {
+    margin-bottom: 0.5rem;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+}
+
+hr {
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid #cfd8e0;
+}
+
+.section-label {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.lines {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+
+    span {
+      color: var(--primary);
+      font-weight: 600;
+    }
+  }
+}
+
+.cut {
+  position: relative;
+  margin: 1.5rem 0;
+  border-top: 1.5px dashed #c5dae2;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -1.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  &::before {
+    left: -2.75rem;
+  }
+
+  &::after {
+    right: -2.75rem;
+  }
+}
+
+.total {
+  font-size: 1.05rem;
+}
+
+.card {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border: 1.5px solid var(--primary);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--primary);
+  text-align: left;
+  cursor: pointer;
+
+  svg {
+    width: 1.5rem;
+    flex: none;
+  }
+}
+
+.brand {
+  display: flex;
+  flex: none;
+
+  i {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: #d9272e;
+
+    & + i {
+      margin-left: -0.6rem;
+      background: rgba(245, 166, 35, 0.9);
+    }
+  }
+}
+
+.card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+
+  strong {
+    color: var(--text);
+  }
+
+  span {
+    color: var(--muted);
+  }
+}
+
+.pay {
+  width: 100%;
+  height: 3.75rem;
+  margin-top: 1.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.not-found {
+  padding: 2rem;
+  text-align: center;
+}

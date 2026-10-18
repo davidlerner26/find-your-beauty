@@ -75,7 +75,7 @@
           <circle cx="7" cy="12" r="1.600" /><circle cx="12" cy="12" r="1.600" /><circle cx="17" cy="12" r="1.600" />
         </svg>
       </button>
-      <button type="button" class="checkout" [disabled]="!canCheckout()">Finalizar</button>
+      <button type="button" class="checkout" [disabled]="!canCheckout()" (click)="checkout()">Finalizar</button>
     </div>
   </footer>
 } @else {

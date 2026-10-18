@@ -1,6 +1,7 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MAKEUP_ARTISTS } from '../../data/makeup-artists';
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
@@ -61,7 +62,23 @@ export class Booking {
 
   protected readonly canCheckout = computed(() => !!this.selectedDay() && !!this.selectedTime());
 
-  constructor(private readonly location: Location) {}
+  constructor(
+    private readonly location: Location,
+    private readonly router: Router,
+  ) {}
+
+  protected checkout() {
+    const day = this.selectedDay();
+    const time = this.selectedTime();
+    if (!day || !time) return;
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const data = `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
+
+    this.router.navigate(['/maquiadores', this.id(), 'pagamento'], {
+      queryParams: { servicos: this.servicos(), data, horario: time },
+    });
+  }
 
   protected goBack() {
     this.location.back();

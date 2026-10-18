@@ -44,5 +44,9 @@ export const routes: Routes = [
     path: 'mensagens/:id',
     loadComponent: () => import('./pages/chat/chat').then((m) => m.Chat),
   },
+  {
+    path: 'maquiadores/:id/pagamento',
+    loadComponent: () => import('./pages/checkout/checkout').then((m) => m.Checkout),
+  },
   { path: '**', redirectTo: '' },
 ];

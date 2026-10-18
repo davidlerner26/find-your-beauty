@@ -1,0 +1,167 @@
+@if (artist(); as artist) {
+  <div class="hero" [style.background-image]="'url(' + artist.image + ')'">
+    <button type="button" class="round" aria-label="Voltar" (click)="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 5-7 7 7 7" />
+      </svg>
+    </button>
+    <div class="hero-actions">
+      <button type="button" class="round heart" aria-label="Favoritar" (click)="toggleFavorite()">
+        {{ favorite() ? '♥' : '♡' }}
+      </button>
+      <a class="round" routerLink="/explore" aria-label="Ver no mapa">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M9 3 3 5.500v15.500l6-2.500zm1 0v15.500l5 2.500V5.500zm6 2.500v15.500l5-2.500V3z" />
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="content">
+    <header class="intro">
+      <h1>{{ artist.name }}</h1>
+      <p class="muted">{{ artist.address }}</p>
+      <div class="facts">
+        <p>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+          </svg>
+          Aberto hoje
+        </p>
+        <p>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12s3.500-7 10-7 10 7 10 7-3.500 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" />
+          </svg>
+          {{ artist.views }} visualizações
+        </p>
+        <p>
+          <span class="star">★</span> <strong>{{ artist.rating }}</strong>
+          ({{ artist.reviewsCount }})
+        </p>
+      </div>
+    </header>
+
+    <section>
+      <h2>Sobre</h2>
+      <div class="about" [class.collapsed]="!aboutExpanded()">
+        @for (paragraph of artist.about; track paragraph) {
+          <p class="muted">{{ paragraph }}</p>
+        }
+      </div>
+      <button type="button" class="link" (click)="aboutExpanded.set(!aboutExpanded())">
+        {{ aboutExpanded() ? 'Ler menos' : 'Ler mais' }}
+      </button>
+    </section>
+
+    <section>
+      <h2>Horário de funcionamento</h2>
+      <div class="hours">
+        <p><span class="muted">Segunda a sexta</span><strong>08:00 - 15:00</strong></p>
+        <p><span class="muted">Sábado e domingo</span><strong>09:00 - 14:00</strong></p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Nossos serviços</h2>
+      <div class="categories">
+        @for (category of categories; track category.name) {
+          <button
+            type="button"
+            class="category"
+            [class.active]="activeCategory() === category.name"
+            (click)="activeCategory.set(category.name)"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path [attr.d]="category.icon" />
+            </svg>
+            {{ category.name }}
+          </button>
+        }
+      </div>
+      <div class="services">
+        @for (service of visibleServices(); track service.id) {
+          <article class="service">
+            <div class="service-image" [style.background-image]="'url(' + service.image + ')'"></div>
+            <div class="service-info">
+              <h3>{{ service.name }}</h3>
+              <p class="service-meta">
+                <strong>R$ {{ service.price }}</strong>
+                <span class="muted">· {{ formatDuration(service.durationMinutes) }}</span>
+              </p>
+              <p class="muted service-description">{{ service.description }}</p>
+            </div>
+            <button
+              type="button"
+              class="toggle"
+              [class.on]="isSelected(service)"
+              [attr.aria-label]="(isSelected(service) ? 'Remover ' : 'Adicionar ') + service.name"
+              (click)="toggleService(service)"
+            >
+              {{ isSelected(service) ? '−' : '+' }}
+            </button>
+          </article>
+        }
+      </div>
+      <button type="button" class="all-services">Ver todos os serviços</button>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Galeria</h2>
+        <a href="#">Ver todas</a>
+      </div>
+      <div class="gallery">
+        @for (photo of artist.gallery; track photo) {
+          <img [src]="photo" [alt]="'Trabalho de ' + artist.name" />
+        }
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Avaliações</h2>
+        <a href="#">Ver todas</a>
+      </div>
+      <div class="reviews">
+        @for (review of artist.reviews; track review.author) {
+          <article class="review">
+            <span class="avatar">{{ review.author[0] }}</span>
+            <div class="review-body">
+              <div class="review-head">
+                <h3>{{ review.author }}</h3>
+                <span class="muted">há {{ review.daysAgo }} dias</span>
+              </div>
+              <p class="stars">
+                @for (star of stars; track star) {
+                  <span [class.on]="star <= review.stars">★</span>
+                }
+              </p>
+              <p class="muted">{{ review.text }}</p>
+            </div>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
+
+  <footer class="book-bar">
+    <div>
+      <p><strong>Total</strong> ({{ selectedServices().length }} {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})</p>
+      <p class="price">R$ {{ total() }}</p>
+    </div>
+    <div class="book-actions">
+      <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="7" cy="12" r="1.600" /><circle cx="12" cy="12" r="1.600" /><circle cx="17" cy="12" r="1.600" />
+        </svg>
+      </a>
+      <button type="button" class="book" [disabled]="!selectedServices().length" (click)="book()">Agendar</button>
+    </div>
+  </footer>
+} @else if (professionals.status() === 'loading') {
+  <p class="not-found">Carregando...</p>
+} @else if (professionals.status() === 'error') {
+  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
+} @else {
+  <p class="not-found">Maquiadora não encontrada.</p>
+}

@@ -1,0 +1,79 @@
+@if (peer(); as peer) {
+  <header class="top">
+    <button type="button" class="icon-btn" aria-label="Voltar" (click)="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 5-7 7 7 7" />
+      </svg>
+    </button>
+    @if (peer.image) {
+      <img class="avatar" [src]="peer.image" [alt]="peer.name" />
+    } @else {
+      <span class="avatar initial">{{ peer.name[0] }}</span>
+    }
+    <div class="who">
+      <strong>{{ peer.name }}</strong>
+    </div>
+    <button type="button" class="icon-btn" aria-label="Ligar">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M6.600 10.800a15 15 0 0 0 6.600 6.600l2.200-2.200a1 1 0 0 1 1-.25c1.100.37 2.300.57 3.600.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.500a1 1 0 0 1 1 1c0 1.300.2 2.500.57 3.600a1 1 0 0 1-.25 1z" />
+      </svg>
+    </button>
+    <button type="button" class="icon-btn" aria-label="Mais opções">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="5" r="1.800" /><circle cx="12" cy="12" r="1.800" /><circle cx="12" cy="19" r="1.800" />
+      </svg>
+    </button>
+  </header>
+
+  <div class="messages">
+    @for (message of messages(); track message.id) {
+      <div class="row" [class.mine]="isMine(message)">
+        @if (!isMine(message)) {
+          @if (peer.image) {
+            <img class="avatar small" [src]="peer.image" [alt]="peer.name" />
+          } @else {
+            <span class="avatar small initial">{{ peer.name[0] }}</span>
+          }
+        }
+        <div class="stack">
+          <div class="bubble" [class.image]="message.image">
+            @if (message.image) {
+              <img [src]="message.image" alt="Foto enviada" />
+            } @else {
+              {{ message.text }}
+            }
+          </div>
+          <span class="time">{{ clock(message.createdAt) }}</span>
+        </div>
+      </div>
+    } @empty {
+      <p class="empty">Envie uma mensagem para {{ peer.name }}.</p>
+    }
+  </div>
+
+  @if (auth.user()) {
+  <form class="composer" (ngSubmit)="send()">
+    <button type="button" class="icon-btn" aria-label="Anexar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m21 11-8.500 8.500a5 5 0 0 1-7-7L14 4a3.500 3.500 0 0 1 5 5l-8.500 8.500a2 2 0 0 1-3-3L15 7" />
+      </svg>
+    </button>
+    <input name="draft" placeholder="Digite uma mensagem" autocomplete="off" [(ngModel)]="draft" />
+    <button type="submit" class="send" aria-label="Enviar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 2 11 13M22 2l-7 20-4-9-9-4z" />
+      </svg>
+    </button>
+  </form>
+  } @else if (auth.ready()) {
+    <p class="login-hint">
+      <a routerLink="/entrar">Entre</a> na sua conta para enviar mensagens.
+    </p>
+  }
+} @else if (professionals.status() === 'loading') {
+  <p class="not-found">Carregando...</p>
+} @else if (professionals.status() === 'error') {
+  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
+} @else {
+  <p class="not-found">Conversa não encontrada.</p>
+}

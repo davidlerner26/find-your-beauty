@@ -1,0 +1,48 @@
+<div class="profile">
+  <h1>Perfil</h1>
+
+  @if (!auth.ready()) {
+    <p class="muted">Carregando...</p>
+  } @else if (auth.user(); as user) {
+    <section class="card">
+      @if (user.photoURL) {
+        <img class="avatar" [src]="user.photoURL" [alt]="user.displayName || 'Foto do perfil'" referrerpolicy="no-referrer" />
+      } @else {
+        <span class="avatar initial">{{ initial(user.displayName, user.email) }}</span>
+      }
+      <div>
+        <h2>{{ user.displayName || 'Sem nome' }}</h2>
+        <p class="muted">{{ user.email }}</p>
+      </div>
+    </section>
+
+    <section class="details">
+      <h3>Meus dados</h3>
+      @if (profile.isLoading()) {
+        <p class="muted">Carregando...</p>
+      } @else if (profile.error()) {
+        <p class="error">Não foi possível carregar seus dados.</p>
+      } @else if (profile.value(); as data) {
+        <dl>
+          <div><dt>Nome</dt><dd>{{ data.firstName || '-' }}</dd></div>
+          <div><dt>Sobrenome</dt><dd>{{ data.lastName || '-' }}</dd></div>
+          <div><dt>E-mail</dt><dd>{{ data.email || user.email }}</dd></div>
+          <div><dt>Celular</dt><dd>{{ data.phone || '-' }}</dd></div>
+        </dl>
+      } @else {
+        <p class="muted">Seus dados ainda não foram salvos.</p>
+      }
+    </section>
+
+    <p class="status">
+      <span class="dot"></span> Você está logado
+    </p>
+
+    <button type="button" class="signout" (click)="signOut()">Sair</button>
+  } @else {
+    <section class="card empty">
+      <p>Você não está logado.</p>
+      <a class="signin" routerLink="/entrar">Entrar</a>
+    </section>
+  }
+</div>

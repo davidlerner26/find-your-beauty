@@ -1,0 +1,42 @@
+import { computed, Injectable, signal } from '@angular/core';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { Professional } from '../models/professional';
+import { db } from './firebase';
+
+@Injectable({ providedIn: 'root' })
+export class Professionals {
+  readonly list = signal<Professional[]>([]);
+  // What clients can see: professionals that haven't hidden their profile
+  readonly published = computed(() => this.list().filter((professional) => professional.published !== false));
+  readonly status = signal<'loading' | 'ready' | 'error'>('loading');
+
+  constructor() {
+    this.load();
+  }
+
+  async load() {
+    this.status.set('loading');
+    try {
+      const snapshot = await getDocs(collection(db, 'professionals'));
+      this.list.set(
+        snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Professional),
+      );
+      this.status.set('ready');
+    } catch (error) {
+      console.error('Failed to load professionals', error);
+      this.status.set('error');
+    }
+  }
+
+  byId(id: string) {
+    return this.list().find((professional) => professional.id === id);
+  }
+
+  // Slots ("HH:mm") already taken on a day: they live in professionals/{id}/busy, readable by anyone
+  async busyTimes(id: string, dateKey: string) {
+    const snapshot = await getDocs(
+      query(collection(db, 'professionals', id, 'busy'), where('date', '==', dateKey)),
+    );
+    return new Set(snapshot.docs.map((doc) => doc.id.split('_')[1]));
+  }
+}

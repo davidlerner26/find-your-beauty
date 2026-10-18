@@ -1,0 +1,159 @@
+<div class="profile">
+  <h1>Meu perfil</h1>
+
+  @if (!profile()) {
+    <p class="muted">Carregando...</p>
+  } @else {
+    <form (ngSubmit)="save()">
+      <section>
+        <h2>Dados</h2>
+        <label>Nome<input name="name" [(ngModel)]="name" /></label>
+        <label>Celular<input name="phone" type="tel" [(ngModel)]="phone" /></label>
+        <div class="photo">
+          @if (image) {
+            <img class="preview" [src]="image" alt="Sua foto" />
+          } @else {
+            <span class="preview empty">Sem foto</span>
+          }
+          <label class="upload">
+            {{ uploading() ? 'Enviando...' : image ? 'Trocar foto' : 'Escolher foto' }}
+            <input type="file" accept="image/*" hidden [disabled]="uploading()" #profileFile (change)="uploadProfilePhoto(profileFile)" />
+          </label>
+        </div>
+        <label>
+          Sobre você
+          <textarea name="about" rows="5" placeholder="Conte sobre o seu trabalho" [(ngModel)]="about"></textarea>
+        </label>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2>Galeria</h2>
+          <label class="link upload-link">
+            {{ uploading() ? 'Enviando...' : '+ Adicionar fotos' }}
+            <input type="file" accept="image/*" multiple hidden [disabled]="uploading()" #galleryFile (change)="uploadGalleryPhotos(galleryFile)" />
+          </label>
+        </div>
+        <div class="gallery">
+          @for (photo of gallery; track photo) {
+            <div class="thumb">
+              <img [src]="photo" alt="Foto da galeria" />
+              <button type="button" aria-label="Remover foto" (click)="removeGalleryPhoto(photo)">✕</button>
+            </div>
+          } @empty {
+            <p class="hint muted">Mostre o seu trabalho: as fotos aparecem na galeria do seu perfil.</p>
+          }
+        </div>
+      </section>
+
+      <section>
+        <h2>Localização</h2>
+        <label>Endereço<input name="address" placeholder="Rua, número - bairro, cidade" [(ngModel)]="address" /></label>
+        <button type="button" class="secondary" [disabled]="locating()" (click)="useMyLocation()">
+          {{ locating() ? 'Buscando...' : 'Usar minha localização atual' }}
+        </button>
+        <p class="hint muted">
+          {{ hasPosition ? 'Localização no mapa definida.' : 'Defina o ponto no mapa para aparecer no Explorar.' }}
+        </p>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2>Serviços</h2>
+          <button type="button" class="link" (click)="addService()">+ Adicionar</button>
+        </div>
+
+        @for (service of services; track service.id; let i = $index) {
+          <div class="service">
+            <input [name]="'sname' + i" placeholder="Nome do serviço" [(ngModel)]="service.name" />
+            <div class="row">
+              <select [name]="'scat' + i" [(ngModel)]="service.category">
+                @for (category of categories; track category) {
+                  <option [value]="category">{{ category }}</option>
+                }
+              </select>
+              <input [name]="'sprice' + i" type="number" min="0" placeholder="Preço (R$)" [(ngModel)]="service.price" />
+              <input [name]="'sdur' + i" type="number" min="15" step="15" placeholder="Minutos" [(ngModel)]="service.durationMinutes" />
+            </div>
+            <textarea [name]="'sdesc' + i" rows="2" placeholder="Descrição" [(ngModel)]="service.description"></textarea>
+            <button type="button" class="remove" (click)="removeService(service)">Remover</button>
+          </div>
+        } @empty {
+          <p class="muted">Nenhum serviço ainda.</p>
+        }
+      </section>
+
+      <section>
+        <h2>Horários de atendimento</h2>
+        <label>
+          Duração de cada horário
+          <select name="slot" [(ngModel)]="availability.slotMinutes">
+            <option [ngValue]="30">30 minutos</option>
+            <option [ngValue]="60">1 hora</option>
+          </select>
+        </label>
+
+        <div class="week">
+          @for (day of weekdays; track day.key) {
+            <div class="weekday">
+              <label class="check">
+                <input type="checkbox" [name]="'on' + day.key" [(ngModel)]="availability.weekly[day.key].enabled" />
+                {{ day.label }}
+              </label>
+              @if (availability.weekly[day.key].enabled) {
+                <div class="times">
+                  <input type="time" [name]="'start' + day.key" [(ngModel)]="availability.weekly[day.key].start" />
+                  <span>às</span>
+                  <input type="time" [name]="'end' + day.key" [(ngModel)]="availability.weekly[day.key].end" />
+                </div>
+              } @else {
+                <span class="muted">Folga</span>
+              }
+            </div>
+          }
+        </div>
+        @if (invalidDays.length) {
+          <p class="error">O fechamento precisa ser depois da abertura em: {{ invalidDays.length }} dia(s).</p>
+        }
+
+        <h3>Dias bloqueados</h3>
+        <div class="block">
+          <input type="date" name="blocked" [(ngModel)]="blockedDate" />
+          <button type="button" class="secondary small" [disabled]="!blockedDate" (click)="blockDate()">Bloquear</button>
+        </div>
+        <div class="chips">
+          @for (date of availability.blockedDates; track date) {
+            <span class="chip">
+              {{ dateLabel(date) }}
+              <button type="button" aria-label="Desbloquear" (click)="unblockDate(date)">✕</button>
+            </span>
+          } @empty {
+            <p class="hint muted">Nenhum dia bloqueado. Use para férias e folgas.</p>
+          }
+        </div>
+      </section>
+
+      <section>
+        <label class="check">
+          <input type="checkbox" name="published" [ngModel]="visible()" (ngModelChange)="visible.set($event)" />
+          Mostrar meu perfil para as clientes
+        </label>
+        @if (missing.length) {
+          <p class="hint muted">Para publicar falta: {{ missing.join(', ') }}.</p>
+        } @else if (!visible()) {
+          <p class="hint muted">Seu perfil está completo, mas oculto para as clientes.</p>
+        }
+      </section>
+
+      @if (message()) {
+        <p class="message">{{ message() }}</p>
+      }
+
+      <button type="submit" class="primary" [disabled]="saving()">
+        {{ saving() ? 'Salvando...' : 'Salvar perfil' }}
+      </button>
+    </form>
+
+    <button type="button" class="signout" (click)="signOut()">Sair</button>
+  }
+</div>

@@ -1,0 +1,91 @@
+@if (artist(); as artist) {
+  <header class="top">
+    <button type="button" class="back" aria-label="Voltar" (click)="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 5-7 7 7 7" />
+      </svg>
+    </button>
+    <h1>Agendar serviço</h1>
+  </header>
+
+  <div class="content">
+    <p class="artist muted">com <strong>{{ artist.name }}</strong></p>
+
+    <section>
+      <h2>Data</h2>
+      <div class="month">
+        <button type="button" aria-label="Mês anterior" [disabled]="isCurrentMonth()" (click)="changeMonth(-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 5-7 7 7 7" />
+          </svg>
+        </button>
+        <strong>{{ monthLabel() }}</strong>
+        <button type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 5 7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+      <div class="days">
+        @for (day of days(); track day.number) {
+          <button
+            type="button"
+            class="day"
+            [class.selected]="isSelected(day)"
+            [disabled]="day.disabled"
+            (click)="selectedDay.set(day.date)"
+          >
+            <span>{{ day.weekday }}</span>
+            <strong>{{ day.number }}</strong>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section>
+      <h2>Horário</h2>
+      <div class="times">
+        @for (time of times(); track time) {
+          <button
+            type="button"
+            class="time"
+            [class.selected]="selectedTime() === time"
+            (click)="selectedTime.set(time)"
+          >
+            {{ time }}
+          </button>
+        } @empty {
+          <p class="muted">
+            {{ !selectedDay() ? 'Escolha um dia para ver os horários.' : loadingTimes() ? 'Carregando horários...' : 'Não há horários livres neste dia. Escolha outro.' }}
+          </p>
+        }
+      </div>
+    </section>
+
+    <section>
+      <h2>Observações</h2>
+      <textarea rows="5" placeholder="Digite suas observações aqui" [(ngModel)]="notes"></textarea>
+    </section>
+  </div>
+
+  <footer class="book-bar">
+    <div>
+      <p><strong>Total</strong> ({{ selectedServices().length }} {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})</p>
+      <p class="price">R$ {{ total() }}</p>
+    </div>
+    <div class="book-actions">
+      <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="7" cy="12" r="1.600" /><circle cx="12" cy="12" r="1.600" /><circle cx="17" cy="12" r="1.600" />
+        </svg>
+      </a>
+      <button type="button" class="checkout" [disabled]="!canCheckout()" (click)="checkout()">Finalizar</button>
+    </div>
+  </footer>
+} @else if (professionals.status() === 'loading') {
+  <p class="not-found">Carregando...</p>
+} @else if (professionals.status() === 'error') {
+  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
+} @else {
+  <p class="not-found">Maquiadora não encontrada.</p>
+}

@@ -1,0 +1,291 @@
+.profile {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+section {
+  display: grid;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+label {
+  display: grid;
+  gap: 0.4rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border: 1.5px solid transparent;
+  border-radius: 14px;
+  background: #f1f2f6;
+  font-size: 1rem;
+  outline: 0;
+
+  &:focus {
+    border-color: var(--primary);
+    background: #fff;
+  }
+}
+
+.preview {
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.link {
+  border: 0;
+  background: none;
+  color: var(--primary);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.service {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--primary-light);
+
+  .row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  input,
+  select,
+  textarea {
+    background: #fff;
+  }
+}
+
+.remove {
+  justify-self: end;
+  border: 0;
+  background: none;
+  color: #e5484d;
+  cursor: pointer;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  input {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+.hint {
+  font-size: 0.9rem;
+}
+
+.message {
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.primary,
+.secondary,
+.signout {
+  width: 100%;
+  height: 3.25rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.primary {
+  margin-top: 1rem;
+  border: 0;
+  background: var(--primary);
+  color: #fff;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.secondary {
+  border: 1.5px solid var(--primary);
+  background: #fff;
+  color: var(--primary);
+}
+
+.signout {
+  margin-top: 1rem;
+  border: 1.5px solid #e5484d;
+  background: #fff;
+  color: #e5484d;
+}
+
+h3 {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.week {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.weekday {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 14px;
+  background: var(--primary-light);
+
+  .check {
+    min-width: 7rem;
+  }
+
+  .times {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input {
+      width: auto;
+      background: #fff;
+    }
+  }
+}
+
+.block {
+  display: flex;
+  gap: 0.75rem;
+
+  input {
+    flex: 1;
+  }
+
+  .small {
+    width: auto;
+    padding: 0 1.25rem;
+    height: auto;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: #fde6e7;
+  color: #e5484d;
+
+  button {
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+}
+
+.error {
+  color: #e5484d;
+}
+
+.photo {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.preview.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.85rem;
+}
+
+.upload,
+.upload-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.4rem;
+  border: 1.5px solid var(--primary);
+  border-radius: 999px;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.upload-link {
+  padding: 0;
+  border: 0;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: 0.75rem;
+}
+
+.thumb {
+  position: relative;
+
+  img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  button {
+    position: absolute;
+    top: 0.35rem;
+    right: 0.35rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    cursor: pointer;
+  }
+}

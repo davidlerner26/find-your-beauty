@@ -1,0 +1,159 @@
+:host {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+.auth {
+  width: 100%;
+  max-width: 26rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 3.5rem;
+  padding: 0 1.25rem;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  background: #f1f2f6;
+  color: var(--muted);
+
+  &:focus-within {
+    background: #fff;
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  &.invalid {
+    border-color: #e5484d;
+  }
+
+  svg {
+    width: 1.25rem;
+    flex: none;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: none;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .toggle {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+  }
+}
+
+.error {
+  margin: -0.5rem 0 0 1.25rem;
+  color: #e5484d;
+  font-size: 0.85rem;
+}
+
+.forgot {
+  align-self: flex-end;
+  font-size: 0.9rem;
+  color: var(--primary);
+}
+
+.terms {
+  font-size: 0.8rem;
+  color: var(--muted);
+
+  a {
+    color: var(--primary);
+    font-weight: 600;
+  }
+}
+
+.primary,
+.google {
+  height: 3.5rem;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.primary {
+  border: 0;
+  background: var(--primary);
+  color: #fff;
+  margin-top: 1rem;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--muted);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #d6d6d6;
+  }
+}
+
+.google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1.5px solid var(--primary);
+  background: #fff;
+  color: var(--primary);
+
+  svg {
+    width: 1.3rem;
+  }
+}
+
+.switch {
+  text-align: center;
+  margin-top: 0.5rem;
+
+  a {
+    color: var(--primary);
+    font-weight: 600;
+  }
+}
+
+.success {
+  padding: 0.9rem 1.25rem;
+  border-radius: 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.9rem;
+}

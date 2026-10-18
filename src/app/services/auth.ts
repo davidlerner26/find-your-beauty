@@ -20,9 +20,14 @@ export class Auth {
   private readonly googleProvider = new GoogleAuthProvider();
 
   readonly user = signal<User | null>(null);
+  // false until Firebase tells us whether there is a session
+  readonly ready = signal(false);
 
   constructor() {
-    onAuthStateChanged(this.auth, (user) => this.user.set(user));
+    onAuthStateChanged(this.auth, (user) => {
+      this.user.set(user);
+      this.ready.set(true);
+    });
   }
 
   async signInWithGoogle() {

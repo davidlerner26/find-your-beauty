@@ -5,7 +5,7 @@ import { filter } from 'rxjs';
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean };
 
 // Screens that show the bottom tab bar (the others, like details and chat, are full screen)
-const TAB_SCREENS = ['/', '/explore', '/mensagens', '/notificacoes'];
+const TAB_SCREENS = ['/', '/explore', '/mensagens', '/notificacoes', '/perfil'];
 
 @Component({
   selector: 'app-root',
@@ -33,6 +33,12 @@ export class App {
       match: ['/mensagens', '/notificacoes'],
       icon: 'M6 3h12a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-3.500L12 21l-2.500-3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z',
       badge: true,
+    },
+    {
+      label: 'Perfil',
+      path: '/perfil',
+      match: ['/perfil'],
+      icon: 'M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.500 0-9 2.200-9 5.500V22h18v-2.500c0-3.300-4.500-5.500-9-5.500z',
     },
   ];
 

@@ -1,0 +1,90 @@
+.profile {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: var(--primary-light);
+
+  &.empty {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.avatar {
+  width: 4.5rem;
+  height: 4.5rem;
+  flex: none;
+  border-radius: 50%;
+  object-fit: cover;
+
+  &.initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--primary);
+}
+
+.dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: #2faa5f;
+}
+
+.signout,
+.signin {
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+.signout {
+  border: 1.5px solid #e5484d;
+  background: #fff;
+  color: #e5484d;
+}
+
+.signin {
+  width: 100%;
+  background: var(--primary);
+  color: #fff;
+}

@@ -53,5 +53,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
   },
+  {
+    path: 'perfil',
+    loadComponent: () => import('./pages/profile/profile').then((m) => m.Profile),
+  },
   { path: '**', redirectTo: '' },
 ];

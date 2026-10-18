@@ -11,6 +11,7 @@ import {
 import { toMinutes } from '../../utils/slots';
 import { Auth } from '../../services/auth';
 import { db } from '../../services/firebase';
+import { Photos } from '../../services/photos';
 import { Professionals } from '../../services/professionals';
 
 @Component({
@@ -20,11 +21,13 @@ import { Professionals } from '../../services/professionals';
   styleUrl: './pro-profile.scss',
 })
 export class ProProfile {
-  protected readonly categories: ServiceCategory[] = ['Maquiagem', 'Cabelo', 'Facial'];
+  protected readonly categories: ServiceCategory[] = ['Maquiagem', 'Cabelo'];
 
   protected name = '';
   protected phone = '';
   protected image = '';
+  protected gallery: string[] = [];
+  private removedPhotos: string[] = [];
   protected address = '';
   protected about = '';
   protected services: Service[] = [];
@@ -43,10 +46,11 @@ export class ProProfile {
     { key: '0', label: 'Domingo' },
   ];
 
-  protected readonly published = signal(false);
+  protected readonly visible = signal(true);
   protected readonly saving = signal(false);
   protected readonly message = signal('');
   protected readonly locating = signal(false);
+  protected readonly uploading = signal(false);
   private filled = false;
 
   private readonly uid = computed(() => this.auth.user()?.uid ?? '');
@@ -56,6 +60,7 @@ export class ProProfile {
     private readonly auth: Auth,
     private readonly professionals: Professionals,
     private readonly router: Router,
+    private readonly photos: Photos,
   ) {
     // Fills the form once, when the profile document arrives
     effect(() => {
@@ -66,12 +71,13 @@ export class ProProfile {
       this.name = profile.name;
       this.phone = profile.phone ?? '';
       this.image = profile.image;
+      this.gallery = [...profile.gallery];
       this.address = profile.address;
       this.about = profile.about.join('\n\n');
       this.services = profile.services.map((service) => ({ ...service }));
       this.position = { ...profile.position };
       this.availability = structuredClone(profile.availability ?? DEFAULT_AVAILABILITY);
-      this.published.set(profile.published !== false);
+      this.visible.set(profile.visible !== false);
     });
   }
 
@@ -115,6 +121,49 @@ export class ProProfile {
   protected dateLabel(date: string) {
     const [year, month, day] = date.split('-').map(Number);
     return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
+  }
+
+  protected async uploadProfilePhoto(input: HTMLInputElement) {
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+
+    this.uploading.set(true);
+    this.message.set('');
+    try {
+      this.image = await this.photos.upload(this.uid(), 'profile', file);
+    } catch (error) {
+      this.showUploadError(error);
+    } finally {
+      this.uploading.set(false);
+    }
+  }
+
+  protected async uploadGalleryPhotos(input: HTMLInputElement) {
+    const files = Array.from(input.files ?? []);
+    input.value = '';
+    if (!files.length) return;
+
+    this.uploading.set(true);
+    this.message.set('');
+    try {
+      const urls = await Promise.all(files.map((file) => this.photos.upload(this.uid(), 'gallery', file)));
+      this.gallery = [...this.gallery, ...urls];
+    } catch (error) {
+      this.showUploadError(error);
+    } finally {
+      this.uploading.set(false);
+    }
+  }
+
+  protected removeGalleryPhoto(url: string) {
+    this.gallery = this.gallery.filter((photo) => photo !== url);
+    this.removedPhotos.push(url);
+  }
+
+  private showUploadError(error: unknown) {
+    console.error('Upload failed', error);
+    this.message.set('Não foi possível enviar a foto. Use uma imagem e tente novamente.');
   }
 
   protected addService() {
@@ -167,8 +216,9 @@ export class ProProfile {
       durationMinutes: Number(service.durationMinutes),
       image: service.image || this.image.trim(),
     }));
-    // A profile that isn't complete can't be published
-    const published = this.published() && this.missing.length === 0;
+    // Clients only see profiles that are visible and complete
+    const visible = this.visible();
+    const published = visible && this.missing.length === 0;
 
     try {
       await updateDoc(doc(db, 'professionals', this.uid()), {
@@ -176,19 +226,28 @@ export class ProProfile {
         phone: this.phone.trim(),
         image: this.image.trim(),
         address: this.address.trim(),
-        about: this.about.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+        about: this.about
+          .split(/\n\s*\n/)
+          .map((p) => p.trim())
+          .filter(Boolean),
         services,
         tags: [...new Set(services.map((service) => service.category))],
+        gallery: this.gallery,
         position: this.position,
         availability: { ...this.availability, slotMinutes: Number(this.availability.slotMinutes) },
+        visible,
         published,
       });
+      // Only deletes the removed photos once the profile no longer points to them
+      await Promise.all(this.removedPhotos.map((url) => this.photos.remove(url)));
+      this.removedPhotos = [];
       await this.professionals.load();
-      this.published.set(published);
       this.message.set(
-        this.published() || !this.missing.length
-          ? 'Perfil salvo!'
-          : `Perfil salvo, mas ainda não publicado. Falta: ${this.missing.join(', ')}.`,
+        published
+          ? 'Perfil salvo e publicado! As clientes já podem encontrar você.'
+          : !visible
+            ? 'Perfil salvo, mas oculto. Marque "Mostrar meu perfil para as clientes" para publicar.'
+            : `Perfil salvo, mas ainda não publicado. Falta: ${this.missing.join(', ')}.`,
       );
     } catch (error) {
       console.error('Failed to save profile', error);

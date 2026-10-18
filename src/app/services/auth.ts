@@ -102,6 +102,7 @@ export class Auth {
       gallery: [],
       reviews: [],
       position: { lat: 0, lng: 0 },
+      visible: true,
       published: false,
       availability: DEFAULT_AVAILABILITY,
     });

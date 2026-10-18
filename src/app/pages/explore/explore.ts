@@ -40,7 +40,8 @@ export class Explore implements OnInit {
   };
 
   protected readonly filters = ['Cabelo', 'Maquiagem'];
-  protected readonly activeFilters = signal<string[]>(['Cabelo', 'Facial']);
+  // Every chip starts selected
+  protected readonly activeFilters = signal<string[]>([...this.filters]);
   protected readonly selected = signal(0);
 
   constructor(
@@ -60,7 +61,11 @@ export class Explore implements OnInit {
 
     return this.professionals
       .published()
-      .filter((salon) => !active.length || salon.tags.some((tag) => active.includes(tag)))
+      // With every chip selected nothing is filtered out, even professionals with other tags
+      .filter(
+        (salon) =>
+          active.length === this.filters.length || salon.tags.some((tag) => active.includes(tag)),
+      )
       .map((salon) => ({
         ...salon,
         distance: user ? formatDistance(distanceKm(user, salon.position)) : null,

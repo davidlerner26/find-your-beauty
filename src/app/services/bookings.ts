@@ -13,13 +13,6 @@ import { Booking, BookingStatus } from '../models/booking';
 import { Auth } from './auth';
 import { db } from './firebase';
 
-const notification = (text: { text: string; bold?: boolean }[]) => ({
-  icon: 'calendar',
-  text,
-  unread: true,
-  createdAt: serverTimestamp(),
-});
-
 @Injectable({ providedIn: 'root' })
 export class Bookings {
   // Requests received by the logged in professional
@@ -54,7 +47,7 @@ export class Bookings {
     });
   }
 
-  // The client requests a booking. Saves it and notifies both sides in one write.
+  // The client requests a booking. A Cloud Function notifies both sides.
   async create(booking: Omit<Booking, 'id' | 'clientUid' | 'clientName' | 'status'>) {
     const user = this.auth.user();
     if (!user) throw new Error('not-authenticated');
@@ -77,29 +70,15 @@ export class Bookings {
       status: 'pending',
       createdAt: serverTimestamp(),
     });
-    batch.set(
-      doc(collection(db, 'users', user.uid, 'notifications')),
-      notification([
-        { text: 'Você solicitou um horário com ' },
-        { text: booking.professionalName, bold: true },
-      ]),
-    );
-    if (booking.professionalUid) {
-      batch.set(
-        doc(collection(db, 'users', booking.professionalUid, 'notifications')),
-        notification([{ text: 'Nova solicitação de ', bold: false }, { text: clientName, bold: true }]),
-      );
-    }
     await batch.commit();
 
     return bookingRef.id;
   }
 
-  // The professional answers a request or concludes a booking, and the client is notified
+  // The professional answers a request or concludes a booking. A Cloud Function notifies the client.
   async setStatus(booking: Booking, status: Extract<BookingStatus, 'confirmed' | 'declined' | 'completed'>) {
     if (!booking.id) return;
 
-    const verb = { confirmed: 'confirmou', declined: 'recusou', completed: 'concluiu' }[status];
     const batch = writeBatch(db);
     batch.update(doc(db, 'bookings', booking.id), { status, updatedAt: serverTimestamp() });
     // A declined booking frees its slots
@@ -108,13 +87,6 @@ export class Bookings {
         batch.delete(doc(db, 'professionals', booking.professionalId, 'busy', busyId));
       }
     }
-    batch.set(
-      doc(collection(db, 'users', booking.clientUid, 'notifications')),
-      notification([
-        { text: booking.professionalName, bold: true },
-        { text: ` ${verb} o seu agendamento` },
-      ]),
-    );
     await batch.commit();
   }
 }

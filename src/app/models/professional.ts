@@ -57,7 +57,9 @@ export type Professional = {
   ownerUid?: string;
   email?: string;
   phone?: string;
-  // Hidden from home and explore while false. Demo professionals have no flag (visible).
+  // The professional's choice to show the profile (default: yes)
+  visible?: boolean;
+  // What clients see: visible and complete. Computed when the profile is saved.
   published?: boolean;
   availability?: Availability;
 };

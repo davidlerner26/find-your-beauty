@@ -9,17 +9,41 @@
         <h2>Dados</h2>
         <label>Nome<input name="name" [(ngModel)]="name" /></label>
         <label>Celular<input name="phone" type="tel" [(ngModel)]="phone" /></label>
-        <label>
-          Link da foto
-          <input name="image" type="url" placeholder="https://..." [(ngModel)]="image" />
-        </label>
-        @if (image) {
-          <img class="preview" [src]="image" alt="Prévia da foto" />
-        }
+        <div class="photo">
+          @if (image) {
+            <img class="preview" [src]="image" alt="Sua foto" />
+          } @else {
+            <span class="preview empty">Sem foto</span>
+          }
+          <label class="upload">
+            {{ uploading() ? 'Enviando...' : image ? 'Trocar foto' : 'Escolher foto' }}
+            <input type="file" accept="image/*" hidden [disabled]="uploading()" #profileFile (change)="uploadProfilePhoto(profileFile)" />
+          </label>
+        </div>
         <label>
           Sobre você
           <textarea name="about" rows="5" placeholder="Conte sobre o seu trabalho" [(ngModel)]="about"></textarea>
         </label>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2>Galeria</h2>
+          <label class="link upload-link">
+            {{ uploading() ? 'Enviando...' : '+ Adicionar fotos' }}
+            <input type="file" accept="image/*" multiple hidden [disabled]="uploading()" #galleryFile (change)="uploadGalleryPhotos(galleryFile)" />
+          </label>
+        </div>
+        <div class="gallery">
+          @for (photo of gallery; track photo) {
+            <div class="thumb">
+              <img [src]="photo" alt="Foto da galeria" />
+              <button type="button" aria-label="Remover foto" (click)="removeGalleryPhoto(photo)">✕</button>
+            </div>
+          } @empty {
+            <p class="hint muted">Mostre o seu trabalho: as fotos aparecem na galeria do seu perfil.</p>
+          }
+        </div>
       </section>
 
       <section>
@@ -111,11 +135,13 @@
 
       <section>
         <label class="check">
-          <input type="checkbox" name="published" [ngModel]="published()" (ngModelChange)="published.set($event)" />
+          <input type="checkbox" name="published" [ngModel]="visible()" (ngModelChange)="visible.set($event)" />
           Mostrar meu perfil para as clientes
         </label>
         @if (missing.length) {
           <p class="hint muted">Para publicar falta: {{ missing.join(', ') }}.</p>
+        } @else if (!visible()) {
+          <p class="hint muted">Seu perfil está completo, mas oculto para as clientes.</p>
         }
       </section>
 

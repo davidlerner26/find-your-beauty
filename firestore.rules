@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Public catalog. A professional account owns the document with its own uid as id.
+    match /professionals/{id} {
+      allow read: if true;
+      allow create, update: if request.auth != null && request.auth.uid == id;
+
+      // One document per taken slot. It can only be created once, which prevents double bookings.
+      match /busy/{slot} {
+        allow read: if true;
+        allow create: if request.auth != null && request.resource.data.clientUid == request.auth.uid;
+        allow delete: if request.auth != null && request.auth.uid == id;
+      }
+    }
+
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      // Notifications are created by Cloud Functions. The owner can only mark them as read.
+      match /notifications/{n} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        allow update: if request.auth != null && request.auth.uid == uid &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['unread']);
+      }
+    }
+
+    match /bookings/{id} {
+      allow read: if request.auth != null &&
+        (resource.data.clientUid == request.auth.uid || resource.data.professionalUid == request.auth.uid);
+      allow create: if request.auth != null &&
+        request.resource.data.clientUid == request.auth.uid && request.resource.data.status == 'pending';
+      allow update: if request.auth != null && resource.data.professionalUid == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']);
+    }
+
+    match /conversations/{id} {
+      allow read: if request.auth != null && request.auth.uid in resource.data.participants;
+      allow create: if request.auth != null && id.split('_')[0] == request.auth.uid &&
+        request.auth.uid in request.resource.data.participants;
+      allow update: if request.auth != null && request.auth.uid in resource.data.participants &&
+        request.resource.data.participants == resource.data.participants;
+
+      match /messages/{m} {
+        allow read: if request.auth != null && (id.split('_')[0] == request.auth.uid ||
+          request.auth.uid in get(/databases/$(database)/documents/conversations/$(id)).data.participants);
+        allow create: if request.auth != null && request.resource.data.senderUid == request.auth.uid &&
+          (id.split('_')[0] == request.auth.uid ||
+          request.auth.uid in get(/databases/$(database)/documents/conversations/$(id)).data.participants);
+      }
+    }
+  }
+}

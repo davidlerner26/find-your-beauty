@@ -11,7 +11,8 @@ import { authErrorMessage, isValidEmail } from '../../utils/validators';
   styleUrl: '../auth/auth.scss',
 })
 export class Signup {
-  protected name = '';
+  protected firstName = '';
+  protected lastName = '';
   protected email = '';
   protected phone = '';
   protected password = '';
@@ -23,7 +24,11 @@ export class Signup {
   protected readonly submitting = signal(false);
 
   protected get nameValid() {
-    return this.name.trim().length >= 3;
+    return this.firstName.trim().length >= 3;
+  }
+
+  protected get lastNameValid() {
+    return this.lastName.trim().length >= 2;
   }
 
   protected get emailValid() {
@@ -68,12 +73,12 @@ export class Signup {
 
   protected async submit() {
     this.submitted.set(true);
-    if (!this.nameValid || !this.emailValid || !this.phoneValid || !this.passwordValid) return;
+    if (!this.nameValid || !this.lastNameValid || !this.emailValid || !this.phoneValid || !this.passwordValid) return;
 
     this.formError.set('');
     this.submitting.set(true);
     try {
-      await this.auth.signUpWithEmail(this.name, this.email, this.password);
+      await this.auth.signUpWithEmail(`${this.firstName.trim()} ${this.lastName.trim()}`, this.email, this.password);
       this.router.navigateByUrl('/');
     } catch (error) {
       this.formError.set(authErrorMessage(error));

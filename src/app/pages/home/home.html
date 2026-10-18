@@ -1,7 +1,9 @@
 <main class="container">
   <section class="hero">
     <div>
-      <h1>Olá, David</h1>
+      @if (firstName(); as name) {
+        <h1>Olá, {{ name }}</h1>
+      }
       <p class="muted">Encontre o serviço que você quer e se cuide</p>
     </div>
     <button class="search-btn" type="button" aria-label="Buscar">

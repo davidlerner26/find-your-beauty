@@ -1,5 +1,6 @@
 import { RouterLink } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
+import { Auth } from '../../services/auth';
 
 type Salon = {
   id: string;
@@ -20,6 +21,12 @@ type Offer = Salon & { distance: string };
   styleUrl: './home.scss',
 })
 export class Home {
+  protected readonly firstName = computed(
+    () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || null,
+  );
+
+  constructor(private readonly auth: Auth) {}
+
   protected readonly services = [
     {
       name: 'Corte',

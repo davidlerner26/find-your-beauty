@@ -45,7 +45,7 @@
     <section>
       <h2>Horário</h2>
       <div class="times">
-        @for (time of times; track time) {
+        @for (time of times(); track time) {
           <button
             type="button"
             class="time"
@@ -54,6 +54,10 @@
           >
             {{ time }}
           </button>
+        } @empty {
+          <p class="muted">
+            {{ !selectedDay() ? 'Escolha um dia para ver os horários.' : loadingTimes() ? 'Carregando horários...' : 'Não há horários livres neste dia. Escolha outro.' }}
+          </p>
         }
       </div>
     </section>

@@ -1,15 +1,19 @@
-// users/{uid}/conversations/{professionalId}
+// conversations/{clientUid}_{professionalId}
 export type Conversation = {
+  id: string;
+  clientUid: string;
+  clientName: string;
   professionalId: string;
   lastMessage: string;
   lastMessageAt: Date | null;
+  // Unread messages for the logged in user
   unread: number;
 };
 
-// users/{uid}/conversations/{professionalId}/messages/{id}
+// conversations/{id}/messages/{id}
 export type ChatMessage = {
   id: string;
-  from: 'user' | 'professional';
+  senderUid: string;
   text?: string;
   image?: string;
   createdAt: Date | null;

@@ -1,14 +1,17 @@
-@if (artist(); as artist) {
+@if (peer(); as peer) {
   <header class="top">
     <button type="button" class="icon-btn" aria-label="Voltar" (click)="goBack()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round">
         <path d="m15 5-7 7 7 7" />
       </svg>
     </button>
-    <img class="avatar" [src]="artist.image" [alt]="artist.name" />
+    @if (peer.image) {
+      <img class="avatar" [src]="peer.image" [alt]="peer.name" />
+    } @else {
+      <span class="avatar initial">{{ peer.name[0] }}</span>
+    }
     <div class="who">
-      <strong>{{ artist.name }}</strong>
-      <span class="online">Online</span>
+      <strong>{{ peer.name }}</strong>
     </div>
     <button type="button" class="icon-btn" aria-label="Ligar">
       <svg viewBox="0 0 24 24" fill="currentColor">
@@ -24,9 +27,13 @@
 
   <div class="messages">
     @for (message of messages(); track message.id) {
-      <div class="row" [class.mine]="message.from === 'user'">
-        @if (message.from === 'professional') {
-          <img class="avatar small" [src]="artist.image" [alt]="artist.name" />
+      <div class="row" [class.mine]="isMine(message)">
+        @if (!isMine(message)) {
+          @if (peer.image) {
+            <img class="avatar small" [src]="peer.image" [alt]="peer.name" />
+          } @else {
+            <span class="avatar small initial">{{ peer.name[0] }}</span>
+          }
         }
         <div class="stack">
           <div class="bubble" [class.image]="message.image">
@@ -40,7 +47,7 @@
         </div>
       </div>
     } @empty {
-      <p class="empty">Envie uma mensagem para {{ artist.name }}.</p>
+      <p class="empty">Envie uma mensagem para {{ peer.name }}.</p>
     }
   </div>
 

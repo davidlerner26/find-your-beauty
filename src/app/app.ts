@@ -6,7 +6,17 @@ import { Messages } from './services/messages';
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean };
 
 // Screens that show the bottom tab bar (the others, like details and chat, are full screen)
-const TAB_SCREENS = ['/', '/explore', '/mensagens', '/notificacoes', '/perfil'];
+const TAB_SCREENS = [
+  '/',
+  '/explore',
+  '/mensagens',
+  '/notificacoes',
+  '/perfil',
+  '/pro',
+  '/pro/mensagens',
+  '/pro/notificacoes',
+  '/pro/perfil',
+];
 
 @Component({
   selector: 'app-root',
@@ -15,7 +25,7 @@ const TAB_SCREENS = ['/', '/explore', '/mensagens', '/notificacoes', '/perfil'];
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly tabs: Tab[] = [
+  private readonly clientTabs: Tab[] = [
     {
       label: 'Início',
       path: '/',
@@ -43,6 +53,28 @@ export class App {
     },
   ];
 
+  private readonly proTabs: Tab[] = [
+    {
+      label: 'Agenda',
+      path: '/pro',
+      match: ['/pro'],
+      icon: 'M7 2v3H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2V2h-2v3H9V2zM5 10h14v10H5z',
+    },
+    {
+      label: 'Mensagens',
+      path: '/pro/mensagens',
+      match: ['/pro/mensagens', '/pro/notificacoes'],
+      icon: 'M6 3h12a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-3.500L12 21l-2.500-3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z',
+      badge: true,
+    },
+    {
+      label: 'Perfil',
+      path: '/pro/perfil',
+      match: ['/pro/perfil'],
+      icon: 'M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.500 0-9 2.200-9 5.500V22h18v-2.500c0-3.300-4.500-5.500-9-5.500z',
+    },
+  ];
+
   protected readonly url = signal('/');
 
   constructor(
@@ -53,6 +85,10 @@ export class App {
     router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => this.url.set(this.pathOf(event.urlAfterRedirects)));
+  }
+
+  protected get tabs() {
+    return this.url().startsWith('/pro') ? this.proTabs : this.clientTabs;
   }
 
   protected get showTabs() {

@@ -59,7 +59,7 @@ export class Explore implements OnInit {
     const user = this.userPosition();
 
     return this.professionals
-      .list()
+      .published()
       .filter((salon) => !active.length || salon.tags.some((tag) => active.includes(tag)))
       .map((salon) => ({
         ...salon,

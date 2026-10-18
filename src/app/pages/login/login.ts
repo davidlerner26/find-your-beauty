@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
@@ -11,6 +11,9 @@ import { authErrorMessage, isValidEmail } from '../../utils/validators';
   styleUrl: '../auth/auth.scss',
 })
 export class Login {
+  // Set by the route: the professional area has its own login
+  readonly pro = input(false);
+
   protected email = '';
   protected password = '';
   protected readonly showPassword = signal(false);
@@ -40,8 +43,12 @@ export class Login {
     this.formError.set('');
     this.submitting.set(true);
     try {
-      await this.auth.signInWithEmail(this.email, this.password);
-      this.router.navigateByUrl('/');
+      if (this.pro()) {
+        await this.auth.signInProfessional(this.email, this.password);
+      } else {
+        await this.auth.signInWithEmail(this.email, this.password);
+      }
+      this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
       this.formError.set(authErrorMessage(error));
     } finally {
@@ -58,7 +65,7 @@ export class Login {
     this.googleError.set('');
     try {
       await this.auth.signInWithGoogle();
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
       const code = (error as { code?: string }).code;
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;

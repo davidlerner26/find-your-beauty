@@ -190,3 +190,12 @@
     font-weight: 600;
   }
 }
+
+.avatar.initial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+}

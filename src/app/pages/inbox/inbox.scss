@@ -183,3 +183,16 @@ h2 {
   background: var(--primary);
   color: #fff;
 }
+
+.avatar-initial {
+  width: 3.25rem;
+  height: 3.25rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

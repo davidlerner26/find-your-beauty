@@ -1,8 +1,10 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, effect, input, signal } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
+import { freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
@@ -28,7 +30,22 @@ export class Booking {
     this.selectedServices().reduce((sum, service) => sum + service.price, 0),
   );
 
-  protected readonly times = ['08:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+  private readonly availability = computed(() => this.artist()?.availability ?? DEFAULT_AVAILABILITY);
+  private readonly duration = computed(
+    () => this.selectedServices().reduce((sum, service) => sum + service.durationMinutes, 0) || 60,
+  );
+
+  // Slots already taken on the selected day (null while loading)
+  private readonly taken = signal<Set<string> | null>(null);
+
+  protected readonly loadingTimes = computed(() => !!this.selectedDay() && this.taken() === null);
+
+  protected readonly times = computed(() => {
+    const day = this.selectedDay();
+    const taken = this.taken();
+    if (!day || !taken) return [];
+    return freeStartTimes(day, this.availability(), this.duration(), taken);
+  });
 
   private readonly today = this.startOfDay(new Date());
   protected readonly month = signal(new Date(this.today.getFullYear(), this.today.getMonth(), 1));
@@ -55,7 +72,7 @@ export class Booking {
         date,
         weekday: weekday.format(date).replace('.', ''),
         number: i + 1,
-        disabled: date < this.today || date.getDay() === 0,
+        disabled: date < this.today || !isWorkingDay(date, this.availability()),
       };
     });
   });
@@ -66,15 +83,33 @@ export class Booking {
     private readonly location: Location,
     private readonly router: Router,
     protected readonly professionals: Professionals,
-  ) {}
+  ) {
+    // Loads the taken slots whenever the day changes
+    effect((onCleanup) => {
+      const day = this.selectedDay();
+      const id = this.id();
+      this.selectedTime.set(null);
+      this.taken.set(null);
+      if (!day) return;
+
+      let cancelled = false;
+      onCleanup(() => (cancelled = true));
+      this.professionals
+        .busyTimes(id, toDateKey(day))
+        .then((taken) => !cancelled && this.taken.set(taken))
+        .catch((error) => {
+          console.error('Failed to load times', error);
+          if (!cancelled) this.taken.set(new Set());
+        });
+    });
+  }
 
   protected checkout() {
     const day = this.selectedDay();
     const time = this.selectedTime();
     if (!day || !time) return;
 
-    const pad = (n: number) => String(n).padStart(2, '0');
-    const data = `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
+    const data = toDateKey(day);
 
     this.router.navigate(['/maquiadores', this.id(), 'pagamento'], {
       queryParams: {

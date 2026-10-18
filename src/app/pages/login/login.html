@@ -1,6 +1,8 @@
 <form class="auth" (ngSubmit)="submit()" novalidate>
-  <h1>Bem-vindo de volta,</h1>
-  <p class="subtitle">Que bom te ver de novo! Entre para usar o app.</p>
+  <h1>{{ pro() ? 'Área da profissional,' : 'Bem-vindo de volta,' }}</h1>
+  <p class="subtitle">
+    {{ pro() ? 'Entre para gerenciar sua agenda e seus clientes.' : 'Que bom te ver de novo! Entre para usar o app.' }}
+  </p>
 
   <label class="field" [class.invalid]="showError('email') && !emailValid">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.500L4 7.200V8l8 5 8-5v-.8z" /></svg>
@@ -37,6 +39,7 @@
     {{ submitting() ? 'Aguarde...' : 'Entrar' }}
   </button>
 
+  @if (!pro()) {
   <p class="divider">ou</p>
 
   <button type="button" class="google" (click)="signInWithGoogle()">
@@ -51,6 +54,13 @@
   @if (googleError()) {
     <p class="error">{{ googleError() }}</p>
   }
+  }
 
-  <p class="switch">Não tem uma conta? <a routerLink="/cadastro">Cadastre-se</a></p>
+  @if (pro()) {
+    <p class="switch">Não tem uma conta? <a routerLink="/pro/cadastro">Cadastre-se</a></p>
+    <p class="switch"><a routerLink="/entrar">Sou cliente</a></p>
+  } @else {
+    <p class="switch">Não tem uma conta? <a routerLink="/cadastro">Cadastre-se</a></p>
+    <p class="switch"><a routerLink="/pro/entrar">Sou profissional</a></p>
+  }
 </form>

@@ -2,15 +2,18 @@ import { computed, effect, Injectable, signal } from '@angular/core';
 import {
   collection,
   doc,
+  increment,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
-  setDoc,
   Timestamp,
+  updateDoc,
+  where,
   writeBatch,
 } from 'firebase/firestore';
 import { ChatMessage, Conversation } from '../models/message';
+import { Professional } from '../models/professional';
 import { Auth } from './auth';
 import { db } from './firebase';
 
@@ -24,7 +27,7 @@ export class Messages {
   );
 
   constructor(private readonly auth: Auth) {
-    // Keeps the conversation list in sync with the logged in user
+    // Keeps the conversation list in sync with the logged in user (client or professional)
     effect((onCleanup) => {
       const uid = this.auth.user()?.uid;
       if (!uid) {
@@ -32,42 +35,45 @@ export class Messages {
         return;
       }
 
-      const q = query(
-        collection(db, 'users', uid, 'conversations'),
-        orderBy('lastMessageAt', 'desc'),
-      );
+      const q = query(collection(db, 'conversations'), where('participants', 'array-contains', uid));
       const unsubscribe = onSnapshot(
         q,
-        (snapshot) =>
-          this.conversations.set(
-            snapshot.docs.map((d) => {
-              const data = d.data({ serverTimestamps: 'estimate' });
-              return {
-                professionalId: d.id,
-                lastMessage: data['lastMessage'] ?? '',
-                lastMessageAt: toDate(data['lastMessageAt']),
-                unread: data['unread'] ?? 0,
-              };
-            }),
-          ),
+        (snapshot) => {
+          const list = snapshot.docs.map((d): Conversation => {
+            const data = d.data({ serverTimestamps: 'estimate' });
+            const isClient = data['clientUid'] === uid;
+            return {
+              id: d.id,
+              clientUid: data['clientUid'],
+              clientName: data['clientName'] ?? '',
+              professionalId: data['professionalId'],
+              lastMessage: data['lastMessage'] ?? '',
+              lastMessageAt: toDate(data['lastMessageAt']),
+              unread: (isClient ? data['unreadClient'] : data['unreadProfessional']) ?? 0,
+            };
+          });
+          // Sorted here to avoid a composite index
+          list.sort((a, b) => (b.lastMessageAt?.getTime() ?? 0) - (a.lastMessageAt?.getTime() ?? 0));
+          this.conversations.set(list);
+        },
         (error) => console.error('Failed to load conversations', error),
       );
       onCleanup(unsubscribe);
     });
   }
 
-  // Calls `onChange` with every update of the messages with a professional. Returns the unsubscribe.
-  watch(professionalId: string, onChange: (messages: ChatMessage[]) => void) {
-    const uid = this.auth.user()?.uid;
-    if (!uid) {
+  clientConversationId(professionalId: string) {
+    return `${this.auth.user()?.uid}_${professionalId}`;
+  }
+
+  // Calls `onChange` with every update of the conversation. Returns the unsubscribe.
+  watch(conversationId: string, onChange: (messages: ChatMessage[]) => void) {
+    if (!this.auth.user()) {
       onChange([]);
       return () => {};
     }
 
-    const q = query(
-      collection(db, 'users', uid, 'conversations', professionalId, 'messages'),
-      orderBy('createdAt', 'asc'),
-    );
+    const q = query(collection(db, 'conversations', conversationId, 'messages'), orderBy('createdAt', 'asc'));
     return onSnapshot(
       q,
       (snapshot) =>
@@ -76,7 +82,7 @@ export class Messages {
             const data = d.data({ serverTimestamps: 'estimate' });
             return {
               id: d.id,
-              from: data['from'],
+              senderUid: data['senderUid'],
               text: data['text'],
               image: data['image'],
               createdAt: toDate(data['createdAt']),
@@ -87,27 +93,54 @@ export class Messages {
     );
   }
 
-  async send(professionalId: string, text: string) {
-    const uid = this.auth.user()?.uid;
-    if (!uid) return;
+  // The client starts (or continues) a conversation with a professional
+  async sendAsClient(professional: Professional, text: string) {
+    const user = this.auth.user();
+    if (!user) return;
 
-    const conversation = doc(db, 'users', uid, 'conversations', professionalId);
+    const conversation = doc(db, 'conversations', this.clientConversationId(professional.id));
     const message = doc(collection(conversation, 'messages'));
 
     const batch = writeBatch(db);
-    batch.set(message, { from: 'user', text, createdAt: serverTimestamp() });
+    batch.set(message, { senderUid: user.uid, text, createdAt: serverTimestamp() });
     batch.set(
       conversation,
-      { lastMessage: text, lastMessageAt: serverTimestamp(), unread: 0 },
+      {
+        // Demo professionals have no account, so the conversation only has the client
+        participants: professional.ownerUid ? [user.uid, professional.ownerUid] : [user.uid],
+        clientUid: user.uid,
+        clientName: user.displayName || user.email || 'Cliente',
+        professionalId: professional.id,
+        lastMessage: text,
+        lastMessageAt: serverTimestamp(),
+        unreadProfessional: increment(1),
+      },
       { merge: true },
     );
     await batch.commit();
   }
 
-  async markAsRead(professionalId: string) {
+  async sendAsProfessional(conversationId: string, text: string) {
     const uid = this.auth.user()?.uid;
     if (!uid) return;
 
-    await setDoc(doc(db, 'users', uid, 'conversations', professionalId), { unread: 0 }, { merge: true });
+    const conversation = doc(db, 'conversations', conversationId);
+    const message = doc(collection(conversation, 'messages'));
+
+    const batch = writeBatch(db);
+    batch.set(message, { senderUid: uid, text, createdAt: serverTimestamp() });
+    batch.update(conversation, {
+      lastMessage: text,
+      lastMessageAt: serverTimestamp(),
+      unreadClient: increment(1),
+    });
+    await batch.commit();
+  }
+
+  async markAsRead(conversation: Conversation) {
+    const isClient = this.auth.user()?.uid === conversation.clientUid;
+    await updateDoc(doc(db, 'conversations', conversation.id), {
+      [isClient ? 'unreadClient' : 'unreadProfessional']: 0,
+    });
   }
 }

@@ -32,7 +32,7 @@ export class Home {
   private readonly userPosition = signal<{ lat: number; lng: number } | null>(null);
 
   private readonly salons = computed<Salon[]>(() =>
-    this.professionals.list().map((professional) => this.toSalon(professional)),
+    this.professionals.published().map((professional) => this.toSalon(professional)),
   );
 
   protected readonly featuredSalons = computed(() =>

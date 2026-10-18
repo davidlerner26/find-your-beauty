@@ -1,5 +1,6 @@
 import { isDevMode } from '@angular/core';
 import { Routes } from '@angular/router';
+import { proGuard } from './guards/pro';
 
 export const routes: Routes = [
   {
@@ -63,6 +64,45 @@ export const routes: Routes = [
     path: 'seed',
     canMatch: [() => isDevMode()],
     loadComponent: () => import('./pages/seed/seed').then((m) => m.Seed),
+  },
+  // Professional area
+  {
+    path: 'pro/entrar',
+    data: { pro: true },
+    loadComponent: () => import('./pages/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'pro/cadastro',
+    data: { pro: true },
+    loadComponent: () => import('./pages/signup/signup').then((m) => m.Signup),
+  },
+  {
+    path: 'pro',
+    canActivate: [proGuard],
+    loadComponent: () => import('./pages/pro-agenda/pro-agenda').then((m) => m.ProAgenda),
+  },
+  {
+    path: 'pro/mensagens',
+    canActivate: [proGuard],
+    data: { tab: 'mensagens' },
+    loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
+  },
+  {
+    path: 'pro/notificacoes',
+    canActivate: [proGuard],
+    data: { tab: 'notificacoes' },
+    loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
+  },
+  {
+    path: 'pro/mensagens/:id',
+    canActivate: [proGuard],
+    data: { pro: true },
+    loadComponent: () => import('./pages/chat/chat').then((m) => m.Chat),
+  },
+  {
+    path: 'pro/perfil',
+    canActivate: [proGuard],
+    loadComponent: () => import('./pages/pro-profile/pro-profile').then((m) => m.ProProfile),
   },
   { path: '**', redirectTo: '' },
 ];

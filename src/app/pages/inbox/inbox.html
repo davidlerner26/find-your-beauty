@@ -1,7 +1,7 @@
 <div class="inbox">
   <div class="tabs">
-    <a routerLink="/mensagens" [class.active]="tab() === 'mensagens'">Mensagens</a>
-    <a routerLink="/notificacoes" [class.active]="tab() === 'notificacoes'">Notificações</a>
+    <a [routerLink]="base() + '/mensagens'" [class.active]="tab() === 'mensagens'">Mensagens</a>
+    <a [routerLink]="base() + '/notificacoes'" [class.active]="tab() === 'notificacoes'">Notificações</a>
   </div>
 
   @if (!auth.ready()) {
@@ -17,16 +17,20 @@
         <circle cx="11" cy="11" r="7" />
         <path d="m20 20-3.500-3.500" />
       </svg>
-      <input type="search" placeholder="Buscar mensagens ou maquiadora" [(ngModel)]="search" name="search" />
+      <input type="search" [placeholder]="auth.role() === 'professional' ? 'Buscar mensagens ou cliente' : 'Buscar mensagens ou maquiadora'" [(ngModel)]="search" name="search" />
     </label>
 
     <ul class="list">
-      @for (item of filteredConversations; track item.professionalId) {
+      @for (item of filteredConversations; track item.id) {
         <li>
-          <a class="conversation" [routerLink]="['/mensagens', item.professionalId]">
-            <img [src]="item.artist.image" [alt]="item.artist.name" />
+          <a class="conversation" [routerLink]="item.link">
+            @if (item.image) {
+              <img [src]="item.image" [alt]="item.title" />
+            } @else {
+              <span class="avatar-initial">{{ item.title[0] }}</span>
+            }
             <div class="conversation-body">
-              <h3>{{ item.artist.name }}</h3>
+              <h3>{{ item.title }}</h3>
               <p class="muted">{{ item.lastMessage }}</p>
             </div>
             <div class="conversation-meta">
@@ -38,7 +42,7 @@
           </a>
         </li>
       } @empty {
-        <li class="empty muted">Você ainda não tem conversas. Abra o perfil de uma maquiadora para começar uma.</li>
+        <li class="empty muted">{{ auth.role() === 'professional' ? 'Você ainda não recebeu mensagens.' : 'Você ainda não tem conversas. Abra o perfil de uma maquiadora para começar uma.' }}</li>
       }
     </ul>
   } @else if (notifications.loading()) {

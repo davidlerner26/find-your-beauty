@@ -46,8 +46,8 @@
 
     @if (confirmed()) {
       <div class="confirmed">
-        <strong>Agendamento confirmado!</strong>
-        <p>Enviamos uma notificação com os detalhes.</p>
+        <strong>Solicitação enviada!</strong>
+        <p>A maquiadora vai confirmar o seu horário. Você será avisada por notificação.</p>
         <a class="pay" routerLink="/">Voltar ao início</a>
       </div>
     } @else if (!auth.user()) {
@@ -58,7 +58,7 @@
         <p class="error">{{ error() }}</p>
       }
       <button type="button" class="pay" [disabled]="paying()" (click)="pay()">
-        {{ paying() ? 'Confirmando...' : 'Pagar agora' }}
+        {{ paying() ? 'Enviando...' : 'Pagar agora' }}
       </button>
     }
   </div>

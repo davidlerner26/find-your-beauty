@@ -5,6 +5,8 @@ import { formatDuration } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
 import { Professionals } from '../../services/professionals';
+import { DEFAULT_AVAILABILITY } from '../../models/professional';
+import { busyIdsFor } from '../../utils/slots';
 
 @Component({
   selector: 'app-checkout',
@@ -74,6 +76,7 @@ export class Checkout {
     try {
       await this.bookings.create({
         professionalId: artist.id,
+        professionalUid: artist.ownerUid ?? null,
         professionalName: artist.name,
         services: services.map(({ id, name, price, durationMinutes }) => ({
           id,
@@ -85,13 +88,23 @@ export class Checkout {
         durationMinutes: services.reduce((sum, service) => sum + service.durationMinutes, 0),
         total: this.total(),
         notes: this.notas(),
-        status: 'confirmed',
+        busyIds: busyIdsFor(
+          this.data(),
+          this.horario(),
+          services.reduce((sum, service) => sum + service.durationMinutes, 0),
+          (artist.availability ?? DEFAULT_AVAILABILITY).slotMinutes,
+        ),
         paymentStatus: 'pending',
       });
       this.confirmed.set(true);
     } catch (error) {
       console.error('Failed to create booking', error);
-      this.error.set('Não foi possível confirmar o agendamento. Tente novamente.');
+      // Slots can only be created once, so a denied write means someone took this time first
+      this.error.set(
+        (error as { code?: string }).code === 'permission-denied'
+          ? 'Este horário acabou de ser ocupado. Volte e escolha outro.'
+          : 'Não foi possível enviar a solicitação. Tente novamente.',
+      );
     } finally {
       this.paying.set(false);
     }

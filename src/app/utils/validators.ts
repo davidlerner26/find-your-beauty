@@ -11,6 +11,7 @@ const AUTH_ERRORS: Record<string, string> = {
   'auth/wrong-password': 'E-mail ou senha incorretos.',
   'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
   'auth/network-request-failed': 'Sem conexão. Verifique sua internet.',
+  'auth/not-professional': 'Esta conta não é de profissional. Use o login de cliente.',
   'auth/operation-not-allowed': 'Login por e-mail não está ativado no Firebase.',
 };
 

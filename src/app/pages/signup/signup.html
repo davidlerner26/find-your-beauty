@@ -1,6 +1,8 @@
 <form class="auth" (ngSubmit)="submit()" novalidate>
-  <h1>Crie uma conta,</h1>
-  <p class="subtitle">Preencha todas as informações abaixo para criar sua conta.</p>
+  <h1>{{ pro() ? 'Cadastro de profissional,' : 'Crie uma conta,' }}</h1>
+  <p class="subtitle">
+    {{ pro() ? 'Crie a conta da profissional. Depois você completa o perfil e publica seus serviços.' : 'Preencha todas as informações abaixo para criar sua conta.' }}
+  </p>
 
   <label class="field" [class.invalid]="showError('name') && !nameValid">
     <svg viewBox="0 0 24 24" fill="currentColor">
@@ -124,6 +126,7 @@
     {{ submitting() ? 'Aguarde...' : 'Cadastrar' }}
   </button>
 
+  @if (!pro()) {
   <p class="divider">ou</p>
 
   <button type="button" class="google" (click)="signInWithGoogle()">
@@ -150,6 +153,13 @@
   @if (googleError()) {
     <p class="error">{{ googleError() }}</p>
   }
+  }
 
-  <p class="switch">Já tem uma conta? <a routerLink="/entrar">Entrar</a></p>
+  @if (pro()) {
+    <p class="switch">Já tem uma conta? <a routerLink="/pro/entrar">Entrar</a></p>
+    <p class="switch"><a routerLink="/cadastro">Sou cliente</a></p>
+  } @else {
+    <p class="switch">Já tem uma conta? <a routerLink="/entrar">Entrar</a></p>
+    <p class="switch"><a routerLink="/pro/cadastro">Sou profissional</a></p>
+  }
 </form>

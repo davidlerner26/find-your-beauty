@@ -1,0 +1,16 @@
+[build]
+  command = "npm run build"
+  publish = "dist/find-your-beauty/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Browser keys (Firebase web apiKey and Google Maps key) are public by design: they have to be in
+  # the bundle. What protects them is the Firestore/Storage rules and the HTTP referrer restriction
+  # in Google Cloud, so the secrets scanner is told to ignore these two values.
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I,AIzaSyBGcq0sRf1RW7h4v9M-ZU-hR2RYstQnUzM"
+
+# The app is a single page app: every route is served by index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

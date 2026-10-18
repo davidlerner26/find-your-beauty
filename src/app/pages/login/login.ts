@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { authErrorMessage, isValidEmail } from '../../utils/validators';
 
 @Component({
   selector: 'app-login',
@@ -14,16 +15,38 @@ export class Login {
   protected password = '';
   protected readonly showPassword = signal(false);
   protected readonly submitted = signal(false);
+  private readonly touched = signal<Record<string, boolean>>({});
   protected readonly googleError = signal('');
+  protected readonly formError = signal('');
+  protected readonly submitting = signal(false);
 
   protected get emailValid() {
-    return /^\S+@\S+\.\S+$/.test(this.email);
+    return isValidEmail(this.email);
   }
 
-  protected submit() {
+  protected touch(field: string) {
+    this.touched.update((touched) => ({ ...touched, [field]: true }));
+  }
+
+  // Errors show once a field was left (blur) or after the first submit
+  protected showError(field: string) {
+    return this.submitted() || !!this.touched()[field];
+  }
+
+  protected async submit() {
     this.submitted.set(true);
     if (!this.emailValid || !this.password) return;
-    // TODO: authenticate
+
+    this.formError.set('');
+    this.submitting.set(true);
+    try {
+      await this.auth.signInWithEmail(this.email, this.password);
+      this.router.navigateByUrl('/');
+    } catch (error) {
+      this.formError.set(authErrorMessage(error));
+    } finally {
+      this.submitting.set(false);
+    }
   }
 
   constructor(

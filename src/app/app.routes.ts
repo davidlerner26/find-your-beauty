@@ -48,5 +48,10 @@ export const routes: Routes = [
     path: 'maquiadores/:id/pagamento',
     loadComponent: () => import('./pages/checkout/checkout').then((m) => m.Checkout),
   },
+  {
+    path: 'esqueci-senha',
+    loadComponent: () =>
+      import('./pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+  },
   { path: '**', redirectTo: '' },
 ];

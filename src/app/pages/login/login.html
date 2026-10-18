@@ -2,18 +2,18 @@
   <h1>Bem-vindo de volta,</h1>
   <p class="subtitle">Que bom te ver de novo! Entre para usar o app.</p>
 
-  <label class="field" [class.invalid]="submitted() && !emailValid">
+  <label class="field" [class.invalid]="showError('email') && !emailValid">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.500L4 7.200V8l8 5 8-5v-.8z" /></svg>
-    <input type="email" name="email" placeholder="E-mail" autocomplete="email" [(ngModel)]="email" />
+    <input type="email" name="email" (blur)="touch('email')" placeholder="E-mail" autocomplete="email" [(ngModel)]="email" />
   </label>
-  @if (submitted() && !emailValid) {
+  @if (showError('email') && !emailValid) {
     <p class="error">Digite um e-mail válido.</p>
   }
 
-  <label class="field" [class.invalid]="submitted() && !password">
+  <label class="field" [class.invalid]="showError('password') && !password">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9zm-8-2a3 3 0 0 1 6 0v2H9z" /></svg>
     <input
-      name="password"
+      name="password" (blur)="touch('password')"
       placeholder="Senha"
       autocomplete="current-password"
       [type]="showPassword() ? 'text' : 'password'"
@@ -23,13 +23,19 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.500-7 10-7 10 7 10 7-3.500 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" />@if (showPassword()) {<path d="M4 4l16 16" />}</svg>
     </button>
   </label>
-  @if (submitted() && !password) {
+  @if (showError('password') && !password) {
     <p class="error">Digite sua senha.</p>
   }
 
-  <a class="forgot" href="#">Esqueceu a senha?</a>
+  <a class="forgot" routerLink="/esqueci-senha">Esqueceu a senha?</a>
 
-  <button type="submit" class="primary">Entrar</button>
+  @if (formError()) {
+    <p class="error">{{ formError() }}</p>
+  }
+
+  <button type="submit" class="primary" [disabled]="submitting()">
+    {{ submitting() ? 'Aguarde...' : 'Entrar' }}
+  </button>
 
   <p class="divider">ou</p>
 

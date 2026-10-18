@@ -2,38 +2,42 @@
   <h1>Crie uma conta,</h1>
   <p class="subtitle">Preencha todas as informações abaixo para criar sua conta.</p>
 
-  <label class="field" [class.invalid]="submitted() && !name.trim()">
+  <label class="field" [class.invalid]="showError('name') && !nameValid">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4.500 4.500 0 1 0 0-9 4.500 4.500 0 0 0 0 9zm0 2c-4 0-8 2-8 5v2h16v-2c0-3-4-5-8-5z" /></svg>
-    <input name="name" placeholder="Nome" autocomplete="name" [(ngModel)]="name" />
+    <input name="name" (blur)="touch('name')" placeholder="Nome" autocomplete="name" [(ngModel)]="name" />
   </label>
-  @if (submitted() && !name.trim()) {
-    <p class="error">Digite seu nome.</p>
+  @if (showError('name') && !nameValid) {
+    <p class="error">O nome precisa ter pelo menos 3 caracteres.</p>
   }
 
-  <label class="field" [class.invalid]="submitted() && !emailValid">
+  <label class="field" [class.invalid]="showError('email') && !emailValid">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.500L4 7.200V8l8 5 8-5v-.8z" /></svg>
-    <input type="email" name="email" placeholder="E-mail" autocomplete="email" [(ngModel)]="email" />
+    <input type="email" name="email" (blur)="touch('email')" placeholder="E-mail" autocomplete="email" [(ngModel)]="email" />
   </label>
-  @if (submitted() && !emailValid) {
+  @if (showError('email') && !emailValid) {
     <p class="error">Digite um e-mail válido.</p>
   }
 
-  <label class="field" [class.invalid]="submitted() && !phoneValid">
-    <select name="countryCode" aria-label="Código do país" [(ngModel)]="countryCode">
-      @for (code of countryCodes; track code) {
-        <option [value]="code">{{ code }}</option>
-      }
-    </select>
-    <input type="tel" name="phone" placeholder="Celular" autocomplete="tel-national" [(ngModel)]="phone" />
+  <label class="field" [class.invalid]="showError('phone') && !phoneValid">
+    <input
+      type="tel"
+      name="phone" (blur)="touch('phone')"
+      placeholder="Celular"
+      autocomplete="tel-national"
+      inputmode="numeric"
+      maxlength="15"
+      [ngModel]="phone"
+      (ngModelChange)="onPhoneChange($event)"
+    />
   </label>
-  @if (submitted() && !phoneValid) {
-    <p class="error">Digite um celular válido.</p>
+  @if (showError('phone') && !phoneValid) {
+    <p class="error">Digite o celular completo, com DDD e 9 dígitos.</p>
   }
 
-  <label class="field" [class.invalid]="submitted() && !passwordValid">
+  <label class="field" [class.invalid]="showError('password') && !passwordValid">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9zm-8-2a3 3 0 0 1 6 0v2H9z" /></svg>
     <input
-      name="password"
+      name="password" (blur)="touch('password')"
       placeholder="Senha"
       autocomplete="new-password"
       [type]="showPassword() ? 'text' : 'password'"
@@ -43,15 +47,21 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.500-7 10-7 10 7 10 7-3.500 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" />@if (showPassword()) {<path d="M4 4l16 16" />}</svg>
     </button>
   </label>
-  @if (submitted() && !passwordValid) {
-    <p class="error">A senha precisa ter pelo menos 6 caracteres.</p>
+  @if (showError('password') && !passwordValid) {
+    <p class="error">A senha precisa ter pelo menos 10 caracteres e 1 número.</p>
   }
 
   <p class="terms">
     Ao se cadastrar, você concorda com os <a href="#">Termos de uso e privacidade</a>.
   </p>
 
-  <button type="submit" class="primary">Cadastrar</button>
+  @if (formError()) {
+    <p class="error">{{ formError() }}</p>
+  }
+
+  <button type="submit" class="primary" [disabled]="submitting()">
+    {{ submitting() ? 'Aguarde...' : 'Cadastrar' }}
+  </button>
 
   <p class="divider">ou</p>
 

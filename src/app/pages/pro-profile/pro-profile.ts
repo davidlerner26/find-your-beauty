@@ -22,6 +22,7 @@ import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Photos } from '../../services/photos';
 import { PhotoPositioner } from '../../components/photo-positioner/photo-positioner';
 import { DateRangePicker, PendingRange } from '../../components/date-range-picker/date-range-picker';
+import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
 
 // A service being edited: nothing is pre-filled, so the fields can be empty
@@ -97,6 +98,7 @@ export class ProProfile {
     private readonly router: Router,
     private readonly photos: Photos,
     private readonly maps: GoogleMapsLoader,
+    protected readonly instagramService: Instagram,
   ) {
     // The profile document was just created by the first step: the list of professionals is stale
     if (this.signup()) this.professionals.load();
@@ -450,6 +452,42 @@ export class ProProfile {
       this.show('Não foi possível salvar. Tente novamente.');
     } finally {
       this.saving.set(false);
+    }
+  }
+
+  protected readonly instagramBusy = signal(false);
+
+  protected connectInstagram() {
+    this.instagramService.connect();
+  }
+
+  protected async refreshInstagram() {
+    this.instagramBusy.set(true);
+    try {
+      const { photos } = await this.instagramService.refresh();
+      await this.professionals.load();
+      this.show(`Fotos do Instagram atualizadas (${photos}).`);
+    } catch (error) {
+      console.error('Failed to refresh Instagram', error);
+      this.show('Não foi possível atualizar as fotos do Instagram. Tente novamente.');
+    } finally {
+      this.instagramBusy.set(false);
+    }
+  }
+
+  protected async disconnectInstagram() {
+    if (!confirm('Desconectar o Instagram? As fotos importadas deixam de aparecer no seu perfil.')) return;
+
+    this.instagramBusy.set(true);
+    try {
+      await this.instagramService.disconnect();
+      await this.professionals.load();
+      this.show('Instagram desconectado.');
+    } catch (error) {
+      console.error('Failed to disconnect Instagram', error);
+      this.show('Não foi possível desconectar. Tente novamente.');
+    } finally {
+      this.instagramBusy.set(false);
     }
   }
 

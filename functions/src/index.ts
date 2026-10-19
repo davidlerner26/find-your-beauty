@@ -95,3 +95,6 @@ export const onReviewWritten = onDocumentWritten('professionals/{professionalId}
   const rating = reviews.size ? Math.round((total / reviews.size) * 10) / 10 : 0;
   await ref.update({ rating, reviewsCount: String(reviews.size) });
 });
+
+// Instagram integration (see instagram.ts)
+export { connectInstagram, disconnectInstagram, refreshInstagram, syncInstagramDaily } from './instagram';

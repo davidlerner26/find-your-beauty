@@ -49,6 +49,9 @@ export const DEFAULT_AVAILABILITY: Availability = {
   blockedRanges: [],
 };
 
+// A photo copied from the professional's connected Instagram
+export type InstagramPhoto = { id: string; url: string; permalink: string; caption: string; video: boolean };
+
 export type Professional = {
   id: string;
   name: string;
@@ -70,6 +73,8 @@ export type Professional = {
   phone?: string;
   // Instagram username, without the @
   instagram?: string;
+  instagramConnected?: boolean;
+  instagramPhotos?: InstagramPhoto[];
   // New accounts start with false and can only sign in after an admin approves them.
   // Accounts created before this existed have no value and count as approved.
   approved?: boolean;

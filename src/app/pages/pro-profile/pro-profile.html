@@ -86,6 +86,34 @@
         </label>
       </section>
 
+      @if (!signup()) {
+        <section>
+          <h2>Instagram</h2>
+          @if (profile()?.instagramConnected) {
+            <p class="hint muted">
+              Conectado como &#64;{{ profile()?.instagram }}. {{ profile()?.instagramPhotos?.length ?? 0 }} fotos aparecem no seu perfil.
+              Elas são atualizadas todas as noites.
+            </p>
+            <div class="block">
+              <button type="button" class="secondary" [disabled]="instagramBusy()" (click)="refreshInstagram()">
+                {{ instagramBusy() ? 'Aguarde...' : 'Atualizar fotos' }}
+              </button>
+              <button type="button" class="signout" [disabled]="instagramBusy()" (click)="disconnectInstagram()">Desconectar</button>
+            </div>
+          } @else {
+            <p class="hint muted">
+              Conecte a sua conta (comercial ou de criador) para mostrar as fotos do seu Instagram no perfil.
+            </p>
+            <button type="button" class="secondary" [disabled]="!instagramService.available" (click)="connectInstagram()">
+              Conectar Instagram
+            </button>
+            @if (!instagramService.available) {
+              <p class="hint muted">A conexão com o Instagram ainda não foi configurada.</p>
+            }
+          }
+        </section>
+      }
+
       <section>
         <div class="head">
           <h2>Galeria</h2>

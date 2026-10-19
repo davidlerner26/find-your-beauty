@@ -120,6 +120,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/chat/chat').then((m) => m.Chat),
   },
   {
+    path: 'pro/instagram',
+    canActivate: [proGuard],
+    loadComponent: () => import('./pages/pro-instagram/pro-instagram').then((m) => m.ProInstagram),
+  },
+  {
     path: 'pro/perfil',
     canActivate: [proGuard],
     loadComponent: () => import('./pages/pro-profile/pro-profile').then((m) => m.ProProfile),

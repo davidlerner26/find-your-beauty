@@ -1,6 +1,8 @@
 import { RouterLink } from '@angular/router';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { Auth } from '../../services/auth';
+import { UserLocation } from '../../services/user-location';
+import { LocationPrompt } from '../../components/location-prompt/location-prompt';
 import { Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { distanceKm, formatDistance } from '../../utils/geo';
@@ -20,7 +22,7 @@ type Salon = {
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [RouterLink, LocationPrompt],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -28,8 +30,6 @@ export class Home {
   protected readonly firstName = computed(
     () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || null,
   );
-
-  private readonly userPosition = signal<{ lat: number; lng: number } | null>(null);
 
   private readonly salons = computed<Salon[]>(() =>
     this.professionals.published().map((professional) => this.toSalon(professional)),
@@ -48,14 +48,11 @@ export class Home {
   constructor(
     private readonly auth: Auth,
     protected readonly professionals: Professionals,
-  ) {
-    navigator.geolocation?.getCurrentPosition(({ coords }) =>
-      this.userPosition.set({ lat: coords.latitude, lng: coords.longitude }),
-    );
-  }
+    private readonly userLocation: UserLocation,
+  ) {}
 
   private toSalon(professional: Professional): Salon {
-    const position = this.userPosition();
+    const position = this.userLocation.position();
     const km = position ? distanceKm(position, professional.position) : null;
 
     return {

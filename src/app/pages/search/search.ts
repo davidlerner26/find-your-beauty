@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
+import { UserLocation } from '../../services/user-location';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { isWorkingDay } from '../../utils/slots';
@@ -47,7 +48,7 @@ export class Search {
   protected readonly term = signal('');
   protected readonly recents = signal<string[]>(readRecents());
   protected readonly applied = signal<Filters>({ ...NO_FILTERS });
-  protected readonly userPosition = signal<{ lat: number; lng: number } | null>(null);
+  protected readonly userPosition = computed(() => this.userLocation.position());
 
   // Filter sheet: edits a draft that only becomes the applied filters on "Mostrar resultados"
   protected readonly sheetOpen = signal(false);
@@ -122,11 +123,8 @@ export class Search {
   constructor(
     private readonly location: Location,
     protected readonly professionals: Professionals,
-  ) {
-    navigator.geolocation?.getCurrentPosition(({ coords }) =>
-      this.userPosition.set({ lat: coords.latitude, lng: coords.longitude }),
-    );
-  }
+    private readonly userLocation: UserLocation,
+  ) {}
 
   protected goBack() {
     this.location.back();

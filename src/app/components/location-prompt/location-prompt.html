@@ -1,0 +1,25 @@
+@if (location.shouldAsk()) {
+  <div class="backdrop" (click)="dismiss()">
+    <div
+      class="card"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="location-title"
+      (click)="$event.stopPropagation()"
+    >
+      <svg class="icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" aria-hidden="true">
+        <circle cx="32" cy="32" r="18" />
+        <circle cx="32" cy="32" r="8" fill="currentColor" stroke="none" />
+        <path d="M32 4v8M32 52v8M4 32h8M52 32h8" />
+      </svg>
+
+      <h2 id="location-title">Ative sua localização</h2>
+      <p>Ative para usar a sua localização e mostrar os serviços próximos no mapa.</p>
+
+      <button type="button" class="enable" [disabled]="location.requesting()" (click)="enable()">
+        {{ location.requesting() ? 'Aguardando...' : 'Ativar minha localização' }}
+      </button>
+      <button type="button" class="later" (click)="dismiss()">Agora não</button>
+    </div>
+  </div>
+}

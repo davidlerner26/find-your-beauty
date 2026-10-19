@@ -1,8 +1,9 @@
 import { RouterLink } from '@angular/router';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Professionals } from '../../services/professionals';
+import { UserLocation } from '../../services/user-location';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
 
@@ -26,7 +27,7 @@ export class Explore implements OnInit {
     lat: -22.9845,
     lng: -43.205,
   });
-  protected readonly userPosition = signal<google.maps.LatLngLiteral | null>(null);
+  protected readonly userPosition = computed(() => this.userLocation.position());
   protected readonly zoom = 14;
   protected readonly mapOptions: google.maps.MapOptions = {
     disableDefaultUI: true,
@@ -47,10 +48,16 @@ export class Explore implements OnInit {
   constructor(
     private readonly loader: GoogleMapsLoader,
     protected readonly professionals: Professionals,
-  ) {}
+    private readonly userLocation: UserLocation,
+  ) {
+    // Centers the map on the user as soon as the position is known
+    effect(() => {
+      const position = this.userLocation.position();
+      if (position) this.center.set(position);
+    });
+  }
 
   ngOnInit() {
-    this.locateMe();
     if (!this.hasKey) return;
     this.loader.load().then(() => this.loaded.set(true));
   }
@@ -88,11 +95,8 @@ export class Explore implements OnInit {
     return pin(index === this.selected() ? '#ee8b2e' : '#2f6b7a');
   }
 
-  protected locateMe() {
-    navigator.geolocation.getCurrentPosition(({ coords }) => {
-      const position = { lat: coords.latitude, lng: coords.longitude };
-      this.userPosition.set(position);
-      this.center.set(position);
-    });
+  // Button: asks for the position (the browser prompt only shows if it wasn't decided yet)
+  protected async locateMe() {
+    if (await this.userLocation.request()) this.center.set(this.userLocation.position()!);
   }
 }

@@ -2,6 +2,7 @@ import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Component, computed, effect, ElementRef, input, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
+import { Spinner } from '../../components/spinner/spinner';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
@@ -16,7 +17,7 @@ const pin = (color: string) =>
 
 @Component({
   selector: 'app-explore',
-  imports: [FocusPipe, GoogleMap, MapMarker, MapCircle, RouterLink],
+  imports: [FocusPipe, GoogleMap, MapMarker, MapCircle, RouterLink, Spinner],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })
@@ -47,6 +48,10 @@ export class Explore implements OnInit {
   // Every chip starts selected, unless a tag came from the home page
   protected readonly activeFilters = signal<string[]>([...this.filters]);
   protected readonly selected = signal(0);
+  // Card photos that finished loading (or failed), so the spinner stops
+  // Photo being shown in each card
+  protected readonly photoIndex = signal<Record<string, number>>({});
+  protected readonly loadedPhotos = signal<string[]>([]);
 
   constructor(
     private readonly loader: GoogleMapsLoader,
@@ -84,10 +89,26 @@ export class Explore implements OnInit {
       )
       .map((salon) => ({
         ...salon,
-        cardImage: salon.image,
-        cardPosition: salon.imagePosition,
+        // Work photos (the profile photo when there is no gallery)
+        photos: salon.gallery.length ? salon.gallery : [salon.image],
         distance: user ? formatDistance(distanceKm(user, salon.position)) : null,
       }));
+  }
+
+  protected photoOf(salon: { id: string; photos: string[] }) {
+    return salon.photos[this.photoIndex()[salon.id] ?? 0];
+  }
+
+  // Arrows of the card: they must not open the professional's page
+  protected step(event: Event, salon: { id: string; photos: string[] }, direction: 1 | -1) {
+    event.stopPropagation();
+    const count = salon.photos.length;
+    const current = this.photoIndex()[salon.id] ?? 0;
+    this.photoIndex.update((index) => ({ ...index, [salon.id]: (current + direction + count) % count }));
+  }
+
+  protected photoLoaded(url: string) {
+    this.loadedPhotos.update((urls) => (urls.includes(url) ? urls : [...urls, url]));
   }
 
   protected toggleFilter(filter: string) {

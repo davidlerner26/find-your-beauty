@@ -45,12 +45,26 @@
     <div class="cards">
       @for (salon of featuredSalons(); track salon.id) {
         <article class="card" [routerLink]="['/maquiadores', salon.id]">
-          <div
-            class="card-image"
-            [style.background-image]="'url(' + salon.image + ')'"
-            [style.background-position]="salon.imagePosition | focus"
-          >
+          <div class="card-image">
+            @if (!loadedPhotos().includes(photoOf(salon))) {
+              <app-spinner class="loading" [small]="true" />
+            }
+            <img
+              [src]="photoOf(salon)"
+              [alt]="salon.name"
+              [style.object-position]="(photoOf(salon) === salon.image ? salon.imagePosition : undefined) | focus"
+              (load)="photoLoaded(photoOf(salon))"
+              (error)="photoLoaded(photoOf(salon))"
+            />
             <button type="button" class="heart" aria-label="Favoritar">♡</button>
+            @if (salon.photos.length > 1) {
+              <button type="button" class="arrow prev" aria-label="Foto anterior" (click)="step($event, salon, -1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7" /></svg>
+              </button>
+              <button type="button" class="arrow next" aria-label="Próxima foto" (click)="step($event, salon, 1)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg>
+              </button>
+            }
           </div>
           <p class="tags">{{ salon.tags }}</p>
           <h3>{{ salon.name }}</h3>

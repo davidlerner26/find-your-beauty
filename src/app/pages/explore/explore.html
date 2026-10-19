@@ -55,11 +55,25 @@
         [class.selected]="i === selected()"
         [routerLink]="['/maquiadores', salon.id]"
       >
-        <div
-          class="offer-image"
-          [style.background-image]="'url(' + salon.cardImage + ')'"
-          [style.background-position]="salon.cardPosition | focus"
-        >
+        <div class="offer-image">
+          @if (!loadedPhotos().includes(photoOf(salon))) {
+            <app-spinner class="loading" [small]="true" />
+          }
+          <img
+            [src]="photoOf(salon)"
+            [alt]="salon.name"
+            [style.object-position]="(photoOf(salon) === salon.image ? salon.imagePosition : undefined) | focus"
+            (load)="photoLoaded(photoOf(salon))"
+            (error)="photoLoaded(photoOf(salon))"
+          />
+          @if (salon.photos.length > 1) {
+            <button type="button" class="arrow prev" aria-label="Foto anterior" (click)="step($event, salon, -1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7" /></svg>
+            </button>
+            <button type="button" class="arrow next" aria-label="Próxima foto" (click)="step($event, salon, 1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg>
+            </button>
+          }
           @if (salon.distance) {
             <span class="distance">{{ salon.distance }}</span>
           }

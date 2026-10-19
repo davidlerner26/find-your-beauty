@@ -1,8 +1,9 @@
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
-import { Component, computed } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { Auth } from '../../services/auth';
 import { UserLocation } from '../../services/user-location';
+import { Spinner } from '../../components/spinner/spinner';
 import { LocationPrompt } from '../../components/location-prompt/location-prompt';
 import { ImagePosition, Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
@@ -14,6 +15,8 @@ type Salon = {
   name: string;
   image: string;
   imagePosition?: ImagePosition;
+  // Work photos shown in the featured card (the profile photo when there is no gallery)
+  photos: string[];
   address: string;
   rating: number;
   reviews: string;
@@ -23,7 +26,7 @@ type Salon = {
 
 @Component({
   selector: 'app-home',
-  imports: [FocusPipe, RouterLink, LocationPrompt],
+  imports: [FocusPipe, RouterLink, LocationPrompt, Spinner],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -46,11 +49,32 @@ export class Home {
       .slice(0, 3),
   );
 
+  // Photo being shown in each featured card
+  // Photos that finished loading (or failed), so the spinner stops
+  protected readonly loadedPhotos = signal<string[]>([]);
+  protected readonly photoIndex = signal<Record<string, number>>({});
+
   constructor(
     private readonly auth: Auth,
     protected readonly professionals: Professionals,
     private readonly userLocation: UserLocation,
   ) {}
+
+  protected photoLoaded(url: string) {
+    this.loadedPhotos.update((urls) => (urls.includes(url) ? urls : [...urls, url]));
+  }
+
+  protected photoOf(salon: Salon) {
+    return salon.photos[this.photoIndex()[salon.id] ?? 0];
+  }
+
+  // Arrows of the card: they must not open the professional's page
+  protected step(event: Event, salon: Salon, direction: 1 | -1) {
+    event.stopPropagation();
+    const count = salon.photos.length;
+    const current = this.photoIndex()[salon.id] ?? 0;
+    this.photoIndex.update((index) => ({ ...index, [salon.id]: (current + direction + count) % count }));
+  }
 
   private toSalon(professional: Professional): Salon {
     const position = this.userLocation.position();
@@ -61,6 +85,7 @@ export class Home {
       name: professional.name,
       image: professional.image,
       imagePosition: professional.imagePosition,
+      photos: professional.gallery.length ? professional.gallery : [professional.image],
       address: professional.address,
       rating: professional.rating,
       reviews: professional.reviewsCount,

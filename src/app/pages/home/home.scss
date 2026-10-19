@@ -33,6 +33,9 @@ a {
 }
 
 .search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 3.25rem;
   height: 3.25rem;
   border: 0;

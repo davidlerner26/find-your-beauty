@@ -29,38 +29,7 @@
   left: 1.5rem;
   right: 1.5rem;
   display: flex;
-  gap: 1rem;
-}
-
-.search {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0 1.25rem;
-  height: 3.5rem;
-  background: #fff;
-  border-radius: 999px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-
-  svg {
-    width: 1.5rem;
-    flex: none;
-  }
-
-  input {
-    flex: 1;
-    border: 0;
-    outline: 0;
-    font-size: 1rem;
-  }
-
-  button {
-    border: 0;
-    background: none;
-    color: var(--muted);
-    cursor: pointer;
-  }
+  justify-content: flex-end;
 }
 
 .round {
@@ -81,9 +50,10 @@
 
 .filters {
   position: absolute;
-  top: 6rem;
+  // Same row as the filters button, leaving room for it
+  top: 1.9rem;
   left: 1.5rem;
-  right: 1.5rem;
+  right: 6rem;
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;

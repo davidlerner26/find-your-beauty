@@ -65,6 +65,10 @@ export const routes: Routes = [
     canMatch: [() => isDevMode()],
     loadComponent: () => import('./pages/seed/seed').then((m) => m.Seed),
   },
+  {
+    path: 'busca',
+    loadComponent: () => import('./pages/search/search').then((m) => m.Search),
+  },
   // Professional area
   {
     path: 'pro/entrar',

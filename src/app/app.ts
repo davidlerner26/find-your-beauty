@@ -10,6 +10,7 @@ const TAB_SCREENS = [
   '/',
   '/explore',
   '/agenda',
+  '/favoritos',
   '/mensagens',
   '/notificacoes',
   '/perfil',
@@ -51,6 +52,12 @@ export class App {
       match: ['/mensagens', '/notificacoes'],
       icon: 'M6 3h12a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-3.500L12 21l-2.500-3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z',
       badge: true,
+    },
+    {
+      label: 'Favoritos',
+      path: '/favoritos',
+      match: ['/favoritos'],
+      icon: 'M12 21.350l-1.450-1.320C5.400 15.360 2 12.280 2 8.500 2 5.420 4.420 3 7.500 3c1.740 0 3.410.81 4.500 2.090C13.090 3.810 14.760 3 16.500 3 19.580 3 22 5.420 22 8.500c0 3.780-3.400 6.860-8.550 11.540z',
     },
     {
       label: 'Perfil',

@@ -16,6 +16,7 @@ export class Login {
 
   protected email = '';
   protected password = '';
+  protected rememberMe = true;
   protected readonly showPassword = signal(false);
   protected readonly submitted = signal(false);
   private readonly touched = signal<Record<string, boolean>>({});
@@ -44,9 +45,9 @@ export class Login {
     this.submitting.set(true);
     try {
       if (this.pro()) {
-        await this.auth.signInProfessional(this.email, this.password);
+        await this.auth.signInProfessional(this.email, this.password, this.rememberMe);
       } else {
-        await this.auth.signInWithEmail(this.email, this.password);
+        await this.auth.signInWithEmail(this.email, this.password, this.rememberMe);
       }
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
@@ -64,7 +65,7 @@ export class Login {
   protected async signInWithGoogle() {
     this.googleError.set('');
     try {
-      await this.auth.signInWithGoogle();
+      await this.auth.signInWithGoogle(this.rememberMe);
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
       const code = (error as { code?: string }).code;

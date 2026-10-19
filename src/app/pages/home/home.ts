@@ -1,6 +1,7 @@
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Component, computed, signal } from '@angular/core';
+import { Favorites } from '../../services/favorites';
 import { Auth } from '../../services/auth';
 import { UserLocation } from '../../services/user-location';
 import { Spinner } from '../../components/spinner/spinner';
@@ -58,7 +59,14 @@ export class Home {
     private readonly auth: Auth,
     protected readonly professionals: Professionals,
     private readonly userLocation: UserLocation,
+    protected readonly favorites: Favorites,
   ) {}
+
+  // The heart sits inside a card that is a link: it must not open the page
+  protected toggleFavorite(event: Event, id: string) {
+    event.stopPropagation();
+    this.favorites.toggle(id).catch((error) => console.error('Failed to update favorite', error));
+  }
 
   protected photoLoaded(url: string) {
     this.loadedPhotos.update((urls) => (urls.includes(url) ? urls : [...urls, url]));

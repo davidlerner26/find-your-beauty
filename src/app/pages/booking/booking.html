@@ -72,6 +72,10 @@
     </section>
   </div>
 
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
   <footer class="book-bar">
     <div>
       <p><strong>Total</strong> ({{ selectedServices().length }} {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})</p>
@@ -83,7 +87,11 @@
           <circle cx="7" cy="12" r="1.600" /><circle cx="12" cy="12" r="1.600" /><circle cx="17" cy="12" r="1.600" />
         </svg>
       </a>
-      <button type="button" class="checkout" [disabled]="!canCheckout()" (click)="checkout()">Finalizar</button>
+      <button type="button" class="checkout" [disabled]="!canCheckout()" aria-label="Finalizar" title="Finalizar" (click)="checkout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m5 12.500 4.500 4.500L19 7.500" />
+        </svg>
+      </button>
     </div>
   </footer>
 } @else if (professionals.status() === 'loading') {

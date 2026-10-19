@@ -73,7 +73,7 @@
 </div>
 
 <ng-template #row let-notification>
-  <li class="notification">
+  <li class="notification" role="link" tabindex="0" (click)="openNotification(notification)" (keydown.enter)="openNotification(notification)">
     <span class="icon">
       @switch (notification.icon) {
         @case ('calendar') {

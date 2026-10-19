@@ -42,6 +42,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/my-bookings/my-bookings').then((m) => m.MyBookings),
   },
   {
+    path: 'favoritos',
+    loadComponent: () => import('./pages/favorites/favorites').then((m) => m.Favorites),
+  },
+  {
     path: 'notificacoes',
     data: { tab: 'notificacoes' },
     loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
@@ -49,10 +53,6 @@ export const routes: Routes = [
   {
     path: 'mensagens/:id',
     loadComponent: () => import('./pages/chat/chat').then((m) => m.Chat),
-  },
-  {
-    path: 'maquiadores/:id/pagamento',
-    loadComponent: () => import('./pages/checkout/checkout').then((m) => m.Checkout),
   },
   {
     path: 'esqueci-senha',

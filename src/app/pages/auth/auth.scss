@@ -75,8 +75,31 @@ h1 {
   font-size: 0.85rem;
 }
 
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  cursor: pointer;
+
+  input {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--primary);
+  }
+}
+
 .forgot {
-  align-self: flex-end;
   font-size: 0.9rem;
   color: var(--primary);
 }

@@ -6,8 +6,10 @@ import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DEFAULT_AVAILABILITY } from '../../models/professional';
+import { Auth } from '../../services/auth';
+import { Bookings } from '../../services/bookings';
 import { Professionals } from '../../services/professionals';
-import { freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
+import { busyIdsFor, freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
@@ -80,12 +82,16 @@ export class Booking {
     });
   });
 
-  protected readonly canCheckout = computed(() => !!this.selectedDay() && !!this.selectedTime());
+  protected readonly canCheckout = computed(() => !!this.selectedDay() && !!this.selectedTime() && !this.saving());
+  protected readonly saving = signal(false);
+  protected readonly error = signal('');
 
   constructor(
     private readonly location: Location,
     private readonly router: Router,
     protected readonly professionals: Professionals,
+    private readonly auth: Auth,
+    private readonly bookings: Bookings,
   ) {
     // Loads the taken slots whenever the day changes
     effect((onCleanup) => {
@@ -107,21 +113,50 @@ export class Booking {
     });
   }
 
-  protected checkout() {
+  // Finalizar: requests the booking. The professional confirms it afterwards.
+  protected async checkout() {
+    const artist = this.artist();
     const day = this.selectedDay();
     const time = this.selectedTime();
-    if (!day || !time) return;
+    const services = this.selectedServices();
+    if (!artist || !day || !time || !services.length) return;
 
-    const data = toDateKey(day);
+    if (!this.auth.user()) {
+      this.router.navigate(['/entrar']);
+      return;
+    }
 
-    this.router.navigate(['/maquiadores', this.id(), 'pagamento'], {
-      queryParams: {
-        servicos: this.servicos(),
-        data,
-        horario: time,
-        notas: this.notes.trim() || null,
-      },
-    });
+    const date = toDateKey(day);
+    const [hour, minute] = time.split(':').map(Number);
+    const durationMinutes = services.reduce((sum, service) => sum + service.durationMinutes, 0);
+
+    this.error.set('');
+    this.saving.set(true);
+    try {
+      await this.bookings.create({
+        professionalId: artist.id,
+        professionalUid: artist.ownerUid ?? null,
+        professionalName: artist.name,
+        services: services.map(({ id, name, price, durationMinutes }) => ({ id, name, price, durationMinutes })),
+        startsAt: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, minute),
+        durationMinutes,
+        total: this.total(),
+        notes: this.notes.trim(),
+        busyIds: busyIdsFor(date, time, durationMinutes, this.availability().slotMinutes),
+        paymentStatus: 'pending',
+      });
+      this.router.navigate(['/agenda']);
+    } catch (error) {
+      console.error('Failed to create booking', error);
+      // Slots can only be created once, so a denied write means someone took this time first
+      this.error.set(
+        (error as { code?: string }).code === 'permission-denied'
+          ? 'Este horário acabou de ser ocupado. Escolha outro.'
+          : 'Não foi possível enviar a solicitação. Tente novamente.',
+      );
+    } finally {
+      this.saving.set(false);
+    }
   }
 
   protected goBack() {

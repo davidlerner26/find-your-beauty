@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { collection, doc, getDocs, orderBy, query, serverTimestamp, setDoc, Timestamp, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, serverTimestamp, setDoc, Timestamp, where } from 'firebase/firestore';
 import { Review } from '../models/professional';
 import { Auth } from './auth';
 import { db } from './firebase';
@@ -48,5 +48,12 @@ export class Reviews {
       text: text.trim(),
       createdAt: serverTimestamp(),
     });
+  }
+
+  // The client removes their own review. A Cloud Function updates the professional's rating.
+  async remove(professionalId: string) {
+    const uid = this.auth.user()?.uid;
+    if (!uid) return;
+    await deleteDoc(doc(db, 'professionals', professionalId, 'reviews', uid));
   }
 }

@@ -32,6 +32,11 @@ service cloud.firestore {
     match /users/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
 
+      // Professionals the client hearted
+      match /favorites/{professionalId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+
       // Notifications are created by Cloud Functions. The owner can only mark them as read.
       match /notifications/{n} {
         allow read: if request.auth != null && request.auth.uid == uid;

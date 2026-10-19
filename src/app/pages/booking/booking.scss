@@ -179,8 +179,16 @@ textarea {
   cursor: pointer;
 }
 
+.checkout svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
 .checkout {
-  min-width: 14rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 9rem;
   height: 3.25rem;
   border: 0;
   border-radius: 999px;
@@ -198,4 +206,12 @@ textarea {
 .not-found {
   padding: 2rem;
   text-align: center;
+}
+
+.error {
+  margin: 0 1.5rem 7rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: #fde6e7;
+  color: #e5484d;
 }

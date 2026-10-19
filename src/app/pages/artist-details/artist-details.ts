@@ -9,6 +9,7 @@ import { Router, RouterLink } from '@angular/router';
 import { formatDuration, Review, Service, ServiceCategory } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Professionals } from '../../services/professionals';
+import { Favorites } from '../../services/favorites';
 import { Reviews } from '../../services/reviews';
 import { instagramUrl } from '../../utils/instagram';
 import { formatRelative } from '../../utils/format-date';
@@ -23,7 +24,6 @@ export class ArtistDetails {
   readonly id = input.required<string>();
 
   protected readonly artist = computed(() => this.professionals.byId(this.id()));
-  protected readonly favorite = signal(false);
   protected readonly aboutExpanded = signal(false);
   protected readonly stars = [1, 2, 3, 4, 5];
 
@@ -60,6 +60,8 @@ export class ArtistDetails {
   protected readonly myStars = signal(0);
   protected myText = '';
   protected readonly savingReview = signal(false);
+  // The form shows for a new review, or after pressing edit
+  protected readonly editingReview = signal(false);
   protected readonly reviewMessage = signal('');
   protected readonly formatRelative = formatRelative;
 
@@ -69,6 +71,7 @@ export class ArtistDetails {
     protected readonly professionals: Professionals,
     protected readonly auth: Auth,
     private readonly reviewsService: Reviews,
+    protected readonly favorites: Favorites,
   ) {
     effect(() => {
       const id = this.id();
@@ -96,6 +99,31 @@ export class ArtistDetails {
     return this.reviews().find((review) => review.id === this.auth.user()?.uid);
   }
 
+  protected editReview() {
+    const mine = this.myReview;
+    if (!mine) return;
+    this.myStars.set(mine.stars);
+    this.myText = mine.text;
+    this.reviewMessage.set('');
+    this.editingReview.set(true);
+  }
+
+  protected async deleteReview() {
+    if (!confirm('Excluir a sua avaliação?')) return;
+
+    try {
+      await this.reviewsService.remove(this.id());
+      this.reviews.set(await this.reviewsService.list(this.id()));
+      this.myStars.set(0);
+      this.myText = '';
+      this.editingReview.set(false);
+      this.reviewMessage.set('');
+    } catch (error) {
+      console.error('Failed to delete review', error);
+      this.reviewMessage.set('Não foi possível excluir a avaliação. Tente novamente.');
+    }
+  }
+
   protected async sendReview() {
     const bookingId = this.reviewBookingId();
     if (!bookingId || !this.myStars()) {
@@ -108,6 +136,7 @@ export class ArtistDetails {
     try {
       await this.reviewsService.save(this.id(), bookingId, this.myStars(), this.myText);
       this.reviews.set(await this.reviewsService.list(this.id()));
+      this.editingReview.set(false);
       this.reviewMessage.set('Avaliação enviada. Obrigada!');
     } catch (error) {
       console.error('Failed to save review', error);
@@ -122,7 +151,7 @@ export class ArtistDetails {
   }
 
   protected toggleFavorite() {
-    this.favorite.update((favorite) => !favorite);
+    this.favorites.toggle(this.id()).catch((error) => console.error('Failed to update favorite', error));
   }
 
   protected isSelected(service: Service) {

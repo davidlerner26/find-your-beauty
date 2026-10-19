@@ -3,8 +3,8 @@ import { FocusPipe } from '../../utils/focus.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { Conversation } from '../../models/message';
+import { Router, RouterLink } from '@angular/router';
+import { Conversation, Notification } from '../../models/message';
 import { ImagePosition } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Messages } from '../../services/messages';
@@ -73,7 +73,17 @@ export class Inbox {
     protected readonly notifications: Notifications,
     private readonly messages: Messages,
     private readonly professionals: Professionals,
+    private readonly router: Router,
   ) {}
+
+  // Every notification is about a booking: the professional goes to the agenda (new requests are there)
+  // and the client to their bookings
+  protected openNotification(notification: Notification) {
+    if (notification.unread) {
+      this.notifications.markAsRead(notification.id).catch((error) => console.error('Failed to mark as read', error));
+    }
+    this.router.navigateByUrl(this.auth.role() === 'professional' ? '/pro' : '/agenda');
+  }
 
   protected get filteredConversations() {
     const term = this.search.trim().toLowerCase();

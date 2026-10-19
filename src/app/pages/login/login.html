@@ -65,7 +65,13 @@
     <p class="error">Digite sua senha.</p>
   }
 
-  <a class="forgot" routerLink="/esqueci-senha">Esqueceu a senha?</a>
+  <div class="options">
+    <label class="remember">
+      <input type="checkbox" name="remember" [(ngModel)]="rememberMe" />
+      Lembrar de mim
+    </label>
+    <a class="forgot" routerLink="/esqueci-senha">Esqueceu a senha?</a>
+  </div>
 
   @if (formError()) {
     <p class="error">{{ formError() }}</p>

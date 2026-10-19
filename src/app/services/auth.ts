@@ -1,11 +1,14 @@
 import { Injectable, signal } from '@angular/core';
 import {
+  browserLocalPersistence,
+  browserSessionPersistence,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -54,7 +57,13 @@ export class Auth {
     return this.role() === 'professional' ? '/pro' : '/';
   }
 
-  async signInWithGoogle() {
+  // Stay signed in after closing the browser (default), or only until the tab is closed
+  private remember(remember: boolean) {
+    return setPersistence(this.auth, remember ? browserLocalPersistence : browserSessionPersistence);
+  }
+
+  async signInWithGoogle(remember = true) {
+    await this.remember(remember);
     const { user } = await signInWithPopup(this.auth, this.googleProvider);
     await this.resolveRole(user);
     if (this.role() === 'client') await this.createUserDocIfMissing(user);
@@ -110,13 +119,14 @@ export class Auth {
     await this.resolveRole(user);
   }
 
-  async signInWithEmail(email: string, password: string) {
+  async signInWithEmail(email: string, password: string, remember = true) {
+    await this.remember(remember);
     const { user } = await signInWithEmailAndPassword(this.auth, email.trim(), password);
     await this.resolveRole(user);
   }
 
-  async signInProfessional(email: string, password: string) {
-    await this.signInWithEmail(email, password);
+  async signInProfessional(email: string, password: string, remember = true) {
+    await this.signInWithEmail(email, password, remember);
     if (this.role() !== 'professional') {
       await this.signOut();
       throw { code: 'auth/not-professional' };

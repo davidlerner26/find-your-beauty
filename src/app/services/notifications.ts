@@ -1,5 +1,5 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { collection, onSnapshot, orderBy, query, Timestamp } from 'firebase/firestore';
+import { collection, doc, onSnapshot, orderBy, query, Timestamp, updateDoc } from 'firebase/firestore';
 import { Notification } from '../models/message';
 import { Auth } from './auth';
 import { db } from './firebase';
@@ -44,5 +44,12 @@ export class Notifications {
       );
       onCleanup(unsubscribe);
     });
+  }
+
+  // Opening a notification marks it as read
+  async markAsRead(id: string) {
+    const uid = this.auth.user()?.uid;
+    if (!uid) return;
+    await updateDoc(doc(db, 'users', uid, 'notifications', id), { unread: false });
   }
 }

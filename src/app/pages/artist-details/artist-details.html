@@ -17,8 +17,13 @@
       </svg>
     </button>
     <div class="hero-actions">
-      <button type="button" class="round heart" aria-label="Favoritar" (click)="toggleFavorite()">
-        {{ favorite() ? '♥' : '♡' }}
+      <button
+        type="button"
+        class="round heart"
+        [attr.aria-label]="favorites.has(artist.id) ? 'Remover dos favoritos' : 'Favoritar'"
+        (click)="toggleFavorite()"
+      >
+        {{ favorites.has(artist.id) ? '♥' : '♡' }}
       </button>
       <a class="round" routerLink="/explore" aria-label="Ver no mapa">
         <svg viewBox="0 0 24 24" fill="currentColor">
@@ -56,8 +61,17 @@
       <p class="muted">{{ artist.address }}</p>
       @if (artist.instagram) {
         <a class="instagram" [href]="instagramUrl(artist.instagram)" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
           </svg>
           &#64;{{ artist.instagram }}
         </a>
@@ -170,7 +184,6 @@
           </article>
         }
       </div>
-      <button type="button" class="all-services">Ver todos os serviços</button>
     </section>
 
     <section>
@@ -189,7 +202,7 @@
       <h2>Avaliações</h2>
 
       @if (auth.role() === 'client') {
-        @if (reviewBookingId()) {
+        @if (reviewBookingId() && (!myReview || editingReview())) {
           <form class="review-form" (ngSubmit)="sendReview()">
             <p class="review-title">{{ myReview ? 'Sua avaliação' : 'Avalie esta maquiadora' }}</p>
             <p class="stars pick">
@@ -220,14 +233,17 @@
                     : 'Enviar avaliação'
               }}
             </button>
+            @if (editingReview()) {
+              <button type="button" class="cancel-edit" (click)="editingReview.set(false)">
+                Cancelar
+              </button>
+            }
             @if (reviewMessage()) {
               <p class="muted">{{ reviewMessage() }}</p>
             }
           </form>
-        } @else {
-          <p class="muted">
-            Você poderá avaliar depois de concluir um atendimento com {{ artist.name }}.
-          </p>
+        } @else if (reviewMessage()) {
+          <p class="muted">{{ reviewMessage() }}</p>
         }
       } @else if (!auth.user()) {
         <p class="muted">
@@ -244,14 +260,61 @@
                 <h3>{{ review.author }}</h3>
                 <span class="muted">{{ formatRelative(review.createdAt) }}</span>
               </div>
-              <p class="stars">
-                @for (star of stars; track star) {
-                  <span [class.on]="star <= review.stars">★</span>
+              <div class="review-main">
+                <div class="review-content">
+                  <p class="stars">
+                    @for (star of stars; track star) {
+                      <span [class.on]="star <= review.stars">★</span>
+                    }
+                  </p>
+                  @if (review.text) {
+                    <p class="muted">{{ review.text }}</p>
+                  }
+                </div>
+                @if (review.id === auth.user()?.uid) {
+                  <div class="review-actions">
+                    <button
+                      type="button"
+                      aria-label="Editar avaliação"
+                      title="Editar"
+                      (click)="editReview()"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M12 20h9" />
+                        <path d="M16.500 3.500a2.100 2.100 0 0 1 3 3L7 19l-4 1 1-4z" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      class="danger"
+                      aria-label="Excluir avaliação"
+                      title="Excluir"
+                      (click)="deleteReview()"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M3 6h18" />
+                        <path d="M8 6V4h8v2" />
+                        <path d="m19 6-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                      </svg>
+                    </button>
+                  </div>
                 }
-              </p>
-              @if (review.text) {
-                <p class="muted">{{ review.text }}</p>
-              }
+              </div>
             </div>
           </article>
         } @empty {
@@ -284,8 +347,25 @@
           />
         </svg>
       </a>
-      <button type="button" class="book" [disabled]="!selectedServices().length" (click)="book()">
-        Agendar
+      <button
+        type="button"
+        class="book"
+        [disabled]="!selectedServices().length"
+        aria-label="Agendar"
+        title="Agendar"
+        (click)="book()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <path d="M16 2v4M8 2v4M3 10h18" />
+        </svg>
       </button>
     </div>
   </footer>

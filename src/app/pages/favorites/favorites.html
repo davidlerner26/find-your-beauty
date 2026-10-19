@@ -1,0 +1,28 @@
+<div class="favorites">
+  <h1>Favoritos</h1>
+
+  @if (!auth.ready() || favorites.loading() || professionals.status() === 'loading') {
+    <app-spinner />
+  } @else if (!auth.user()) {
+    <p class="empty muted"><a routerLink="/entrar">Entre</a> na sua conta para ver as suas maquiadoras favoritas.</p>
+  } @else {
+    <div class="list">
+      @for (item of items(); track item.id) {
+        <a class="result" [routerLink]="['/maquiadores', item.id]">
+          <div class="result-image">
+            <img [src]="item.image" [alt]="item.name" [style.object-position]="item.imagePosition | focus" />
+          </div>
+          <div class="result-info">
+            <p class="tags">{{ item.tags.join(' . ') }}</p>
+            <h3>{{ item.name }}</h3>
+            <p class="muted">{{ item.address }}</p>
+            <p class="rating"><span class="star">★</span> <strong>{{ item.rating }}</strong> ({{ item.reviewsCount }})</p>
+          </div>
+          <button type="button" class="heart" aria-label="Remover dos favoritos" (click)="remove($event, item.id)">♥</button>
+        </a>
+      } @empty {
+        <p class="empty muted">Você ainda não favoritou ninguém. Toque no ♡ no perfil de uma maquiadora para salvar aqui.</p>
+      }
+    </div>
+  }
+</div>

@@ -1,8 +1,10 @@
+// professionals/{professionalId}/reviews/{clientUid}: one review per client
 export type Review = {
+  id: string;
   author: string;
-  daysAgo: number;
   stars: number;
   text: string;
+  createdAt: Date | null;
 };
 
 export type ServiceCategory = 'Maquiagem' | 'Cabelo';
@@ -65,7 +67,6 @@ export type Professional = {
   services: Service[];
   gallery: string[];
   position: { lat: number; lng: number };
-  reviews: Review[];
   // Set for professionals that signed up in the app (the document id is the account uid)
   ownerUid?: string;
   email?: string;

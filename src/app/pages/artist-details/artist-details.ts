@@ -1,16 +1,20 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, effect, input, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { coverOf, formatDuration, Service, ServiceCategory } from '../../models/professional';
+import { coverOf, formatDuration, Review, Service, ServiceCategory } from '../../models/professional';
+import { Auth } from '../../services/auth';
 import { Professionals } from '../../services/professionals';
+import { Reviews } from '../../services/reviews';
+import { formatRelative } from '../../utils/format-date';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [FocusPipe, PricePipe, Spinner, RouterLink],
+  imports: [FormsModule, FocusPipe, PricePipe, Spinner, RouterLink],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })
@@ -49,11 +53,68 @@ export class ArtistDetails {
   protected readonly formatDuration = formatDuration;
   protected readonly coverOf = coverOf;
 
+  protected readonly reviews = signal<Review[]>([]);
+  // Booking that lets this client review (null: none completed yet)
+  protected readonly reviewBookingId = signal<string | null>(null);
+  protected readonly myStars = signal(0);
+  protected myText = '';
+  protected readonly savingReview = signal(false);
+  protected readonly reviewMessage = signal('');
+  protected readonly formatRelative = formatRelative;
+
   constructor(
     private readonly location: Location,
     private readonly router: Router,
     protected readonly professionals: Professionals,
-  ) {}
+    protected readonly auth: Auth,
+    private readonly reviewsService: Reviews,
+  ) {
+    effect(() => {
+      const id = this.id();
+      const uid = this.auth.user()?.uid;
+      const role = this.auth.role();
+      void this.loadReviews(id, uid, role);
+    });
+  }
+
+  private async loadReviews(id: string, uid: string | undefined, role: string | null) {
+    try {
+      const list = await this.reviewsService.list(id);
+      this.reviews.set(list);
+
+      const mine = list.find((review) => review.id === uid);
+      this.myStars.set(mine?.stars ?? 0);
+      this.myText = mine?.text ?? '';
+      this.reviewBookingId.set(uid && role === 'client' ? await this.reviewsService.completedBookingId(id) : null);
+    } catch (error) {
+      console.error('Failed to load reviews', error);
+    }
+  }
+
+  protected get myReview() {
+    return this.reviews().find((review) => review.id === this.auth.user()?.uid);
+  }
+
+  protected async sendReview() {
+    const bookingId = this.reviewBookingId();
+    if (!bookingId || !this.myStars()) {
+      this.reviewMessage.set('Escolha de 1 a 5 estrelas.');
+      return;
+    }
+
+    this.savingReview.set(true);
+    this.reviewMessage.set('');
+    try {
+      await this.reviewsService.save(this.id(), bookingId, this.myStars(), this.myText);
+      this.reviews.set(await this.reviewsService.list(this.id()));
+      this.reviewMessage.set('Avaliação enviada. Obrigada!');
+    } catch (error) {
+      console.error('Failed to save review', error);
+      this.reviewMessage.set('Não foi possível enviar a avaliação. Tente novamente.');
+    } finally {
+      this.savingReview.set(false);
+    }
+  }
 
   protected goBack() {
     this.location.back();

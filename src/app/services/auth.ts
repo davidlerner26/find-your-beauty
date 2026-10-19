@@ -102,7 +102,6 @@ export class Auth {
       about: [],
       services: [],
       gallery: [],
-      reviews: [],
       position: { lat: 0, lng: 0 },
       visible: true,
       published: false,

@@ -126,27 +126,53 @@
     </section>
 
     <section>
-      <div class="section-head">
-        <h2>Avaliações</h2>
-        <a href="#">Ver todas</a>
-      </div>
+      <h2>Avaliações</h2>
+
+      @if (auth.role() === 'client') {
+        @if (reviewBookingId()) {
+          <form class="review-form" (ngSubmit)="sendReview()">
+            <p class="review-title">{{ myReview ? 'Sua avaliação' : 'Avalie esta maquiadora' }}</p>
+            <p class="stars pick">
+              @for (star of stars; track star) {
+                <button type="button" [class.on]="star <= myStars()" [attr.aria-label]="star + ' estrelas'" (click)="myStars.set(star)">★</button>
+              }
+            </p>
+            <textarea name="text" rows="3" maxlength="500" placeholder="Conte como foi (opcional)" [(ngModel)]="myText"></textarea>
+            <button type="submit" class="send" [disabled]="savingReview()">
+              {{ savingReview() ? 'Enviando...' : myReview ? 'Atualizar avaliação' : 'Enviar avaliação' }}
+            </button>
+            @if (reviewMessage()) {
+              <p class="muted">{{ reviewMessage() }}</p>
+            }
+          </form>
+        } @else {
+          <p class="muted">Você poderá avaliar depois de concluir um atendimento com {{ artist.name }}.</p>
+        }
+      } @else if (!auth.user()) {
+        <p class="muted"><a routerLink="/entrar">Entre</a> para avaliar depois de um atendimento.</p>
+      }
+
       <div class="reviews">
-        @for (review of artist.reviews; track review.author) {
+        @for (review of reviews(); track review.id) {
           <article class="review">
             <span class="avatar">{{ review.author[0] }}</span>
             <div class="review-body">
               <div class="review-head">
                 <h3>{{ review.author }}</h3>
-                <span class="muted">há {{ review.daysAgo }} dias</span>
+                <span class="muted">{{ formatRelative(review.createdAt) }}</span>
               </div>
               <p class="stars">
                 @for (star of stars; track star) {
                   <span [class.on]="star <= review.stars">★</span>
                 }
               </p>
-              <p class="muted">{{ review.text }}</p>
+              @if (review.text) {
+                <p class="muted">{{ review.text }}</p>
+              }
             </div>
           </article>
+        } @empty {
+          <p class="muted">Ainda não há avaliações.</p>
         }
       </div>
     </section>

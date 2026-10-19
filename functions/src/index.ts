@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import { setGlobalOptions } from 'firebase-functions/v2';
-import { onDocumentCreated, onDocumentUpdated } from 'firebase-functions/v2/firestore';
+import { onDocumentCreated, onDocumentUpdated, onDocumentWritten } from 'firebase-functions/v2/firestore';
 
 // Same region as the Firestore database
 setGlobalOptions({ region: 'southamerica-east1', maxInstances: 5 });
@@ -74,4 +74,13 @@ export const onBookingUpdated = onDocumentUpdated('bookings/{bookingId}', async 
     { text: after.professionalName, bold: true },
     { text: ` ${verb} o seu agendamento` },
   ]);
+});
+
+// Keeps the average rating and the count shown on cards in sync with the reviews
+export const onReviewWritten = onDocumentWritten('professionals/{professionalId}/reviews/{clientUid}', async (event) => {
+  const ref = db.doc(`professionals/${event.params.professionalId}`);
+  const reviews = await ref.collection('reviews').get();
+  const total = reviews.docs.reduce((sum, review) => sum + (review.data()['stars'] as number), 0);
+  const rating = reviews.size ? Math.round((total / reviews.size) * 10) / 10 : 0;
+  await ref.update({ rating, reviewsCount: String(reviews.size) });
 });

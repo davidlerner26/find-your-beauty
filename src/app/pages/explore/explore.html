@@ -55,7 +55,11 @@
         [class.selected]="i === selected()"
         [routerLink]="['/maquiadores', salon.id]"
       >
-        <div class="offer-image" [style.background-image]="'url(' + salon.image + ')'">
+        <div
+          class="offer-image"
+          [style.background-image]="'url(' + salon.cardImage + ')'"
+          [style.background-position]="salon.cardPosition | focus"
+        >
           @if (salon.distance) {
             <span class="distance">{{ salon.distance }}</span>
           }

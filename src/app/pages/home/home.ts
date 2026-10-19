@@ -1,9 +1,10 @@
 import { RouterLink } from '@angular/router';
+import { FocusPipe } from '../../utils/focus.pipe';
 import { Component, computed } from '@angular/core';
 import { Auth } from '../../services/auth';
 import { UserLocation } from '../../services/user-location';
 import { LocationPrompt } from '../../components/location-prompt/location-prompt';
-import { Professional } from '../../models/professional';
+import { coverOf, ImagePosition, Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { distanceKm, formatDistance } from '../../utils/geo';
 
@@ -12,6 +13,7 @@ type Salon = {
   tags: string;
   name: string;
   image: string;
+  imagePosition?: ImagePosition;
   address: string;
   rating: number;
   reviews: string;
@@ -21,7 +23,7 @@ type Salon = {
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, LocationPrompt],
+  imports: [FocusPipe, RouterLink, LocationPrompt],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -57,7 +59,8 @@ export class Home {
     return {
       id: professional.id,
       name: professional.name,
-      image: professional.image,
+      image: coverOf(professional).image,
+      imagePosition: coverOf(professional).position,
       address: professional.address,
       rating: professional.rating,
       reviews: professional.reviewsCount,

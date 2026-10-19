@@ -83,7 +83,11 @@
 
 <ng-template #card let-item>
   <a class="result" [routerLink]="['/maquiadores', item.id]">
-    <div class="result-image" [style.background-image]="'url(' + item.image + ')'"></div>
+    <div
+      class="result-image"
+      [style.background-image]="'url(' + item.cardImage + ')'"
+      [style.background-position]="item.cardPosition | focus"
+    ></div>
     <div class="result-info">
       <p class="tags">{{ item.tags.join(' . ') }}</p>
       <h3>{{ item.name }}</h3>

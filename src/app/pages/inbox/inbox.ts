@@ -1,20 +1,27 @@
 import { Component, computed, input } from '@angular/core';
+import { FocusPipe } from '../../utils/focus.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Conversation } from '../../models/message';
+import { ImagePosition } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Messages } from '../../services/messages';
 import { Notifications } from '../../services/notifications';
 import { Professionals } from '../../services/professionals';
 import { formatRelative } from '../../utils/format-date';
 
-type Row = Conversation & { title: string; image: string | null; link: string[] };
+type Row = Conversation & {
+  title: string;
+  image: string | null;
+  imagePosition?: ImagePosition;
+  link: string[];
+};
 
 @Component({
   selector: 'app-inbox',
-  imports: [Spinner, RouterLink, FormsModule, NgTemplateOutlet],
+  imports: [FocusPipe, Spinner, RouterLink, FormsModule, NgTemplateOutlet],
   templateUrl: './inbox.html',
   styleUrl: './inbox.scss',
 })
@@ -48,7 +55,13 @@ export class Inbox {
 
       const artist = this.professionals.byId(conversation.professionalId);
       return artist
-        ? [{ ...conversation, title: artist.name, image: artist.image, link: ['/mensagens', artist.id] }]
+        ? [{
+            ...conversation,
+            title: artist.name,
+            image: artist.image,
+            imagePosition: artist.imagePosition,
+            link: ['/mensagens', artist.id],
+          }]
         : [];
     }),
   );

@@ -1,5 +1,9 @@
 @if (artist(); as artist) {
-  <div class="hero" [style.background-image]="'url(' + artist.image + ')'">
+  <div
+    class="hero"
+    [style.background-image]="'url(' + coverOf(artist).image + ')'"
+    [style.background-position]="coverOf(artist).position | focus"
+  >
     <button type="button" class="round" aria-label="Voltar" (click)="goBack()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="m15 5-7 7 7 7" />
@@ -81,7 +85,11 @@
       <div class="services">
         @for (service of visibleServices(); track service.id) {
           <article class="service">
-            <div class="service-image" [style.background-image]="'url(' + service.image + ')'"></div>
+            <div
+              class="service-image"
+              [style.background-image]="'url(' + coverOf(artist).image + ')'"
+              [style.background-position]="coverOf(artist).position | focus"
+            ></div>
             <div class="service-info">
               <h3>{{ service.name }}</h3>
               <p class="service-meta">

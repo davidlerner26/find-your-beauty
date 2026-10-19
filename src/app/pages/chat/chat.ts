@@ -1,4 +1,5 @@
 import { Component, computed, effect, input, signal } from '@angular/core';
+import { FocusPipe } from '../../utils/focus.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +13,7 @@ import { formatClock } from '../../utils/format-date';
 // `id` is the professional id for clients and the conversation id in the professional area
 @Component({
   selector: 'app-chat',
-  imports: [Spinner, FormsModule, RouterLink],
+  imports: [FocusPipe, Spinner, FormsModule, RouterLink],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
@@ -40,10 +41,12 @@ export class Chat {
   protected readonly peer = computed(() => {
     if (this.pro()) {
       const conversation = this.conversation();
-      return conversation ? { name: conversation.clientName, image: null } : null;
+      return conversation ? { name: conversation.clientName, image: null, position: undefined } : null;
     }
     const professional = this.professional();
-    return professional ? { name: professional.name, image: professional.image } : null;
+    return professional
+      ? { name: professional.name, image: professional.image, position: professional.imagePosition }
+      : null;
   });
 
   constructor(

@@ -6,6 +6,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import {
   Availability,
   DateRange,
+  ImagePosition,
   DEFAULT_AVAILABILITY,
   Service,
   ServiceCategory,
@@ -16,6 +17,7 @@ import { toDateKey, toMinutes } from '../../utils/slots';
 import { Auth } from '../../services/auth';
 import { db } from '../../services/firebase';
 import { Photos } from '../../services/photos';
+import { PhotoPositioner } from '../../components/photo-positioner/photo-positioner';
 import { DateRangePicker, PendingRange } from '../../components/date-range-picker/date-range-picker';
 import { Professionals } from '../../services/professionals';
 
@@ -30,7 +32,7 @@ type ServiceDraft = Omit<Service, 'category' | 'price' | 'durationMinutes'> & {
 
 @Component({
   selector: 'app-pro-profile',
-  imports: [DateRangePicker, Spinner, FormsModule],
+  imports: [PhotoPositioner, DateRangePicker, Spinner, FormsModule],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
 })
@@ -40,6 +42,9 @@ export class ProProfile {
   protected name = '';
   protected phone = '';
   protected image = '';
+  protected readonly imagePosition = signal<ImagePosition>({ x: 50, y: 50 });
+  protected coverImage = '';
+  protected readonly coverPosition = signal<ImagePosition>({ x: 50, y: 50 });
   protected gallery: string[] = [];
   private removedPhotos: string[] = [];
   protected address = '';
@@ -87,6 +92,9 @@ export class ProProfile {
       this.name = profile.name;
       this.phone = profile.phone ?? '';
       this.image = profile.image;
+      this.imagePosition.set(profile.imagePosition ?? { x: 50, y: 50 });
+      this.coverImage = profile.coverImage ?? '';
+      this.coverPosition.set(profile.coverPosition ?? { x: 50, y: 50 });
       this.gallery = [...profile.gallery];
       this.address = profile.address;
       this.about = profile.about.join('\n\n');
@@ -175,6 +183,25 @@ export class ProProfile {
     this.message.set('');
     try {
       this.image = await this.photos.upload(this.uid(), 'profile', file);
+      // A new photo starts centered
+      this.imagePosition.set({ x: 50, y: 50 });
+    } catch (error) {
+      this.showUploadError(error);
+    } finally {
+      this.uploading.set(false);
+    }
+  }
+
+  protected async uploadCoverPhoto(input: HTMLInputElement) {
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+
+    this.uploading.set(true);
+    this.message.set('');
+    try {
+      this.coverImage = await this.photos.upload(this.uid(), 'cover', file);
+      this.coverPosition.set({ x: 50, y: 50 });
     } catch (error) {
       this.showUploadError(error);
     } finally {
@@ -217,7 +244,7 @@ export class ProProfile {
         name: '',
         category: '',
         price: '0,00',
-        duration: '',
+        duration: '0:00',
         description: '',
         image: '',
       },
@@ -295,7 +322,7 @@ export class ProProfile {
       category: service.category as ServiceCategory,
       name: service.name.trim(),
       description: service.description.trim(),
-      image: service.image || this.image.trim(),
+      image: service.image || this.coverImage || this.image.trim(),
     }));
     // Clients only see profiles that are visible and complete
     const visible = this.visible();
@@ -306,6 +333,9 @@ export class ProProfile {
         name: this.name.trim(),
         phone: this.phone.trim(),
         image: this.image.trim(),
+        imagePosition: this.imagePosition(),
+        coverImage: this.coverImage,
+        coverPosition: this.coverPosition(),
         address: this.address.trim(),
         about: this.about
           .split(/\n\s*\n/)

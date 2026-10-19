@@ -1,0 +1,49 @@
+<div
+  class="frame"
+  [class.round]="variant() === 'profile'"
+  [class.dragging]="dragging()"
+  tabindex="0"
+  role="group"
+  aria-label="Enquadramento da foto. Use as setas do teclado para mover."
+  (pointerdown)="onDown($event)"
+  (pointermove)="onMove($event, photo)"
+  (pointerup)="onUp()"
+  (pointercancel)="onUp()"
+  (keydown)="onKey($event)"
+>
+  <img #photo [src]="src()" alt="Foto" draggable="false" [style.object-position]="position() | focus" />
+  <span class="hint">Arraste para ajustar</span>
+  <!-- stopPropagation: pressing the button must not start a drag of the photo -->
+  <button
+    type="button"
+    class="center"
+    aria-label="Centralizar foto"
+    title="Centralizar"
+    (pointerdown)="$event.stopPropagation()"
+    (click)="reset()"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+    </svg>
+  </button>
+</div>
+
+<div class="previews">
+  @if (variant() === 'cover') {
+    <div class="preview-item">
+      <img class="card" [src]="src()" alt="" [style.object-position]="position() | focus" />
+      <span>Card</span>
+    </div>
+    <div class="preview-item grow">
+      <img class="strip" [src]="src()" alt="" [style.object-position]="position() | focus" />
+      <span>Topo da página</span>
+    </div>
+  } @else {
+    <div class="preview-item">
+      <img class="circle" [src]="src()" alt="" [style.object-position]="position() | focus" />
+      <span>Mensagens</span>
+    </div>
+    <span class="grow"></span>
+  }
+</div>

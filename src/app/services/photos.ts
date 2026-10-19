@@ -6,7 +6,7 @@ import { storage } from './firebase';
 @Injectable({ providedIn: 'root' })
 export class Photos {
   // Uploads a photo of the professional and returns its public URL
-  async upload(uid: string, folder: 'profile' | 'gallery', file: File) {
+  async upload(uid: string, folder: 'profile' | 'cover' | 'gallery', file: File) {
     if (!file.type.startsWith('image/')) throw new Error('not-an-image');
 
     const blob = await resizeImage(file);

@@ -1,15 +1,16 @@
 import { Component, computed, input, signal } from '@angular/core';
+import { FocusPipe } from '../../utils/focus.pipe';
 import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { formatDuration, Service, ServiceCategory } from '../../models/professional';
+import { coverOf, formatDuration, Service, ServiceCategory } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [PricePipe, Spinner, RouterLink],
+  imports: [FocusPipe, PricePipe, Spinner, RouterLink],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })
@@ -46,6 +47,7 @@ export class ArtistDetails {
   );
 
   protected readonly formatDuration = formatDuration;
+  protected readonly coverOf = coverOf;
 
   constructor(
     private readonly location: Location,

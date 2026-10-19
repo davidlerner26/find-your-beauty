@@ -19,17 +19,35 @@
             <input name="phone" type="tel" [(ngModel)]="phone" />
           </span>
         </label>
+        <h3>Foto de perfil</h3>
+        <p class="hint muted">Aparece redonda nas mensagens.</p>
         <div class="photo">
-          @if (image) {
-            <img class="preview" [src]="image" alt="Sua foto" />
-          } @else {
+          @if (!image) {
             <span class="preview empty">Sem foto</span>
           }
           <label class="upload">
-            {{ uploading() ? 'Enviando...' : image ? 'Trocar foto' : 'Escolher foto' }}
+            {{ uploading() ? 'Enviando...' : image ? 'Trocar foto de perfil' : 'Escolher foto de perfil' }}
             <input type="file" accept="image/*" hidden [disabled]="uploading()" #profileFile (change)="uploadProfilePhoto(profileFile)" />
           </label>
         </div>
+        @if (image) {
+          <app-photo-positioner variant="profile" [src]="image" [(position)]="imagePosition" />
+        }
+
+        <h3>Foto de capa</h3>
+        <p class="hint muted">Aparece nos cards e no topo da sua página. Sem capa, usamos a foto de perfil.</p>
+        <div class="photo">
+          @if (!coverImage) {
+            <span class="preview empty">Sem capa</span>
+          }
+          <label class="upload">
+            {{ uploading() ? 'Enviando...' : coverImage ? 'Trocar foto de capa' : 'Escolher foto de capa' }}
+            <input type="file" accept="image/*" hidden [disabled]="uploading()" #coverFile (change)="uploadCoverPhoto(coverFile)" />
+          </label>
+        </div>
+        @if (coverImage) {
+          <app-photo-positioner variant="cover" [src]="coverImage" [(position)]="coverPosition" />
+        }
         <label>
           Sobre você
           <textarea name="about" rows="5" placeholder="Conte sobre o seu trabalho" [(ngModel)]="about"></textarea>

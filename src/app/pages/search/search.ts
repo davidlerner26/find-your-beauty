@@ -1,8 +1,10 @@
 import { Component, computed, signal } from '@angular/core';
+import { FocusPipe } from '../../utils/focus.pipe';
 import { Location, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Professional } from '../../models/professional';
+import { coverOf } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
 import { distanceKm, formatDistance } from '../../utils/geo';
@@ -36,7 +38,7 @@ const readRecents = (): string[] => {
 
 @Component({
   selector: 'app-search',
-  imports: [FormsModule, RouterLink, NgTemplateOutlet],
+  imports: [FocusPipe, FormsModule, RouterLink, NgTemplateOutlet],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
@@ -88,6 +90,8 @@ export class Search {
       })
       .map((professional) => ({
         ...professional,
+        cardImage: coverOf(professional).image,
+        cardPosition: coverOf(professional).position,
         distance: user ? formatDistance(distanceKm(user, professional.position)) : null,
       }));
   });

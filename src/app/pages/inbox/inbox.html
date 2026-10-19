@@ -25,7 +25,7 @@
         <li>
           <a class="conversation" [routerLink]="item.link">
             @if (item.image) {
-              <img [src]="item.image" [alt]="item.title" />
+              <img [src]="item.image" [alt]="item.title" [style.object-position]="item.imagePosition | focus" />
             } @else {
               <span class="avatar-initial">{{ item.title[0] }}</span>
             }

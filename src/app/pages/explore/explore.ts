@@ -1,7 +1,9 @@
 import { RouterLink } from '@angular/router';
+import { FocusPipe } from '../../utils/focus.pipe';
 import { Component, computed, effect, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
+import { coverOf } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
 import { distanceKm, formatDistance } from '../../utils/geo';
@@ -15,7 +17,7 @@ const pin = (color: string) =>
 
 @Component({
   selector: 'app-explore',
-  imports: [GoogleMap, MapMarker, MapCircle, RouterLink],
+  imports: [FocusPipe, GoogleMap, MapMarker, MapCircle, RouterLink],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })
@@ -75,6 +77,8 @@ export class Explore implements OnInit {
       )
       .map((salon) => ({
         ...salon,
+        cardImage: coverOf(salon).image,
+        cardPosition: coverOf(salon).position,
         distance: user ? formatDistance(distanceKm(user, salon.position)) : null,
       }));
   }

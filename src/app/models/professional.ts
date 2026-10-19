@@ -17,6 +17,9 @@ export type Service = {
   image: string;
 };
 
+// Focal point of the profile photo, in percent: where the photo is anchored when it gets cropped
+export type ImagePosition = { x: number; y: number };
+
 // A period of days ("yyyy-mm-dd"), both ends included
 export type DateRange = { start: string; end: string };
 
@@ -47,7 +50,12 @@ export const DEFAULT_AVAILABILITY: Availability = {
 export type Professional = {
   id: string;
   name: string;
+  // Profile photo (round avatars in messages)
   image: string;
+  imagePosition?: ImagePosition;
+  // Cover photo (cards and the top of the page). Falls back to the profile photo when missing.
+  coverImage?: string;
+  coverPosition?: ImagePosition;
   address: string;
   tags: string[];
   rating: number;
@@ -70,3 +78,9 @@ export type Professional = {
 };
 
 export const formatDuration = (minutes: number) => `${(minutes / 60).toLocaleString('pt-BR')} h`;
+
+// The photo shown on cards and at the top of the page
+export const coverOf = (professional: Pick<Professional, 'image' | 'imagePosition' | 'coverImage' | 'coverPosition'>) =>
+  professional.coverImage
+    ? { image: professional.coverImage, position: professional.coverPosition }
+    : { image: professional.image, position: professional.imagePosition };

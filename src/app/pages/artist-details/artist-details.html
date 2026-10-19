@@ -1,11 +1,18 @@
 @if (artist(); as artist) {
   <div
     class="hero"
-    [style.background-image]="'url(' + coverOf(artist).image + ')'"
-    [style.background-position]="coverOf(artist).position | focus"
+    [style.background-image]="'url(' + artist.image + ')'"
+    [style.background-position]="artist.imagePosition | focus"
   >
     <button type="button" class="round" aria-label="Voltar" (click)="goBack()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
         <path d="m15 5-7 7 7 7" />
       </svg>
     </button>
@@ -15,7 +22,9 @@
       </button>
       <a class="round" routerLink="/explore" aria-label="Ver no mapa">
         <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M9 3 3 5.500v15.500l6-2.500zm1 0v15.500l5 2.500V5.500zm6 2.500v15.500l5-2.500V3z" />
+          <path
+            d="M9 3 3 5.500v15.500l6-2.500zm1 0v15.500l5 2.500V5.500zm6 2.500v15.500l5-2.500V3z"
+          />
         </svg>
       </a>
     </div>
@@ -23,24 +32,68 @@
 
   <div class="content">
     <header class="intro">
-      <h1>{{ artist.name }}</h1>
+      <div class="name-row">
+        <h1>{{ artist.name }}</h1>
+        <a
+          class="chat-icon"
+          [routerLink]="['/mensagens', artist.id]"
+          aria-label="Conversar com {{ artist.name }}"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21 11.500a8.400 8.400 0 0 1-9 8.400 9 9 0 0 1-3.800-.8L3 21l1.900-5.200A8.400 8.400 0 0 1 3 11.500 8.500 8.500 0 0 1 12 3a8.500 8.500 0 0 1 9 8.500z"
+            />
+          </svg>
+        </a>
+      </div>
       <p class="muted">{{ artist.address }}</p>
+      @if (artist.instagram) {
+        <a class="instagram" [href]="instagramUrl(artist.instagram)" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+          </svg>
+          &#64;{{ artist.instagram }}
+        </a>
+      }
       <div class="facts">
         <p>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
           </svg>
           Aberto hoje
         </p>
         <p>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 12s3.500-7 10-7 10 7 10 7-3.500 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M2 12s3.500-7 10-7 10 7 10 7-3.500 7-10 7S2 12 2 12z" />
+            <circle cx="12" cy="12" r="3" />
           </svg>
           {{ artist.views }} visualizações
         </p>
         <p>
-          <span class="star">★</span> <strong>{{ artist.rating }}</strong>
-          ({{ artist.reviewsCount }})
+          <span class="star">★</span> <strong>{{ artist.rating }}</strong> ({{
+            artist.reviewsCount
+          }})
         </p>
       </div>
     </header>
@@ -75,7 +128,14 @@
             [class.active]="activeCategory() === category.name"
             (click)="activeCategory.set(category.name)"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path [attr.d]="category.icon" />
             </svg>
             {{ category.name }}
@@ -87,8 +147,8 @@
           <article class="service">
             <div
               class="service-image"
-              [style.background-image]="'url(' + coverOf(artist).image + ')'"
-              [style.background-position]="coverOf(artist).position | focus"
+              [style.background-image]="'url(' + artist.image + ')'"
+              [style.background-position]="artist.imagePosition | focus"
             ></div>
             <div class="service-info">
               <h3>{{ service.name }}</h3>
@@ -134,22 +194,45 @@
             <p class="review-title">{{ myReview ? 'Sua avaliação' : 'Avalie esta maquiadora' }}</p>
             <p class="stars pick">
               @for (star of stars; track star) {
-                <button type="button" [class.on]="star <= myStars()" [attr.aria-label]="star + ' estrelas'" (click)="myStars.set(star)">★</button>
+                <button
+                  type="button"
+                  [class.on]="star <= myStars()"
+                  [attr.aria-label]="star + ' estrelas'"
+                  (click)="myStars.set(star)"
+                >
+                  ★
+                </button>
               }
             </p>
-            <textarea name="text" rows="3" maxlength="500" placeholder="Conte como foi (opcional)" [(ngModel)]="myText"></textarea>
+            <textarea
+              name="text"
+              rows="3"
+              maxlength="500"
+              placeholder="Conte como foi (opcional)"
+              [(ngModel)]="myText"
+            ></textarea>
             <button type="submit" class="send" [disabled]="savingReview()">
-              {{ savingReview() ? 'Enviando...' : myReview ? 'Atualizar avaliação' : 'Enviar avaliação' }}
+              {{
+                savingReview()
+                  ? 'Enviando...'
+                  : myReview
+                    ? 'Atualizar avaliação'
+                    : 'Enviar avaliação'
+              }}
             </button>
             @if (reviewMessage()) {
               <p class="muted">{{ reviewMessage() }}</p>
             }
           </form>
         } @else {
-          <p class="muted">Você poderá avaliar depois de concluir um atendimento com {{ artist.name }}.</p>
+          <p class="muted">
+            Você poderá avaliar depois de concluir um atendimento com {{ artist.name }}.
+          </p>
         }
       } @else if (!auth.user()) {
-        <p class="muted"><a routerLink="/entrar">Entre</a> para avaliar depois de um atendimento.</p>
+        <p class="muted">
+          <a routerLink="/entrar">Entre</a> para avaliar depois de um atendimento.
+        </p>
       }
 
       <div class="reviews">
@@ -180,16 +263,30 @@
 
   <footer class="book-bar">
     <div>
-      <p><strong>Total</strong> ({{ selectedServices().length }} {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})</p>
+      <p>
+        <strong>Total</strong> ({{ selectedServices().length }}
+        {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})
+      </p>
       <p class="price">{{ total() | price }}</p>
     </div>
     <div class="book-actions">
-      <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <circle cx="7" cy="12" r="1.600" /><circle cx="12" cy="12" r="1.600" /><circle cx="17" cy="12" r="1.600" />
+      <a class="chat" [routerLink]="['/mensagens', artist.id]">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M21 11.500a8.400 8.400 0 0 1-9 8.400 9 9 0 0 1-3.800-.8L3 21l1.900-5.200A8.400 8.400 0 0 1 3 11.500 8.500 8.500 0 0 1 12 3a8.500 8.500 0 0 1 9 8.500z"
+          />
         </svg>
       </a>
-      <button type="button" class="book" [disabled]="!selectedServices().length" (click)="book()">Agendar</button>
+      <button type="button" class="book" [disabled]="!selectedServices().length" (click)="book()">
+        Agendar
+      </button>
     </div>
   </footer>
 } @else if (professionals.status() === 'loading') {

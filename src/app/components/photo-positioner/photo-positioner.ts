@@ -13,8 +13,6 @@ const clamp = (value: number) => Math.min(100, Math.max(0, value));
 })
 export class PhotoPositioner {
   readonly src = input.required<string>();
-  // profile: round photo used in messages. cover: wide photo used on cards and at the top of the page.
-  readonly variant = input<'profile' | 'cover'>('cover');
   readonly position = model<ImagePosition>({ x: 50, y: 50 });
 
   protected readonly dragging = signal(false);

@@ -1,9 +1,8 @@
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
-import { Component, computed, effect, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
-import { coverOf } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
 import { distanceKm, formatDistance } from '../../utils/geo';
@@ -43,7 +42,9 @@ export class Explore implements OnInit {
   };
 
   protected readonly filters = ['Cabelo', 'Maquiagem'];
-  // Every chip starts selected
+  // Tag chosen on the home page (?tag=Cabelo)
+  readonly tag = input<string>();
+  // Every chip starts selected, unless a tag came from the home page
   protected readonly activeFilters = signal<string[]>([...this.filters]);
   protected readonly selected = signal(0);
 
@@ -51,7 +52,13 @@ export class Explore implements OnInit {
     private readonly loader: GoogleMapsLoader,
     protected readonly professionals: Professionals,
     private readonly userLocation: UserLocation,
+    private readonly host: ElementRef<HTMLElement>,
   ) {
+    effect(() => {
+      const tag = this.tag();
+      if (tag && this.filters.includes(tag)) this.activeFilters.set([tag]);
+    });
+
     // Centers the map on the user as soon as the position is known
     effect(() => {
       const position = this.userLocation.position();
@@ -77,8 +84,8 @@ export class Explore implements OnInit {
       )
       .map((salon) => ({
         ...salon,
-        cardImage: coverOf(salon).image,
-        cardPosition: coverOf(salon).position,
+        cardImage: salon.image,
+        cardPosition: salon.imagePosition,
         distance: user ? formatDistance(distanceKm(user, salon.position)) : null,
       }));
   }
@@ -93,6 +100,11 @@ export class Explore implements OnInit {
   protected selectSalon(index: number) {
     this.selected.set(index);
     this.center.set(this.visibleSalons[index].position);
+
+    // Brings the salon's card into view in the carousel
+    this.host.nativeElement
+      .querySelectorAll('.results .offer')
+      [index]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 
   protected markerIcon(index: number) {

@@ -2,9 +2,11 @@ import { Component, computed, effect, signal } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { doc, updateDoc } from 'firebase/firestore';
+import { parseInstagram } from '../../utils/instagram';
+import { deleteField, doc, updateDoc } from 'firebase/firestore';
 import {
   Availability,
+  Professional,
   DateRange,
   ImagePosition,
   DEFAULT_AVAILABILITY,
@@ -44,10 +46,9 @@ export class ProProfile {
 
   protected name = '';
   protected phone = '';
+  protected instagram = '';
   protected image = '';
   protected readonly imagePosition = signal<ImagePosition>({ x: 50, y: 50 });
-  protected coverImage = '';
-  protected readonly coverPosition = signal<ImagePosition>({ x: 50, y: 50 });
   protected gallery: string[] = [];
   private removedPhotos: string[] = [];
   protected address = '';
@@ -101,10 +102,11 @@ export class ProProfile {
       this.filled = true;
       this.name = profile.name;
       this.phone = profile.phone ?? '';
-      this.image = profile.image;
-      this.imagePosition.set(profile.imagePosition ?? { x: 50, y: 50 });
-      this.coverImage = profile.coverImage ?? '';
-      this.coverPosition.set(profile.coverPosition ?? { x: 50, y: 50 });
+      this.instagram = profile.instagram ? '@' + profile.instagram : '';
+      // Accounts from when there were two photos: the old cover is used when there is no profile photo
+      const legacy = profile as Professional & { coverImage?: string; coverPosition?: ImagePosition };
+      this.image = profile.image || legacy.coverImage || '';
+      this.imagePosition.set((profile.image ? profile.imagePosition : legacy.coverPosition) ?? { x: 50, y: 50 });
       this.gallery = [...profile.gallery];
       this.address = profile.address;
       this.about = profile.about.join('\n\n');
@@ -196,23 +198,6 @@ export class ProProfile {
       this.image = await this.photos.upload(this.uid(), 'profile', file);
       // A new photo starts centered
       this.imagePosition.set({ x: 50, y: 50 });
-    } catch (error) {
-      this.showUploadError(error);
-    } finally {
-      this.uploading.set(false);
-    }
-  }
-
-  protected async uploadCoverPhoto(input: HTMLInputElement) {
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) return;
-
-    this.uploading.set(true);
-    this.message.set('');
-    try {
-      this.coverImage = await this.photos.upload(this.uid(), 'cover', file);
-      this.coverPosition.set({ x: 50, y: 50 });
     } catch (error) {
       this.showUploadError(error);
     } finally {
@@ -375,6 +360,12 @@ export class ProProfile {
       return;
     }
 
+    const instagram = parseInstagram(this.instagram);
+    if (instagram === null) {
+      this.show('Usuário do Instagram inválido. Use o formato @usuario.');
+      return;
+    }
+
     this.serviceTried.set(true);
     if (!this.services.every((service) => this.serviceComplete(service))) {
       this.show('Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.');
@@ -391,7 +382,7 @@ export class ProProfile {
       category: service.category as ServiceCategory,
       name: service.name.trim(),
       description: service.description.trim(),
-      image: service.image || this.coverImage || this.image.trim(),
+      image: service.image || this.image.trim(),
     }));
     // Clients only see profiles that are visible and complete
     const visible = this.visible();
@@ -401,10 +392,11 @@ export class ProProfile {
       await updateDoc(doc(db, 'professionals', this.uid()), {
         name: this.name.trim(),
         phone: this.phone.trim(),
+        instagram,
         image: this.image.trim(),
         imagePosition: this.imagePosition(),
-        coverImage: this.coverImage,
-        coverPosition: this.coverPosition(),
+        coverImage: deleteField(),
+        coverPosition: deleteField(),
         address: this.address.trim(),
         about: this.about
           .split(/\n\s*\n/)

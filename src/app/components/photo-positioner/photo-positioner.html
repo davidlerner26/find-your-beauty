@@ -1,6 +1,5 @@
 <div
   class="frame"
-  [class.round]="variant() === 'profile'"
   [class.dragging]="dragging()"
   tabindex="0"
   role="group"
@@ -30,20 +29,16 @@
 </div>
 
 <div class="previews">
-  @if (variant() === 'cover') {
-    <div class="preview-item">
-      <img class="card" [src]="src()" alt="" [style.object-position]="position() | focus" />
-      <span>Card</span>
-    </div>
-    <div class="preview-item grow">
-      <img class="strip" [src]="src()" alt="" [style.object-position]="position() | focus" />
-      <span>Topo da página</span>
-    </div>
-  } @else {
-    <div class="preview-item">
-      <img class="circle" [src]="src()" alt="" [style.object-position]="position() | focus" />
-      <span>Mensagens</span>
-    </div>
-    <span class="grow"></span>
-  }
+  <div class="preview-item">
+    <img class="circle" [src]="src()" alt="" [style.object-position]="position() | focus" />
+    <span>Mensagens</span>
+  </div>
+  <div class="preview-item">
+    <img class="card" [src]="src()" alt="" [style.object-position]="position() | focus" />
+    <span>Card</span>
+  </div>
+  <div class="preview-item grow">
+    <img class="strip" [src]="src()" alt="" [style.object-position]="position() | focus" />
+    <span>Topo da página</span>
+  </div>
 </div>

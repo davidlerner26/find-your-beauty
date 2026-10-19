@@ -14,7 +14,7 @@
     </a>
   </section>
 
-  <section>
+  <!-- <section>
     <h2>O que você quer fazer?</h2>
     <div class="services">
       @for (service of services; track service.name) {
@@ -35,7 +35,7 @@
         </button>
       }
     </div>
-  </section>
+  </section> -->
 
   <section>
     <div class="section-head">
@@ -67,7 +67,7 @@
     <h2>Mais buscados</h2>
     <div class="interests">
       @for (interest of interests; track interest) {
-        <button type="button" class="chip">{{ interest }}</button>
+        <a class="chip" routerLink="/explore" [queryParams]="{ tag: interest }">{{ interest }}</a>
       }
     </div>
   </section>

@@ -4,7 +4,7 @@ import { Component, computed } from '@angular/core';
 import { Auth } from '../../services/auth';
 import { UserLocation } from '../../services/user-location';
 import { LocationPrompt } from '../../components/location-prompt/location-prompt';
-import { coverOf, ImagePosition, Professional } from '../../models/professional';
+import { ImagePosition, Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { distanceKm, formatDistance } from '../../utils/geo';
 
@@ -59,8 +59,8 @@ export class Home {
     return {
       id: professional.id,
       name: professional.name,
-      image: coverOf(professional).image,
-      imagePosition: coverOf(professional).position,
+      image: professional.image,
+      imagePosition: professional.imagePosition,
       address: professional.address,
       rating: professional.rating,
       reviews: professional.reviewsCount,

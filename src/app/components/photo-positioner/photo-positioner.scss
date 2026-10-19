@@ -15,15 +15,6 @@
   touch-action: none;
   user-select: none;
 
-  // The profile photo is shown round, so it is positioned inside a circle
-  &.round {
-    width: 14rem;
-    max-width: 100%;
-    aspect-ratio: 1;
-    margin: 0 auto;
-    border-radius: 50%;
-  }
-
   &.dragging {
     cursor: grabbing;
   }
@@ -77,19 +68,6 @@
     display: block;
     width: 100%;
     height: 100%;
-  }
-}
-
-// In the round frame the corners are cut off: pull the button and the hint inside the circle
-.round {
-  .center {
-    right: 13%;
-    bottom: 13%;
-  }
-
-  .hint {
-    top: 12%;
-    bottom: auto;
   }
 }
 

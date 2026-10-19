@@ -9,5 +9,14 @@ service firebase.storage {
         request.resource.contentType.matches('image/.*');
       allow delete: if request.auth != null && request.auth.uid == uid;
     }
+
+    // Files of a conversation: only its two participants (up to 10 MB). Its id is {clientUid}_{professionalId}.
+    match /chats/{conversationId}/{allPaths=**} {
+      allow read: if request.auth != null && (conversationId.split('_')[0] == request.auth.uid ||
+        request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(conversationId)).data.participants);
+      allow create: if request.auth != null && request.resource.size < 10 * 1024 * 1024 &&
+        (conversationId.split('_')[0] == request.auth.uid ||
+        request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(conversationId)).data.participants);
+    }
   }
 }

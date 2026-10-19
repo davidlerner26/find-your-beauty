@@ -6,10 +6,11 @@ import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { coverOf, formatDuration, Review, Service, ServiceCategory } from '../../models/professional';
+import { formatDuration, Review, Service, ServiceCategory } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Professionals } from '../../services/professionals';
 import { Reviews } from '../../services/reviews';
+import { instagramUrl } from '../../utils/instagram';
 import { formatRelative } from '../../utils/format-date';
 
 @Component({
@@ -51,7 +52,7 @@ export class ArtistDetails {
   );
 
   protected readonly formatDuration = formatDuration;
-  protected readonly coverOf = coverOf;
+  protected readonly instagramUrl = instagramUrl;
 
   protected readonly reviews = signal<Review[]>([]);
   // Booking that lets this client review (null: none completed yet)

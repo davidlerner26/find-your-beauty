@@ -4,7 +4,6 @@ import { Location, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Professional } from '../../models/professional';
-import { coverOf } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
 import { distanceKm, formatDistance } from '../../utils/geo';
@@ -90,8 +89,8 @@ export class Search {
       })
       .map((professional) => ({
         ...professional,
-        cardImage: coverOf(professional).image,
-        cardPosition: coverOf(professional).position,
+        cardImage: professional.image,
+        cardPosition: professional.imagePosition,
         distance: user ? formatDistance(distanceKm(user, professional.position)) : null,
       }));
   });

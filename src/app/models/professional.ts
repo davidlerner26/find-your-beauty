@@ -52,12 +52,9 @@ export const DEFAULT_AVAILABILITY: Availability = {
 export type Professional = {
   id: string;
   name: string;
-  // Profile photo (round avatars in messages)
+  // The one photo of the professional: cards, top of the page and round avatars in messages
   image: string;
   imagePosition?: ImagePosition;
-  // Cover photo (cards and the top of the page). Falls back to the profile photo when missing.
-  coverImage?: string;
-  coverPosition?: ImagePosition;
   address: string;
   tags: string[];
   rating: number;
@@ -71,6 +68,8 @@ export type Professional = {
   ownerUid?: string;
   email?: string;
   phone?: string;
+  // Instagram username, without the @
+  instagram?: string;
   // The professional's choice to show the profile (default: yes)
   visible?: boolean;
   // What clients see: visible and complete. Computed when the profile is saved.
@@ -79,9 +78,3 @@ export type Professional = {
 };
 
 export const formatDuration = (minutes: number) => `${(minutes / 60).toLocaleString('pt-BR')} h`;
-
-// The photo shown on cards and at the top of the page
-export const coverOf = (professional: Pick<Professional, 'image' | 'imagePosition' | 'coverImage' | 'coverPosition'>) =>
-  professional.coverImage
-    ? { image: professional.coverImage, position: professional.coverPosition }
-    : { image: professional.image, position: professional.imagePosition };

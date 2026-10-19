@@ -12,10 +12,16 @@ import {
   where,
   writeBatch,
 } from 'firebase/firestore';
-import { ChatMessage, Conversation } from '../models/message';
+import { ChatMessage, Conversation, MessageContent } from '../models/message';
 import { Professional } from '../models/professional';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { resizeImage } from '../utils/image';
 import { Auth } from './auth';
-import { db } from './firebase';
+import { db, storage } from './firebase';
+
+// What the conversation list shows for the last message
+const preview = (content: MessageContent) =>
+  content.text ?? (content.image ? 'Foto' : (content.file?.name ?? ''));
 
 const toDate = (value: unknown) => (value instanceof Timestamp ? value.toDate() : null);
 
@@ -85,6 +91,7 @@ export class Messages {
               senderUid: data['senderUid'],
               text: data['text'],
               image: data['image'],
+              file: data['file'],
               createdAt: toDate(data['createdAt']),
             };
           }),
@@ -94,7 +101,7 @@ export class Messages {
   }
 
   // The client starts (or continues) a conversation with a professional
-  async sendAsClient(professional: Professional, text: string) {
+  async sendAsClient(professional: Professional, content: MessageContent) {
     const user = this.auth.user();
     if (!user) return;
 
@@ -102,7 +109,7 @@ export class Messages {
     const message = doc(collection(conversation, 'messages'));
 
     const batch = writeBatch(db);
-    batch.set(message, { senderUid: user.uid, text, createdAt: serverTimestamp() });
+    batch.set(message, { senderUid: user.uid, ...content, createdAt: serverTimestamp() });
     batch.set(
       conversation,
       {
@@ -111,7 +118,7 @@ export class Messages {
         clientUid: user.uid,
         clientName: user.displayName || user.email || 'Cliente',
         professionalId: professional.id,
-        lastMessage: text,
+        lastMessage: preview(content),
         lastMessageAt: serverTimestamp(),
         unreadProfessional: increment(1),
       },
@@ -120,7 +127,7 @@ export class Messages {
     await batch.commit();
   }
 
-  async sendAsProfessional(conversationId: string, text: string) {
+  async sendAsProfessional(conversationId: string, content: MessageContent) {
     const uid = this.auth.user()?.uid;
     if (!uid) return;
 
@@ -128,13 +135,27 @@ export class Messages {
     const message = doc(collection(conversation, 'messages'));
 
     const batch = writeBatch(db);
-    batch.set(message, { senderUid: uid, text, createdAt: serverTimestamp() });
+    batch.set(message, { senderUid: uid, ...content, createdAt: serverTimestamp() });
     batch.update(conversation, {
-      lastMessage: text,
+      lastMessage: preview(content),
       lastMessageAt: serverTimestamp(),
       unreadClient: increment(1),
     });
     await batch.commit();
+  }
+
+  // Uploads a file of the device to the conversation: photos are resized and shown inline
+  async upload(conversationId: string, file: File): Promise<MessageContent> {
+    const isImage = file.type.startsWith('image/');
+    const name = `${Date.now()}_${file.name.replace(/[^\w.-]/g, '_')}`;
+    const target = ref(storage, `chats/${conversationId}/${isImage ? name.replace(/\.[^.]*$/, '') + '.jpg' : name}`);
+
+    if (isImage) {
+      await uploadBytes(target, await resizeImage(file), { contentType: 'image/jpeg' });
+      return { image: await getDownloadURL(target) };
+    }
+    await uploadBytes(target, file);
+    return { file: { url: await getDownloadURL(target), name: file.name } };
   }
 
   async markAsRead(conversation: Conversation) {

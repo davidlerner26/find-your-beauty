@@ -16,8 +16,13 @@ export type ChatMessage = {
   senderUid: string;
   text?: string;
   image?: string;
+  // Any other file sent from the device
+  file?: { url: string; name: string };
   createdAt: Date | null;
 };
+
+// What goes into a new message
+export type MessageContent = Pick<ChatMessage, 'text' | 'image' | 'file'>;
 
 export type TextPart = { text: string; bold?: boolean };
 

@@ -4,11 +4,13 @@ import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ChatMessage } from '../../models/message';
+import { ChatMessage, MessageContent } from '../../models/message';
 import { Auth } from '../../services/auth';
 import { Messages } from '../../services/messages';
 import { Professionals } from '../../services/professionals';
 import { formatClock } from '../../utils/format-date';
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 // `id` is the professional id for clients and the conversation id in the professional area
 @Component({
@@ -24,6 +26,8 @@ export class Chat {
   protected readonly messages = signal<ChatMessage[]>([]);
   protected readonly clock = formatClock;
   protected draft = '';
+  protected readonly uploading = signal(false);
+  protected readonly attachError = signal('');
 
   private readonly conversationId = computed(() =>
     this.pro() ? this.id() : this.messagesService.clientConversationId(this.id()),
@@ -79,13 +83,39 @@ export class Chat {
     const text = this.draft.trim();
     if (!text) return;
 
-    const sending = this.pro()
-      ? this.messagesService.sendAsProfessional(this.conversationId(), text)
-      : this.professional()
-        ? this.messagesService.sendAsClient(this.professional()!, text)
-        : null;
-
     this.draft = '';
-    sending?.catch((error) => console.error('Failed to send message', error));
+    this.deliver({ text })?.catch((error) => console.error('Failed to send message', error));
+  }
+
+  // The clip button: sends each chosen file of the device as a message
+  protected async attach(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = Array.from(input.files ?? []);
+    input.value = '';
+
+    this.attachError.set('');
+    this.uploading.set(true);
+    try {
+      for (const file of files) {
+        if (file.size > MAX_FILE_SIZE) {
+          this.attachError.set('Cada arquivo pode ter até 10 MB.');
+          continue;
+        }
+        await this.deliver(await this.messagesService.upload(this.conversationId(), file));
+      }
+    } catch (error) {
+      console.error('Failed to send file', error);
+      this.attachError.set('Não foi possível enviar o arquivo. Tente novamente.');
+    } finally {
+      this.uploading.set(false);
+    }
+  }
+
+  private deliver(content: MessageContent) {
+    return this.pro()
+      ? this.messagesService.sendAsProfessional(this.conversationId(), content)
+      : this.professional()
+        ? this.messagesService.sendAsClient(this.professional()!, content)
+        : null;
   }
 }

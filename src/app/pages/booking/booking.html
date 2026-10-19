@@ -55,9 +55,13 @@
             {{ time }}
           </button>
         } @empty {
-          <p class="muted">
-            {{ !selectedDay() ? 'Escolha um dia para ver os horários.' : loadingTimes() ? 'Carregando horários...' : 'Não há horários livres neste dia. Escolha outro.' }}
-          </p>
+          @if (loadingTimes()) {
+            <app-spinner [small]="true" />
+          } @else {
+            <p class="muted">
+              {{ !selectedDay() ? 'Escolha um dia para ver os horários.' : 'Não há horários livres neste dia. Escolha outro.' }}
+            </p>
+          }
         }
       </div>
     </section>
@@ -71,7 +75,7 @@
   <footer class="book-bar">
     <div>
       <p><strong>Total</strong> ({{ selectedServices().length }} {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})</p>
-      <p class="price">R$ {{ total() }}</p>
+      <p class="price">{{ total() | price }}</p>
     </div>
     <div class="book-actions">
       <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar">
@@ -83,7 +87,7 @@
     </div>
   </footer>
 } @else if (professionals.status() === 'loading') {
-  <p class="not-found">Carregando...</p>
+  <app-spinner />
 } @else if (professionals.status() === 'error') {
   <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {

@@ -1,4 +1,5 @@
 import { Component, computed, input } from '@angular/core';
+import { Spinner } from '../../components/spinner/spinner';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -13,7 +14,7 @@ type Row = Conversation & { title: string; image: string | null; link: string[] 
 
 @Component({
   selector: 'app-inbox',
-  imports: [RouterLink, FormsModule, NgTemplateOutlet],
+  imports: [Spinner, RouterLink, FormsModule, NgTemplateOutlet],
   templateUrl: './inbox.html',
   styleUrl: './inbox.scss',
 })

@@ -60,10 +60,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/profile/profile').then((m) => m.Profile),
   },
   {
-    // Dev only: fills the `professionals` collection with the initial data
-    path: 'seed',
-    canMatch: [() => isDevMode()],
-    loadComponent: () => import('./pages/seed/seed').then((m) => m.Seed),
+    // Target of the link in the password reset e-mail (set as the action URL in the Firebase console)
+    path: 'redefinir-senha',
+    loadComponent: () =>
+      import('./pages/reset-password/reset-password').then((m) => m.ResetPassword),
   },
   {
     path: 'busca',

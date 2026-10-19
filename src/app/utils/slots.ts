@@ -12,8 +12,13 @@ export const toTime = (minutes: number) => `${pad(Math.floor(minutes / 60))}:${p
 export const toDateKey = (date: Date) =>
   `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 
+export const isBlocked = (dateKey: string, availability: Availability) =>
+  // "yyyy-mm-dd" strings compare in date order
+  (availability.blockedRanges ?? []).some((range) => dateKey >= range.start && dateKey <= range.end) ||
+  (availability.blockedDates ?? []).includes(dateKey);
+
 export const isWorkingDay = (date: Date, availability: Availability) =>
-  !!availability.weekly[date.getDay()]?.enabled && !availability.blockedDates.includes(toDateKey(date));
+  !!availability.weekly[date.getDay()]?.enabled && !isBlocked(toDateKey(date), availability);
 
 // How many slots a service of `durationMinutes` takes
 const slotCount = (durationMinutes: number, slotMinutes: number) =>

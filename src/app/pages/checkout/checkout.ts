@@ -1,4 +1,7 @@
 import { Component, computed, input, signal } from '@angular/core';
+import { roundMoney } from '../../utils/money';
+import { PricePipe } from '../../utils/price.pipe';
+import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { formatDuration } from '../../models/professional';
@@ -10,7 +13,7 @@ import { busyIdsFor } from '../../utils/slots';
 
 @Component({
   selector: 'app-checkout',
-  imports: [RouterLink],
+  imports: [PricePipe, Spinner, RouterLink],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })
@@ -31,7 +34,7 @@ export class Checkout {
   });
 
   protected readonly total = computed(() =>
-    this.services().reduce((sum, service) => sum + service.price, 0),
+    roundMoney(this.services().reduce((sum, service) => sum + service.price, 0)),
   );
 
   protected readonly duration = computed(() =>

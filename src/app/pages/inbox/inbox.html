@@ -5,7 +5,7 @@
   </div>
 
   @if (!auth.ready()) {
-    <p class="empty muted">Carregando...</p>
+    <app-spinner />
   } @else if (!auth.user()) {
     <div class="empty">
       <p class="muted">Entre na sua conta para ver {{ tab() === 'mensagens' ? 'suas mensagens' : 'suas notificações' }}.</p>
@@ -46,7 +46,7 @@
       }
     </ul>
   } @else if (notifications.loading()) {
-    <p class="empty muted">Carregando...</p>
+    <app-spinner />
   } @else {
     @if (newNotifications().length) {
       <h2>Novas</h2>

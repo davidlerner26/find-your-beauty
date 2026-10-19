@@ -85,7 +85,7 @@
             <div class="service-info">
               <h3>{{ service.name }}</h3>
               <p class="service-meta">
-                <strong>R$ {{ service.price }}</strong>
+                <strong>{{ service.price | price }}</strong>
                 <span class="muted">· {{ formatDuration(service.durationMinutes) }}</span>
               </p>
               <p class="muted service-description">{{ service.description }}</p>
@@ -147,7 +147,7 @@
   <footer class="book-bar">
     <div>
       <p><strong>Total</strong> ({{ selectedServices().length }} {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})</p>
-      <p class="price">R$ {{ total() }}</p>
+      <p class="price">{{ total() | price }}</p>
     </div>
     <div class="book-actions">
       <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar">
@@ -159,7 +159,7 @@
     </div>
   </footer>
 } @else if (professionals.status() === 'loading') {
-  <p class="not-found">Carregando...</p>
+  <app-spinner />
 } @else if (professionals.status() === 'error') {
   <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {

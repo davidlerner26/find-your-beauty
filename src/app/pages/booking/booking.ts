@@ -1,4 +1,7 @@
 import { Component, computed, effect, input, signal } from '@angular/core';
+import { roundMoney } from '../../utils/money';
+import { PricePipe } from '../../utils/price.pipe';
+import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -10,7 +13,7 @@ type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
 @Component({
   selector: 'app-booking',
-  imports: [FormsModule, RouterLink],
+  imports: [PricePipe, Spinner, FormsModule, RouterLink],
   templateUrl: './booking.html',
   styleUrl: './booking.scss',
 })
@@ -27,7 +30,7 @@ export class Booking {
     return this.artist()?.services.filter((service) => ids.includes(service.id)) ?? [];
   });
   protected readonly total = computed(() =>
-    this.selectedServices().reduce((sum, service) => sum + service.price, 0),
+    roundMoney(this.selectedServices().reduce((sum, service) => sum + service.price, 0)),
   );
 
   private readonly availability = computed(() => this.artist()?.availability ?? DEFAULT_AVAILABILITY);

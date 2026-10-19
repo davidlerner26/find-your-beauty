@@ -2,6 +2,7 @@ import { Component, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { formatPhone } from '../../utils/phone';
 import { authErrorMessage, isValidEmail } from '../../utils/validators';
 
 @Component({
@@ -47,22 +48,11 @@ export class Signup {
     return this.password.length >= 10 && /\d/.test(this.password);
   }
 
-  // Formats as (21) 99747-2878, or (21) 3974-2878 for landlines
-  protected onPhoneChange(value: string) {
-    const digits = value.replace(/\D/g, '').slice(0, 11);
-    const area = digits.slice(0, 2);
-    const rest = digits.slice(2);
-    const split = digits.length > 10 ? 5 : 4;
-
-    let masked = digits;
-    if (digits.length > 2) {
-      masked = `(${area}) ${rest.slice(0, split)}`;
-      if (rest.length > split) masked += `-${rest.slice(split)}`;
-    } else if (digits.length) {
-      masked = `(${area}`;
-    }
-
-    this.phone = masked;
+  protected onPhoneInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.phone = formatPhone(input.value);
+    // Written back so an extra digit that the mask drops also disappears from the field
+    input.value = this.phone;
   }
 
   protected touch(field: string) {

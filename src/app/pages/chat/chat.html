@@ -71,7 +71,7 @@
     </p>
   }
 } @else if (professionals.status() === 'loading') {
-  <p class="not-found">Carregando...</p>
+  <app-spinner />
 } @else if (professionals.status() === 'error') {
   <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {

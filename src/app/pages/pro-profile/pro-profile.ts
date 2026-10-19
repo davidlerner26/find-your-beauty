@@ -1,22 +1,36 @@
 import { Component, computed, effect, signal } from '@angular/core';
+import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { doc, updateDoc } from 'firebase/firestore';
 import {
   Availability,
+  DateRange,
   DEFAULT_AVAILABILITY,
   Service,
   ServiceCategory,
 } from '../../models/professional';
-import { toMinutes } from '../../utils/slots';
+import { durationToText, maskDuration, parseDuration } from '../../utils/duration';
+import { maskMoney, moneyToText, parseMoney } from '../../utils/money';
+import { toDateKey, toMinutes } from '../../utils/slots';
 import { Auth } from '../../services/auth';
 import { db } from '../../services/firebase';
 import { Photos } from '../../services/photos';
+import { DateRangePicker, PendingRange } from '../../components/date-range-picker/date-range-picker';
 import { Professionals } from '../../services/professionals';
+
+// A service being edited: nothing is pre-filled, so the fields can be empty
+type ServiceDraft = Omit<Service, 'category' | 'price' | 'durationMinutes'> & {
+  category: ServiceCategory | '';
+  // Typed like a money field, e.g. "15,50"
+  price: string;
+  // Typed as H:MM, e.g. "1:30"
+  duration: string;
+};
 
 @Component({
   selector: 'app-pro-profile',
-  imports: [FormsModule],
+  imports: [DateRangePicker, Spinner, FormsModule],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
 })
@@ -30,10 +44,12 @@ export class ProProfile {
   private removedPhotos: string[] = [];
   protected address = '';
   protected about = '';
-  protected services: Service[] = [];
+  protected services: ServiceDraft[] = [];
+  protected readonly serviceTried = signal(false);
   protected position = { lat: 0, lng: 0 };
   protected availability: Availability = structuredClone(DEFAULT_AVAILABILITY);
-  protected blockedDate = '';
+  protected readonly today = toDateKey(new Date());
+  protected readonly pending = signal<PendingRange>({ start: null, end: null });
 
   // Monday first, as in the Brazilian calendar
   protected readonly weekdays = [
@@ -74,9 +90,20 @@ export class ProProfile {
       this.gallery = [...profile.gallery];
       this.address = profile.address;
       this.about = profile.about.join('\n\n');
-      this.services = profile.services.map((service) => ({ ...service }));
+      this.services = profile.services.map(({ durationMinutes, price, ...service }) => ({
+        ...service,
+        price: moneyToText(price),
+        duration: durationToText(durationMinutes),
+      }));
       this.position = { ...profile.position };
-      this.availability = structuredClone(profile.availability ?? DEFAULT_AVAILABILITY);
+      const availability = structuredClone(profile.availability ?? DEFAULT_AVAILABILITY);
+      // Single days saved before periods existed become one-day periods
+      availability.blockedRanges = [
+        ...(availability.blockedRanges ?? []),
+        ...(availability.blockedDates ?? []).map((date) => ({ start: date, end: date })),
+      ];
+      delete availability.blockedDates;
+      this.availability = availability;
       this.visible.set(profile.visible !== false);
     });
   }
@@ -92,7 +119,7 @@ export class ProProfile {
     if (!this.image.trim()) missing.push('foto');
     if (this.address.trim().length < 5) missing.push('endereço');
     if (!this.hasPosition) missing.push('localização no mapa');
-    if (!this.services.some((s) => s.name.trim() && s.price > 0 && s.durationMinutes > 0)) {
+    if (!this.services.some((service) => this.serviceComplete(service))) {
       missing.push('pelo menos 1 serviço completo');
     }
     return missing;
@@ -106,21 +133,37 @@ export class ProProfile {
     });
   }
 
-  protected blockDate() {
-    const date = this.blockedDate;
-    if (!date || this.availability.blockedDates.includes(date)) return;
+  protected blockPending() {
+    const { start, end } = this.pending();
+    if (!start) return;
 
-    this.availability.blockedDates = [...this.availability.blockedDates, date].sort();
-    this.blockedDate = '';
+    const range: DateRange = { start, end: end ?? start };
+    const exists = this.availability.blockedRanges.some((r) => r.start === range.start && r.end === range.end);
+    if (!exists) {
+      this.availability.blockedRanges = [...this.availability.blockedRanges, range].sort((a, b) =>
+        a.start.localeCompare(b.start),
+      );
+    }
+    this.pending.set({ start: null, end: null });
   }
 
-  protected unblockDate(date: string) {
-    this.availability.blockedDates = this.availability.blockedDates.filter((d) => d !== date);
+  protected unblock(range: DateRange) {
+    this.availability.blockedRanges = this.availability.blockedRanges.filter((r) => r !== range);
   }
 
-  protected dateLabel(date: string) {
-    const [year, month, day] = date.split('-').map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
+  // "10/03/2026" for a single day, "10/03/2026 a 15/03/2026" for a period
+  protected rangeLabel(start: string, end: string | null) {
+    const format = (key: string) => {
+      const [year, month, day] = key.split('-').map(Number);
+      return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
+    };
+    return !end || end === start ? format(start) : `${format(start)} a ${format(end)}`;
+  }
+
+  // Shows the feedback at the top of the page and brings it into view
+  private show(text: string) {
+    this.message.set(text);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   protected async uploadProfilePhoto(input: HTMLInputElement) {
@@ -163,7 +206,7 @@ export class ProProfile {
 
   private showUploadError(error: unknown) {
     console.error('Upload failed', error);
-    this.message.set('Não foi possível enviar a foto. Use uma imagem e tente novamente.');
+    this.show('Não foi possível enviar a foto. Use uma imagem e tente novamente.');
   }
 
   protected addService() {
@@ -172,16 +215,47 @@ export class ProProfile {
       {
         id: Math.random().toString(36).slice(2, 10),
         name: '',
-        category: 'Maquiagem',
-        price: 0,
-        durationMinutes: 60,
+        category: '',
+        price: '0,00',
+        duration: '',
         description: '',
         image: '',
       },
     ];
   }
 
-  protected removeService(service: Service) {
+  // Description is optional, everything else is required
+  protected serviceComplete(service: ServiceDraft) {
+    return (
+      !!service.name.trim() &&
+      !!service.category &&
+      parseMoney(service.price) > 0 &&
+      !!parseDuration(service.duration)
+    );
+  }
+
+  protected readonly parseDuration = parseDuration;
+  protected readonly parseMoney = parseMoney;
+
+  protected onPriceInput(service: ServiceDraft, event: Event) {
+    const input = event.target as HTMLInputElement;
+    service.price = maskMoney(input.value);
+    input.value = service.price;
+  }
+
+  protected onDurationInput(service: ServiceDraft, event: Event) {
+    const input = event.target as HTMLInputElement;
+    service.duration = maskDuration(input.value);
+    // Written back so a rejected extra digit disappears from the field too
+    input.value = service.duration;
+  }
+
+  // Highlights an empty required field once a save was attempted
+  protected fieldInvalid(empty: boolean) {
+    return this.serviceTried() && empty;
+  }
+
+  protected removeService(service: ServiceDraft) {
     this.services = this.services.filter((item) => item !== service);
   }
 
@@ -193,7 +267,7 @@ export class ProProfile {
         this.locating.set(false);
       },
       () => {
-        this.message.set('Não foi possível obter a sua localização.');
+        this.show('Não foi possível obter a sua localização.');
         this.locating.set(false);
       },
     );
@@ -201,19 +275,26 @@ export class ProProfile {
 
   protected async save() {
     if (this.invalidDays.length) {
-      this.message.set('O horário de fechamento precisa ser depois do de abertura.');
+      this.show('O horário de fechamento precisa ser depois do de abertura.');
+      return;
+    }
+
+    this.serviceTried.set(true);
+    if (!this.services.every((service) => this.serviceComplete(service))) {
+      this.show('Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.');
       return;
     }
 
     this.saving.set(true);
     this.message.set('');
 
-    const services = this.services.map((service) => ({
+    const services: Service[] = this.services.map(({ duration, price, ...service }) => ({
       ...service,
+      price: parseMoney(price),
+      durationMinutes: parseDuration(duration)!,
+      category: service.category as ServiceCategory,
       name: service.name.trim(),
       description: service.description.trim(),
-      price: Number(service.price),
-      durationMinutes: Number(service.durationMinutes),
       image: service.image || this.image.trim(),
     }));
     // Clients only see profiles that are visible and complete
@@ -234,7 +315,11 @@ export class ProProfile {
         tags: [...new Set(services.map((service) => service.category))],
         gallery: this.gallery,
         position: this.position,
-        availability: { ...this.availability, slotMinutes: Number(this.availability.slotMinutes) },
+        availability: {
+          slotMinutes: Number(this.availability.slotMinutes),
+          weekly: this.availability.weekly,
+          blockedRanges: this.availability.blockedRanges,
+        },
         visible,
         published,
       });
@@ -242,7 +327,7 @@ export class ProProfile {
       await Promise.all(this.removedPhotos.map((url) => this.photos.remove(url)));
       this.removedPhotos = [];
       await this.professionals.load();
-      this.message.set(
+      this.show(
         published
           ? 'Perfil salvo e publicado! As clientes já podem encontrar você.'
           : !visible
@@ -251,7 +336,7 @@ export class ProProfile {
       );
     } catch (error) {
       console.error('Failed to save profile', error);
-      this.message.set('Não foi possível salvar. Tente novamente.');
+      this.show('Não foi possível salvar. Tente novamente.');
     } finally {
       this.saving.set(false);
     }

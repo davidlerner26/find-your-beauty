@@ -19,10 +19,10 @@
 
       <ul class="services">
         @for (service of booking.services; track service.id) {
-          <li><span>{{ service.name }}</span><span>R$ {{ service.price }}</span></li>
+          <li><span>{{ service.name }}</span><span>{{ service.price | price }}</span></li>
         }
       </ul>
-      <p class="total"><strong>Total</strong> <strong>R$ {{ booking.total }}</strong></p>
+      <p class="total"><strong>Total</strong> <strong>{{ booking.total | price }}</strong></p>
 
       @if (booking.notes) {
         <p class="notes muted">“{{ booking.notes }}”</p>

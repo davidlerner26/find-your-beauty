@@ -5,7 +5,7 @@ export type Review = {
   text: string;
 };
 
-export type ServiceCategory = 'Maquiagem' | 'Cabelo' | 'Facial';
+export type ServiceCategory = 'Maquiagem' | 'Cabelo';
 
 export type Service = {
   id: string;
@@ -17,11 +17,16 @@ export type Service = {
   image: string;
 };
 
+// A period of days ("yyyy-mm-dd"), both ends included
+export type DateRange = { start: string; end: string };
+
 // When a professional works. `weekly` is keyed by Date#getDay (0 = Sunday).
 export type Availability = {
   slotMinutes: number;
   weekly: Record<string, { enabled: boolean; start: string; end: string }>;
-  blockedDates: string[];
+  blockedRanges: DateRange[];
+  // Single days saved before periods existed. Read as one-day periods and dropped on the next save.
+  blockedDates?: string[];
 };
 
 // Used by demo professionals and new accounts: Monday to Saturday, 08:00 - 18:00
@@ -36,7 +41,7 @@ export const DEFAULT_AVAILABILITY: Availability = {
     '5': { enabled: true, start: '08:00', end: '18:00' },
     '6': { enabled: true, start: '09:00', end: '14:00' },
   },
-  blockedDates: [],
+  blockedRanges: [],
 };
 
 export type Professional = {
@@ -64,5 +69,4 @@ export type Professional = {
   availability?: Availability;
 };
 
-export const formatDuration = (minutes: number) =>
-  `${(minutes / 60).toLocaleString('pt-BR')} h`;
+export const formatDuration = (minutes: number) => `${(minutes / 60).toLocaleString('pt-BR')} h`;

@@ -12,6 +12,8 @@ const AUTH_ERRORS: Record<string, string> = {
   'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
   'auth/network-request-failed': 'Sem conexão. Verifique sua internet.',
   'auth/not-professional': 'Esta conta não é de profissional. Use o login de cliente.',
+  'auth/expired-action-code': 'Este link expirou. Peça um novo link de redefinição.',
+  'auth/invalid-action-code': 'Este link é inválido ou já foi usado. Peça um novo link de redefinição.',
   'auth/operation-not-allowed': 'Login por e-mail não está ativado no Firebase.',
 };
 

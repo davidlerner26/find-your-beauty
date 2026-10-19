@@ -35,7 +35,7 @@ export const onBookingCreated = onDocumentCreated('bookings/{bookingId}', async 
   const chosen = (booking.services as Service[]).map((s) => catalog.find((c) => c.id === s.id));
   if (professional.exists && chosen.every(Boolean)) {
     const services = chosen as Service[];
-    const total = services.reduce((sum, s) => sum + s.price, 0);
+    const total = Math.round(services.reduce((sum, s) => sum + s.price, 0) * 100) / 100;
     const durationMinutes = services.reduce((sum, s) => sum + s.durationMinutes, 0);
     if (total !== booking.total || durationMinutes !== booking.durationMinutes) {
       await event.data!.ref.update({ total, durationMinutes, correctedByServer: true });

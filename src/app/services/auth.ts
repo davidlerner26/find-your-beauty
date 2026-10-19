@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import {
+  confirmPasswordReset,
   createUserWithEmailAndPassword,
   getAuth,
   GoogleAuthProvider,
@@ -10,6 +11,7 @@ import {
   signOut,
   updateProfile,
   User,
+  verifyPasswordResetCode,
 } from 'firebase/auth';
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { DEFAULT_AVAILABILITY } from '../models/professional';
@@ -124,6 +126,15 @@ export class Auth {
 
   async sendPasswordReset(email: string) {
     await sendPasswordResetEmail(this.auth, email.trim());
+  }
+
+  // Checks the code from the e-mail link. Returns the e-mail of the account.
+  verifyResetCode(code: string) {
+    return verifyPasswordResetCode(this.auth, code);
+  }
+
+  async confirmPasswordReset(code: string, password: string) {
+    await confirmPasswordReset(this.auth, code, password);
   }
 
   signOut() {

@@ -1,4 +1,5 @@
 import { Component, computed, effect, input, signal } from '@angular/core';
+import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -11,7 +12,7 @@ import { formatClock } from '../../utils/format-date';
 // `id` is the professional id for clients and the conversation id in the professional area
 @Component({
   selector: 'app-chat',
-  imports: [FormsModule, RouterLink],
+  imports: [Spinner, FormsModule, RouterLink],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })

@@ -1,0 +1,42 @@
+<div class="picker">
+  <div class="month">
+    <button type="button" aria-label="Mês anterior" [disabled]="!canGoBack()" (click)="changeMonth(-1)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7" /></svg>
+    </button>
+    <strong>{{ monthLabel() }}</strong>
+    <button type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg>
+    </button>
+  </div>
+
+  <div class="grid">
+    @for (weekday of weekdays; track $index) {
+      <span class="weekday">{{ weekday }}</span>
+    }
+    @for (cell of cells(); track $index) {
+      @if (cell) {
+        <button
+          type="button"
+          class="cell"
+          [class.blocked]="!!blockedBand(cell.key)"
+          [class.blocked-first]="blockedBand(cell.key)?.first"
+          [class.blocked-last]="blockedBand(cell.key)?.last"
+          [class.in-range]="inRange(cell.key)"
+          [class.edge]="isStart(cell.key) || isEnd(cell.key)"
+          [class.start]="isStart(cell.key) && range().end"
+          [class.end]="isEnd(cell.key) && range().end"
+          [disabled]="cell.disabled || !!blockedBand(cell.key)"
+          (click)="pick(cell.key)"
+        >
+          {{ cell.day }}
+        </button>
+      } @else {
+        <span></span>
+      }
+    }
+  </div>
+
+  @if (blocked().length) {
+    <p class="legend"><span class="swatch"></span> Dias já bloqueados</p>
+  }
+</div>

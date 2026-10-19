@@ -1,4 +1,5 @@
 import { Component, computed } from '@angular/core';
+import { PricePipe } from '../../utils/price.pipe';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Booking, BookingStatus } from '../../models/booking';
@@ -17,7 +18,7 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
 
 @Component({
   selector: 'app-pro-agenda',
-  imports: [RouterLink, NgTemplateOutlet],
+  imports: [PricePipe, RouterLink, NgTemplateOutlet],
   templateUrl: './pro-agenda.html',
   styleUrl: './pro-agenda.scss',
 })

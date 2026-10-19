@@ -22,14 +22,14 @@
       <p class="section-label">Serviços</p>
       <ul class="lines">
         @for (service of services(); track service.id) {
-          <li><strong>{{ service.name }}</strong><span>R$ {{ service.price }}</span></li>
+          <li><strong>{{ service.name }}</strong><span>{{ service.price | price }}</span></li>
         }
       </ul>
 
       <div class="cut"></div>
 
       <ul class="lines">
-        <li class="total"><strong>Total</strong><span>R$ {{ total() }}</span></li>
+        <li class="total"><strong>Total</strong><span>{{ total() | price }}</span></li>
       </ul>
 
       <button type="button" class="card">
@@ -63,7 +63,7 @@
     }
   </div>
 } @else if (professionals.status() === 'loading') {
-  <p class="not-found">Carregando...</p>
+  <app-spinner />
 } @else if (professionals.status() === 'error') {
   <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {

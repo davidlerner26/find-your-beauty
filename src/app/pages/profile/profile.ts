@@ -1,11 +1,12 @@
 import { Component, resource } from '@angular/core';
+import { Spinner } from '../../components/spinner/spinner';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { Users } from '../../services/users';
 
 @Component({
   selector: 'app-profile',
-  imports: [RouterLink],
+  imports: [Spinner, RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

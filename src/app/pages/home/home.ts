@@ -19,7 +19,6 @@ type Salon = {
   distanceKm: number | null;
 };
 
-
 @Component({
   selector: 'app-home',
   imports: [RouterLink, LocationPrompt],
@@ -28,7 +27,7 @@ type Salon = {
 })
 export class Home {
   protected readonly firstName = computed(
-    () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || null,
+    () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || 'visitante',
   );
 
   private readonly salons = computed<Salon[]>(() =>
@@ -75,10 +74,6 @@ export class Home {
     },
     { name: 'Unhas', icon: 'M9 10h6v12H9z M10 10V6h4v4 M11 2h2v4h-2z' },
     {
-      name: 'Facial',
-      icon: 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0z M8 14s1.5 2 4 2 4-2 4-2 M9 9h.01 M15 9h.01',
-    },
-    {
       name: 'Coloração',
       icon: 'M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z',
     },
@@ -95,5 +90,4 @@ export class Home {
   ];
 
   protected readonly interests = ['Cabelo', 'Maquiagem'];
-
 }

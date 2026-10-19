@@ -23,15 +23,6 @@
   color: var(--muted);
 }
 
-.top {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-  right: 1.5rem;
-  display: flex;
-  justify-content: flex-end;
-}
-
 .round {
   width: 3.5rem;
   height: 3.5rem;
@@ -42,10 +33,6 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   padding: 1rem;
   cursor: pointer;
-
-  &.primary {
-    background: var(--primary);
-  }
 }
 
 .filters {

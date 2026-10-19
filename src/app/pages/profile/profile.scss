@@ -129,3 +129,92 @@ h1 {
   margin-right: 0.35rem;
   vertical-align: -0.15rem;
 }
+
+.details-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0;
+  }
+}
+
+.edit {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.edit-form {
+  display: grid;
+  gap: 0.75rem;
+
+  label {
+    display: grid;
+    gap: 0.35rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  input {
+    height: 3rem;
+    padding: 0 1rem;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text);
+    font-size: 1rem;
+    outline: 0;
+
+    &:focus {
+      border-color: var(--primary);
+    }
+  }
+
+  .error {
+    margin: -0.25rem 0 0;
+    font-size: 0.85rem;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+
+  button {
+    flex: 1;
+  }
+}
+
+.save,
+.cancel {
+  height: 3rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+}
+
+.save {
+  border: 0;
+  background: var(--primary);
+  color: #fff;
+}
+
+.cancel {
+  border: 1.5px solid var(--primary);
+  background: #fff;
+  color: var(--primary);
+}

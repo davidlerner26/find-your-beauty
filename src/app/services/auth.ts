@@ -146,6 +146,14 @@ export class Auth {
     await confirmPasswordReset(this.auth, code, password);
   }
 
+  // Changes the name shown in the app (messages, bookings, reviews)
+  async updateName(name: string) {
+    const user = this.auth.currentUser;
+    if (!user) return;
+    await updateProfile(user, { displayName: name });
+    this.user.set({ ...user } as User);
+  }
+
   signOut() {
     return signOut(this.auth);
   }

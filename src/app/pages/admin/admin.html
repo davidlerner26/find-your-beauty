@@ -1,0 +1,55 @@
+<div class="admin">
+  <h1>Administração</h1>
+
+  <ng-template #card let-professional>
+    <article class="item">
+      <a class="info" [routerLink]="['/admin/profissionais', professional.id]">
+        <h3>{{ professional.name }}</h3>
+        <p class="muted">{{ professional.email }}</p>
+        <p class="muted">{{ professional.phone || 'Sem celular' }}</p>
+        @if (professional.createdAt) {
+          <p class="muted">Cadastro: {{ relative(professional.createdAt) }}</p>
+        }
+        <span class="view">Ver perfil completo</span>
+      </a>
+      <div class="actions">
+        <button type="button" class="approve" [disabled]="working() === professional.id" (click)="answer(professional, true)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.500 4.500 4.500L19 7.500" /></svg>
+          Aprovar
+        </button>
+        @if (!professional.rejected) {
+          <button type="button" class="deny" [disabled]="working() === professional.id" (click)="answer(professional, false)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
+            Negar
+          </button>
+        }
+      </div>
+    </article>
+  </ng-template>
+
+  @if (loading()) {
+    <app-spinner />
+  } @else {
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+
+    <h2>Aguardando aprovação</h2>
+    <div class="list">
+      @for (professional of waiting(); track professional.id) {
+        <ng-container *ngTemplateOutlet="card; context: { $implicit: professional }" />
+      } @empty {
+        <p class="muted">Nenhum cadastro aguardando aprovação.</p>
+      }
+    </div>
+
+    @if (denied().length) {
+      <h2>Negados</h2>
+      <div class="list">
+        @for (professional of denied(); track professional.id) {
+          <ng-container *ngTemplateOutlet="card; context: { $implicit: professional }" />
+        }
+      </div>
+    }
+  }
+</div>

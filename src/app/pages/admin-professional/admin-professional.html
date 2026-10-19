@@ -1,0 +1,111 @@
+<div class="page">
+  <header class="top">
+    <button type="button" class="back" aria-label="Voltar" (click)="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 5-7 7 7 7" />
+      </svg>
+    </button>
+    <h1>Perfil da profissional</h1>
+  </header>
+
+  @if (professional.isLoading()) {
+    <app-spinner />
+  } @else if (professional.error()) {
+    <p class="error">Não foi possível carregar o perfil.</p>
+  } @else if (professional.value(); as p) {
+    <section class="card head">
+      @if (p.image) {
+        <img class="photo" [src]="p.image" [alt]="p.name" [style.object-position]="p.imagePosition | focus" />
+      } @else {
+        <span class="photo empty">Sem foto</span>
+      }
+      <div>
+        <h2>{{ p.name }}</h2>
+        <span class="status" [class.denied]="p.rejected" [class.waiting]="p.approved === false && !p.rejected">{{ status() }}</span>
+      </div>
+    </section>
+
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+    @if (p.approved === false) {
+      <div class="answer">
+        <button type="button" class="approve" [disabled]="working()" (click)="answer(p, true)">Aprovar</button>
+        @if (!p.rejected) {
+          <button type="button" class="deny" [disabled]="working()" (click)="answer(p, false)">Negar</button>
+        }
+      </div>
+    }
+
+    <section class="card">
+      <h3>Contato</h3>
+      <dl>
+        <div><dt>E-mail</dt><dd>{{ p.email || '-' }}</dd></div>
+        <div><dt>Celular</dt><dd>{{ p.phone || '-' }}</dd></div>
+        <div>
+          <dt>Instagram</dt>
+          <dd>
+            @if (p.instagram) {
+              <a [href]="instagramUrl(p.instagram)" target="_blank" rel="noopener">&#64;{{ p.instagram }}</a>
+            } @else {
+              -
+            }
+          </dd>
+        </div>
+        <div><dt>Endereço</dt><dd>{{ p.address || '-' }}</dd></div>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h3>Sobre</h3>
+      @for (paragraph of p.about; track $index) {
+        <p>{{ paragraph }}</p>
+      } @empty {
+        <p class="muted">Não preenchido.</p>
+      }
+    </section>
+
+    <section class="card">
+      <h3>Serviços</h3>
+      @for (service of p.services; track service.id) {
+        <article class="service">
+          <div>
+            <strong>{{ service.name }}</strong>
+            <p class="muted">{{ service.category }} · {{ formatDuration(service.durationMinutes) }}</p>
+            @if (service.description) {
+              <p class="muted">{{ service.description }}</p>
+            }
+          </div>
+          <strong>{{ service.price | price }}</strong>
+        </article>
+      } @empty {
+        <p class="muted">Nenhum serviço cadastrado.</p>
+      }
+    </section>
+
+    <section class="card">
+      <h3>Horários</h3>
+      <dl>
+        @for (item of hours(); track item.name) {
+          <div>
+            <dt>{{ item.name }}</dt>
+            <dd>{{ item.day?.enabled ? item.day?.start + ' - ' + item.day?.end : 'Fechado' }}</dd>
+          </div>
+        }
+      </dl>
+    </section>
+
+    <section class="card">
+      <h3>Galeria</h3>
+      <div class="gallery">
+        @for (photo of p.gallery; track photo) {
+          <img [src]="photo" [alt]="'Trabalho de ' + p.name" />
+        } @empty {
+          <p class="muted">Nenhuma foto.</p>
+        }
+      </div>
+    </section>
+  } @else {
+    <p class="muted">Profissional não encontrada.</p>
+  }
+</div>

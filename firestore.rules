@@ -2,10 +2,22 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Admins approve new professionals. An admin has `admin: true` in their users document, which can
+    // only be set by hand in the Firestore console (the rules below stop anyone from changing it).
+    function isAdmin() {
+      return request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('admin', false) == true;
+    }
+
     // Public catalog. A professional account owns the document with its own uid as id.
     match /professionals/{id} {
       allow read: if true;
-      allow create, update: if request.auth != null && request.auth.uid == id;
+      // New accounts start waiting for approval
+      allow create: if request.auth != null && request.auth.uid == id && request.resource.data.approved == false &&
+        request.resource.data.get('admin', false) == false;
+      // The owner edits the profile but can't change the approval; admins can change anything
+      allow update: if (request.auth != null && request.auth.uid == id &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['approved', 'rejected', 'admin'])) || isAdmin();
 
       // One review per client, only after a booking with this professional was completed
       match /reviews/{clientUid} {
@@ -30,7 +42,13 @@ service cloud.firestore {
     }
 
     match /users/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read: if request.auth != null && request.auth.uid == uid;
+      // `admin` is informational (the real list is isAdmin() above): nobody can give it to themselves
+      allow create: if request.auth != null && request.auth.uid == uid &&
+        request.resource.data.get('admin', false) == false;
+      allow update: if request.auth != null && request.auth.uid == uid &&
+        request.resource.data.get('admin', false) == resource.data.get('admin', false);
+      allow delete: if request.auth != null && request.auth.uid == uid;
 
       // Professionals the client hearted
       match /favorites/{professionalId} {

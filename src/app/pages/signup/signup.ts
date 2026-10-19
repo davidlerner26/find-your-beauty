@@ -1,13 +1,14 @@
 import { Component, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { ProProfile } from '../pro-profile/pro-profile';
 import { Auth } from '../../services/auth';
 import { formatPhone } from '../../utils/phone';
 import { authErrorMessage, isValidEmail } from '../../utils/validators';
 
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, ProProfile],
   templateUrl: './signup.html',
   styleUrl: '../auth/auth.scss',
 })
@@ -26,6 +27,8 @@ export class Signup {
   protected readonly googleError = signal('');
   protected readonly formError = signal('');
   protected readonly submitting = signal(false);
+  // Professionals can only sign in after an admin approves the account
+  protected readonly awaitingApproval = signal(false);
 
   protected get nameValid() {
     return this.firstName.trim().length >= 3;
@@ -79,8 +82,8 @@ export class Signup {
         password: this.password,
       };
       if (this.pro()) {
+        // The account is created here; the profile is completed in the second step
         await this.auth.signUpProfessional(data);
-        this.router.navigateByUrl('/pro/perfil');
       } else {
         await this.auth.signUpWithEmail(data);
         this.router.navigateByUrl('/');
@@ -93,7 +96,7 @@ export class Signup {
   }
 
   constructor(
-    private readonly auth: Auth,
+    protected readonly auth: Auth,
     private readonly router: Router,
   ) {}
 

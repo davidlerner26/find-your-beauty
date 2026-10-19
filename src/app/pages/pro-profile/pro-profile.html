@@ -1,5 +1,11 @@
 <div class="profile">
-  <h1>Meu perfil</h1>
+  <h1>{{ signup() ? 'Complete seu cadastro' : 'Meu perfil' }}</h1>
+  @if (signup()) {
+    <p class="muted">
+      Preencha todos os dados abaixo para enviar o cadastro. Depois, ele passa pela aprovação da
+      nossa equipe.
+    </p>
+  }
 
   @if (message()) {
     <p class="message" role="status" aria-live="polite">{{ message() }}</p>
@@ -15,17 +21,36 @@
         <label>
           Celular
           <span class="with-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1z" /></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.25 1z"
+              />
+            </svg>
             <input name="phone" type="tel" [(ngModel)]="phone" />
           </span>
         </label>
         <label>
           Instagram
           <span class="with-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
             </svg>
-            <input name="instagram" placeholder="@seuusuario" autocapitalize="none" autocomplete="off" [(ngModel)]="instagram" />
+            <input
+              name="instagram"
+              placeholder="@seuusuario"
+              autocapitalize="none"
+              autocomplete="off"
+              [(ngModel)]="instagram"
+            />
           </span>
         </label>
         <h3>Foto</h3>
@@ -36,7 +61,14 @@
           }
           <label class="upload">
             {{ uploading() ? 'Enviando...' : image ? 'Trocar foto' : 'Escolher foto' }}
-            <input type="file" accept="image/*" hidden [disabled]="uploading()" #profileFile (change)="uploadProfilePhoto(profileFile)" />
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              [disabled]="uploading()"
+              #profileFile
+              (change)="uploadProfilePhoto(profileFile)"
+            />
           </label>
         </div>
         @if (image) {
@@ -45,7 +77,12 @@
 
         <label>
           Sobre você
-          <textarea name="about" rows="5" placeholder="Conte sobre o seu trabalho" [(ngModel)]="about"></textarea>
+          <textarea
+            name="about"
+            rows="5"
+            placeholder="Conte sobre o seu trabalho"
+            [(ngModel)]="about"
+          ></textarea>
         </label>
       </section>
 
@@ -54,17 +91,29 @@
           <h2>Galeria</h2>
           <label class="link upload-link">
             {{ uploading() ? 'Enviando...' : '+ Adicionar fotos' }}
-            <input type="file" accept="image/*" multiple hidden [disabled]="uploading()" #galleryFile (change)="uploadGalleryPhotos(galleryFile)" />
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              [disabled]="uploading()"
+              #galleryFile
+              (change)="uploadGalleryPhotos(galleryFile)"
+            />
           </label>
         </div>
         <div class="gallery">
           @for (photo of gallery; track photo) {
             <div class="thumb">
               <img [src]="photo" alt="Foto da galeria" />
-              <button type="button" aria-label="Remover foto" (click)="removeGalleryPhoto(photo)">✕</button>
+              <button type="button" aria-label="Remover foto" (click)="removeGalleryPhoto(photo)">
+                ✕
+              </button>
             </div>
           } @empty {
-            <p class="hint muted">Mostre o seu trabalho: as fotos aparecem na galeria do seu perfil.</p>
+            <p class="hint muted">
+              Mostre o seu trabalho: as fotos aparecem na galeria do seu perfil.
+            </p>
           }
         </div>
       </section>
@@ -93,7 +142,11 @@
               @for (suggestion of suggestions(); track suggestion.text) {
                 <!-- mousedown is prevented so the input keeps focus and the click still lands -->
                 <li role="option">
-                  <button type="button" (mousedown)="$event.preventDefault()" (click)="chooseAddress(suggestion)">
+                  <button
+                    type="button"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="chooseAddress(suggestion)"
+                  >
                     {{ suggestion.text }}
                   </button>
                 </li>
@@ -110,7 +163,9 @@
         } @else if (address.trim().length >= 3) {
           <p class="hint muted">Escolha uma das sugestões para confirmar o endereço.</p>
         } @else {
-          <p class="hint muted">Busque o endereço e escolha uma sugestão para aparecer no Explorar.</p>
+          <p class="hint muted">
+            Busque o endereço e escolha uma sugestão para aparecer no Explorar.
+          </p>
         }
       </section>
 
@@ -185,14 +240,26 @@
           @for (day of weekdays; track day.key) {
             <div class="weekday">
               <label class="check">
-                <input type="checkbox" [name]="'on' + day.key" [(ngModel)]="availability.weekly[day.key].enabled" />
+                <input
+                  type="checkbox"
+                  [name]="'on' + day.key"
+                  [(ngModel)]="availability.weekly[day.key].enabled"
+                />
                 {{ day.label }}
               </label>
               @if (availability.weekly[day.key].enabled) {
                 <div class="times">
-                  <input type="time" [name]="'start' + day.key" [(ngModel)]="availability.weekly[day.key].start" />
+                  <input
+                    type="time"
+                    [name]="'start' + day.key"
+                    [(ngModel)]="availability.weekly[day.key].start"
+                  />
                   <span>às</span>
-                  <input type="time" [name]="'end' + day.key" [(ngModel)]="availability.weekly[day.key].end" />
+                  <input
+                    type="time"
+                    [name]="'end' + day.key"
+                    [(ngModel)]="availability.weekly[day.key].end"
+                  />
                 </div>
               } @else {
                 <span class="muted">Folga</span>
@@ -201,16 +268,31 @@
           }
         </div>
         @if (invalidDays.length) {
-          <p class="error">O fechamento precisa ser depois da abertura em: {{ invalidDays.length }} dia(s).</p>
+          <p class="error">
+            O fechamento precisa ser depois da abertura em: {{ invalidDays.length }} dia(s).
+          </p>
         }
 
         <h3>Dias bloqueados</h3>
-        <p class="hint muted">Escolha o primeiro e o último dia do período. Para um dia só, clique nele duas vezes.</p>
-        <app-date-range-picker [min]="today" [blocked]="availability.blockedRanges" [(range)]="pending" />
+        <p class="hint muted">
+          Escolha o primeiro e o último dia do período. Para um dia só, clique nele duas vezes.
+        </p>
+        <app-date-range-picker
+          [min]="today"
+          [blocked]="availability.blockedRanges"
+          [(range)]="pending"
+        />
         @if (pending().start; as start) {
-          <p class="selected">Selecionado: <strong>{{ rangeLabel(start, pending().end) }}</strong></p>
+          <p class="selected">
+            Selecionado: <strong>{{ rangeLabel(start, pending().end) }}</strong>
+          </p>
         }
-        <button type="button" class="secondary" [disabled]="!pending().start" (click)="blockPending()">
+        <button
+          type="button"
+          class="secondary"
+          [disabled]="!pending().start"
+          (click)="blockPending()"
+        >
           Bloquear período
         </button>
 
@@ -218,7 +300,9 @@
           @for (range of availability.blockedRanges; track range.start + range.end) {
             <span class="chip">
               {{ rangeLabel(range.start, range.end) }}
-              <button type="button" aria-label="Desbloquear período" (click)="unblock(range)">✕</button>
+              <button type="button" aria-label="Desbloquear período" (click)="unblock(range)">
+                ✕
+              </button>
             </span>
           } @empty {
             <p class="hint muted">Nenhum período bloqueado. Use para férias e folgas.</p>
@@ -227,19 +311,36 @@
       </section>
 
       <section>
-        <label class="check">
-          <input type="checkbox" name="published" [ngModel]="visible()" (ngModelChange)="visible.set($event)" />
-          Mostrar meu perfil para as clientes
-        </label>
+        @if (!signup()) {
+          <label class="check">
+            <input
+              type="checkbox"
+              name="published"
+              [ngModel]="visible()"
+              (ngModelChange)="visible.set($event)"
+            />
+            Mostrar meu perfil para as clientes
+          </label>
+        }
         @if (missing.length) {
-          <p class="hint muted">Para publicar falta: {{ missing.join(', ') }}.</p>
+          <p class="hint muted">
+            Para {{ signup() ? 'enviar o cadastro' : 'publicar' }} falta: {{ missing.join(', ') }}.
+          </p>
         } @else if (!visible()) {
           <p class="hint muted">Seu perfil está completo, mas oculto para as clientes.</p>
         }
       </section>
 
       <button type="submit" class="primary" [disabled]="saving()">
-        {{ saving() ? 'Salvando...' : 'Salvar perfil' }}
+        {{
+          saving()
+            ? signup()
+              ? 'Enviando...'
+              : 'Salvando...'
+            : signup()
+              ? 'Enviar cadastro'
+              : 'Salvar perfil'
+        }}
       </button>
     </form>
 

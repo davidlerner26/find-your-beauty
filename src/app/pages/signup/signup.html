@@ -1,9 +1,20 @@
+@if (awaitingApproval()) {
+  <div class="auth">
+    <h1>Cadastro enviado!</h1>
+    <p class="subtitle">
+      Sua conta está em análise. Você poderá entrar na área da profissional assim que ela for aprovada.
+    </p>
+    <a class="primary" routerLink="/pro/entrar">Ir para o login</a>
+  </div>
+} @else if (pro() && auth.signupIncomplete()) {
+  <app-pro-profile [signup]="true" (submitted)="awaitingApproval.set(true)" />
+} @else {
 <form class="auth" (ngSubmit)="submit()" novalidate>
   <h1>{{ pro() ? 'Cadastro de profissional' : 'Crie uma conta' }}</h1>
   <p class="subtitle">
     {{
       pro()
-        ? 'Crie a conta da profissional. Depois você completa o perfil e publica seus serviços.'
+        ? 'Crie a conta da profissional. No próximo passo você completa o perfil: foto, endereço e serviços.'
         : 'Preencha todas as informações abaixo para criar sua conta.'
     }}
   </p>
@@ -170,3 +181,4 @@
     <p class="switch"><a routerLink="/pro/cadastro">Sou profissional</a></p>
   }
 </form>
+}

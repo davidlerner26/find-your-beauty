@@ -79,6 +79,10 @@
       <span class="dot"></span> Você está logado
     </p>
 
+    @if (auth.isAdmin()) {
+      <a class="admin-link" routerLink="/admin">Administração</a>
+    }
+
     <button type="button" class="signout" (click)="signOut()">Sair</button>
   } @else {
     <section class="card empty">

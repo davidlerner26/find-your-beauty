@@ -218,3 +218,14 @@ h1 {
   background: #fff;
   color: var(--primary);
 }
+
+.admin-link {
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--primary);
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 1.05rem;
+}

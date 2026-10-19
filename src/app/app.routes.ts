@@ -1,5 +1,6 @@
 import { isDevMode } from '@angular/core';
 import { Routes } from '@angular/router';
+import { adminGuard } from './guards/admin';
 import { proGuard } from './guards/pro';
 
 export const routes: Routes = [
@@ -72,6 +73,17 @@ export const routes: Routes = [
   {
     path: 'busca',
     loadComponent: () => import('./pages/search/search').then((m) => m.Search),
+  },
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./pages/admin/admin').then((m) => m.Admin),
+  },
+  {
+    path: 'admin/profissionais/:id',
+    canActivate: [adminGuard],
+    loadComponent: () =>
+      import('./pages/admin-professional/admin-professional').then((m) => m.AdminProfessional),
   },
   // Professional area
   {

@@ -40,7 +40,7 @@
   <section>
     <div class="section-head">
       <h2>Maquiadoras em destaque</h2>
-      <a href="#">Ver todos</a>
+      <!-- <a href="#">Ver todos</a> -->
     </div>
     <div class="cards">
       @for (salon of featuredSalons(); track salon.id) {
@@ -52,17 +52,54 @@
             <img
               [src]="photoOf(salon)"
               [alt]="salon.name"
-              [style.object-position]="(photoOf(salon) === salon.image ? salon.imagePosition : undefined) | focus"
+              [style.object-position]="
+                (photoOf(salon) === salon.image ? salon.imagePosition : undefined) | focus
+              "
               (load)="photoLoaded(photoOf(salon))"
               (error)="photoLoaded(photoOf(salon))"
             />
-            <button type="button" class="heart" [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'" (click)="toggleFavorite($event, salon.id)">{{ favorites.has(salon.id) ? '♥' : '♡' }}</button>
+            <button
+              type="button"
+              class="heart"
+              [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
+              (click)="toggleFavorite($event, salon.id)"
+            >
+              {{ favorites.has(salon.id) ? '♥' : '♡' }}
+            </button>
             @if (salon.photos.length > 1) {
-              <button type="button" class="arrow prev" aria-label="Foto anterior" (click)="step($event, salon, -1)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7" /></svg>
+              <button
+                type="button"
+                class="arrow prev"
+                aria-label="Foto anterior"
+                (click)="step($event, salon, -1)"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m15 5-7 7 7 7" />
+                </svg>
               </button>
-              <button type="button" class="arrow next" aria-label="Próxima foto" (click)="step($event, salon, 1)">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg>
+              <button
+                type="button"
+                class="arrow next"
+                aria-label="Próxima foto"
+                (click)="step($event, salon, 1)"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m9 5 7 7-7 7" />
+                </svg>
               </button>
             }
           </div>
@@ -89,7 +126,7 @@
   <section>
     <div class="section-head">
       <h2>Maquiadoras próximas</h2>
-      <a href="#">Ver todos</a>
+      <!-- <a href="#">Ver todos</a> -->
     </div>
     <div class="offers">
       @for (offer of nearbyOffers(); track offer.id) {

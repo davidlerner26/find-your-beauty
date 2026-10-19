@@ -90,15 +90,17 @@ export class App {
   ];
 
   protected readonly url = signal('/');
+  // Last tab screen visited: it stays highlighted on /admin, which has no tab of its own
+  private readonly lastTab = signal('/perfil');
 
   constructor(
     router: Router,
     protected readonly messages: Messages,
   ) {
-    this.url.set(this.pathOf(router.url));
+    this.setUrl(this.pathOf(router.url));
     router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
-      .subscribe((event) => this.url.set(this.pathOf(event.urlAfterRedirects)));
+      .subscribe((event) => this.setUrl(this.pathOf(event.urlAfterRedirects)));
   }
 
   protected get tabs() {
@@ -106,11 +108,22 @@ export class App {
   }
 
   protected get showTabs() {
-    return TAB_SCREENS.includes(this.url());
+    return TAB_SCREENS.includes(this.url()) || this.isAdminScreen;
   }
 
   protected isActive(tab: Tab) {
-    return tab.match.includes(this.url());
+    return tab.match.includes(this.isAdminScreen ? this.lastTab() : this.url());
+  }
+
+  private get isAdminScreen() {
+    return this.url().startsWith('/admin');
+  }
+
+  private setUrl(url: string) {
+    this.url.set(url);
+    // The professional area has its own look (see styles.scss)
+    document.body.classList.toggle('pro-theme', url.startsWith('/pro'));
+    if (TAB_SCREENS.includes(url)) this.lastTab.set(url);
   }
 
   private pathOf(url: string) {

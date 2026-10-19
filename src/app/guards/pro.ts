@@ -9,5 +9,7 @@ export const proGuard: CanActivateFn = async () => {
 
   await auth.whenReady;
   if (auth.role() === 'professional') return true;
+  // Account created but the profile is not complete: back to the second step of the sign up
+  if (auth.signupIncomplete()) return router.parseUrl('/pro/cadastro');
   return router.parseUrl(auth.user() ? '/' : '/pro/entrar');
 };

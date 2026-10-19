@@ -11,6 +11,8 @@ const AUTH_ERRORS: Record<string, string> = {
   'auth/wrong-password': 'E-mail ou senha incorretos.',
   'auth/too-many-requests': 'Muitas tentativas. Tente novamente mais tarde.',
   'auth/network-request-failed': 'Sem conexão. Verifique sua internet.',
+  'auth/pending-approval': 'Seu cadastro ainda está em análise. Você poderá entrar assim que for aprovado.',
+  'auth/rejected': 'Seu cadastro não foi aprovado. Em caso de dúvida, entre em contato com o suporte.',
   'auth/not-professional': 'Esta conta não é de profissional. Use o login de cliente.',
   'auth/expired-action-code': 'Este link expirou. Peça um novo link de redefinição.',
   'auth/invalid-action-code': 'Este link é inválido ou já foi usado. Peça um novo link de redefinição.',

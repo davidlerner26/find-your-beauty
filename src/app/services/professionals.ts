@@ -7,7 +7,7 @@ import { db } from './firebase';
 export class Professionals {
   readonly list = signal<Professional[]>([]);
   // What clients can see: professionals that haven't hidden their profile
-  readonly published = computed(() => this.list().filter((professional) => professional.published !== false));
+  readonly published = computed(() => this.list().filter((professional) => professional.published !== false && professional.approved !== false));
   readonly status = signal<'loading' | 'ready' | 'error'>('loading');
 
   constructor() {

@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -42,6 +42,10 @@ type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePre
   styleUrl: './pro-profile.scss',
 })
 export class ProProfile {
+  // Second step of the sign up: the same form, but the profile has to be complete to be sent
+  readonly signup = input(false);
+  readonly submitted = output<void>();
+
   protected readonly categories: ServiceCategory[] = ['Maquiagem', 'Cabelo'];
 
   protected name = '';
@@ -94,6 +98,9 @@ export class ProProfile {
     private readonly photos: Photos,
     private readonly maps: GoogleMapsLoader,
   ) {
+    // The profile document was just created by the first step: the list of professionals is stale
+    if (this.signup()) this.professionals.load();
+
     // Fills the form once, when the profile document arrives
     effect(() => {
       const profile = this.profile();
@@ -366,6 +373,12 @@ export class ProProfile {
       return;
     }
 
+    if (this.signup() && this.missing.length) {
+      this.serviceTried.set(true);
+      this.show(`Para enviar o cadastro falta: ${this.missing.join(', ')}.`);
+      return;
+    }
+
     this.serviceTried.set(true);
     if (!this.services.every((service) => this.serviceComplete(service))) {
       this.show('Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.');
@@ -413,10 +426,17 @@ export class ProProfile {
         },
         visible,
         published,
+        // Sign up finished: the account now waits for an admin
+        ...(this.signup() ? { submitted: true } : {}),
       });
       // Only deletes the removed photos once the profile no longer points to them
       await Promise.all(this.removedPhotos.map((url) => this.photos.remove(url)));
       this.removedPhotos = [];
+      if (this.signup()) {
+        await this.auth.finishSignup();
+        this.submitted.emit();
+        return;
+      }
       await this.professionals.load();
       this.show(
         published

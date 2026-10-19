@@ -35,11 +35,19 @@ export class Auth {
   private readonly auth = getAuth(firebaseApp);
   private readonly googleProvider = new GoogleAuthProvider();
   private roleRequest = 0;
+  // The pending account found by the last resolveRole was denied by an admin
+  private deniedByAdmin = false;
   private markReady!: () => void;
 
   readonly user = signal<User | null>(null);
   // null while logged out. A professional account has a document in `professionals/{uid}`.
   readonly role = signal<Role | null>(null);
+  // `admin: true` in the user's document (set by hand in the Firestore console; the rules check the same field)
+  readonly isAdmin = signal(false);
+  // A professional that created the account but didn't finish the profile yet (stays signed in)
+  readonly signupIncomplete = signal(false);
+  // true when the last sign in was a professional still waiting for an admin (that session is closed right away)
+  readonly pendingApproval = signal(false);
   // false until Firebase tells us whether there is a session (and its role)
   readonly ready = signal(false);
   readonly whenReady = new Promise<void>((resolve) => (this.markReady = resolve));
@@ -47,25 +55,35 @@ export class Auth {
   constructor() {
     onAuthStateChanged(this.auth, async (user) => {
       this.user.set(user);
-      await this.resolveRole(user);
+      const pending = await this.resolveRole(user);
+      // A professional waiting for approval can't stay signed in
+      if (pending) await signOut(this.auth);
       this.ready.set(true);
       this.markReady();
     });
   }
 
   homePath() {
+    if (this.signupIncomplete()) return '/pro/cadastro';
     return this.role() === 'professional' ? '/pro' : '/';
   }
 
   // Stay signed in after closing the browser (default), or only until the tab is closed
   private remember(remember: boolean) {
-    return setPersistence(this.auth, remember ? browserLocalPersistence : browserSessionPersistence);
+    return setPersistence(
+      this.auth,
+      remember ? browserLocalPersistence : browserSessionPersistence,
+    );
   }
 
   async signInWithGoogle(remember = true) {
     await this.remember(remember);
+    this.pendingApproval.set(false);
     const { user } = await signInWithPopup(this.auth, this.googleProvider);
-    await this.resolveRole(user);
+    if (await this.resolveRole(user)) {
+      await signOut(this.auth);
+      throw { code: this.deniedByAdmin ? 'auth/rejected' : 'auth/pending-approval' };
+    }
     if (this.role() === 'client') await this.createUserDocIfMissing(user);
   }
 
@@ -83,6 +101,7 @@ export class Auth {
         lastName: lastName.trim(),
         email: email.trim(),
         phone,
+        admin: false,
         createdAt: serverTimestamp(),
       });
     } catch (error) {
@@ -115,19 +134,29 @@ export class Auth {
       visible: true,
       published: false,
       availability: DEFAULT_AVAILABILITY,
+      // Waits for an admin. `submitted` becomes true when the profile is complete (second step of the sign up).
+      approved: false,
+      submitted: false,
+      admin: false,
+      createdAt: serverTimestamp(),
     });
+    // Stays signed in: the second step of the sign up completes the profile
     await this.resolveRole(user);
   }
 
   async signInWithEmail(email: string, password: string, remember = true) {
     await this.remember(remember);
+    this.pendingApproval.set(false);
     const { user } = await signInWithEmailAndPassword(this.auth, email.trim(), password);
-    await this.resolveRole(user);
+    if (await this.resolveRole(user)) {
+      await signOut(this.auth);
+      throw { code: this.deniedByAdmin ? 'auth/rejected' : 'auth/pending-approval' };
+    }
   }
 
   async signInProfessional(email: string, password: string, remember = true) {
     await this.signInWithEmail(email, password, remember);
-    if (this.role() !== 'professional') {
+    if (this.role() !== 'professional' && !this.signupIncomplete()) {
       await this.signOut();
       throw { code: 'auth/not-professional' };
     }
@@ -154,25 +183,59 @@ export class Auth {
     this.user.set({ ...user } as User);
   }
 
+  // The profile is complete and was sent: now it waits for an admin, so the session is closed
+  async finishSignup() {
+    this.pendingApproval.set(true);
+    this.signupIncomplete.set(false);
+    await signOut(this.auth);
+  }
+
   signOut() {
     return signOut(this.auth);
   }
 
+  // Returns true when the account is a professional still waiting for approval
   private async resolveRole(user: User | null) {
     const request = ++this.roleRequest;
     let role: Role | null = null;
+    let pending = false;
+    let admin = false;
+    let incomplete = false;
 
     if (user) {
       role = 'client';
       try {
-        if ((await getDoc(doc(db, 'professionals', user.uid))).exists()) role = 'professional';
+        const [profile, account] = await Promise.all([
+          getDoc(doc(db, 'professionals', user.uid)),
+          getDoc(doc(db, 'users', user.uid)),
+        ]);
+        admin = account.data()?.['admin'] === true;
+        if (profile.exists()) {
+          // Not approved yet: no access to the app (the callers close the session)
+          if (profile.data()['approved'] === false && profile.data()['submitted'] === false) {
+            role = null;
+            incomplete = true;
+          } else if (profile.data()['approved'] === false) {
+            role = null;
+            pending = true;
+            this.deniedByAdmin = profile.data()['rejected'] === true;
+            this.pendingApproval.set(true);
+          } else {
+            role = 'professional';
+          }
+        }
       } catch (error) {
         console.error('Failed to resolve role', error);
       }
     }
 
     // Ignore answers that were overtaken by a newer request
-    if (request === this.roleRequest) this.role.set(role);
+    if (request === this.roleRequest) {
+      this.role.set(role);
+      this.isAdmin.set(admin);
+      this.signupIncomplete.set(incomplete);
+    }
+    return pending;
   }
 
   private async createUserDocIfMissing(user: User) {
@@ -186,6 +249,7 @@ export class Auth {
         lastName: rest.join(' '),
         email: user.email,
         phone: user.phoneNumber ?? '',
+        admin: false,
         createdAt: serverTimestamp(),
       });
     } catch (error) {

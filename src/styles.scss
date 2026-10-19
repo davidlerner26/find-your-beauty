@@ -27,3 +27,125 @@ body {
   color: var(--text);
   background: #fff;
 }
+
+// Professional area (/pro/*): the teal of the buttons becomes the background and the letters turn white.
+// The app toggles `pro-theme` on <body>. Variables do most of the work: --primary turns white, so links,
+// outlines and icons that used the teal stay visible. The rules below fix what variables can't:
+// solid buttons (white with teal letters), inputs (stay light) and the bars. They use !important because
+// component styles are scoped (attribute selectors) and would win on specificity.
+body.pro-theme {
+  --primary: #fff;
+  --primary-light: rgba(255, 255, 255, 0.16);
+  --text: #fff;
+  --muted: rgba(255, 255, 255, 0.75);
+  background: #2f6b7a;
+  color: #fff;
+
+  a {
+    color: #fff;
+  }
+
+  // Inputs keep a light background, so their letters stay dark
+  input,
+  select,
+  textarea {
+    color: #1c1c1c !important;
+  }
+
+  // Solid buttons: white with teal letters
+  .primary,
+  .accept,
+  .signin,
+  .send,
+  .secondary {
+    background: #fff !important;
+    color: #2f6b7a !important;
+  }
+
+  .error {
+    color: #ffc9cb !important;
+  }
+
+  .hint.confirmed {
+    color: #b8f0cf !important;
+  }
+
+  // Cards
+  .booking {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: none !important;
+  }
+
+  .total {
+    border-top-color: rgba(255, 255, 255, 0.35) !important;
+  }
+
+  // Lists and dividers
+  .tabs,
+  .list > li,
+  .top,
+  .composer {
+    border-color: rgba(255, 255, 255, 0.22) !important;
+  }
+
+  // Message list
+  .search {
+    background: #f1f2f6 !important;
+    color: #2f6b7a !important;
+  }
+
+  .messages {
+    background: transparent !important;
+  }
+
+  .bubble {
+    background: rgba(255, 255, 255, 0.16) !important;
+    color: #fff !important;
+  }
+
+  .mine .bubble {
+    background: #fff !important;
+    color: #2f6b7a !important;
+  }
+
+  // Login and sign up fields are light pills
+  .field {
+    color: #6b6b6b !important;
+
+    &:focus-within {
+      color: #2f6b7a !important;
+    }
+  }
+
+  // Bottom menu
+  nav.tabs {
+    background: #245765 !important;
+    box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.2);
+
+    a {
+      color: rgba(255, 255, 255, 0.6) !important;
+
+      &.active {
+        color: #fff !important;
+      }
+    }
+  }
+
+  // Widgets that are white cards: they get the original light colors back
+  app-date-range-picker,
+  app-photo-positioner,
+  .suggestions {
+    --primary: #2f6b7a;
+    --primary-light: #e3f4f7;
+    --text: #1c1c1c;
+    --muted: #6b6b6b;
+    color: #1c1c1c;
+  }
+
+  app-photo-positioner {
+    padding: 1rem;
+    border-radius: 16px;
+    background: #fff;
+  }
+}

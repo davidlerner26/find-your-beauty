@@ -70,6 +70,12 @@ export type Professional = {
   phone?: string;
   // Instagram username, without the @
   instagram?: string;
+  // New accounts start with false and can only sign in after an admin approves them.
+  // Accounts created before this existed have no value and count as approved.
+  approved?: boolean;
+  // An admin denied the account (approved stays false)
+  rejected?: boolean;
+  admin?: boolean;
   // The professional's choice to show the profile (default: yes)
   visible?: boolean;
   // What clients see: visible and complete. Computed when the profile is saved.

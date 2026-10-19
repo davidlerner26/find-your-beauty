@@ -16,6 +16,7 @@ import { maskMoney, moneyToText, parseMoney } from '../../utils/money';
 import { toDateKey, toMinutes } from '../../utils/slots';
 import { Auth } from '../../services/auth';
 import { db } from '../../services/firebase';
+import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Photos } from '../../services/photos';
 import { PhotoPositioner } from '../../components/photo-positioner/photo-positioner';
 import { DateRangePicker, PendingRange } from '../../components/date-range-picker/date-range-picker';
@@ -29,6 +30,8 @@ type ServiceDraft = Omit<Service, 'category' | 'price' | 'durationMinutes'> & {
   // Typed as H:MM, e.g. "1:30"
   duration: string;
 };
+
+type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePrediction };
 
 @Component({
   selector: 'app-pro-profile',
@@ -70,7 +73,13 @@ export class ProProfile {
   protected readonly visible = signal(true);
   protected readonly saving = signal(false);
   protected readonly message = signal('');
-  protected readonly locating = signal(false);
+  // Address search (Google Places): the address only counts once a suggestion was chosen
+  protected readonly suggestions = signal<AddressSuggestion[]>([]);
+  protected readonly addressOpen = signal(false);
+  protected readonly addressConfirmed = signal(false);
+  protected readonly addressError = signal('');
+  private addressTimer?: ReturnType<typeof setTimeout>;
+  private sessionToken?: google.maps.places.AutocompleteSessionToken;
   protected readonly uploading = signal(false);
   private filled = false;
 
@@ -82,6 +91,7 @@ export class ProProfile {
     private readonly professionals: Professionals,
     private readonly router: Router,
     private readonly photos: Photos,
+    private readonly maps: GoogleMapsLoader,
   ) {
     // Fills the form once, when the profile document arrives
     effect(() => {
@@ -104,6 +114,7 @@ export class ProProfile {
         duration: durationToText(durationMinutes),
       }));
       this.position = { ...profile.position };
+      this.addressConfirmed.set(this.hasPosition);
       const availability = structuredClone(profile.availability ?? DEFAULT_AVAILABILITY);
       // Single days saved before periods existed become one-day periods
       availability.blockedRanges = [
@@ -126,7 +137,7 @@ export class ProProfile {
     if (this.name.trim().length < 3) missing.push('nome');
     if (!this.image.trim()) missing.push('foto');
     if (this.address.trim().length < 5) missing.push('endereço');
-    if (!this.hasPosition) missing.push('localização no mapa');
+    else if (!this.addressConfirmed()) missing.push('escolher o endereço na lista de sugestões');
     if (!this.services.some((service) => this.serviceComplete(service))) {
       missing.push('pelo menos 1 serviço completo');
     }
@@ -286,18 +297,76 @@ export class ProProfile {
     this.services = this.services.filter((item) => item !== service);
   }
 
-  protected useMyLocation() {
-    this.locating.set(true);
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        this.position = { lat: coords.latitude, lng: coords.longitude };
-        this.locating.set(false);
-      },
-      () => {
-        this.show('Não foi possível obter a sua localização.');
-        this.locating.set(false);
-      },
-    );
+  protected onAddressInput(value: string) {
+    this.address = value;
+    // Editing the text breaks the link with the chosen place: it has to be chosen again
+    this.addressConfirmed.set(false);
+    this.position = { lat: 0, lng: 0 };
+    this.addressError.set('');
+    clearTimeout(this.addressTimer);
+
+    if (value.trim().length < 3) {
+      this.suggestions.set([]);
+      return;
+    }
+    // Waits for a pause in the typing so it doesn't search on every key
+    this.addressTimer = setTimeout(() => this.searchAddress(value), 250);
+  }
+
+  private async searchAddress(input: string) {
+    try {
+      await this.maps.load();
+      const { AutocompleteSuggestion, AutocompleteSessionToken } = google.maps.places;
+      this.sessionToken ??= new AutocompleteSessionToken();
+
+      const { suggestions } = await AutocompleteSuggestion.fetchAutocompleteSuggestions({
+        input,
+        sessionToken: this.sessionToken,
+        includedRegionCodes: ['br'],
+        language: 'pt-BR',
+        region: 'br',
+      });
+
+      // The user kept typing while this was loading: that answer is already old
+      if (input !== this.address) return;
+
+      this.suggestions.set(
+        suggestions.flatMap((suggestion) =>
+          suggestion.placePrediction
+            ? [{ text: suggestion.placePrediction.text.text, prediction: suggestion.placePrediction }]
+            : [],
+        ),
+      );
+      this.addressOpen.set(true);
+    } catch (error) {
+      console.error('Address search failed', error);
+      this.suggestions.set([]);
+      this.addressError.set('Não foi possível buscar endereços agora. Tente novamente em instantes.');
+    }
+  }
+
+  protected async chooseAddress(suggestion: AddressSuggestion) {
+    this.addressOpen.set(false);
+    this.suggestions.set([]);
+
+    try {
+      const place = suggestion.prediction.toPlace();
+      await place.fetchFields({ fields: ['formattedAddress', 'location'] });
+      if (!place.location) throw new Error('place-without-location');
+
+      this.address = place.formattedAddress ?? suggestion.text;
+      this.position = { lat: place.location.lat(), lng: place.location.lng() };
+      this.addressConfirmed.set(true);
+      // Choosing a place closes the billing session of the search
+      this.sessionToken = undefined;
+    } catch (error) {
+      console.error('Failed to load the place', error);
+      this.addressError.set('Não foi possível carregar este endereço. Escolha outro.');
+    }
+  }
+
+  protected closeAddressList() {
+    this.addressOpen.set(false);
   }
 
   protected async save() {

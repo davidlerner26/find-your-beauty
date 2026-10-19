@@ -76,13 +76,47 @@
 
       <section>
         <h2>Localização</h2>
-        <label>Endereço<input name="address" placeholder="Rua, número - bairro, cidade" [(ngModel)]="address" /></label>
-        <button type="button" class="secondary" [disabled]="locating()" (click)="useMyLocation()">
-          {{ locating() ? 'Buscando...' : 'Usar minha localização atual' }}
-        </button>
-        <p class="hint muted">
-          {{ hasPosition ? 'Localização no mapa definida.' : 'Defina o ponto no mapa para aparecer no Explorar.' }}
-        </p>
+        <div class="autocomplete">
+          <label>
+            Endereço
+            <input
+              name="address"
+              autocomplete="off"
+              placeholder="Comece a digitar o endereço"
+              role="combobox"
+              [attr.aria-expanded]="addressOpen() && suggestions().length > 0"
+              [ngModel]="address"
+              (ngModelChange)="onAddressInput($event)"
+              (focus)="addressOpen.set(true)"
+              (blur)="closeAddressList()"
+              (keydown.escape)="closeAddressList()"
+            />
+          </label>
+
+          @if (addressOpen() && suggestions().length) {
+            <ul class="suggestions" role="listbox">
+              @for (suggestion of suggestions(); track suggestion.text) {
+                <!-- mousedown is prevented so the input keeps focus and the click still lands -->
+                <li role="option">
+                  <button type="button" (mousedown)="$event.preventDefault()" (click)="chooseAddress(suggestion)">
+                    {{ suggestion.text }}
+                  </button>
+                </li>
+              }
+              <li class="powered">Powered by Google</li>
+            </ul>
+          }
+        </div>
+
+        @if (addressError()) {
+          <p class="hint error">{{ addressError() }}</p>
+        } @else if (addressConfirmed()) {
+          <p class="hint confirmed">✓ Endereço confirmado no mapa.</p>
+        } @else if (address.trim().length >= 3) {
+          <p class="hint muted">Escolha uma das sugestões para confirmar o endereço.</p>
+        } @else {
+          <p class="hint muted">Busque o endereço e escolha uma sugestão para aparecer no Explorar.</p>
+        }
       </section>
 
       <section>

@@ -12,7 +12,7 @@ export class GoogleMapsLoader {
 
     this.promise ??= new Promise<void>((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsApiKey}`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsApiKey}&libraries=places&language=pt-BR`;
       script.async = true;
       script.onload = () => resolve();
       script.onerror = () => reject(new Error('Failed to load Google Maps'));

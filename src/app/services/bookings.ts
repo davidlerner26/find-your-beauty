@@ -1,4 +1,4 @@
-import { effect, Injectable, signal } from '@angular/core';
+import { effect, Injectable, signal, WritableSignal } from '@angular/core';
 import {
   collection,
   doc,
@@ -17,16 +17,32 @@ import { db } from './firebase';
 export class Bookings {
   // Requests received by the logged in professional
   readonly received = signal<Booking[]>([]);
+  // Bookings made by the logged in client
+  readonly mine = signal<Booking[]>([]);
+  readonly mineLoading = signal(true);
 
   constructor(private readonly auth: Auth) {
+    this.watch('professional', 'professionalUid', this.received);
+    this.watch('client', 'clientUid', this.mine, this.mineLoading);
+  }
+
+  // Keeps `target` in sync with the bookings of the logged in user, sorted by date
+  private watch(
+    role: 'client' | 'professional',
+    field: 'clientUid' | 'professionalUid',
+    target: WritableSignal<Booking[]>,
+    loading?: WritableSignal<boolean>,
+  ) {
     effect((onCleanup) => {
       const uid = this.auth.user()?.uid;
-      if (!uid || this.auth.role() !== 'professional') {
-        this.received.set([]);
+      if (!uid || this.auth.role() !== role) {
+        target.set([]);
+        loading?.set(false);
         return;
       }
 
-      const q = query(collection(db, 'bookings'), where('professionalUid', '==', uid));
+      loading?.set(true);
+      const q = query(collection(db, 'bookings'), where(field, '==', uid));
       const unsubscribe = onSnapshot(
         q,
         (snapshot) => {
@@ -39,9 +55,13 @@ export class Bookings {
             };
           });
           list.sort((a, b) => a.startsAt.getTime() - b.startsAt.getTime());
-          this.received.set(list);
+          target.set(list);
+          loading?.set(false);
         },
-        (error) => console.error('Failed to load bookings', error),
+        (error) => {
+          console.error('Failed to load bookings', error);
+          loading?.set(false);
+        },
       );
       onCleanup(unsubscribe);
     });
@@ -86,6 +106,18 @@ export class Bookings {
       for (const busyId of booking.busyIds ?? []) {
         batch.delete(doc(db, 'professionals', booking.professionalId, 'busy', busyId));
       }
+    }
+    await batch.commit();
+  }
+
+  // The client cancels a booking. The slots are freed and a Cloud Function notifies the professional.
+  async cancel(booking: Booking) {
+    if (!booking.id) return;
+
+    const batch = writeBatch(db);
+    batch.update(doc(db, 'bookings', booking.id), { status: 'cancelled', updatedAt: serverTimestamp() });
+    for (const busyId of booking.busyIds ?? []) {
+      batch.delete(doc(db, 'professionals', booking.professionalId, 'busy', busyId));
     }
     await batch.commit();
   }

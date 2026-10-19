@@ -38,6 +38,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
   },
   {
+    path: 'agenda',
+    loadComponent: () => import('./pages/my-bookings/my-bookings').then((m) => m.MyBookings),
+  },
+  {
     path: 'notificacoes',
     data: { tab: 'notificacoes' },
     loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),

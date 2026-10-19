@@ -1,0 +1,132 @@
+.agenda {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 2rem 0 1rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.list {
+  display: grid;
+  gap: 1rem;
+}
+
+.booking {
+  padding: 1.25rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.booking-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  h3 {
+    font-size: 1.1rem;
+  }
+}
+
+.when {
+  margin-top: 0.25rem;
+  color: var(--primary);
+  text-transform: capitalize;
+}
+
+.status {
+  align-self: flex-start;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: var(--primary-light);
+  color: var(--primary);
+
+  &.pending {
+    background: #fdf1d8;
+    color: #9a5b0b;
+  }
+
+  &.declined,
+  &.cancelled {
+    background: #fde6e7;
+    color: #e5484d;
+  }
+}
+
+.services {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0.75rem;
+  display: grid;
+  gap: 0.4rem;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px dashed #d6d6d6;
+}
+
+.notes {
+  margin-top: 0.75rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+
+  button {
+    flex: 1;
+    height: 2.9rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+
+.chat,
+.cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.chat {
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+}
+
+.cancel {
+  border: 1.5px solid #e5484d;
+  background: #fff;
+  color: #e5484d;
+}
+
+.empty a,
+h3 a {
+  color: inherit;
+}
+
+.empty {
+  padding: 1rem 0;
+}

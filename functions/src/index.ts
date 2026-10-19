@@ -67,6 +67,17 @@ export const onBookingUpdated = onDocumentUpdated('bookings/{bookingId}', async 
   const after = event.data?.after.data();
   if (!before || !after || before.status === after.status) return;
 
+  // The client cancelled: tells the professional
+  if (after.status === 'cancelled') {
+    if (after.professionalUid) {
+      await notify(after.professionalUid, `${event.params.bookingId}-cancelled`, [
+        { text: after.clientName, bold: true },
+        { text: ' cancelou o agendamento' },
+      ]);
+    }
+    return;
+  }
+
   const verb = VERB[after.status];
   if (!verb) return;
 

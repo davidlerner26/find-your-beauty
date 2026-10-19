@@ -1,0 +1,57 @@
+<div class="agenda">
+  <h1>Meus agendamentos</h1>
+
+  @if (!auth.ready() || bookings.mineLoading()) {
+    <app-spinner />
+  } @else if (!auth.user()) {
+    <p class="empty muted"><a routerLink="/entrar">Entre</a> na sua conta para ver os seus agendamentos.</p>
+  } @else {
+    <ng-template #card let-booking>
+      <article class="booking">
+        <div class="booking-head">
+          <div>
+            <h3><a [routerLink]="['/maquiadores', booking.professionalId]">{{ booking.professionalName }}</a></h3>
+            <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
+          </div>
+          <span class="status" [class]="booking.status">{{ label(booking) }}</span>
+        </div>
+
+        <ul class="services">
+          @for (service of booking.services; track service.id) {
+            <li><span>{{ service.name }}</span><span>{{ service.price | price }}</span></li>
+          }
+        </ul>
+        <p class="total"><strong>Total</strong> <strong>{{ booking.total | price }}</strong></p>
+
+        @if (booking.status === 'pending' || booking.status === 'confirmed') {
+          <div class="actions">
+            <a class="chat" [routerLink]="['/mensagens', booking.professionalId]">Conversar</a>
+            <button type="button" class="cancel" (click)="cancel(booking)">Cancelar</button>
+          </div>
+        } @else if (booking.status === 'completed') {
+          <div class="actions">
+            <a class="chat" [routerLink]="['/maquiadores', booking.professionalId]" fragment="avaliacoes">Avaliar</a>
+          </div>
+        }
+      </article>
+    </ng-template>
+
+    <h2>Próximos</h2>
+    <div class="list">
+      @for (booking of upcoming(); track booking.id) {
+        <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
+      } @empty {
+        <p class="empty muted">Você não tem agendamentos. <a routerLink="/explore">Encontre uma maquiadora</a>.</p>
+      }
+    </div>
+
+    @if (history().length) {
+      <h2>Histórico</h2>
+      <div class="list">
+        @for (booking of history(); track booking.id) {
+          <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
+        }
+      </div>
+    }
+  }
+</div>

@@ -1,5 +1,14 @@
 import { Injectable } from '@angular/core';
-import { collection, doc, getDoc, getDocs, query, Timestamp, updateDoc, where } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  Timestamp,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 import { Professional } from '../models/professional';
 import { db } from './firebase';
 
@@ -18,18 +27,23 @@ export type PendingProfessional = {
 export class Admin {
   // Everyone who is not approved: waiting (oldest first) and denied
   async pending() {
-    const snapshot = await getDocs(query(collection(db, 'professionals'), where('approved', '==', false)));
-    const list = snapshot.docs.map((d): PendingProfessional => {
-      const data = d.data();
-      return {
-        id: d.id,
-        name: data['name'] ?? '',
-        email: data['email'] ?? '',
-        phone: data['phone'] ?? '',
-        rejected: data['rejected'] === true,
-        createdAt: data['createdAt'] instanceof Timestamp ? data['createdAt'].toDate() : null,
-      };
-    });
+    const snapshot = await getDocs(
+      query(collection(db, 'professionals'), where('approved', '==', false)),
+    );
+    // Only the ones that finished the sign up (second step). Older accounts without `submitted` haven't.
+    const list = snapshot.docs
+      .filter((d) => d.data()['submitted'] === true)
+      .map((d): PendingProfessional => {
+        const data = d.data();
+        return {
+          id: d.id,
+          name: data['name'] ?? '',
+          email: data['email'] ?? '',
+          phone: data['phone'] ?? '',
+          rejected: data['rejected'] === true,
+          createdAt: data['createdAt'] instanceof Timestamp ? data['createdAt'].toDate() : null,
+        };
+      });
     // Sorted here to avoid an index
     return list.sort((a, b) => (a.createdAt?.getTime() ?? 0) - (b.createdAt?.getTime() ?? 0));
   }

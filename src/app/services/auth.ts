@@ -212,7 +212,7 @@ export class Auth {
         admin = account.data()?.['admin'] === true;
         if (profile.exists()) {
           // Not approved yet: no access to the app (the callers close the session)
-          if (profile.data()['approved'] === false && profile.data()['submitted'] === false) {
+          if (profile.data()['approved'] === false && profile.data()['submitted'] !== true) {
             role = null;
             incomplete = true;
           } else if (profile.data()['approved'] === false) {

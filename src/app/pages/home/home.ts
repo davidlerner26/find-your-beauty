@@ -73,16 +73,10 @@ export class Home {
     this.loadedPhotos.update((urls) => (urls.includes(url) ? urls : [...urls, url]));
   }
 
-  protected photoOf(salon: Salon) {
-    return salon.photos[this.photoIndex()[salon.id] ?? 0];
-  }
-
-  // Arrows of the card: they must not open the professional's page
-  protected step(event: Event, salon: Salon, direction: 1 | -1) {
-    event.stopPropagation();
-    const count = salon.photos.length;
-    const current = this.photoIndex()[salon.id] ?? 0;
-    this.photoIndex.update((index) => ({ ...index, [salon.id]: (current + direction + count) % count }));
+  protected onPhotosScroll(event: Event, id: string) {
+    const element = event.target as HTMLElement;
+    const index = Math.round(element.scrollLeft / element.clientWidth);
+    if (this.photoIndex()[id] !== index) this.photoIndex.update((current) => ({ ...current, [id]: index }));
   }
 
   private toSalon(professional: Professional): Salon {

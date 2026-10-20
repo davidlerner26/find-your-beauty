@@ -43,18 +43,22 @@
       @for (salon of featuredSalons(); track salon.id) {
         <article class="card" [routerLink]="['/maquiadores', salon.id]">
           <div class="card-image">
-            @if (!loadedPhotos().includes(photoOf(salon))) {
-              <app-spinner class="loading" [small]="true" />
-            }
-            <img
-              [src]="photoOf(salon)"
-              [alt]="salon.name"
-              [style.object-position]="
-                (photoOf(salon) === salon.image ? salon.imagePosition : undefined) | focus
-              "
-              (load)="photoLoaded(photoOf(salon))"
-              (error)="photoLoaded(photoOf(salon))"
-            />
+            <div class="photos" (scroll)="onPhotosScroll($event, salon.id)">
+              @for (photo of salon.photos; track photo) {
+                <div class="slide">
+                  @if (!loadedPhotos().includes(photo)) {
+                    <app-spinner class="loading" [small]="true" />
+                  }
+                  <img
+                    [src]="photo"
+                    [alt]="salon.name"
+                    [style.object-position]="(photo === salon.image ? salon.imagePosition : undefined) | focus"
+                    (load)="photoLoaded(photo)"
+                    (error)="photoLoaded(photo)"
+                  />
+                </div>
+              }
+            </div>
             <button
               type="button"
               class="heart"
@@ -64,22 +68,11 @@
               {{ favorites.has(salon.id) ? '♥' : '♡' }}
             </button>
             @if (salon.photos.length > 1) {
-              <button
-                type="button"
-                class="arrow prev"
-                aria-label="Foto anterior"
-                (click)="step($event, salon, -1)"
-              >
-                <mat-icon>chevron_left</mat-icon>
-              </button>
-              <button
-                type="button"
-                class="arrow next"
-                aria-label="Próxima foto"
-                (click)="step($event, salon, 1)"
-              >
-                <mat-icon>chevron_right</mat-icon>
-              </button>
+              <div class="dots" aria-hidden="true">
+                @for (photo of salon.photos; track photo; let n = $index) {
+                  <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
+                }
+              </div>
             }
           </div>
           <p class="tags">{{ salon.tags }}</p>

@@ -84,13 +84,25 @@ a {
   }
 }
 
+// Carousel: the next card peeks in from the right edge of the screen
 .cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  margin: 0 -1.5rem;
+  padding: 0 1.5rem;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 1.5rem;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .card {
+  flex: 0 0 min(18rem, calc(100vw - 5rem));
+  scroll-snap-align: start;
   cursor: pointer;
   h3 {
     margin: 0.25rem 0;
@@ -136,26 +148,56 @@ a {
   cursor: pointer;
 }
 
-.arrow {
+// Swipe sideways with the finger to go through the photos
+.photos {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  touch-action: pan-x;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+
+  img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.dots {
   z-index: 1;
   position: absolute;
-  top: 50%;
-  width: 2rem;
-  height: 2rem;
-  padding: 0.4rem;
-  transform: translateY(-50%);
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--primary);
-  cursor: pointer;
+  left: 0;
+  right: 0;
+  bottom: 0.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  pointer-events: none;
 
-  &.prev {
-    left: 0.5rem;
-  }
+  span {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
 
-  &.next {
-    right: 0.5rem;
+    &.on {
+      background: #fff;
+    }
   }
 }
 

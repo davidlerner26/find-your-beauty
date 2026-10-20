@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, signal } from '@angular/core';
 import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
@@ -29,7 +29,7 @@ export class Booking {
   );
 
   protected readonly selectedServices = computed(() => {
-    const ids = this.servicos().split(',');
+    const ids = (this.servicos() ?? '').split(',');
     return this.artist()?.services.filter((service) => ids.includes(service.id)) ?? [];
   });
   protected readonly total = computed(() =>
@@ -87,13 +87,23 @@ export class Booking {
   protected readonly saving = signal(false);
   protected readonly error = signal('');
 
+  // The first thing the page does is to show the next day the professional can attend
+  private firstDayPicked = false;
+
   constructor(
     private readonly location: Location,
     private readonly router: Router,
     protected readonly professionals: Professionals,
     private readonly auth: Auth,
     private readonly bookings: Bookings,
+    private readonly host: ElementRef<HTMLElement>,
   ) {
+    effect(() => {
+      if (!this.artist() || this.firstDayPicked) return;
+      this.firstDayPicked = true;
+      void this.pickNextAvailableDay();
+    });
+
     // Loads the taken slots whenever the day changes
     effect((onCleanup) => {
       const day = this.selectedDay();
@@ -112,6 +122,29 @@ export class Booking {
           if (!cancelled) this.taken.set(new Set());
         });
     });
+  }
+
+  // Selects the next day with a free time (looks up to 120 days ahead) and brings it into view
+  private async pickNextAvailableDay() {
+    const id = this.id();
+    let busy = new Map<string, Set<string>>();
+    try {
+      busy = await this.professionals.busyFrom(id, toDateKey(this.today));
+    } catch (error) {
+      console.error('Failed to load busy days', error);
+    }
+
+    for (let offset = 0; offset < 120; offset++) {
+      const date = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate() + offset);
+      const free = freeStartTimes(date, this.availability(), this.duration(), busy.get(toDateKey(date)) ?? new Set());
+      if (!free.length) continue;
+
+      this.month.set(new Date(date.getFullYear(), date.getMonth(), 1));
+      this.selectedDay.set(date);
+      // Waits for the day list to render, then scrolls the strip to the chosen day
+      setTimeout(() => this.host.nativeElement.querySelector('.day.selected')?.scrollIntoView({ inline: 'center', block: 'nearest' }), 100);
+      return;
+    }
   }
 
   // Finalizar: requests the booking. The professional confirms it afterwards.

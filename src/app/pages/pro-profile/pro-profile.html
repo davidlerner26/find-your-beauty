@@ -210,6 +210,7 @@
               <span class="field-label">Nome do serviço *</span>
               <input
                 [name]="'sname' + i"
+                maxlength="60"
                 [class.invalid]="fieldInvalid(!service.name.trim())"
                 [(ngModel)]="service.name"
               />
@@ -254,7 +255,7 @@
             </div>
             <label>
               <span class="field-label">Descrição</span>
-              <textarea [name]="'sdesc' + i" rows="2" [(ngModel)]="service.description"></textarea>
+              <textarea [name]="'sdesc' + i" rows="2" maxlength="200" [(ngModel)]="service.description"></textarea>
             </label>
             <button type="button" class="remove" (click)="removeService(service)">Remover</button>
           </div>

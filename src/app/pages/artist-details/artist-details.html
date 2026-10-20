@@ -64,7 +64,8 @@
         <p>
           <span class="star">★</span> <strong>{{ artist.rating }}</strong> ({{
             artist.reviewsCount
-          }})
+          }}
+          avaliações)
         </p>
       </div>
     </header>
@@ -139,13 +140,19 @@
         <div class="section-head">
           <h2>Instagram</h2>
           @if (artist.instagram) {
-            <a [href]="instagramUrl(artist.instagram)" target="_blank" rel="noopener">&#64;{{ artist.instagram }}</a>
+            <a [href]="instagramUrl(artist.instagram)" target="_blank" rel="noopener"
+              >&#64;{{ artist.instagram }}</a
+            >
           }
         </div>
         <div class="gallery">
           @for (photo of artist.instagramPhotos; track photo.id) {
             <a [href]="photo.permalink" target="_blank" rel="noopener">
-              <img [src]="photo.url" [alt]="photo.caption || 'Foto do Instagram de ' + artist.name" loading="lazy" />
+              <img
+                [src]="photo.url"
+                [alt]="photo.caption || 'Foto do Instagram de ' + artist.name"
+                loading="lazy"
+              />
             </a>
           }
         </div>

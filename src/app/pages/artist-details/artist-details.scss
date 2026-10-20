@@ -55,7 +55,7 @@ a {
   padding: 1.5rem 0;
 
   h1 {
-    margin: 0.25rem 0;
+    margin: 0.25rem 0 0.5rem;
   }
 }
 
@@ -63,7 +63,7 @@ a {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  margin-top: 0.25rem;
+  margin-top: 0.6rem;
   color: var(--primary);
   font-weight: 600;
   text-decoration: none;
@@ -124,7 +124,7 @@ a {
 }
 
 .link {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   padding: 0;
   border: 0;
   background: none;
@@ -222,10 +222,17 @@ a {
 
 .service-info {
   flex: 1;
+  // Lets the text shrink and wrap instead of stretching the card
+  min-width: 0;
   padding: 1rem 0;
+  overflow-wrap: anywhere;
 
   h3 {
     font-size: 1.05rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 
@@ -273,6 +280,20 @@ section {
 
 h2 {
   font-size: 1.25rem;
+}
+
+// Same room under every section title as the ones with a link on the side (Galeria)
+section > h2 {
+  margin-bottom: 1.25rem;
+}
+
+section > p,
+.reviews > p {
+  margin-bottom: 0.75rem;
+}
+
+.reviews {
+  margin-top: 1rem;
 }
 
 .section-head {

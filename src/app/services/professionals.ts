@@ -32,6 +32,19 @@ export class Professionals {
     return this.list().find((professional) => professional.id === id);
   }
 
+  // Slots already taken from `dateKey` on, by day: { "yyyy-mm-dd": Set of "HH:mm" }
+  async busyFrom(id: string, dateKey: string) {
+    const snapshot = await getDocs(
+      query(collection(db, 'professionals', id, 'busy'), where('date', '>=', dateKey)),
+    );
+    const byDay = new Map<string, Set<string>>();
+    for (const doc of snapshot.docs) {
+      const [date, time] = doc.id.split('_');
+      byDay.set(date, (byDay.get(date) ?? new Set<string>()).add(time));
+    }
+    return byDay;
+  }
+
   // Slots ("HH:mm") already taken on a day: they live in professionals/{id}/busy, readable by anyone
   async busyTimes(id: string, dateKey: string) {
     const snapshot = await getDocs(

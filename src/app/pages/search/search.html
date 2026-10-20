@@ -94,6 +94,9 @@
       <p class="tags">{{ item.tags.join(' . ') }}</p>
       <h3>{{ item.name }}</h3>
       <p class="muted address">{{ item.address }}</p>
+      @if (item.minPrice !== null && item.minPrice !== undefined) {
+        <p class="from-price">A partir de {{ item.minPrice | price }}</p>
+      }
       <p class="rating">
         <span class="star">★</span> <strong>{{ item.rating }}</strong> ({{
           item.reviewsCount
@@ -118,6 +121,24 @@
     </div>
 
     <div class="sheet-body">
+      <h2>Ordenar por</h2>
+      <div class="chips">
+        @for (option of sortOptions; track option.key) {
+          <button
+            type="button"
+            class="filter-chip"
+            [class.active]="draft.sort === option.key"
+            [disabled]="option.key === 'distance' && !userPosition()"
+            (click)="setSort(option.key)"
+          >
+            {{ option.label }}
+          </button>
+        }
+      </div>
+      @if (!userPosition()) {
+        <p class="muted range-label">Permita a localização para ordenar por distância.</p>
+      }
+
       <h2>Disponível em</h2>
       <div class="month">
         <button
@@ -139,6 +160,7 @@
             type="button"
             class="day"
             [class.selected]="isDraftDay(day)"
+            [class.today]="isToday(day)"
             [disabled]="day.disabled"
             (click)="pickDay(day)"
           >

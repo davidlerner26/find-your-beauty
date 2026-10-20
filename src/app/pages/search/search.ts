@@ -1,6 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, ElementRef, signal } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { PricePipe } from '../../utils/price.pipe';
 import { Location, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -11,17 +12,20 @@ import { distanceKm, formatDistance } from '../../utils/geo';
 import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { isWorkingDay } from '../../utils/slots';
 
+type SortKey = 'price-asc' | 'rating' | 'distance' | 'price-desc';
+
 type Filters = {
   date: Date | null;
   tags: string[];
   minRating: number;
   maxKm: number;
+  sort: SortKey | null;
 };
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
 const MAX_KM = 50;
-const NO_FILTERS: Filters = { date: null, tags: [], minRating: 0, maxKm: MAX_KM };
+const NO_FILTERS: Filters = { date: null, tags: [], minRating: 0, maxKm: MAX_KM, sort: null };
 const RECENTS_KEY = 'recent-searches';
 
 // Compares text ignoring case and accents
@@ -38,13 +42,19 @@ const readRecents = (): string[] => {
 
 @Component({
   selector: 'app-search',
-  imports: [FocusPipe, FormsModule, RouterLink, NgTemplateOutlet, MatIconModule],
+  imports: [PricePipe, FocusPipe, FormsModule, RouterLink, NgTemplateOutlet, MatIconModule],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
 export class Search {
   protected readonly maxKm = MAX_KM;
   protected readonly stars = [1, 2, 3, 4, 5];
+  protected readonly sortOptions: { key: SortKey; label: string }[] = [
+    { key: 'price-asc', label: 'Menor preço' },
+    { key: 'rating', label: 'Melhor avaliação' },
+    { key: 'distance', label: 'Mais próximo' },
+    { key: 'price-desc', label: 'Maior preço' },
+  ];
 
   protected query = '';
   protected readonly term = signal('');
@@ -67,18 +77,18 @@ export class Search {
   protected readonly popular = computed(() => this.allTags().slice(0, 6));
 
   protected readonly activeFilterCount = computed(() => {
-    const { date, tags, minRating, maxKm } = this.applied();
-    return (date ? 1 : 0) + (tags.length ? 1 : 0) + (minRating ? 1 : 0) + (maxKm < MAX_KM ? 1 : 0);
+    const { date, tags, minRating, maxKm, sort } = this.applied();
+    return (date ? 1 : 0) + (tags.length ? 1 : 0) + (minRating ? 1 : 0) + (maxKm < MAX_KM ? 1 : 0) + (sort ? 1 : 0);
   });
 
   protected readonly searching = computed(() => !!this.term().trim() || this.activeFilterCount() > 0);
 
   protected readonly results = computed(() => {
     const term = normalize(this.term().trim());
-    const { date, tags, minRating, maxKm } = this.applied();
+    const { date, tags, minRating, maxKm, sort } = this.applied();
     const user = this.userPosition();
 
-    return this.professionals
+    const found = this.professionals
       .published()
       .filter((professional) => {
         if (term && !this.matchesText(professional, term)) return false;
@@ -93,7 +103,26 @@ export class Search {
         cardImage: professional.image,
         cardPosition: professional.imagePosition,
         distance: user ? formatDistance(distanceKm(user, professional.position)) : null,
+        km: user ? distanceKm(user, professional.position) : null,
+        // The cheapest service: "a partir de"
+        minPrice: professional.services.length ? Math.min(...professional.services.map((s) => s.price)) : null,
       }));
+
+    // No chosen order keeps the order of the catalog. Without a price or a distance, a professional goes last.
+    if (!sort) return found;
+    const last = (value: number | null, fallback: number) => value ?? fallback;
+    return found.sort((a, b) => {
+      switch (sort) {
+        case 'price-asc':
+          return last(a.minPrice, Infinity) - last(b.minPrice, Infinity) || 0;
+        case 'price-desc':
+          return last(b.minPrice, -Infinity) - last(a.minPrice, -Infinity) || 0;
+        case 'rating':
+          return b.rating - a.rating;
+        case 'distance':
+          return last(a.km, Infinity) - last(b.km, Infinity) || 0;
+      }
+    });
   });
 
   // What is shown before searching: the best rated
@@ -128,6 +157,7 @@ export class Search {
     private readonly location: Location,
     protected readonly professionals: Professionals,
     private readonly userLocation: UserLocation,
+    private readonly host: ElementRef<HTMLElement>,
   ) {}
 
   protected goBack() {
@@ -170,6 +200,7 @@ export class Search {
     this.draft = { ...this.applied(), tags: [...this.applied().tags] };
     this.month.set(this.startOfMonth(this.draft.date ?? this.today));
     this.sheetOpen.set(true);
+    this.showDay();
   }
 
   protected cancelSheet() {
@@ -188,10 +219,23 @@ export class Search {
   protected changeMonth(delta: number) {
     const month = this.month();
     this.month.set(new Date(month.getFullYear(), month.getMonth() + delta, 1));
+    this.showDay();
   }
 
   protected pickDay(day: Day) {
     this.draft.date = this.isDraftDay(day) ? null : day.date;
+  }
+
+  protected isToday(day: Day) {
+    return day.date.getTime() === this.today.getTime();
+  }
+
+  // Scrolls the strip of days to the chosen day, or to today, so it is in view when the list opens
+  private showDay() {
+    setTimeout(() => {
+      const strip = this.host.nativeElement.querySelector('.days');
+      strip?.querySelector('.day.selected, .day.today')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }, 50);
   }
 
   protected isDraftDay(day: Day) {
@@ -202,6 +246,10 @@ export class Search {
     this.draft.tags = this.draft.tags.includes(tag)
       ? this.draft.tags.filter((t) => t !== tag)
       : [...this.draft.tags, tag];
+  }
+
+  protected setSort(sort: SortKey) {
+    this.draft.sort = this.draft.sort === sort ? null : sort;
   }
 
   protected setRating(stars: number) {

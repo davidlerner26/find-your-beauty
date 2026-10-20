@@ -69,8 +69,10 @@ h2 {
   background: #f1f2f6;
   color: var(--primary);
 
-  svg {
+  mat-icon {
     width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.5rem;
     flex: none;
   }
 

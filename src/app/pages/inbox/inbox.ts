@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, input } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Spinner } from '../../components/spinner/spinner';
@@ -21,7 +22,7 @@ type Row = Conversation & {
 
 @Component({
   selector: 'app-inbox',
-  imports: [FocusPipe, Spinner, RouterLink, FormsModule, NgTemplateOutlet],
+  imports: [FocusPipe, Spinner, RouterLink, FormsModule, NgTemplateOutlet, MatIconModule],
   templateUrl: './inbox.html',
   styleUrl: './inbox.scss',
 })

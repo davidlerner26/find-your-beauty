@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, input, resource, signal } from '@angular/core';
 import { Location } from '@angular/common';
 import { Spinner } from '../../components/spinner/spinner';
@@ -12,7 +13,7 @@ const WEEKDAYS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', '
 // The whole profile of a professional for an admin to review, even when it is not published
 @Component({
   selector: 'app-admin-professional',
-  imports: [FocusPipe, PricePipe, Spinner],
+  imports: [FocusPipe, PricePipe, Spinner, MatIconModule],
   templateUrl: './admin-professional.html',
   styleUrl: './admin-professional.scss',
 })

@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FocusPipe } from '../../utils/focus.pipe';
@@ -16,7 +17,7 @@ import { formatRelative } from '../../utils/format-date';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [FormsModule, FocusPipe, PricePipe, Spinner, RouterLink],
+  imports: [FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })
@@ -30,11 +31,11 @@ export class ArtistDetails {
   protected readonly categories: { name: ServiceCategory; icon: string }[] = [
     {
       name: 'Maquiagem',
-      icon: 'M9 11h6v11H9z M10 5h4v6h-4z M11 2h2v3h-2z',
+      icon: 'brush',
     },
     {
       name: 'Cabelo',
-      icon: 'M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0z M20 4 8.12 15.88 M14.47 14.48 20 20 M8.12 8.12 12 12',
+      icon: 'content_cut',
     },
   ];
   protected readonly activeCategory = signal<ServiceCategory>('Maquiagem');

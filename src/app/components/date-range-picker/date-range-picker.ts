@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, input, model, signal } from '@angular/core';
 import { DateRange } from '../../models/professional';
 import { toDateKey } from '../../utils/slots';
@@ -9,6 +10,7 @@ type Cell = { key: string; day: number; disabled: boolean } | null;
 // Calendar to pick a period: the first click sets the start, the second sets the end.
 // A new click after that starts over. Clicking the same day twice picks a single day.
 @Component({
+  imports: [MatIconModule],
   selector: 'app-date-range-picker',
   templateUrl: './date-range-picker.html',
   styleUrl: './date-range-picker.scss',

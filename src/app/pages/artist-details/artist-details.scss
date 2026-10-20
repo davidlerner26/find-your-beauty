@@ -68,9 +68,14 @@ a {
   font-weight: 600;
   text-decoration: none;
 
-  svg {
+  svg,
+  mat-icon {
     width: 1.2rem;
     height: 1.2rem;
+  }
+
+  mat-icon {
+    font-size: 1.2rem;
   }
 }
 
@@ -110,8 +115,10 @@ a {
     gap: 0.6rem;
   }
 
-  svg {
+  mat-icon {
     width: 1.4rem;
+    height: 1.4rem;
+    font-size: 1.4rem;
     color: var(--primary);
   }
 }
@@ -176,8 +183,10 @@ a {
   font-size: 1rem;
   cursor: pointer;
 
-  svg {
+  mat-icon {
     width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1.5rem;
   }
 
   &.active {
@@ -471,9 +480,10 @@ h2 {
   font-weight: 600;
   text-decoration: none;
 
-  svg {
+  mat-icon {
     width: 1.4rem;
     height: 1.4rem;
+    font-size: 1.4rem;
   }
   border: 1.5px solid var(--primary);
   background: #fff;
@@ -481,9 +491,10 @@ h2 {
   cursor: pointer;
 }
 
-.book svg {
+.book mat-icon {
   width: 1.6rem;
   height: 1.6rem;
+  font-size: 1.6rem;
 }
 
 .book {

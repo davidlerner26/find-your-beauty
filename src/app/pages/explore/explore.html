@@ -41,10 +41,7 @@
 
   <div class="controls">
     <button type="button" class="round" aria-label="Minha localização" (click)="locateMe()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#2f6b7a" stroke-width="2" stroke-linecap="round">
-        <circle cx="12" cy="12" r="4" />
-        <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
-      </svg>
+      <mat-icon>my_location</mat-icon>
     </button>
   </div>
 
@@ -68,10 +65,10 @@
           />
           @if (salon.photos.length > 1) {
             <button type="button" class="arrow prev" aria-label="Foto anterior" (click)="step($event, salon, -1)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7" /></svg>
+              <mat-icon>chevron_left</mat-icon>
             </button>
             <button type="button" class="arrow next" aria-label="Próxima foto" (click)="step($event, salon, 1)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7" /></svg>
+              <mat-icon>chevron_right</mat-icon>
             </button>
           }
           @if (salon.distance) {

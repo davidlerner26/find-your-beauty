@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
@@ -6,7 +7,7 @@ type Step = { title: string; description: string; image: string };
 
 @Component({
   selector: 'app-onboarding',
-  imports: [RouterLink],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './onboarding.html',
   styleUrl: './onboarding.scss',
 })

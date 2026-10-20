@@ -7,7 +7,7 @@
     @for (tab of tabs; track tab.path) {
       <a [routerLink]="tab.path" [class.active]="isActive(tab)" [attr.aria-label]="tab.label">
         <span class="icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path [attr.d]="tab.icon" /></svg>
+          <mat-icon class="filled">{{ tab.icon }}</mat-icon>
           @if (tab.badge && messages.unreadTotal() > 0) {
             <span class="badge"></span>
           }

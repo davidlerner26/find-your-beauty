@@ -1,9 +1,7 @@
 @if (artist(); as artist) {
   <header class="top">
     <button type="button" class="back" aria-label="Voltar" (click)="goBack()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m15 5-7 7 7 7" />
-      </svg>
+      <mat-icon>chevron_left</mat-icon>
     </button>
     <h1>Agendar serviço</h1>
   </header>
@@ -15,15 +13,11 @@
       <h2>Data</h2>
       <div class="month">
         <button type="button" aria-label="Mês anterior" [disabled]="isCurrentMonth()" (click)="changeMonth(-1)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m15 5-7 7 7 7" />
-          </svg>
+          <mat-icon>chevron_left</mat-icon>
         </button>
         <strong>{{ monthLabel() }}</strong>
         <button type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m9 5 7 7-7 7" />
-          </svg>
+          <mat-icon>chevron_right</mat-icon>
         </button>
       </div>
       <div class="days">
@@ -83,14 +77,10 @@
     </div>
     <div class="book-actions">
       <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <circle cx="7" cy="12" r="1.600" /><circle cx="12" cy="12" r="1.600" /><circle cx="17" cy="12" r="1.600" />
-        </svg>
+        <mat-icon class="filled">more_horiz</mat-icon>
       </a>
       <button type="button" class="checkout" [disabled]="!canCheckout()" aria-label="Finalizar" title="Finalizar" (click)="checkout()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m5 12.500 4.500 4.500L19 7.500" />
-        </svg>
+        <mat-icon>check</mat-icon>
       </button>
     </div>
   </footer>

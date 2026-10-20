@@ -44,9 +44,15 @@ h1 {
     border-color: #e5484d;
   }
 
-  svg {
+  svg,
+  mat-icon {
     width: 1.25rem;
     flex: none;
+  }
+
+  mat-icon {
+    height: 1.25rem;
+    font-size: 1.25rem;
   }
 
   input {

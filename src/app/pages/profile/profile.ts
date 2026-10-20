@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, resource, signal } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { Router, RouterLink } from '@angular/router';
@@ -8,7 +9,7 @@ import { formatPhone } from '../../utils/phone';
 
 @Component({
   selector: 'app-profile',
-  imports: [Spinner, RouterLink],
+  imports: [Spinner, RouterLink, MatIconModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

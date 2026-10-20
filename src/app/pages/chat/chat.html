@@ -1,9 +1,7 @@
 @if (peer(); as peer) {
   <header class="top">
     <button type="button" class="icon-btn" aria-label="Voltar" (click)="goBack()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m15 5-7 7 7 7" />
-      </svg>
+      <mat-icon>chevron_left</mat-icon>
     </button>
     @if (peer.image) {
       <img class="avatar" [src]="peer.image" [alt]="peer.name" [style.object-position]="peer.position | focus" />
@@ -52,15 +50,11 @@
   <form class="composer" (ngSubmit)="send()">
     <input #files type="file" multiple hidden (change)="attach($event)" />
     <button type="button" class="icon-btn" aria-label="Anexar arquivo" [disabled]="uploading()" (click)="files.click()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m21 11-8.500 8.500a5 5 0 0 1-7-7L14 4a3.500 3.500 0 0 1 5 5l-8.500 8.500a2 2 0 0 1-3-3L15 7" />
-      </svg>
+      <mat-icon>attach_file</mat-icon>
     </button>
     <input class="draft" name="draft" placeholder="Digite uma mensagem" autocomplete="off" [(ngModel)]="draft" />
     <button type="submit" class="send" aria-label="Enviar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 2 11 13M22 2l-7 20-4-9-9-4z" />
-      </svg>
+      <mat-icon>send</mat-icon>
     </button>
   </form>
   } @else if (auth.ready()) {

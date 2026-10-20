@@ -13,10 +13,7 @@
     </div>
   } @else if (tab() === 'mensagens') {
     <label class="search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <circle cx="11" cy="11" r="7" />
-        <path d="m20 20-3.500-3.500" />
-      </svg>
+      <mat-icon>search</mat-icon>
       <input type="search" [placeholder]="auth.role() === 'professional' ? 'Buscar mensagens ou cliente' : 'Buscar mensagens ou maquiadora'" [(ngModel)]="search" name="search" />
     </label>
 
@@ -77,19 +74,13 @@
     <span class="icon">
       @switch (notification.icon) {
         @case ('calendar') {
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 3v4M15 3v4" />
-          </svg>
+          <mat-icon>calendar_today</mat-icon>
         }
         @case ('payment') {
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.200" stroke-linecap="round">
-            <path d="M12 3v18M16 7.500C15 6.500 13.700 6 12 6c-2 0-3.500 1-3.500 2.500S10 11 12 11.500 15.500 13 15.500 14.500 14 18 12 18c-1.700 0-3-.5-4-1.500" />
-          </svg>
+          <mat-icon>attach_money</mat-icon>
         }
         @case ('offer') {
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 12V4h8l10 10-8 8zm4-5a1.500 1.500 0 1 0 0 3 1.500 1.500 0 0 0 0-3z" />
-          </svg>
+          <mat-icon class="filled">sell</mat-icon>
         }
       }
     </span>

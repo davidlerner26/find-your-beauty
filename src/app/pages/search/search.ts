@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, signal } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Location, NgTemplateOutlet } from '@angular/common';
@@ -37,7 +38,7 @@ const readRecents = (): string[] => {
 
 @Component({
   selector: 'app-search',
-  imports: [FocusPipe, FormsModule, RouterLink, NgTemplateOutlet],
+  imports: [FocusPipe, FormsModule, RouterLink, NgTemplateOutlet, MatIconModule],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })

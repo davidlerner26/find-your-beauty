@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -8,7 +9,7 @@ import { authErrorMessage, isValidEmail } from '../../utils/validators';
 
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule, RouterLink, ProProfile],
+  imports: [FormsModule, RouterLink, ProProfile, MatIconModule],
   templateUrl: './signup.html',
   styleUrl: '../auth/auth.scss',
 })

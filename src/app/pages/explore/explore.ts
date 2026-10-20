@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Component, computed, effect, ElementRef, input, OnInit, signal } from '@angular/core';
@@ -17,7 +18,7 @@ const pin = (color: string) =>
 
 @Component({
   selector: 'app-explore',
-  imports: [FocusPipe, GoogleMap, MapMarker, MapCircle, RouterLink, Spinner],
+  imports: [FocusPipe, GoogleMap, MapMarker, MapCircle, RouterLink, Spinner, MatIconModule],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })

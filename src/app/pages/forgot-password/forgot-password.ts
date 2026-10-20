@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -6,7 +7,7 @@ import { authErrorMessage, isValidEmail } from '../../utils/validators';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, MatIconModule],
   templateUrl: './forgot-password.html',
   styleUrl: '../auth/auth.scss',
 })

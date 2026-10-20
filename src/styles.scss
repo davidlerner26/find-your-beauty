@@ -149,3 +149,16 @@ body.pro-theme {
     background: #fff;
   }
 }
+
+// Material icons: the size comes from each component's CSS
+mat-icon {
+  flex: none;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0;
+
+  &.filled {
+    font-variation-settings: 'FILL' 1;
+  }
+}

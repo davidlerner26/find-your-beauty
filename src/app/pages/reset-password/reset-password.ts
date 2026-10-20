@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, input, OnInit, signal } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
@@ -8,7 +9,7 @@ import { authErrorMessage } from '../../utils/validators';
 // Firebase opens this page from the e-mail link with ?mode=resetPassword&oobCode=...
 @Component({
   selector: 'app-reset-password',
-  imports: [Spinner, FormsModule, RouterLink],
+  imports: [Spinner, FormsModule, RouterLink, MatIconModule],
   templateUrl: './reset-password.html',
   styleUrl: '../auth/auth.scss',
 })

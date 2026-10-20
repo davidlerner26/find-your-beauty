@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, input, signal } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Spinner } from '../../components/spinner/spinner';
@@ -15,7 +16,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 // `id` is the professional id for clients and the conversation id in the professional area
 @Component({
   selector: 'app-chat',
-  imports: [FocusPipe, Spinner, FormsModule, RouterLink],
+  imports: [FocusPipe, Spinner, FormsModule, RouterLink, MatIconModule],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })

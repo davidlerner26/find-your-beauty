@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -18,7 +19,7 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [PricePipe, RouterLink, Spinner, NgTemplateOutlet],
+  imports: [PricePipe, RouterLink, Spinner, NgTemplateOutlet, MatIconModule],
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.scss',
 })

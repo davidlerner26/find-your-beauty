@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, model, input, signal } from '@angular/core';
 import { ImagePosition } from '../../models/professional';
 import { FocusPipe } from '../../utils/focus.pipe';
@@ -7,7 +8,7 @@ const clamp = (value: number) => Math.min(100, Math.max(0, value));
 // Drag the photo inside the frame to choose which part of it shows when it is cropped
 @Component({
   selector: 'app-photo-positioner',
-  imports: [FocusPipe],
+  imports: [FocusPipe, MatIconModule],
   templateUrl: './photo-positioner.html',
   styleUrl: './photo-positioner.scss',
 })

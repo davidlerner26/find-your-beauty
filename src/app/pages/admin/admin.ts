@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -7,7 +8,7 @@ import { formatRelative } from '../../utils/format-date';
 
 @Component({
   selector: 'app-admin',
-  imports: [NgTemplateOutlet, RouterLink, Spinner],
+  imports: [NgTemplateOutlet, RouterLink, Spinner, MatIconModule],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',
 })

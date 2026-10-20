@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, input, output, signal } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
@@ -38,7 +39,7 @@ type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePre
 
 @Component({
   selector: 'app-pro-profile',
-  imports: [PhotoPositioner, DateRangePicker, Spinner, FormsModule],
+  imports: [PhotoPositioner, DateRangePicker, Spinner, FormsModule, MatIconModule],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
 })

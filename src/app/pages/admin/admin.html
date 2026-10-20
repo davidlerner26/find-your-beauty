@@ -19,16 +19,7 @@
           [disabled]="working() === professional.id"
           (click)="answer(professional, true)"
         >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.500"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="m5 12.500 4.500 4.500L19 7.500" />
-          </svg>
+          <mat-icon>check</mat-icon>
           Aprovar
         </button>
         @if (!professional.rejected) {
@@ -38,16 +29,7 @@
             [disabled]="working() === professional.id"
             (click)="answer(professional, false)"
           >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.500"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M6 6l12 12M18 6 6 18" />
-            </svg>
+            <mat-icon>close</mat-icon>
             Negar
           </button>
         }

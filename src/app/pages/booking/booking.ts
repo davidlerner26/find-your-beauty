@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, input, signal } from '@angular/core';
 import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
@@ -15,7 +16,7 @@ type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
 @Component({
   selector: 'app-booking',
-  imports: [PricePipe, Spinner, FormsModule, RouterLink],
+  imports: [PricePipe, Spinner, FormsModule, RouterLink, MatIconModule],
   templateUrl: './booking.html',
   styleUrl: './booking.scss',
 })

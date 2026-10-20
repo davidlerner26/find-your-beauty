@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Component, computed, signal } from '@angular/core';
@@ -27,7 +28,7 @@ type Salon = {
 
 @Component({
   selector: 'app-home',
-  imports: [FocusPipe, RouterLink, LocationPrompt, Spinner],
+  imports: [FocusPipe, RouterLink, LocationPrompt, Spinner, MatIconModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

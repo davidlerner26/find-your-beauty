@@ -13,13 +13,23 @@
   } @else if (professional.value(); as p) {
     <section class="card head">
       @if (p.image) {
-        <img class="photo" [src]="p.image" [alt]="p.name" [style.object-position]="p.imagePosition | focus" />
+        <img
+          class="photo"
+          [src]="p.image"
+          [alt]="p.name"
+          [style.object-position]="p.imagePosition | focus"
+        />
       } @else {
         <span class="photo empty">Sem foto</span>
       }
       <div>
         <h2>{{ p.name }}</h2>
-        <span class="status" [class.denied]="p.rejected" [class.waiting]="p.approved === false && !p.rejected">{{ status() }}</span>
+        <span
+          class="status"
+          [class.denied]="p.rejected"
+          [class.waiting]="p.approved === false && !p.rejected"
+          >{{ status() }}</span
+        >
       </div>
     </section>
 
@@ -28,9 +38,13 @@
     }
     @if (p.approved === false) {
       <div class="answer">
-        <button type="button" class="approve" [disabled]="working()" (click)="answer(p, true)">Aprovar</button>
+        <button type="button" class="approve" [disabled]="working()" (click)="answer(p, true)">
+          Aprovar
+        </button>
         @if (!p.rejected) {
-          <button type="button" class="deny" [disabled]="working()" (click)="answer(p, false)">Negar</button>
+          <button type="button" class="deny" [disabled]="working()" (click)="answer(p, false)">
+            Negar
+          </button>
         }
       </div>
     }
@@ -38,19 +52,30 @@
     <section class="card">
       <h3>Contato</h3>
       <dl>
-        <div><dt>E-mail</dt><dd>{{ p.email || '-' }}</dd></div>
-        <div><dt>Celular</dt><dd>{{ p.phone || '-' }}</dd></div>
+        <div>
+          <dt>E-mail</dt>
+          <dd>{{ p.email || '-' }}</dd>
+        </div>
+        <div>
+          <dt>Celular</dt>
+          <dd>{{ p.phone || '-' }}</dd>
+        </div>
         <div>
           <dt>Instagram</dt>
           <dd>
             @if (p.instagram) {
-              <a [href]="instagramUrl(p.instagram)" target="_blank" rel="noopener">&#64;{{ p.instagram }}</a>
+              <a [href]="instagramUrl(p.instagram)" target="_blank" rel="noopener"
+                >&#64;{{ p.instagram }}</a
+              >
             } @else {
               -
             }
           </dd>
         </div>
-        <div><dt>Endereço</dt><dd>{{ p.address || '-' }}</dd></div>
+        <div>
+          <dt>Endereço</dt>
+          <dd>{{ p.address || '-' }}</dd>
+        </div>
       </dl>
     </section>
 
@@ -69,7 +94,9 @@
         <article class="service">
           <div>
             <strong>{{ service.name }}</strong>
-            <p class="muted">{{ service.category }} · {{ formatDuration(service.durationMinutes) }}</p>
+            <p class="muted">
+              {{ service.category }} · {{ formatDuration(service.durationMinutes) }}
+            </p>
             @if (service.description) {
               <p class="muted">{{ service.description }}</p>
             }
@@ -87,7 +114,7 @@
         @for (item of hours(); track item.name) {
           <div>
             <dt>{{ item.name }}</dt>
-            <dd>{{ item.day?.enabled ? item.day?.start + ' - ' + item.day?.end : 'Fechado' }}</dd>
+            <dd>{{ item.day.enabled ? item.day.start + ' - ' + item.day.end : 'Fechado' }}</dd>
           </div>
         }
       </dl>

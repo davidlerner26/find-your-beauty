@@ -91,6 +91,8 @@
   // Runs to the edge of the screen, so the next card shows a little
   padding: 4px 1.5rem 4px 1.5rem;
   pointer-events: auto;
+  // Sideways moves scroll the cards; a pull up is read by the page (it opens the list)
+  touch-action: pan-x;
 }
 
 .offer {
@@ -125,6 +127,7 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
+  touch-action: pan-x;
 
   &::-webkit-scrollbar {
     display: none;
@@ -200,4 +203,109 @@
 
 .discount {
   margin-left: 0.75rem;
+}
+
+// The list that the round button of the left opens
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.4);
+  animation: fade-in 0.3s ease-out;
+  transition: opacity 0.3s ease-in;
+
+  &.closing {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+// Under the menu of the app (z-index 10), which stays visible
+.sheet {
+  position: fixed;
+  z-index: 6;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 8vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0 0;
+  border-radius: 28px 28px 0 0;
+  background: #fff;
+  // Comes up from the bottom; goes back down (or settles back) with the same curve
+  animation: slide-up 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+
+  &.dragging {
+    // Follows the finger with no delay
+    transition: none;
+  }
+
+  h2 {
+    margin: 0 1.5rem 1rem;
+    font-size: 1.25rem;
+  }
+}
+
+.grip {
+  // A wide area to grab, taller than the bar itself
+  padding: 0.25rem 0 1rem;
+  cursor: grab;
+  // The finger drags the list instead of scrolling the page
+  touch-action: none;
+}
+
+.handle {
+  display: block;
+  width: 3rem;
+  height: 0.3rem;
+  margin: 0 auto;
+  border-radius: 999px;
+  background: #d6d6d6;
+}
+
+.sheet-filters {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0 1.5rem 1.25rem;
+}
+
+.sheet-list {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  // Room for the menu of the app
+  padding: 4px 1.5rem 6rem;
+
+  .offer {
+    flex: none;
+  }
+
+  .muted {
+    padding: 1rem 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet,
+  .backdrop {
+    animation: none;
+    transition: none;
+  }
 }

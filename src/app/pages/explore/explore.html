@@ -42,8 +42,7 @@
   <!-- Above the cards: the round buttons of the map and the carousel -->
   <div class="bottom">
     <div class="map-buttons">
-      <!-- No action yet -->
-      <button type="button" class="round" aria-label="Lista">
+      <button type="button" class="round" aria-label="Lista" (click)="listOpen.set(true)">
         <mat-icon>format_list_bulleted</mat-icon>
       </button>
       <button type="button" class="round" aria-label="Minha localização" (click)="locateMe()">
@@ -51,57 +50,115 @@
       </button>
     </div>
 
-    <div class="results">
+    <!-- Pull a card up to turn the carousel into the list -->
+    <div
+      class="results"
+      (pointerdown)="onCarouselDown($event)"
+      (pointermove)="onCarouselMove($event)"
+      (pointerup)="carouselStart = null"
+      (pointercancel)="carouselStart = null"
+    >
       @for (salon of visibleSalons; track salon.name; let i = $index) {
-        <article
-          class="offer"
-          [class.selected]="i === selected()"
-          [routerLink]="['/maquiadores', salon.id]"
-        >
-          <div class="offer-image">
-            <!-- The photos of the professional: swipe sideways to see them -->
-            <div class="photos">
-              @for (photo of salon.photos; track photo) {
-                <div class="slide">
-                  @if (!loadedPhotos().includes(photo)) {
-                    <app-spinner class="loading" [small]="true" />
-                  }
-                  <img
-                    [src]="photo"
-                    [alt]="salon.name"
-                    loading="lazy"
-                    [style.object-position]="(photo === salon.image ? salon.imagePosition : undefined) | focus"
-                    (load)="photoLoaded(photo)"
-                    (error)="photoLoaded(photo)"
-                  />
-                </div>
-              }
-            </div>
-            <button
-              type="button"
-              class="heart"
-              [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
-              (click)="toggleFavorite($event, salon.id)"
-            >
-              {{ favorites.has(salon.id) ? '♥' : '♡' }}
-            </button>
-            @if (salon.distance) {
-              <span class="distance">{{ salon.distance }}</span>
-            }
-          </div>
-          <div class="offer-info">
-            <p class="tags">{{ salon.tags.join(' . ') }}</p>
-            <h3>{{ salon.name }}</h3>
-            <p class="muted">{{ salon.address }}</p>
-            <p class="rating">
-              <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{
-                salon.reviewsCount
-              }}
-              avaliações)
-            </p>
-          </div>
-        </article>
+        <ng-container *ngTemplateOutlet="offerCard; context: { $implicit: salon, index: i }" />
       }
     </div>
   </div>
+  @if (listOpen()) {
+    <div class="backdrop" [class.closing]="closing()" (click)="closeList()"></div>
+    <div
+      class="sheet"
+      role="dialog"
+      aria-label="Maquiadoras próximas"
+      [class.dragging]="dragStart() !== null"
+      [style.transform]="'translateY(' + sheetOffset() + 'px)'"
+    >
+      <!-- Pull the bar down to close the list (a tap closes it too) -->
+      <div
+        class="grip"
+        role="button"
+        tabindex="0"
+        aria-label="Fechar a lista"
+        (pointerdown)="onGripDown($event)"
+        (pointermove)="onGripMove($event)"
+        (pointerup)="onGripUp()"
+        (pointercancel)="onGripUp()"
+        (keydown.enter)="closeList()"
+        (keydown.escape)="closeList()"
+      >
+        <span class="handle"></span>
+      </div>
+      <h2>Maquiadoras próximas</h2>
+      <div class="sheet-filters">
+        @for (filter of filters; track filter) {
+          <button
+            type="button"
+            class="filter"
+            [class.active]="activeFilters().includes(filter)"
+            (click)="toggleFilter(filter)"
+          >
+            {{ filter }}
+          </button>
+        }
+      </div>
+      <div class="sheet-list">
+        @for (salon of nearbySalons; track salon.id) {
+          <ng-container *ngTemplateOutlet="offerCard; context: { $implicit: salon, index: -1 }" />
+        } @empty {
+          <p class="muted">Nenhuma maquiadora encontrada.</p>
+        }
+      </div>
+    </div>
+  }
 </div>
+
+<!-- A professional card: on the map carousel and in the list -->
+<ng-template #offerCard let-salon let-index="index">
+    <article
+      class="offer"
+      [class.selected]="index === selected()"
+      [routerLink]="['/maquiadores', salon.id]"
+    >
+      <div class="offer-image">
+        <!-- The photos of the professional: swipe sideways to see them -->
+        <div class="photos">
+          @for (photo of salon.photos; track photo) {
+            <div class="slide">
+              @if (!loadedPhotos().includes(photo)) {
+                <app-spinner class="loading" [small]="true" />
+              }
+              <img
+                [src]="photo"
+                [alt]="salon.name"
+                loading="lazy"
+                [style.object-position]="(photo === salon.image ? salon.imagePosition : undefined) | focus"
+                (load)="photoLoaded(photo)"
+                (error)="photoLoaded(photo)"
+              />
+            </div>
+          }
+        </div>
+        <button
+          type="button"
+          class="heart"
+          [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
+          (click)="toggleFavorite($event, salon.id)"
+        >
+          {{ favorites.has(salon.id) ? '♥' : '♡' }}
+        </button>
+        @if (salon.distance) {
+          <span class="distance">{{ salon.distance }}</span>
+        }
+      </div>
+      <div class="offer-info">
+        <p class="tags">{{ salon.tags.join(' . ') }}</p>
+        <h3>{{ salon.name }}</h3>
+        <p class="muted">{{ salon.address }}</p>
+        <p class="rating">
+          <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{
+            salon.reviewsCount
+          }}
+          avaliações)
+        </p>
+      </div>
+    </article>
+</ng-template>

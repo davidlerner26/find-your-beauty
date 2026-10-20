@@ -1,6 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, effect, ElementRef, input, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { Spinner } from '../../components/spinner/spinner';
@@ -19,7 +20,7 @@ const pin = (color: string) =>
 
 @Component({
   selector: 'app-explore',
-  imports: [FocusPipe, GoogleMap, MapMarker, MapCircle, RouterLink, Spinner, MatIconModule],
+  imports: [NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, RouterLink, Spinner, MatIconModule],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })
@@ -93,7 +94,75 @@ export class Explore implements OnInit {
         // Work photos (the profile photo when there is no gallery)
         photos: salon.gallery.length ? salon.gallery : [salon.image],
         distance: user ? formatDistance(distanceKm(user, salon.position)) : null,
-      }));
+        km: user ? distanceKm(user, salon.position) : null,
+      }))
+      // Closest first, in the carousel, on the map markers and in the list (the same order everywhere)
+      .sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity));
+  }
+
+  // The list of the round button shows the same professionals, in the same order, as the carousel
+  protected get nearbySalons() {
+    return this.visibleSalons;
+  }
+
+  protected readonly listOpen = signal(false);
+  protected readonly closing = signal(false);
+
+  // The list slides down and the backdrop fades, then it leaves the page
+  protected closeList() {
+    if (this.closing()) return;
+    this.closing.set(true);
+    this.sheetOffset.set(window.innerHeight);
+    setTimeout(() => {
+      this.listOpen.set(false);
+      this.closing.set(false);
+      this.sheetOffset.set(0);
+    }, 300);
+  }
+
+  // Finger of the carousel: pulling a card up opens the list
+  protected carouselStart: { x: number; y: number } | null = null;
+
+  protected onCarouselDown(event: PointerEvent) {
+    this.carouselStart = { x: event.clientX, y: event.clientY };
+  }
+
+  protected onCarouselMove(event: PointerEvent) {
+    const start = this.carouselStart;
+    if (!start) return;
+
+    const up = start.y - event.clientY;
+    const sideways = Math.abs(event.clientX - start.x);
+    // A clear pull upward, more up than sideways (sideways is for the photos and the cards)
+    if (up > 50 && up > sideways * 1.5) {
+      this.carouselStart = null;
+      this.listOpen.set(true);
+    }
+  }
+
+  // Dragging the bar of the list down: how far the list went and where the finger started
+  protected readonly sheetOffset = signal(0);
+  protected readonly dragStart = signal<number | null>(null);
+
+  protected onGripDown(event: PointerEvent) {
+    this.dragStart.set(event.clientY);
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+  }
+
+  protected onGripMove(event: PointerEvent) {
+    const start = this.dragStart();
+    if (start === null) return;
+    this.sheetOffset.set(Math.max(0, event.clientY - start));
+  }
+
+  protected onGripUp() {
+    if (this.dragStart() === null) return;
+
+    const moved = this.sheetOffset();
+    this.dragStart.set(null);
+    this.sheetOffset.set(0);
+    // A tap or a pull of more than 100px closes the list; a shorter pull brings it back
+    if (moved < 5 || moved > 100) this.closeList();
   }
 
   // The heart sits inside a card that is a link: it must not open the page

@@ -76,7 +76,18 @@ export class Auth {
     );
   }
 
-  async signInWithGoogle(remember = true) {
+  // Each login screen only takes the accounts of its own area
+  private async requireArea(area: 'client' | 'professional') {
+    const wrong =
+      area === 'professional'
+        ? this.role() !== 'professional' && !this.signupIncomplete()
+        : this.role() !== 'client';
+    if (!wrong) return;
+    await this.signOut();
+    throw { code: area === 'professional' ? 'auth/not-professional' : 'auth/not-client' };
+  }
+
+  async signInWithGoogle(remember = true, area: 'client' | 'professional' = 'client') {
     await this.remember(remember);
     this.pendingApproval.set(false);
     const { user } = await signInWithPopup(this.auth, this.googleProvider);
@@ -84,7 +95,8 @@ export class Auth {
       await signOut(this.auth);
       throw { code: 'auth/pending-approval' };
     }
-    if (this.role() === 'client') await this.createUserDocIfMissing(user);
+    if (area === 'client' && this.role() === 'client') await this.createUserDocIfMissing(user);
+    await this.requireArea(area);
   }
 
   async signUpWithEmail({ firstName, lastName, email, phone, password }: SignUpData) {
@@ -155,12 +167,14 @@ export class Auth {
     }
   }
 
+  async signInClient(email: string, password: string, remember = true) {
+    await this.signInWithEmail(email, password, remember);
+    await this.requireArea('client');
+  }
+
   async signInProfessional(email: string, password: string, remember = true) {
     await this.signInWithEmail(email, password, remember);
-    if (this.role() !== 'professional' && !this.signupIncomplete()) {
-      await this.signOut();
-      throw { code: 'auth/not-professional' };
-    }
+    await this.requireArea('professional');
   }
 
   async sendPasswordReset(email: string) {

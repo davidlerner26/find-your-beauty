@@ -48,7 +48,7 @@ export class Login {
       if (this.pro()) {
         await this.auth.signInProfessional(this.email, this.password, this.rememberMe);
       } else {
-        await this.auth.signInWithEmail(this.email, this.password, this.rememberMe);
+        await this.auth.signInClient(this.email, this.password, this.rememberMe);
       }
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
@@ -66,11 +66,15 @@ export class Login {
   protected async signInWithGoogle() {
     this.googleError.set('');
     try {
-      await this.auth.signInWithGoogle(this.rememberMe);
+      await this.auth.signInWithGoogle(this.rememberMe, this.pro() ? 'professional' : 'client');
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
       const code = (error as { code?: string }).code;
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+      if (code === 'auth/not-professional' || code === 'auth/not-client' || code === 'auth/pending-approval') {
+        this.googleError.set(authErrorMessage(error));
+        return;
+      }
       this.googleError.set('Não foi possível entrar com o Google. Tente novamente.');
     }
   }

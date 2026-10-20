@@ -13,6 +13,7 @@ const AUTH_ERRORS: Record<string, string> = {
   'auth/network-request-failed': 'Sem conexão. Verifique sua internet.',
   'auth/pending-approval': 'Seu cadastro ainda está em análise. Você poderá entrar assim que for aprovado.',
   'auth/not-professional': 'Esta conta não é de profissional. Use o login de cliente.',
+  'auth/not-client': 'Esta conta é de profissional. Use o login da área profissional.',
   'auth/expired-action-code': 'Este link expirou. Peça um novo link de redefinição.',
   'auth/invalid-action-code': 'Este link é inválido ou já foi usado. Peça um novo link de redefinição.',
   'auth/operation-not-allowed': 'Login por e-mail não está ativado no Firebase.',

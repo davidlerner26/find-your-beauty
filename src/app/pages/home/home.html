@@ -52,7 +52,9 @@
                   <img
                     [src]="photo"
                     [alt]="salon.name"
-                    [style.object-position]="(photo === salon.image ? salon.imagePosition : undefined) | focus"
+                    [style.object-position]="
+                      (photo === salon.image ? salon.imagePosition : undefined) | focus
+                    "
                     (load)="photoLoaded(photo)"
                     (error)="photoLoaded(photo)"
                   />
@@ -117,7 +119,10 @@
             <h3>{{ offer.name }}</h3>
             <p class="muted">{{ offer.address }}</p>
             <p class="rating">
-              <span class="star">★</span> <strong>{{ offer.rating }}</strong> ({{ offer.reviews }})
+              <span class="star">★</span> <strong>{{ offer.rating }}</strong> ({{
+                offer.reviews
+              }}
+              avaliações)
             </p>
           </div>
         </article>

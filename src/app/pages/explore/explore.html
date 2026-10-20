@@ -59,15 +59,27 @@
           <img
             [src]="photoOf(salon)"
             [alt]="salon.name"
-            [style.object-position]="(photoOf(salon) === salon.image ? salon.imagePosition : undefined) | focus"
+            [style.object-position]="
+              (photoOf(salon) === salon.image ? salon.imagePosition : undefined) | focus
+            "
             (load)="photoLoaded(photoOf(salon))"
             (error)="photoLoaded(photoOf(salon))"
           />
           @if (salon.photos.length > 1) {
-            <button type="button" class="arrow prev" aria-label="Foto anterior" (click)="step($event, salon, -1)">
+            <button
+              type="button"
+              class="arrow prev"
+              aria-label="Foto anterior"
+              (click)="step($event, salon, -1)"
+            >
               <mat-icon>chevron_left</mat-icon>
             </button>
-            <button type="button" class="arrow next" aria-label="Próxima foto" (click)="step($event, salon, 1)">
+            <button
+              type="button"
+              class="arrow next"
+              aria-label="Próxima foto"
+              (click)="step($event, salon, 1)"
+            >
               <mat-icon>chevron_right</mat-icon>
             </button>
           }
@@ -82,7 +94,8 @@
           <p class="rating">
             <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{
               salon.reviewsCount
-            }})
+            }}
+            avaliações)
           </p>
         </div>
       </article>

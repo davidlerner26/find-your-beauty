@@ -1,9 +1,22 @@
 @if (artist(); as artist) {
-  <div
-    class="hero"
-    [style.background-image]="'url(' + artist.image + ')'"
-    [style.background-position]="artist.imagePosition | focus"
-  >
+  <div class="hero">
+    <!-- The cover is the gallery: swipe sideways to go through the photos -->
+    <div class="hero-photos" (scroll)="onHeroScroll($event)">
+      @for (photo of heroPhotos(artist); track photo) {
+        <img
+          [src]="photo"
+          [alt]="'Foto de ' + artist.name"
+          [style.object-position]="(photo === artist.image ? artist.imagePosition : undefined) | focus"
+        />
+      }
+    </div>
+    @if (heroPhotos(artist).length > 1) {
+      <div class="dots" aria-hidden="true">
+        @for (photo of heroPhotos(artist); track photo; let i = $index) {
+          <span [class.on]="i === heroIndex()"></span>
+        }
+      </div>
+    }
     <button type="button" class="round" aria-label="Voltar" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
     </button>
@@ -158,18 +171,6 @@
         </div>
       </section>
     }
-
-    <section>
-      <div class="section-head">
-        <h2>Galeria</h2>
-        <!-- <a href="#">Ver todas</a> -->
-      </div>
-      <div class="gallery">
-        @for (photo of artist.gallery; track photo) {
-          <img [src]="photo" [alt]="'Trabalho de ' + artist.name" />
-        }
-      </div>
-    </section>
 
     <section id="avaliacoes">
       <h2>Avaliações</h2>

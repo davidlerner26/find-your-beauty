@@ -4,6 +4,7 @@ import { FocusPipe } from '../../utils/focus.pipe';
 import { Component, computed, effect, ElementRef, input, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { Spinner } from '../../components/spinner/spinner';
+import { Favorites } from '../../services/favorites';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
@@ -50,8 +51,6 @@ export class Explore implements OnInit {
   protected readonly activeFilters = signal<string[]>([...this.filters]);
   protected readonly selected = signal(0);
   // Card photos that finished loading (or failed), so the spinner stops
-  // Photo being shown in each card
-  protected readonly photoIndex = signal<Record<string, number>>({});
   protected readonly loadedPhotos = signal<string[]>([]);
 
   constructor(
@@ -59,6 +58,7 @@ export class Explore implements OnInit {
     protected readonly professionals: Professionals,
     private readonly userLocation: UserLocation,
     private readonly host: ElementRef<HTMLElement>,
+    protected readonly favorites: Favorites,
   ) {
     effect(() => {
       const tag = this.tag();
@@ -96,16 +96,10 @@ export class Explore implements OnInit {
       }));
   }
 
-  protected photoOf(salon: { id: string; photos: string[] }) {
-    return salon.photos[this.photoIndex()[salon.id] ?? 0];
-  }
-
-  // Arrows of the card: they must not open the professional's page
-  protected step(event: Event, salon: { id: string; photos: string[] }, direction: 1 | -1) {
+  // The heart sits inside a card that is a link: it must not open the page
+  protected toggleFavorite(event: Event, id: string) {
     event.stopPropagation();
-    const count = salon.photos.length;
-    const current = this.photoIndex()[salon.id] ?? 0;
-    this.photoIndex.update((index) => ({ ...index, [salon.id]: (current + direction + count) % count }));
+    this.favorites.toggle(id).catch((error) => console.error('Failed to update favorite', error));
   }
 
   protected photoLoaded(url: string) {

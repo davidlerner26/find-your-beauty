@@ -7,7 +7,7 @@ import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { formatDuration, Review, Service, ServiceCategory } from '../../models/professional';
+import { formatDuration, Professional, Review, Service, ServiceCategory } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Professionals } from '../../services/professionals';
 import { Favorites } from '../../services/favorites';
@@ -145,6 +145,18 @@ export class ArtistDetails {
     } finally {
       this.savingReview.set(false);
     }
+  }
+
+  // The photos of the cover: the gallery, or the profile photo when there is no gallery
+  protected heroPhotos(artist: Professional) {
+    return artist.gallery?.length ? artist.gallery : [artist.image];
+  }
+
+  protected readonly heroIndex = signal(0);
+
+  protected onHeroScroll(event: Event) {
+    const strip = event.target as HTMLElement;
+    this.heroIndex.set(Math.round(strip.scrollLeft / strip.clientWidth));
   }
 
   protected goBack() {

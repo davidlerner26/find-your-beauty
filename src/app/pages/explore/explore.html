@@ -39,66 +39,69 @@
     }
   </div>
 
-  <div class="controls">
-    <button type="button" class="round" aria-label="Minha localização" (click)="locateMe()">
-      <mat-icon>my_location</mat-icon>
-    </button>
-  </div>
+  <!-- Above the cards: the round buttons of the map and the carousel -->
+  <div class="bottom">
+    <div class="map-buttons">
+      <!-- No action yet -->
+      <button type="button" class="round" aria-label="Lista">
+        <mat-icon>format_list_bulleted</mat-icon>
+      </button>
+      <button type="button" class="round" aria-label="Minha localização" (click)="locateMe()">
+        <mat-icon>my_location</mat-icon>
+      </button>
+    </div>
 
-  <div class="results">
-    @for (salon of visibleSalons; track salon.name; let i = $index) {
-      <article
-        class="offer"
-        [class.selected]="i === selected()"
-        [routerLink]="['/maquiadores', salon.id]"
-      >
-        <div class="offer-image">
-          @if (!loadedPhotos().includes(photoOf(salon))) {
-            <app-spinner class="loading" [small]="true" />
-          }
-          <img
-            [src]="photoOf(salon)"
-            [alt]="salon.name"
-            [style.object-position]="
-              (photoOf(salon) === salon.image ? salon.imagePosition : undefined) | focus
-            "
-            (load)="photoLoaded(photoOf(salon))"
-            (error)="photoLoaded(photoOf(salon))"
-          />
-          @if (salon.photos.length > 1) {
+    <div class="results">
+      @for (salon of visibleSalons; track salon.name; let i = $index) {
+        <article
+          class="offer"
+          [class.selected]="i === selected()"
+          [routerLink]="['/maquiadores', salon.id]"
+        >
+          <div class="offer-image">
+            <!-- The photos of the professional: swipe sideways to see them -->
+            <div class="photos">
+              @for (photo of salon.photos; track photo) {
+                <div class="slide">
+                  @if (!loadedPhotos().includes(photo)) {
+                    <app-spinner class="loading" [small]="true" />
+                  }
+                  <img
+                    [src]="photo"
+                    [alt]="salon.name"
+                    loading="lazy"
+                    [style.object-position]="(photo === salon.image ? salon.imagePosition : undefined) | focus"
+                    (load)="photoLoaded(photo)"
+                    (error)="photoLoaded(photo)"
+                  />
+                </div>
+              }
+            </div>
             <button
               type="button"
-              class="arrow prev"
-              aria-label="Foto anterior"
-              (click)="step($event, salon, -1)"
+              class="heart"
+              [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
+              (click)="toggleFavorite($event, salon.id)"
             >
-              <mat-icon>chevron_left</mat-icon>
+              {{ favorites.has(salon.id) ? '♥' : '♡' }}
             </button>
-            <button
-              type="button"
-              class="arrow next"
-              aria-label="Próxima foto"
-              (click)="step($event, salon, 1)"
-            >
-              <mat-icon>chevron_right</mat-icon>
-            </button>
-          }
-          @if (salon.distance) {
-            <span class="distance">{{ salon.distance }}</span>
-          }
-        </div>
-        <div class="offer-info">
-          <p class="tags">{{ salon.tags.join(' . ') }}</p>
-          <h3>{{ salon.name }}</h3>
-          <p class="muted">{{ salon.address }}</p>
-          <p class="rating">
-            <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{
-              salon.reviewsCount
-            }}
-            avaliações)
-          </p>
-        </div>
-      </article>
-    }
+            @if (salon.distance) {
+              <span class="distance">{{ salon.distance }}</span>
+            }
+          </div>
+          <div class="offer-info">
+            <p class="tags">{{ salon.tags.join(' . ') }}</p>
+            <h3>{{ salon.name }}</h3>
+            <p class="muted">{{ salon.address }}</p>
+            <p class="rating">
+              <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{
+                salon.reviewsCount
+              }}
+              avaliações)
+            </p>
+          </div>
+        </article>
+      }
+    </div>
   </div>
 </div>

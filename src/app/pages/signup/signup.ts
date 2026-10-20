@@ -28,8 +28,6 @@ export class Signup {
   protected readonly googleError = signal('');
   protected readonly formError = signal('');
   protected readonly submitting = signal(false);
-  // Professionals can only sign in after an admin approves the account
-  protected readonly awaitingApproval = signal(false);
 
   protected get nameValid() {
     return this.firstName.trim().length >= 3;

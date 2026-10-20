@@ -46,6 +46,8 @@ export class Auth {
   readonly isAdmin = signal(false);
   // A professional that created the account but didn't finish the profile yet (stays signed in)
   readonly signupIncomplete = signal(false);
+  // The professional just sent the complete sign up: the screen tells her it is under review
+  readonly signupSubmitted = signal(false);
   // true when the last sign in was a professional still waiting for an admin (that session is closed right away)
   readonly pendingApproval = signal(false);
   // false until Firebase tells us whether there is a session (and its role)
@@ -111,6 +113,7 @@ export class Auth {
 
   // Professionals are separate accounts: the profile document id is the account uid
   async signUpProfessional({ firstName, lastName, email, phone, password }: SignUpData) {
+    this.signupSubmitted.set(false);
     const { user } = await createUserWithEmailAndPassword(this.auth, email.trim(), password);
     const name = `${firstName.trim()} ${lastName.trim()}`;
     await updateProfile(user, { displayName: name });
@@ -186,6 +189,8 @@ export class Auth {
   // The profile is complete and was sent: now it waits for an admin, so the session is closed
   async finishSignup() {
     this.pendingApproval.set(true);
+    // Before closing the session, so the screen goes straight to the "under review" message
+    this.signupSubmitted.set(true);
     this.signupIncomplete.set(false);
     await signOut(this.auth);
   }

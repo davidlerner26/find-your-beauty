@@ -1,4 +1,4 @@
-@if (awaitingApproval()) {
+@if (auth.signupSubmitted()) {
   <div class="auth">
     <h1>Cadastro enviado!</h1>
     <p class="subtitle">
@@ -7,7 +7,7 @@
     <a class="primary" routerLink="/pro/entrar">Ir para o login</a>
   </div>
 } @else if (pro() && auth.signupIncomplete()) {
-  <app-pro-profile [signup]="true" (submitted)="awaitingApproval.set(true)" />
+  <app-pro-profile [signup]="true" />
 } @else {
 <form class="auth" (ngSubmit)="submit()" novalidate>
   <h1>{{ pro() ? 'Cadastro de profissional' : 'Crie uma conta' }}</h1>

@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, input, output, signal } from '@angular/core';
+import { Component, computed, effect, input, signal } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -46,7 +46,6 @@ type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePre
 export class ProProfile {
   // Second step of the sign up: the same form, but the profile has to be complete to be sent
   readonly signup = input(false);
-  readonly submitted = output<void>();
 
   protected readonly categories: ServiceCategory[] = ['Maquiagem', 'Cabelo'];
 
@@ -437,7 +436,6 @@ export class ProProfile {
       this.removedPhotos = [];
       if (this.signup()) {
         await this.auth.finishSignup();
-        this.submitted.emit();
         return;
       }
       await this.professionals.load();

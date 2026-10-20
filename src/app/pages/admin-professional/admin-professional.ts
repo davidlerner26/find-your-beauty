@@ -1,6 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, input, resource, signal } from '@angular/core';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
 import { formatDuration, Professional } from '../../models/professional';
 import { Admin } from '../../services/admin';
@@ -44,6 +45,7 @@ export class AdminProfessional {
   constructor(
     private readonly admin: Admin,
     private readonly location: Location,
+    private readonly router: Router,
   ) {}
 
   protected goBack() {
@@ -58,7 +60,8 @@ export class AdminProfessional {
     try {
       if (approve) await this.admin.approve(professional.id);
       else await this.admin.reject(professional.id);
-      this.professional.reload();
+      // Answered: it is no longer in the waiting list
+      this.router.navigateByUrl('/admin');
     } catch (error) {
       console.error('Failed to answer', error);
       this.error.set('Não foi possível concluir. Tente novamente.');

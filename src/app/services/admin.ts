@@ -32,7 +32,8 @@ export class Admin {
     );
     // Only the ones that finished the sign up (second step). Older accounts without `submitted` haven't.
     const list = snapshot.docs
-      .filter((d) => d.data()['submitted'] === true)
+      // A denied request leaves the list
+      .filter((d) => d.data()['submitted'] === true && d.data()['rejected'] !== true)
       .map((d): PendingProfessional => {
         const data = d.data();
         return {

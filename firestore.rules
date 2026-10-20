@@ -16,8 +16,11 @@ service cloud.firestore {
       allow create: if request.auth != null && request.auth.uid == id && request.resource.data.approved == false &&
         request.resource.data.get('admin', false) == false;
       // The owner edits the profile but can't change the approval; admins can change anything
+      // (a denied sign up can be sent again: the owner may only turn `rejected` from true to false)
       allow update: if (request.auth != null && request.auth.uid == id &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['approved', 'rejected', 'admin'])) || isAdmin();
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['approved', 'admin']) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['rejected']) ||
+          (resource.data.get('rejected', false) == true && request.resource.data.rejected == false))) || isAdmin();
 
       // One review per client, only after a booking with this professional was completed
       match /reviews/{clientUid} {

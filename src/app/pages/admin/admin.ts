@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
@@ -14,8 +14,7 @@ import { formatRelative } from '../../utils/format-date';
 })
 export class Admin {
   private readonly all = signal<PendingProfessional[]>([]);
-  protected readonly waiting = computed(() => this.all().filter((professional) => !professional.rejected));
-  protected readonly denied = computed(() => this.all().filter((professional) => professional.rejected));
+  protected readonly waiting = this.all.asReadonly();
   protected readonly loading = signal(true);
   protected readonly error = signal('');
   // Id of the professional being answered
@@ -50,7 +49,7 @@ export class Admin {
         this.all.update((list) => list.filter((item) => item.id !== professional.id));
       } else {
         await this.admin.reject(professional.id);
-        this.all.update((list) => list.map((item) => (item.id === professional.id ? { ...item, rejected: true } : item)));
+        this.all.update((list) => list.filter((item) => item.id !== professional.id));
       }
     } catch (error) {
       console.error('Failed to answer', error);

@@ -1,5 +1,10 @@
 <div class="profile">
   <h1>{{ signup() ? 'Complete seu cadastro' : 'Meu perfil' }}</h1>
+  @if (signup() && profile()?.rejected) {
+    <p class="message" role="status">
+      Seu cadastro anterior não foi aprovado. Revise os dados abaixo e envie novamente.
+    </p>
+  }
   @if (signup()) {
     <p class="muted">
       Preencha todos os dados abaixo para enviar o cadastro. Depois, ele passa pela aprovação da

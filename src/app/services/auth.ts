@@ -35,8 +35,6 @@ export class Auth {
   private readonly auth = getAuth(firebaseApp);
   private readonly googleProvider = new GoogleAuthProvider();
   private roleRequest = 0;
-  // The pending account found by the last resolveRole was denied by an admin
-  private deniedByAdmin = false;
   private markReady!: () => void;
 
   readonly user = signal<User | null>(null);
@@ -84,7 +82,7 @@ export class Auth {
     const { user } = await signInWithPopup(this.auth, this.googleProvider);
     if (await this.resolveRole(user)) {
       await signOut(this.auth);
-      throw { code: this.deniedByAdmin ? 'auth/rejected' : 'auth/pending-approval' };
+      throw { code: 'auth/pending-approval' };
     }
     if (this.role() === 'client') await this.createUserDocIfMissing(user);
   }
@@ -153,7 +151,7 @@ export class Auth {
     const { user } = await signInWithEmailAndPassword(this.auth, email.trim(), password);
     if (await this.resolveRole(user)) {
       await signOut(this.auth);
-      throw { code: this.deniedByAdmin ? 'auth/rejected' : 'auth/pending-approval' };
+      throw { code: 'auth/pending-approval' };
     }
   }
 
@@ -216,14 +214,15 @@ export class Auth {
         ]);
         admin = account.data()?.['admin'] === true;
         if (profile.exists()) {
-          // Not approved yet: no access to the app (the callers close the session)
-          if (profile.data()['approved'] === false && profile.data()['submitted'] !== true) {
+          // Not approved yet: no access to the app (the callers close the session).
+          // A sign up that wasn't finished, or that an admin denied, goes back to the second step to be (re)sent.
+          const data = profile.data();
+          if (data['approved'] === false && (data['submitted'] !== true || data['rejected'] === true)) {
             role = null;
             incomplete = true;
           } else if (profile.data()['approved'] === false) {
             role = null;
             pending = true;
-            this.deniedByAdmin = profile.data()['rejected'] === true;
             this.pendingApproval.set(true);
           } else {
             role = 'professional';

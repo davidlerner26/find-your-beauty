@@ -429,7 +429,9 @@ export class ProProfile {
         visible,
         published,
         // Sign up finished: the account now waits for an admin
+        // (a denied sign up is sent again: the denial is cleared)
         ...(this.signup() ? { submitted: true } : {}),
+        ...(this.signup() && this.profile()?.rejected ? { rejected: false } : {}),
       });
       // Only deletes the removed photos once the profile no longer points to them
       await Promise.all(this.removedPhotos.map((url) => this.photos.remove(url)));

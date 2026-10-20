@@ -88,4 +88,13 @@ export type Professional = {
   availability?: Availability;
 };
 
-export const formatDuration = (minutes: number) => `${(minutes / 60).toLocaleString('pt-BR')} h`;
+// 30 -> "30 minutos", 60 -> "1 hora", 90 -> "1 hora e 30 minutos", 120 -> "2 horas"
+export const formatDuration = (totalMinutes: number) => {
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  const parts: string[] = [];
+  if (hours) parts.push(`${hours} ${hours === 1 ? 'hora' : 'horas'}`);
+  if (minutes || !hours) parts.push(`${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`);
+  return parts.join(' e ');
+};

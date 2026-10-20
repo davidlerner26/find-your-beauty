@@ -22,17 +22,15 @@
           <mat-icon>check</mat-icon>
           Aprovar
         </button>
-        @if (!professional.rejected) {
-          <button
-            type="button"
-            class="deny"
-            [disabled]="working() === professional.id"
-            (click)="answer(professional, false)"
-          >
-            <mat-icon>close</mat-icon>
-            Negar
-          </button>
-        }
+        <button
+          type="button"
+          class="deny"
+          [disabled]="working() === professional.id"
+          (click)="answer(professional, false)"
+        >
+          <mat-icon>close</mat-icon>
+          Negar
+        </button>
       </div>
     </article>
   </ng-template>
@@ -54,14 +52,5 @@
         <p class="muted">Nenhum cadastro aguardando aprovação.</p>
       }
     </div>
-
-    @if (denied().length) {
-      <h2>Negados</h2>
-      <div class="list">
-        @for (professional of denied(); track professional.id) {
-          <ng-container *ngTemplateOutlet="card; context: { $implicit: professional }" />
-        }
-      </div>
-    }
   }
 </div>

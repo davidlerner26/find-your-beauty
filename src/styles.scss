@@ -109,6 +109,17 @@ body.pro-theme {
     color: #2f6b7a !important;
   }
 
+  // Icons inside light fields (phone, Instagram) stay gray, teal when focused
+  .with-icon mat-icon,
+  .with-icon svg {
+    color: #6b6b6b !important;
+  }
+
+  .with-icon:focus-within mat-icon,
+  .with-icon:focus-within svg {
+    color: #2f6b7a !important;
+  }
+
   // Login and sign up fields are light pills
   .field {
     color: #6b6b6b !important;

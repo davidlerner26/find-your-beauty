@@ -255,8 +255,11 @@ a {
 }
 
 .distance {
+  z-index: 1;
   position: absolute;
-  bottom: 0.75rem;
+  // Above the dots
+  bottom: 1.75rem;
+  pointer-events: none;
   left: 0;
   padding: 0.25rem 0.75rem;
   border-radius: 0 20px 20px 0;
@@ -274,8 +277,9 @@ a {
   display: flex;
   gap: 1rem;
   overflow-x: auto;
-  margin: 0 -1.5rem;
-  padding: 0 1.5rem;
+  // Room around the circles: the scroll area would cut the ring
+  margin: -6px -1.5rem;
+  padding: 6px 1.5rem;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {

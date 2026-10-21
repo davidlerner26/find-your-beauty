@@ -161,10 +161,7 @@
         <h3>{{ salon.name }}</h3>
         <p class="muted">{{ salon.address }}</p>
         <p class="rating">
-          <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{
-            salon.reviewsCount
-          }}
-          avaliações)
+          <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{ salon.reviewsCount }} {{ salon.reviewsCount | reviewsLabel }})
         </p>
       </div>
     </article>

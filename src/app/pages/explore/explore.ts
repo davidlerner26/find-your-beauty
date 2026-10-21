@@ -1,6 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, effect, ElementRef, input, OnInit, signal } from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
@@ -23,7 +24,7 @@ let lastSelectedId: string | null = null;
 
 @Component({
   selector: 'app-explore',
-  imports: [NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
+  imports: [ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })

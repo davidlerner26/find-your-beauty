@@ -98,10 +98,7 @@
         <p class="from-price">A partir de {{ item.minPrice | price }}</p>
       }
       <p class="rating">
-        <span class="star">★</span> <strong>{{ item.rating }}</strong> ({{
-          item.reviewsCount
-        }}
-        avaliações)
+        <span class="star">★</span> <strong>{{ item.rating }}</strong> ({{ item.reviewsCount }} {{ item.reviewsCount | reviewsLabel }})
         @if (item.distance) {
           <span class="muted"> · {{ item.distance }}</span>
         }

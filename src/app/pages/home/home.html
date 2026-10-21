@@ -123,11 +123,31 @@
     <div class="offers">
       @for (offer of nearbyOffers(); track offer.id) {
         <article class="offer" [routerLink]="['/maquiadores', offer.id]">
-          <div
-            class="offer-image"
-            [style.background-image]="'url(' + offer.image + ')'"
-            [style.background-position]="offer.imagePosition | focus"
-          >
+          <div class="offer-image">
+            <div class="photos" (scroll)="onPhotosScroll($event, 'near-' + offer.id)">
+              @for (photo of offer.photos; track photo) {
+                <div class="slide">
+                  @if (!loadedPhotos().includes(photo)) {
+                    <app-spinner class="loading" [small]="true" />
+                  }
+                  <img
+                    [src]="photo"
+                    [alt]="offer.name"
+                    loading="lazy"
+                    [style.object-position]="(photo === offer.image ? offer.imagePosition : undefined) | focus"
+                    (load)="photoLoaded(photo)"
+                    (error)="photoLoaded(photo)"
+                  />
+                </div>
+              }
+            </div>
+            @if (offer.photos.length > 1) {
+              <div class="dots" aria-hidden="true">
+                @for (photo of offer.photos; track photo; let n = $index) {
+                  <span [class.on]="n === (photoIndex()['near-' + offer.id] ?? 0)"></span>
+                }
+              </div>
+            }
             @if (offer.distance) {
               <span class="distance">{{ offer.distance }}</span>
             }
@@ -137,10 +157,7 @@
             <h3>{{ offer.name }}</h3>
             <p class="muted">{{ offer.address }}</p>
             <p class="rating">
-              <span class="star">★</span> <strong>{{ offer.rating }}</strong> ({{
-                offer.reviews
-              }}
-              avaliações)
+              <span class="star">★</span> <strong>{{ offer.rating }}</strong> ({{ offer.reviews }} {{ offer.reviews | reviewsLabel }})
             </p>
           </div>
         </article>

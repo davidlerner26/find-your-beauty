@@ -1,6 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { Component, computed, signal } from '@angular/core';
 import { Favorites } from '../../services/favorites';
 import { Auth } from '../../services/auth';
@@ -28,7 +29,7 @@ type Salon = {
 
 @Component({
   selector: 'app-home',
-  imports: [FocusPipe, RouterLink, LocationPrompt, Spinner, MatIconModule],
+  imports: [ReviewsLabelPipe, FocusPipe, RouterLink, LocationPrompt, Spinner, MatIconModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

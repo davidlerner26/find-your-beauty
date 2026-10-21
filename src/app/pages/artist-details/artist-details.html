@@ -75,10 +75,7 @@
           {{ artist.views }} visualizações
         </p>
         <p>
-          <span class="star">★</span> <strong>{{ artist.rating }}</strong> ({{
-            artist.reviewsCount
-          }}
-          avaliações)
+          <span class="star">★</span> <strong>{{ artist.rating }}</strong> ({{ artist.reviewsCount }} {{ artist.reviewsCount | reviewsLabel }})
         </p>
       </div>
     </header>

@@ -2,6 +2,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
@@ -17,7 +18,7 @@ import { formatRelative } from '../../utils/format-date';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
+  imports: [ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })

@@ -179,7 +179,7 @@ export class ArtistDetails {
   }
 
   protected book() {
-    this.router.navigate(['/maquiadores', this.id(), 'agendar'], {
+    this.router.navigate(['/profissionais', this.id(), 'agendar'], {
       queryParams: { servicos: this.selectedIds().join(',') },
     });
   }

@@ -5,7 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { ProProfile } from '../pro-profile/pro-profile';
 import { Auth } from '../../services/auth';
 import { formatPhone } from '../../utils/phone';
-import { authErrorMessage, isValidEmail } from '../../utils/validators';
+import { authErrorMessage, isValidEmail, isValidPassword, PASSWORD_RULE } from '../../utils/validators';
 
 @Component({
   selector: 'app-signup',
@@ -46,8 +46,10 @@ export class Signup {
     return this.phone.replace(/\D/g, '').length === 11;
   }
 
+  protected readonly passwordRule = PASSWORD_RULE;
+
   protected get passwordValid() {
-    return this.password.length >= 10 && /\d/.test(this.password);
+    return isValidPassword(this.password);
   }
 
   protected onPhoneInput(event: Event) {

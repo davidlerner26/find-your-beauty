@@ -14,13 +14,13 @@ type Step = { title: string; description: string; image: string };
 export class Onboarding {
   protected readonly steps: Step[] = [
     {
-      title: 'A melhor maquiadora para você',
+      title: 'O melhor profissional para você',
       description: 'Realce sua beleza de acordo com o seu estilo de vida',
       image: 'images/makeup/1.jpg',
     },
     {
       title: 'Conheça nossas especialistas',
-      description: 'Há muitas maquiadoras incríveis para escolher, todas perto de você',
+      description: 'Há muitos profissionais incríveis para escolher, todas perto de você',
       image: 'images/makeup/2.jpg',
     },
     {

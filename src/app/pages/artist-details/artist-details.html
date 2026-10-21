@@ -27,7 +27,7 @@
         [attr.aria-label]="favorites.has(artist.id) ? 'Remover dos favoritos' : 'Favoritar'"
         (click)="toggleFavorite()"
       >
-        {{ favorites.has(artist.id) ? '♥' : '♡' }}
+        <mat-icon [class.filled]="favorites.has(artist.id)">favorite</mat-icon>
       </button>
       <a class="round" routerLink="/explore" aria-label="Ver no mapa">
         <mat-icon class="filled">map</mat-icon>
@@ -75,7 +75,7 @@
           {{ artist.views }} visualizações
         </p>
         <p>
-          <span class="star">★</span> <strong>{{ artist.rating }}</strong> ({{ artist.reviewsCount }} {{ artist.reviewsCount | reviewsLabel }})
+          <mat-icon class="star filled">star</mat-icon> <strong>{{ artist.rating }}</strong> ({{ artist.reviewsCount }} {{ artist.reviewsCount | reviewsLabel }})
         </p>
       </div>
     </header>
@@ -175,7 +175,7 @@
       @if (auth.role() === 'client') {
         @if (reviewBookingId() && (!myReview || editingReview())) {
           <form class="review-form" (ngSubmit)="sendReview()">
-            <p class="review-title">{{ myReview ? 'Sua avaliação' : 'Avalie esta maquiadora' }}</p>
+            <p class="review-title">{{ myReview ? 'Sua avaliação' : 'Avalie este profissional' }}</p>
             <p class="stars pick">
               @for (star of stars; track star) {
                 <button
@@ -184,7 +184,7 @@
                   [attr.aria-label]="star + ' estrelas'"
                   (click)="myStars.set(star)"
                 >
-                  ★
+                  <mat-icon class="filled">star</mat-icon>
                 </button>
               }
             </p>
@@ -235,7 +235,7 @@
                 <div class="review-content">
                   <p class="stars">
                     @for (star of stars; track star) {
-                      <span [class.on]="star <= review.stars">★</span>
+                      <mat-icon class="filled" [class.on]="star <= review.stars">star</mat-icon>
                     }
                   </p>
                   @if (review.text) {
@@ -302,5 +302,5 @@
 } @else if (professionals.status() === 'error') {
   <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {
-  <p class="not-found">Maquiadora não encontrada.</p>
+  <p class="not-found">Profissional não encontrado.</p>
 }

@@ -14,7 +14,7 @@
   } @else if (tab() === 'mensagens') {
     <label class="search">
       <mat-icon>search</mat-icon>
-      <input type="search" [placeholder]="auth.role() === 'professional' ? 'Buscar mensagens ou cliente' : 'Buscar mensagens ou maquiadora'" [(ngModel)]="search" name="search" />
+      <input type="search" [placeholder]="auth.role() === 'professional' ? 'Buscar mensagens ou cliente' : 'Buscar mensagens ou profissional'" [(ngModel)]="search" name="search" />
     </label>
 
     <ul class="list">
@@ -39,7 +39,7 @@
           </a>
         </li>
       } @empty {
-        <li class="empty muted">{{ auth.role() === 'professional' ? 'Você ainda não recebeu mensagens.' : 'Você ainda não tem conversas. Abra o perfil de uma maquiadora para começar uma.' }}</li>
+        <li class="empty muted">{{ auth.role() === 'professional' ? 'Você ainda não recebeu mensagens.' : 'Você ainda não tem conversas. Abra o perfil de um profissional para começar uma.' }}</li>
       }
     </ul>
   } @else if (notifications.loading()) {

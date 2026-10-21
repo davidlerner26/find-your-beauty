@@ -10,7 +10,7 @@
       <article class="booking">
         <div class="booking-head">
           <div>
-            <h3><a [routerLink]="['/maquiadores', booking.professionalId]">{{ booking.professionalName }}</a></h3>
+            <h3><a [routerLink]="['/profissionais', booking.professionalId]">{{ booking.professionalName }}</a></h3>
             <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
           </div>
           <span class="status" [class]="booking.status">{{ label(booking) }}</span>
@@ -32,7 +32,7 @@
           </div>
         } @else if (booking.status === 'completed') {
           <div class="actions">
-            <a class="chat" [routerLink]="['/maquiadores', booking.professionalId]" fragment="avaliacoes">Avaliar</a>
+            <a class="chat" [routerLink]="['/profissionais', booking.professionalId]" fragment="avaliacoes">Avaliar</a>
           </div>
         }
       </article>
@@ -43,7 +43,7 @@
       @for (booking of upcoming(); track booking.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
       } @empty {
-        <p class="empty muted">Você não tem agendamentos. <a routerLink="/explore">Encontre uma maquiadora</a>.</p>
+        <p class="empty muted">Você não tem agendamentos. <a routerLink="/explore">Encontre um profissional</a>.</p>
       }
     </div>
 

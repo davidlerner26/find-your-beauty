@@ -13,10 +13,10 @@
 
   @if (followed().length) {
     <section>
-      <h2>Maquiadoras que você segue</h2>
+      <h2>Profissionais favoritos</h2>
       <div class="followed">
         @for (salon of followed(); track salon.id) {
-          <a class="follow" [routerLink]="['/maquiadores', salon.id]">
+          <a class="follow" [routerLink]="['/profissionais', salon.id]">
             <span
               class="avatar"
               [style.background-image]="'url(' + salon.image + ')'"
@@ -54,12 +54,12 @@
 
   <section>
     <div class="section-head">
-      <h2>Maquiadoras em destaque</h2>
+      <h2>Profissionais em destaque</h2>
       <!-- <a href="#">Ver todos</a> -->
     </div>
     <div class="cards">
       @for (salon of featuredSalons(); track salon.id) {
-        <article class="card" [routerLink]="['/maquiadores', salon.id]">
+        <article class="card" [routerLink]="['/profissionais', salon.id]">
           <div class="card-image">
             <div class="photos" (scroll)="onPhotosScroll($event, salon.id)">
               @for (photo of salon.photos; track photo) {
@@ -85,7 +85,7 @@
               [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
               (click)="toggleFavorite($event, salon.id)"
             >
-              {{ favorites.has(salon.id) ? '♥' : '♡' }}
+              <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
             </button>
             @if (salon.photos.length > 1) {
               <div class="dots" aria-hidden="true">
@@ -99,7 +99,9 @@
           <h3>{{ salon.name }}</h3>
           <p class="muted">{{ salon.address }}</p>
           <p class="rating">
-            <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{ salon.reviews }})
+            <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{
+              salon.reviews
+            }})
           </p>
         </article>
       }
@@ -117,12 +119,12 @@
 
   <section>
     <div class="section-head">
-      <h2>Maquiadoras próximas</h2>
+      <h2>Profissionais próximos</h2>
       <!-- <a href="#">Ver todos</a> -->
     </div>
     <div class="offers">
       @for (offer of nearbyOffers(); track offer.id) {
-        <article class="offer" [routerLink]="['/maquiadores', offer.id]">
+        <article class="offer" [routerLink]="['/profissionais', offer.id]">
           <div class="offer-image">
             <div class="photos" (scroll)="onPhotosScroll($event, 'near-' + offer.id)">
               @for (photo of offer.photos; track photo) {
@@ -134,7 +136,9 @@
                     [src]="photo"
                     [alt]="offer.name"
                     loading="lazy"
-                    [style.object-position]="(photo === offer.image ? offer.imagePosition : undefined) | focus"
+                    [style.object-position]="
+                      (photo === offer.image ? offer.imagePosition : undefined) | focus
+                    "
                     (load)="photoLoaded(photo)"
                     (error)="photoLoaded(photo)"
                   />
@@ -157,7 +161,10 @@
             <h3>{{ offer.name }}</h3>
             <p class="muted">{{ offer.address }}</p>
             <p class="rating">
-              <span class="star">★</span> <strong>{{ offer.rating }}</strong> ({{ offer.reviews }} {{ offer.reviews | reviewsLabel }})
+              <mat-icon class="star filled">star</mat-icon> <strong>{{ offer.rating }}</strong> ({{
+                offer.reviews
+              }}
+              {{ offer.reviews | reviewsLabel }})
             </p>
           </div>
         </article>

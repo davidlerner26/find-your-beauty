@@ -17,7 +17,7 @@
     <input
       name="query"
       type="search"
-      placeholder="Busque maquiadora ou serviço.."
+      placeholder="Busque profissional ou serviço.."
       autocomplete="off"
       [(ngModel)]="query"
       (ngModelChange)="onType()"
@@ -36,7 +36,7 @@
         <ng-container *ngTemplateOutlet="card; context: { $implicit: item }" />
       } @empty {
         <p class="empty muted">
-          Nenhuma maquiadora encontrada. Tente outra busca ou mude os filtros.
+          Nenhum profissional encontrado. Tente outra busca ou mude os filtros.
         </p>
       }
     </div>
@@ -77,14 +77,14 @@
       @for (item of suggestions(); track item.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: item }" />
       } @empty {
-        <p class="empty muted">Ainda não há maquiadoras para sugerir.</p>
+        <p class="empty muted">Ainda não há profissionais para sugerir.</p>
       }
     </div>
   }
 </div>
 
 <ng-template #card let-item>
-  <a class="result" [routerLink]="['/maquiadores', item.id]">
+  <a class="result" [routerLink]="['/profissionais', item.id]">
     <div
       class="result-image"
       [style.background-image]="'url(' + item.cardImage + ')'"
@@ -98,7 +98,7 @@
         <p class="from-price">A partir de {{ item.minPrice | price }}</p>
       }
       <p class="rating">
-        <span class="star">★</span> <strong>{{ item.rating }}</strong> ({{ item.reviewsCount }} {{ item.reviewsCount | reviewsLabel }})
+        <mat-icon class="star filled">star</mat-icon> <strong>{{ item.rating }}</strong> ({{ item.reviewsCount }} {{ item.reviewsCount | reviewsLabel }})
         @if (item.distance) {
           <span class="muted"> · {{ item.distance }}</span>
         }
@@ -191,7 +191,7 @@
               [attr.aria-label]="star + ' estrelas'"
               (click)="setRating(star)"
             >
-              ★
+              <mat-icon class="filled">star</mat-icon>
             </button>
           }
         </div>

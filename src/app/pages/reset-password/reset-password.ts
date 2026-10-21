@@ -4,7 +4,7 @@ import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
-import { authErrorMessage } from '../../utils/validators';
+import { authErrorMessage, isValidPassword, PASSWORD_RULE } from '../../utils/validators';
 
 // Firebase opens this page from the e-mail link with ?mode=resetPassword&oobCode=...
 @Component({
@@ -47,8 +47,10 @@ export class ResetPassword implements OnInit {
     }
   }
 
+  protected readonly passwordRule = PASSWORD_RULE;
+
   protected get passwordValid() {
-    return this.password.length >= 10 && /\d/.test(this.password);
+    return isValidPassword(this.password);
   }
 
   protected get confirmationValid() {

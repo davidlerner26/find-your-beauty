@@ -222,7 +222,7 @@ export class Explore implements OnInit {
       return;
     }
     lastSelectedId = id;
-    this.router.navigate(['/maquiadores', id]);
+    this.router.navigate(['/profissionais', id]);
   }
 
   // Brings the salon's card into view in the carousel

@@ -68,7 +68,7 @@
     <div
       class="sheet"
       role="dialog"
-      aria-label="Maquiadoras próximas"
+      aria-label="Profissionais próximos"
       [class.dragging]="dragStart() !== null"
       [style.transform]="'translateY(' + sheetOffset() + 'px)'"
     >
@@ -87,7 +87,7 @@
       >
         <span class="handle"></span>
       </div>
-      <h2>Maquiadoras próximas</h2>
+      <h2>Profissionais próximos</h2>
       <div class="sheet-filters">
         @for (filter of filters; track filter) {
           <button
@@ -104,7 +104,7 @@
         @for (salon of nearbySalons; track salon.id) {
           <ng-container *ngTemplateOutlet="offerCard; context: { $implicit: salon, index: -1 }" />
         } @empty {
-          <p class="muted">Nenhuma maquiadora encontrada.</p>
+          <p class="muted">Nenhum profissional encontrado.</p>
         }
       </div>
     </div>
@@ -150,7 +150,7 @@
           [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
           (click)="toggleFavorite($event, salon.id)"
         >
-          {{ favorites.has(salon.id) ? '♥' : '♡' }}
+          <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
         </button>
         @if (salon.distance) {
           <span class="distance">{{ salon.distance }}</span>
@@ -161,7 +161,7 @@
         <h3>{{ salon.name }}</h3>
         <p class="muted">{{ salon.address }}</p>
         <p class="rating">
-          <span class="star">★</span> <strong>{{ salon.rating }}</strong> ({{ salon.reviewsCount }} {{ salon.reviewsCount | reviewsLabel }})
+          <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{ salon.reviewsCount }} {{ salon.reviewsCount | reviewsLabel }})
         </p>
       </div>
     </article>

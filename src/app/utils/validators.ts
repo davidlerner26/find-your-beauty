@@ -2,6 +2,12 @@ const EMAIL = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$
 
 export const isValidEmail = (email: string) => EMAIL.test(email.trim());
 
+// At least 6 characters, with a letter, a number and a special character
+export const isValidPassword = (password: string) =>
+  password.length >= 6 && /\p{L}/u.test(password) && /\d/.test(password) && /[^\p{L}\d\s]/u.test(password);
+
+export const PASSWORD_RULE = 'A senha precisa ter pelo menos 6 caracteres, com letras, 1 número e 1 caractere especial.';
+
 const AUTH_ERRORS: Record<string, string> = {
   'auth/email-already-in-use': 'Este e-mail já está cadastrado.',
   'auth/invalid-email': 'Digite um e-mail válido.',

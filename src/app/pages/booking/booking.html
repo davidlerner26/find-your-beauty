@@ -76,8 +76,8 @@
       <p class="price">{{ total() | price }}</p>
     </div>
     <div class="book-actions">
-      <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar">
-        <mat-icon class="filled">more_horiz</mat-icon>
+      <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar" title="Conversar">
+        <mat-icon>chat_bubble</mat-icon>
       </a>
       <button type="button" class="checkout" [disabled]="!canCheckout()" aria-label="Finalizar" title="Finalizar" (click)="checkout()">
         <mat-icon>check</mat-icon>

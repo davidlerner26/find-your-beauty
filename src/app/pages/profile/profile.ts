@@ -79,7 +79,14 @@ export class Profile {
       const lastName = this.lastName.trim();
       await this.users.update(uid, { firstName, lastName, phone: this.phone });
       await this.auth.updateName(`${firstName} ${lastName}`);
-      this.profile.reload();
+      // Shows what was just saved, without waiting for another read
+      this.profile.set({
+        email: this.auth.user()?.email ?? '',
+        ...this.profile.value(),
+        firstName,
+        lastName,
+        phone: this.phone,
+      });
       this.editing.set(false);
     } catch (error) {
       console.error('Failed to save profile', error);

@@ -205,10 +205,12 @@ export class Explore implements OnInit {
     this.loadedPhotos.update((urls) => (urls.includes(url) ? urls : [...urls, url]));
   }
 
+  // At least one chip always stays selected
   protected toggleFilter(filter: string) {
-    this.activeFilters.update((filters) =>
-      filters.includes(filter) ? filters.filter((f) => f !== filter) : [...filters, filter],
-    );
+    this.activeFilters.update((filters) => {
+      if (!filters.includes(filter)) return [...filters, filter];
+      return filters.length > 1 ? filters.filter((f) => f !== filter) : filters;
+    });
     this.selected.set(-1);
   }
 

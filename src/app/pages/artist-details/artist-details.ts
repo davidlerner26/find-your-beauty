@@ -40,10 +40,29 @@ export class ArtistDetails {
       icon: 'content_cut',
     },
   ];
-  protected readonly activeCategory = signal<ServiceCategory>('Maquiagem');
+  // Only the categories that the professional has services in
+  protected readonly availableCategories = computed(() =>
+    this.categories.filter((category) => this.artist()?.services.some((s) => s.category === category.name)),
+  );
+
+  private readonly chosenCategories = signal<ServiceCategory[]>([]);
+
+  // The chosen categories (one or both), or the first one that has services
+  protected readonly activeCategories = computed(() => {
+    const available = this.availableCategories().map((category) => category.name);
+    const chosen = this.chosenCategories().filter((name) => available.includes(name));
+    return chosen.length ? chosen : available.slice(0, 1);
+  });
+
+  // Each button turns a category on or off; at least one stays on
+  protected toggleCategory(name: ServiceCategory) {
+    const active = this.activeCategories();
+    if (!active.includes(name)) this.chosenCategories.set([...active, name]);
+    else if (active.length > 1) this.chosenCategories.set(active.filter((n) => n !== name));
+  }
 
   protected readonly visibleServices = computed(
-    () => this.artist()?.services.filter((s) => s.category === this.activeCategory()) ?? [],
+    () => this.artist()?.services.filter((s) => this.activeCategories().includes(s.category)) ?? [],
   );
 
   protected readonly selectedIds = signal<string[]>([]);

@@ -106,12 +106,13 @@
     <section>
       <h2>Nossos serviços</h2>
       <div class="categories">
-        @for (category of categories; track category.name) {
+        @for (category of availableCategories(); track category.name) {
           <button
             type="button"
             class="category"
-            [class.active]="activeCategory() === category.name"
-            (click)="activeCategory.set(category.name)"
+            [class.active]="activeCategories().includes(category.name)"
+            [attr.aria-pressed]="activeCategories().includes(category.name)"
+            (click)="toggleCategory(category.name)"
           >
             <mat-icon>{{ category.icon }}</mat-icon>
             {{ category.name }}

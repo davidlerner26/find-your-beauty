@@ -6,6 +6,9 @@ import { Messages } from './services/messages';
 
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean };
 
+// The professional area is /pro and what is under it (not /profissionais, the public page of a professional)
+const isProArea = (url: string) => url === '/pro' || url.startsWith('/pro/');
+
 // Screens that show the bottom tab bar (the others, like details and chat, are full screen)
 const TAB_SCREENS = [
   '/',
@@ -101,7 +104,7 @@ export class App {
   }
 
   protected get tabs() {
-    return this.url().startsWith('/pro') ? this.proTabs : this.clientTabs;
+    return isProArea(this.url()) ? this.proTabs : this.clientTabs;
   }
 
   protected get showTabs() {
@@ -119,7 +122,7 @@ export class App {
   private setUrl(url: string) {
     this.url.set(url);
     // The professional area has its own look (see styles.scss)
-    document.body.classList.toggle('pro-theme', url.startsWith('/pro'));
+    document.body.classList.toggle('pro-theme', isProArea(url));
     if (TAB_SCREENS.includes(url)) this.lastTab.set(url);
   }
 

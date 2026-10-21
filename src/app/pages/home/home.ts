@@ -45,6 +45,12 @@ export class Home {
     [...this.salons()].sort((a, b) => b.rating - a.rating).slice(0, 4),
   );
 
+  // The professionals the client hearted
+  protected readonly followed = computed(() => {
+    const ids = this.favorites.ids();
+    return this.salons().filter((salon) => ids.includes(salon.id));
+  });
+
   protected readonly nearbyOffers = computed(() =>
     [...this.salons()]
       .sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity))

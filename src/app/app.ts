@@ -11,7 +11,6 @@ const TAB_SCREENS = [
   '/',
   '/explore',
   '/agenda',
-  '/favoritos',
   '/mensagens',
   '/notificacoes',
   '/perfil',
@@ -53,12 +52,6 @@ export class App {
       match: ['/mensagens', '/notificacoes'],
       icon: 'chat_bubble',
       badge: true,
-    },
-    {
-      label: 'Favoritos',
-      path: '/favoritos',
-      match: ['/favoritos'],
-      icon: 'favorite',
     },
     {
       label: 'Perfil',

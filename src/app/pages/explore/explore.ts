@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, effect, ElementRef, input, OnInit, signal } from '@angular/core';
@@ -18,9 +18,12 @@ const pin = (color: string) =>
     `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="52" viewBox="0 0 40 52"><path d="M20 0C9 0 0 9 0 20c0 15 20 32 20 32s20-17 20-32C40 9 31 0 20 0z" fill="${color}"/><circle cx="20" cy="20" r="7" fill="#fff"/></svg>`,
   );
 
+// Survives leaving the page: coming back from a professional's page keeps its card selected
+let lastSelectedId: string | null = null;
+
 @Component({
   selector: 'app-explore',
-  imports: [NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, RouterLink, Spinner, MatIconModule],
+  imports: [NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })
@@ -50,7 +53,8 @@ export class Explore implements OnInit {
   readonly tag = input<string>();
   // Every chip starts selected, unless a tag came from the home page
   protected readonly activeFilters = signal<string[]>([...this.filters]);
-  protected readonly selected = signal(0);
+  protected readonly selected = signal(-1);
+  private restored = false;
   // Card photos that finished loading (or failed), so the spinner stops
   protected readonly loadedPhotos = signal<string[]>([]);
 
@@ -60,6 +64,7 @@ export class Explore implements OnInit {
     private readonly userLocation: UserLocation,
     private readonly host: ElementRef<HTMLElement>,
     protected readonly favorites: Favorites,
+    private readonly router: Router,
   ) {
     effect(() => {
       const tag = this.tag();
@@ -69,7 +74,18 @@ export class Explore implements OnInit {
     // Centers the map on the user as soon as the position is known
     effect(() => {
       const position = this.userLocation.position();
-      if (position) this.center.set(position);
+      if (position && !this.restored) this.center.set(position);
+    });
+
+    // Coming back from a professional's page: selects that card again
+    effect(() => {
+      if (this.restored || !lastSelectedId) return;
+      const index = this.visibleSalons.findIndex((salon) => salon.id === lastSelectedId);
+      if (index < 0) return;
+      this.restored = true;
+      this.selected.set(index);
+      this.center.set(this.visibleSalons[index].position);
+      setTimeout(() => this.showCard(index, 'auto'), 0);
     });
   }
 
@@ -188,17 +204,31 @@ export class Explore implements OnInit {
     this.activeFilters.update((filters) =>
       filters.includes(filter) ? filters.filter((f) => f !== filter) : [...filters, filter],
     );
-    this.selected.set(0);
+    this.selected.set(-1);
   }
 
   protected selectSalon(index: number) {
     this.selected.set(index);
+    lastSelectedId = this.visibleSalons[index].id;
     this.center.set(this.visibleSalons[index].position);
+    this.showCard(index, 'smooth');
+  }
 
-    // Brings the salon's card into view in the carousel
+  // First tap on a carousel card selects it; tapping the selected card (or any card of the list) opens the page
+  protected openSalon(index: number, id: string) {
+    if (index >= 0 && index !== this.selected()) {
+      this.selectSalon(index);
+      return;
+    }
+    lastSelectedId = id;
+    this.router.navigate(['/maquiadores', id]);
+  }
+
+  // Brings the salon's card into view in the carousel
+  private showCard(index: number, behavior: ScrollBehavior) {
     this.host.nativeElement
       .querySelectorAll('.results .offer')
-      [index]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      [index]?.scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
   }
 
   protected markerIcon(index: number) {

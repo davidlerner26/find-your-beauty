@@ -43,10 +43,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/my-bookings/my-bookings').then((m) => m.MyBookings),
   },
   {
-    path: 'favoritos',
-    loadComponent: () => import('./pages/favorites/favorites').then((m) => m.Favorites),
-  },
-  {
     path: 'notificacoes',
     data: { tab: 'notificacoes' },
     loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),

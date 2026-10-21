@@ -11,6 +11,24 @@
     </a>
   </section>
 
+  @if (followed().length) {
+    <section>
+      <h2>Maquiadoras que você segue</h2>
+      <div class="followed">
+        @for (salon of followed(); track salon.id) {
+          <a class="follow" [routerLink]="['/maquiadores', salon.id]">
+            <span
+              class="avatar"
+              [style.background-image]="'url(' + salon.image + ')'"
+              [style.background-position]="salon.imagePosition | focus"
+            ></span>
+            <span class="follow-name">{{ salon.name }}</span>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
   <!-- <section>
     <h2>O que você quer fazer?</h2>
     <div class="services">

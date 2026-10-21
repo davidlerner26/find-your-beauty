@@ -116,7 +116,7 @@
     <article
       class="offer"
       [class.selected]="index === selected()"
-      [routerLink]="['/maquiadores', salon.id]"
+      (click)="openSalon(index, salon.id)"
     >
       <div class="offer-image">
         <!-- The photos of the professional: swipe sideways to see them -->

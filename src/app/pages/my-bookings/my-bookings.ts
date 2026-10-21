@@ -15,6 +15,7 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
   declined: 'Recusado',
   completed: 'Concluído',
   cancelled: 'Cancelado',
+  cancelledByProfessional: 'Cancelado pelo profissional',
 };
 
 @Component({
@@ -33,7 +34,7 @@ export class MyBookings {
   protected readonly history = computed(() =>
     this.bookings
       .mine()
-      .filter((booking) => ['completed', 'declined', 'cancelled'].includes(booking.status))
+      .filter((booking) => ['completed', 'declined', 'cancelled', 'cancelledByProfessional'].includes(booking.status))
       .reverse(),
   );
 

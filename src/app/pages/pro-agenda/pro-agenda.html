@@ -35,6 +35,7 @@
         </div>
       } @else if (booking.status === 'confirmed') {
         <div class="actions">
+          <button type="button" class="decline" (click)="answer(booking, 'cancelledByProfessional')">Cancelar</button>
           <button type="button" class="accept" (click)="answer(booking, 'completed')">Concluir</button>
         </div>
       }

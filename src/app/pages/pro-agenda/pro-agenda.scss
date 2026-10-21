@@ -67,7 +67,8 @@ h2 {
   }
 
   &.declined,
-  &.cancelled {
+  &.cancelled,
+  &.cancelledByProfessional {
     background: #fde6e7;
     color: #e5484d;
   }

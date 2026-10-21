@@ -96,13 +96,16 @@ export class Bookings {
   }
 
   // The professional answers a request or concludes a booking. A Cloud Function notifies the client.
-  async setStatus(booking: Booking, status: Extract<BookingStatus, 'confirmed' | 'declined' | 'completed'>) {
+  async setStatus(
+    booking: Booking,
+    status: Extract<BookingStatus, 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional'>,
+  ) {
     if (!booking.id) return;
 
     const batch = writeBatch(db);
     batch.update(doc(db, 'bookings', booking.id), { status, updatedAt: serverTimestamp() });
-    // A declined booking frees its slots
-    if (status === 'declined') {
+    // A declined or cancelled booking frees its slots
+    if (status === 'declined' || status === 'cancelledByProfessional') {
       for (const busyId of booking.busyIds ?? []) {
         batch.delete(doc(db, 'professionals', booking.professionalId, 'busy', busyId));
       }

@@ -14,6 +14,7 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
   declined: 'Recusado',
   completed: 'Concluído',
   cancelled: 'Cancelado',
+  cancelledByProfessional: 'Cancelado pelo profissional',
 };
 
 @Component({
@@ -36,7 +37,7 @@ export class ProAgenda {
   protected readonly history = computed(() =>
     this.bookings
       .received()
-      .filter((booking) => ['completed', 'declined', 'cancelled'].includes(booking.status))
+      .filter((booking) => ['completed', 'declined', 'cancelled', 'cancelledByProfessional'].includes(booking.status))
       .reverse(),
   );
 
@@ -58,7 +59,10 @@ export class ProAgenda {
     });
   }
 
-  protected answer(booking: Booking, status: 'confirmed' | 'declined' | 'completed') {
+  protected answer(booking: Booking, status: 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional') {
+    // Cancelling a confirmed booking can't be undone: the client is told and the time is released
+    if (status === 'cancelledByProfessional' && !confirm('Cancelar este agendamento? A cliente será avisada.')) return;
+
     this.bookings
       .setStatus(booking, status)
       .catch((error) => console.error('Failed to update booking', error));

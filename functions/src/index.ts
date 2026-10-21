@@ -82,6 +82,7 @@ export const onBookingCreated = onDocumentCreated('bookings/{bookingId}', async 
 const VERB: Record<string, string> = {
   confirmed: 'confirmou',
   declined: 'recusou',
+  cancelledByProfessional: 'cancelou',
   completed: 'concluiu',
 };
 

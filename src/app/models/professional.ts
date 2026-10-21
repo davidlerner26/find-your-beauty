@@ -9,6 +9,35 @@ export type Review = {
 
 export type ServiceCategory = 'Maquiagem' | 'Cabelo';
 
+// Services a professional can pick, by category
+export const SERVICE_NAMES: Record<ServiceCategory, string[]> = {
+  Maquiagem: [
+    'Maquiagem social',
+    'Maquiagem para festa',
+    'Maquiagem de noiva',
+    'Maquiagem para madrinhas',
+    'Maquiagem para formatura',
+    'Maquiagem artística',
+    'Maquiagem para fotos e ensaios',
+    'Automaquiagem (aula)',
+    'Design de sobrancelhas',
+    'Aplicação de cílios',
+  ],
+  Cabelo: [
+    'Corte feminino',
+    'Corte masculino',
+    'Escova',
+    'Penteado para festa',
+    'Penteado de noiva',
+    'Coloração',
+    'Mechas e luzes',
+    'Hidratação',
+    'Cauterização',
+    'Progressiva',
+    'Cronograma capilar',
+  ],
+};
+
 export type Service = {
   id: string;
   name: string;

@@ -7,8 +7,8 @@ export type PendingRange = { start: string | null; end: string | null };
 
 type Cell = { key: string; day: number; disabled: boolean } | null;
 
-// Calendar to pick a period: the first click sets the start, the second sets the end.
-// A new click after that starts over. Clicking the same day twice picks a single day.
+// Calendar to pick a period: the first click sets the start (one click is already a single day),
+// the second sets the end. A new click after that starts over.
 @Component({
   imports: [MatIconModule],
   selector: 'app-date-range-picker',

@@ -13,6 +13,7 @@ import {
   DEFAULT_AVAILABILITY,
   Service,
   ServiceCategory,
+  SERVICE_NAMES,
   SERVICE_PLACES,
   ServiceMode,
 } from '../../models/professional';
@@ -273,6 +274,19 @@ export class ProProfile {
   private showUploadError(error: unknown) {
     console.error('Upload failed', error);
     this.show('Não foi possível enviar a foto. Use uma imagem e tente novamente.');
+  }
+
+  // The names of the chosen category (a name saved before this list existed is kept as an option)
+  protected serviceNames(service: ServiceDraft) {
+    if (!service.category) return [];
+    const names = SERVICE_NAMES[service.category];
+    return service.name && !names.includes(service.name) ? [service.name, ...names] : names;
+  }
+
+  // Changing the category clears a name that doesn't belong to it
+  protected setCategory(service: ServiceDraft, category: ServiceCategory) {
+    service.category = category;
+    if (!SERVICE_NAMES[category].includes(service.name)) service.name = '';
   }
 
   protected addService() {

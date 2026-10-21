@@ -62,6 +62,11 @@ select {
   &.empty {
     color: var(--muted);
   }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
 .preview {
@@ -94,16 +99,21 @@ select {
 
   .row {
     display: grid;
-    grid-template-columns: 1.2fr 1fr 1.2fr;
+    // Category, price and duration on one line, on every screen size
+    grid-template-columns: 1.3fr 1fr 1fr;
     gap: 0.5rem;
 
-    // On narrow screens: category on its own line, price and duration side by side
-    @media (max-width: 32rem) {
-      grid-template-columns: 1fr 1fr;
+    input,
+    select {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      min-width: 0;
+    }
 
-      > label:first-child {
-        grid-column: 1 / -1;
-      }
+    select {
+      padding-right: 1.75rem;
+      background-position: right 0.6rem center;
+      background-size: 0.7rem;
     }
   }
 

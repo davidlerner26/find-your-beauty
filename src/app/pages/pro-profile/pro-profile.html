@@ -232,15 +232,6 @@
 
         @for (service of services; track service.id; let i = $index) {
           <div class="service">
-            <label>
-              <span class="field-label">Nome do serviço *</span>
-              <input
-                [name]="'sname' + i"
-                maxlength="60"
-                [class.invalid]="fieldInvalid(!service.name.trim())"
-                [(ngModel)]="service.name"
-              />
-            </label>
             <div class="row">
               <label>
                 <span class="field-label">Categoria *</span>
@@ -248,7 +239,8 @@
                   [name]="'scat' + i"
                   [class.invalid]="fieldInvalid(!service.category)"
                   [class.empty]="!service.category"
-                  [(ngModel)]="service.category"
+                  [ngModel]="service.category"
+                  (ngModelChange)="setCategory(service, $event)"
                 >
                   <option value="" disabled>Selecione</option>
                   @for (category of categories; track category) {
@@ -279,6 +271,22 @@
                 />
               </label>
             </div>
+            <!-- Names come from the chosen category, so it stays disabled until one is picked -->
+            <label>
+              <span class="field-label">Nome do serviço *</span>
+              <select
+                [name]="'sname' + i"
+                [disabled]="!service.category"
+                [class.invalid]="fieldInvalid(!service.name.trim())"
+                [class.empty]="!service.name"
+                [(ngModel)]="service.name"
+              >
+                <option value="" disabled>Selecione</option>
+                @for (name of serviceNames(service); track name) {
+                  <option [value]="name">{{ name }}</option>
+                }
+              </select>
+            </label>
             <label>
               <span class="field-label">Descrição</span>
               <textarea [name]="'sdesc' + i" rows="2" maxlength="200" [(ngModel)]="service.description"></textarea>
@@ -331,7 +339,7 @@
 
         <h3>Dias bloqueados</h3>
         <p class="hint muted">
-          Escolha o primeiro e o último dia do período. Para um dia só, clique nele duas vezes.
+          Clique no dia que quer bloquear. Para um período, clique também no último dia.
         </p>
         <app-date-range-picker
           [min]="today"

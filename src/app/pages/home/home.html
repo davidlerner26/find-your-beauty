@@ -112,7 +112,15 @@
     <h2>Mais buscados</h2>
     <div class="interests">
       @for (interest of interests; track interest) {
-        <a class="chip" routerLink="/explore" [queryParams]="{ tag: interest }">{{ interest }}</a>
+        <button
+          type="button"
+          class="chip"
+          [class.active]="activeInterests().includes(interest)"
+          [attr.aria-pressed]="activeInterests().includes(interest)"
+          (click)="toggleInterest(interest)"
+        >
+          {{ interest }}
+        </button>
       }
     </div>
   </section>

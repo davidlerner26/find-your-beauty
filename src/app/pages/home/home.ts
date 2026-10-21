@@ -15,6 +15,7 @@ import { distanceKm, formatDistance } from '../../utils/geo';
 type Salon = {
   id: string;
   tags: string;
+  tagList: string[];
   name: string;
   image: string;
   imagePosition?: ImagePosition;
@@ -52,8 +53,25 @@ export class Home {
     return this.salons().filter((salon) => ids.includes(salon.id));
   });
 
+  // Chips of "Mais buscados": both start selected and they can be selected together
+  protected readonly interests = ['Maquiagem', 'Cabelo'];
+  protected readonly activeInterests = signal<string[]>([...this.interests]);
+
+  // At least one chip always stays selected
+  protected toggleInterest(interest: string) {
+    this.activeInterests.update((active) => {
+      if (!active.includes(interest)) return [...active, interest];
+      return active.length > 1 ? active.filter((i) => i !== interest) : active;
+    });
+  }
+
   protected readonly nearbyOffers = computed(() =>
     [...this.salons()]
+      // With every chip selected nothing is filtered out, even professionals with other tags
+      .filter((salon) => {
+        const active = this.activeInterests();
+        return active.length === this.interests.length || salon.tagList.some((tag) => active.includes(tag));
+      })
       .sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity))
       .slice(0, 3),
   );
@@ -100,6 +118,7 @@ export class Home {
       rating: professional.rating,
       reviews: professional.reviewsCount,
       tags: professional.tags.join(' . '),
+      tagList: professional.tags,
       distance: km === null ? null : formatDistance(km),
       distanceKm: km,
     };
@@ -127,5 +146,4 @@ export class Home {
     },
   ];
 
-  protected readonly interests = ['Cabelo', 'Maquiagem'];
 }

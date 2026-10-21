@@ -62,6 +62,16 @@ body.pro-theme {
     color: #2f6b7a !important;
   }
 
+  // Google button stays white, so its letters are teal
+  .google {
+    color: #2f6b7a !important;
+  }
+
+  // Selected tab of the client / professional switch: white with teal letters
+  .role-tabs a.active {
+    color: #2f6b7a !important;
+  }
+
   .error {
     color: #ffc9cb !important;
   }

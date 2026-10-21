@@ -172,6 +172,30 @@ h1 {
   }
 }
 
+// Client / professional: a segmented control at the top, so the two areas are easy to tell apart
+.role-tabs {
+  display: flex;
+  padding: 0.3rem;
+  border-radius: 999px;
+  background: var(--primary-light);
+  margin-bottom: 1rem;
+
+  a {
+    flex: 1;
+    padding: 0.8rem 0.5rem;
+    border-radius: 999px;
+    color: var(--primary);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+
+    &.active {
+      background: var(--primary);
+      color: #fff;
+    }
+  }
+}
+
 .switch {
   text-align: center;
   margin-top: 0.5rem;

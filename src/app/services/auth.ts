@@ -129,10 +129,42 @@ export class Auth {
     await updateProfile(user, { displayName: name });
     this.user.set({ ...user } as User);
 
-    await setDoc(doc(db, 'professionals', user.uid), {
+    await this.createProfessionalDoc(user, name, email.trim(), phone);
+    // Stays signed in: the second step of the sign up completes the profile
+    await this.resolveRole(user);
+  }
+
+  // Sign up with a Google account: the account becomes a professional waiting for the profile step.
+  // An account that is already a client can't also be a professional.
+  async signUpProfessionalWithGoogle(remember = true) {
+    await this.remember(remember);
+    this.signupSubmitted.set(false);
+    this.pendingApproval.set(false);
+    const { user } = await signInWithPopup(this.auth, this.googleProvider);
+
+    const [profile, client] = await Promise.all([
+      getDoc(doc(db, 'professionals', user.uid)),
+      getDoc(doc(db, 'users', user.uid)),
+    ]);
+    if (!profile.exists()) {
+      if (client.exists()) {
+        await signOut(this.auth);
+        throw { code: 'auth/account-is-client' };
+      }
+      await this.createProfessionalDoc(user, user.displayName ?? '', user.email ?? '', user.phoneNumber ?? '');
+    }
+
+    if (await this.resolveRole(user)) {
+      await signOut(this.auth);
+      throw { code: 'auth/pending-approval' };
+    }
+  }
+
+  private createProfessionalDoc(user: User, name: string, email: string, phone: string) {
+    return setDoc(doc(db, 'professionals', user.uid), {
       ownerUid: user.uid,
       name,
-      email: email.trim(),
+      email,
       phone,
       image: '',
       address: '',
@@ -153,8 +185,6 @@ export class Auth {
       admin: false,
       createdAt: serverTimestamp(),
     });
-    // Stays signed in: the second step of the sign up completes the profile
-    await this.resolveRole(user);
   }
 
   async signInWithEmail(email: string, password: string, remember = true) {

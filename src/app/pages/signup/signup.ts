@@ -104,11 +104,16 @@ export class Signup {
   protected async signInWithGoogle() {
     this.googleError.set('');
     try {
-      await this.auth.signInWithGoogle();
+      if (this.pro()) await this.auth.signUpProfessionalWithGoogle();
+      else await this.auth.signInWithGoogle();
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
       const code = (error as { code?: string }).code;
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+      if (code === 'auth/account-is-client' || code === 'auth/pending-approval') {
+        this.googleError.set(authErrorMessage(error));
+        return;
+      }
       this.googleError.set('Não foi possível entrar com o Google. Tente novamente.');
     }
   }

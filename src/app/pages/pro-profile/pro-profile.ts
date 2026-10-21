@@ -182,6 +182,13 @@ export class ProProfile {
     return missing;
   }
 
+  // The floating message that was tapped away (it shows again when its text changes)
+  protected readonly dismissedText = signal('');
+
+  protected get missingText() {
+    return `Para ${this.signup() ? 'enviar o cadastro' : 'publicar'} falta: ${this.missing.join(', ')}.`;
+  }
+
   // Days where the closing time isn't after the opening time
   protected get invalidDays() {
     return this.weekdays.filter(({ key }) => {
@@ -390,7 +397,99 @@ export class ProProfile {
     this.addressOpen.set(false);
   }
 
+  // The services that are filled in, ready to be saved
+  private completeServices(): Service[] {
+    return this.services
+      .filter((service) => this.serviceComplete(service))
+      .map(({ duration, price, ...service }) => ({
+        ...service,
+        price: parseMoney(price),
+        durationMinutes: parseDuration(duration)!,
+        category: service.category as ServiceCategory,
+        name: service.name.trim(),
+        description: service.description.trim(),
+        image: service.image || this.image.trim(),
+      }));
+  }
+
+  // What the form writes to the profile. `instagram` and `place` are left out when they can't be saved yet.
+  private profileFields(services: Service[], instagram: string | null | undefined, draft = false) {
+    // A draft keeps the previous address until a suggestion is chosen, and the previous hours while they are invalid
+    const keepAddress = draft && this.needsAddress && !this.addressConfirmed();
+    const keepHours = draft && this.invalidDays.length > 0;
+    return {
+      name: this.name.trim(),
+      phone: this.phone.trim(),
+      ...(instagram === undefined ? {} : { instagram }),
+      image: this.image.trim(),
+      imagePosition: this.imagePosition(),
+      coverImage: deleteField(),
+      coverPosition: deleteField(),
+      serviceMode: this.serviceMode(),
+      ...(keepAddress
+        ? {}
+        : {
+            // Home-only professionals have no address on the map
+            address: this.needsAddress ? this.address.trim() : '',
+            position: this.needsAddress ? this.position : { lat: 0, lng: 0 },
+          }),
+      about: this.about
+        .split(/\n\s*\n/)
+        .map((p) => p.trim())
+        .filter(Boolean),
+      services,
+      tags: [...new Set(services.map((service) => service.category))],
+      gallery: this.gallery,
+      ...(keepHours
+        ? {}
+        : {
+            availability: {
+              slotMinutes: Number(this.availability.slotMinutes),
+              weekly: this.availability.weekly,
+              blockedRanges: this.availability.blockedRanges,
+            },
+          }),
+    };
+  }
+
+  // Saved by itself when a field loses focus: a draft, nothing is sent for approval
+  private autoSaveTimer?: ReturnType<typeof setTimeout>;
+  private lastSaved = '';
+  protected readonly autoSaved = signal(false);
+
+  // The sentinels that delete old fields are left out of the comparison
+  private snapshot(fields: object) {
+    const { coverImage, coverPosition, ...rest } = fields as Record<string, unknown>;
+    return JSON.stringify(rest);
+  }
+
+  protected autoSave() {
+    clearTimeout(this.autoSaveTimer);
+    this.autoSaveTimer = setTimeout(() => this.saveDraft(), 400);
+  }
+
+  private async saveDraft() {
+    if (!this.filled || this.saving()) return;
+    const instagram = parseInstagram(this.instagram);
+    const fields = this.profileFields(this.completeServices(), instagram === null ? undefined : instagram, true);
+    // Once the sign up is sent, `visible` and `published` follow the form; before, the profile isn't shown anyway
+    const visible = this.visible();
+    const status = this.signup() ? {} : { visible, published: visible && this.missing.length === 0 };
+    const snapshot = this.snapshot({ ...fields, ...status });
+    if (snapshot === this.lastSaved) return;
+
+    try {
+      await updateDoc(doc(db, 'professionals', this.uid()), { ...fields, ...status });
+      this.lastSaved = snapshot;
+      this.autoSaved.set(true);
+      setTimeout(() => this.autoSaved.set(false), 2500);
+    } catch (error) {
+      console.error('Failed to auto save the profile', error);
+    }
+  }
+
   protected async save() {
+    clearTimeout(this.autoSaveTimer);
     if (this.invalidDays.length) {
       this.show('O horário de fechamento precisa ser depois do de abertura.');
       return;
@@ -417,44 +516,15 @@ export class ProProfile {
     this.saving.set(true);
     this.message.set('');
 
-    const services: Service[] = this.services.map(({ duration, price, ...service }) => ({
-      ...service,
-      price: parseMoney(price),
-      durationMinutes: parseDuration(duration)!,
-      category: service.category as ServiceCategory,
-      name: service.name.trim(),
-      description: service.description.trim(),
-      image: service.image || this.image.trim(),
-    }));
+    const services = this.completeServices();
     // Clients only see profiles that are visible and complete
     const visible = this.visible();
     const published = visible && this.missing.length === 0;
 
     try {
+      const fields = this.profileFields(services, instagram);
       await updateDoc(doc(db, 'professionals', this.uid()), {
-        name: this.name.trim(),
-        phone: this.phone.trim(),
-        instagram,
-        image: this.image.trim(),
-        imagePosition: this.imagePosition(),
-        coverImage: deleteField(),
-        coverPosition: deleteField(),
-        serviceMode: this.serviceMode(),
-        // Home-only professionals have no address on the map
-        address: this.needsAddress ? this.address.trim() : '',
-        about: this.about
-          .split(/\n\s*\n/)
-          .map((p) => p.trim())
-          .filter(Boolean),
-        services,
-        tags: [...new Set(services.map((service) => service.category))],
-        gallery: this.gallery,
-        position: this.needsAddress ? this.position : { lat: 0, lng: 0 },
-        availability: {
-          slotMinutes: Number(this.availability.slotMinutes),
-          weekly: this.availability.weekly,
-          blockedRanges: this.availability.blockedRanges,
-        },
+        ...fields,
         visible,
         published,
         // Sign up finished: the account now waits for an admin
@@ -462,6 +532,7 @@ export class ProProfile {
         ...(this.signup() ? { submitted: true } : {}),
         ...(this.signup() && this.profile()?.rejected ? { rejected: false } : {}),
       });
+      this.lastSaved = this.snapshot(fields);
       // Only deletes the removed photos once the profile no longer points to them
       await Promise.all(this.removedPhotos.map((url) => this.photos.remove(url)));
       this.removedPhotos = [];

@@ -1,3 +1,12 @@
+@if (profile() && missing.length) {
+  <!-- Floats at the top, so it is in view without scrolling. A new text makes a new element, which shows again and fades out by itself. -->
+  @for (text of [missingText]; track text) {
+    @if (dismissedText() !== text) {
+      <button type="button" class="missing" role="status" (click)="dismissedText.set(text)">{{ text }}</button>
+    }
+  }
+}
+
 <div class="profile">
   <h1>{{ signup() ? 'Complete seu cadastro' : 'Meu perfil' }}</h1>
   @if (signup() && profile()?.rejected) {
@@ -19,7 +28,7 @@
   @if (!profile()) {
     <app-spinner />
   } @else {
-    <form (ngSubmit)="save()">
+    <form (ngSubmit)="save()" (focusout)="autoSave()">
       <section>
         <h2>Dados</h2>
         <label>Nome<input name="name" [(ngModel)]="name" /></label>
@@ -369,15 +378,14 @@
             Mostrar meu perfil para as clientes
           </label>
         }
-        @if (missing.length) {
-          <p class="hint muted">
-            Para {{ signup() ? 'enviar o cadastro' : 'publicar' }} falta: {{ missing.join(', ') }}.
-          </p>
-        } @else if (!visible()) {
+        @if (!missing.length && !visible()) {
           <p class="hint muted">Seu perfil está completo, mas oculto para as clientes.</p>
         }
       </section>
 
+      @if (autoSaved()) {
+        <p class="autosaved" role="status">✓ Alterações salvas</p>
+      }
       <button type="submit" class="primary" [disabled]="saving()">
         {{
           saving()

@@ -35,6 +35,12 @@ service cloud.firestore {
         allow delete: if request.auth != null && request.auth.uid == clientUid;
       }
 
+      // The CPF of the professional: only the owner and the admins read it (the rest of `private` stays closed)
+      match /private/identity {
+        allow read, write: if request.auth != null && request.auth.uid == id;
+        allow read: if isAdmin();
+      }
+
       // One document per taken slot. It can only be created once, which prevents double bookings.
       match /busy/{slot} {
         allow read: if true;

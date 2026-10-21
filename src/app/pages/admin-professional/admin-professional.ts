@@ -27,6 +27,11 @@ export class AdminProfessional {
     loader: ({ params: id }) => this.admin.get(id),
   });
 
+  protected readonly cpf = resource({
+    params: () => this.id(),
+    loader: ({ params: id }) => this.admin.cpfOf(id),
+  });
+
   protected readonly working = signal(false);
   protected readonly error = signal('');
   protected readonly formatDuration = formatDuration;

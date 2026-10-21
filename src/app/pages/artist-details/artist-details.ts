@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, effect, input, resource, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
@@ -13,6 +13,8 @@ import { Auth } from '../../services/auth';
 import { Professionals } from '../../services/professionals';
 import { Favorites } from '../../services/favorites';
 import { Reviews } from '../../services/reviews';
+import { Users } from '../../services/users';
+import { missingProfileData } from '../../models/user';
 import { ruleLabel } from '../../utils/pricing';
 import { instagramUrl } from '../../utils/instagram';
 import { formatRelative } from '../../utils/format-date';
@@ -43,6 +45,15 @@ export class ArtistDetails {
   // Only the categories that the professional has services in
   protected readonly availableCategories = computed(() =>
     this.categories.filter((category) => this.artist()?.services.some((s) => s.category === category.name)),
+  );
+
+  // The client's own data: booking needs all of it filled in on the profile
+  private readonly account = resource({
+    params: () => (this.auth.role() === 'client' ? this.auth.user()?.uid : undefined),
+    loader: ({ params: uid }) => this.users.get(uid),
+  });
+  protected readonly missingData = computed(() =>
+    this.account.hasValue() ? missingProfileData(this.account.value()) : [],
   );
 
   private readonly chosenCategories = signal<ServiceCategory[]>([]);
@@ -94,6 +105,7 @@ export class ArtistDetails {
     protected readonly professionals: Professionals,
     protected readonly auth: Auth,
     private readonly reviewsService: Reviews,
+    private readonly users: Users,
     protected readonly favorites: Favorites,
   ) {
     effect(() => {
@@ -200,6 +212,12 @@ export class ArtistDetails {
   }
 
   protected book() {
+    // Visitors have to sign in first
+    if (!this.auth.user()) {
+      this.router.navigate(['/entrar']);
+      return;
+    }
+    if (this.missingData().length) return;
     this.router.navigate(['/profissionais', this.id(), 'agendar'], {
       queryParams: { servicos: this.selectedIds().join(',') },
     });

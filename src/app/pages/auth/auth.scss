@@ -219,3 +219,8 @@ h1 {
   align-items: center;
   justify-content: center;
 }
+
+// Address search: the list of suggestions opens under the field
+.autocomplete {
+  position: relative;
+}

@@ -86,6 +86,51 @@
     <p class="error">Digite o celular completo, com DDD e 9 dígitos.</p>
   }
 
+  <label class="field" [class.invalid]="showError('cpf') && !cpfValid">
+    <mat-icon class="filled">badge</mat-icon>
+    <input
+      name="cpf"
+      (blur)="touch('cpf')"
+      placeholder="CPF"
+      inputmode="numeric"
+      maxlength="14"
+      autocomplete="off"
+      [value]="cpf"
+      (input)="onCpfInput($event)"
+    />
+  </label>
+  @if (showError('cpf') && !cpfValid) {
+    <p class="error">Digite um CPF válido.</p>
+  }
+
+  @if (!pro()) {
+    <div class="autocomplete">
+      <label class="field" [class.invalid]="showError('address') && !addressValid">
+        <mat-icon class="filled">location_on</mat-icon>
+        <input
+          name="address"
+          placeholder="Endereço (opcional)"
+          autocomplete="off"
+          role="combobox"
+          [attr.aria-expanded]="place.open() && place.suggestions().length > 0"
+          [ngModel]="place.value"
+          (ngModelChange)="place.input($event)"
+          (focus)="place.open.set(true)"
+          (blur)="place.close(); touch('address')"
+          (keydown.escape)="place.close()"
+        />
+      </label>
+      @if (place.open()) {
+        <app-place-suggestions [suggestions]="place.suggestions()" (pick)="place.choose($event)" />
+      }
+    </div>
+    @if (place.error()) {
+      <p class="error">{{ place.error() }}</p>
+    } @else if (showError('address') && !addressValid) {
+      <p class="error">Escolha uma das sugestões para confirmar o endereço.</p>
+    }
+  }
+
   <label class="field" [class.invalid]="showError('password') && !passwordValid">
     <mat-icon class="filled">lock</mat-icon>
     <input

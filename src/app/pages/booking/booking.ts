@@ -9,6 +9,8 @@ import { Router, RouterLink } from '@angular/router';
 import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
+import { Users } from '../../services/users';
+import { missingProfileData } from '../../models/user';
 import { Professionals } from '../../services/professionals';
 import { priceAt } from '../../utils/pricing';
 import { busyIdsFor, freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
@@ -109,6 +111,7 @@ export class Booking {
     protected readonly professionals: Professionals,
     private readonly auth: Auth,
     private readonly bookings: Bookings,
+    private readonly users: Users,
     private readonly host: ElementRef<HTMLElement>,
   ) {
     effect(() => {
@@ -171,6 +174,22 @@ export class Booking {
     if (!this.auth.user()) {
       this.router.navigate(['/entrar']);
       return;
+    }
+
+    // All the data of the profile is required: checked again here, in case it changed
+    this.saving.set(true);
+    try {
+      const missing = missingProfileData(await this.users.get(this.auth.user()!.uid));
+      if (missing.length) {
+        this.error.set(`Complete seus dados no perfil para agendar. Falta: ${missing.join(', ')}.`);
+        return;
+      }
+    } catch (error) {
+      console.error('Failed to check the profile data', error);
+      this.error.set('Não foi possível verificar seus dados. Tente novamente.');
+      return;
+    } finally {
+      this.saving.set(false);
     }
 
     const date = toDateKey(day);

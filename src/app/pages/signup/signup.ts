@@ -1,15 +1,19 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, input, signal } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ProProfile } from '../pro-profile/pro-profile';
 import { Auth } from '../../services/auth';
+import { GoogleMapsLoader } from '../../services/google-maps-loader';
+import { PlaceSuggestions } from '../../components/place-suggestions/place-suggestions';
+import { PlaceSearch } from '../../utils/place-search';
+import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import { authErrorMessage, isValidEmail, isValidPassword, PASSWORD_RULE } from '../../utils/validators';
 
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule, RouterLink, ProProfile, MatIconModule],
+  imports: [FormsModule, RouterLink, ProProfile, MatIconModule, PlaceSuggestions],
   templateUrl: './signup.html',
   styleUrl: '../auth/auth.scss',
 })
@@ -21,6 +25,10 @@ export class Signup {
   protected lastName = '';
   protected email = '';
   protected phone = '';
+  protected cpf = '';
+  // Clients only, optional: when typed, it has to be chosen from the suggestions
+  private readonly maps = inject(GoogleMapsLoader);
+  protected readonly place = new PlaceSearch(this.maps);
   protected password = '';
   protected readonly showPassword = signal(false);
   protected readonly submitted = signal(false);
@@ -46,6 +54,14 @@ export class Signup {
     return this.phone.replace(/\D/g, '').length === 11;
   }
 
+  protected get addressValid() {
+    return !this.place.value.trim() || this.place.confirmed();
+  }
+
+  protected get cpfValid() {
+    return isValidCpf(this.cpf);
+  }
+
   protected readonly passwordRule = PASSWORD_RULE;
 
   protected get passwordValid() {
@@ -59,6 +75,12 @@ export class Signup {
     input.value = this.phone;
   }
 
+  protected onCpfInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.cpf = formatCpf(input.value);
+    input.value = this.cpf;
+  }
+
   protected touch(field: string) {
     this.touched.update((touched) => ({ ...touched, [field]: true }));
   }
@@ -70,7 +92,7 @@ export class Signup {
 
   protected async submit() {
     this.submitted.set(true);
-    if (!this.nameValid || !this.lastNameValid || !this.emailValid || !this.phoneValid || !this.passwordValid) return;
+    if (!this.nameValid || !this.lastNameValid || !this.emailValid || !this.phoneValid || !this.cpfValid || !this.addressValid || !this.passwordValid) return;
 
     this.formError.set('');
     this.submitting.set(true);
@@ -80,6 +102,9 @@ export class Signup {
         lastName: this.lastName,
         email: this.email,
         phone: this.phone,
+        cpf: this.cpf,
+        address: this.pro() ? '' : this.place.value.trim(),
+        addressPosition: this.pro() ? undefined : this.place.position,
         password: this.password,
       };
       if (this.pro()) {

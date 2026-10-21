@@ -55,6 +55,12 @@ export class Admin {
     return snapshot.exists() ? ({ ...snapshot.data(), id: snapshot.id } as Professional) : null;
   }
 
+  // The CPF of a professional (private: only the owner and admins can read it)
+  async cpfOf(id: string) {
+    const snapshot = await getDoc(doc(db, 'professionals', id, 'private', 'identity'));
+    return (snapshot.data()?.['cpf'] as string | undefined) ?? '';
+  }
+
   approve(id: string) {
     return updateDoc(doc(db, 'professionals', id), { approved: true, rejected: false });
   }

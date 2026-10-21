@@ -229,3 +229,13 @@ h1 {
   color: var(--primary);
   font-size: 1.05rem;
 }
+
+// Address search: the list of suggestions opens under the field
+.autocomplete {
+  position: relative;
+}
+
+.hint-ok {
+  color: #1f8f4d;
+  font-size: 0.85rem;
+}

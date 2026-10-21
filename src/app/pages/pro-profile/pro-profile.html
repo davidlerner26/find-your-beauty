@@ -33,6 +33,21 @@
         <h2>Dados</h2>
         <label>Nome<input name="name" [(ngModel)]="name" /></label>
         <label>
+          CPF
+          <input
+            name="cpf"
+            inputmode="numeric"
+            maxlength="14"
+            autocomplete="off"
+            placeholder="000.000.000-00"
+            [value]="cpf"
+            (input)="onCpfInput($event)"
+          />
+        </label>
+        @if (cpf && !cpfValid) {
+          <p class="hint error">Digite um CPF válido.</p>
+        }
+        <label>
           Celular
           <span class="with-icon">
             <mat-icon class="filled">call</mat-icon>

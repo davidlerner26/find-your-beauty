@@ -4,7 +4,8 @@ import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { parseInstagram } from '../../utils/instagram';
-import { deleteField, doc, updateDoc } from 'firebase/firestore';
+import { deleteField, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { formatCpf, isValidCpf } from '../../utils/cpf';
 import {
   Availability,
   Professional,
@@ -58,6 +59,9 @@ export class ProProfile {
 
   protected name = '';
   protected phone = '';
+  // Private: kept in professionals/{id}/private/identity, not in the public profile
+  protected cpf = '';
+  private savedCpf = '';
   protected instagram = '';
   protected image = '';
   protected readonly imagePosition = signal<ImagePosition>({ x: 50, y: 50 });
@@ -154,6 +158,7 @@ export class ProProfile {
       delete availability.blockedDates;
       this.availability = availability;
       this.visible.set(profile.visible !== false);
+      void this.loadCpf();
     });
   }
 
@@ -182,6 +187,7 @@ export class ProProfile {
   protected get missing() {
     const missing: string[] = [];
     if (this.name.trim().length < 3) missing.push('nome');
+    if (!isValidCpf(this.cpf)) missing.push('CPF');
     if (!this.image.trim()) missing.push('foto');
     if (!this.serviceMode()) missing.push('onde você atende');
     else if (this.needsAddress) {
@@ -465,6 +471,34 @@ export class ProProfile {
     this.addressOpen.set(false);
   }
 
+  private async loadCpf() {
+    try {
+      const snapshot = await getDoc(doc(db, 'professionals', this.uid(), 'private', 'identity'));
+      this.savedCpf = snapshot.data()?.['cpf'] ?? '';
+      // What was typed before the answer came is kept
+      if (!this.cpf) this.cpf = formatCpf(this.savedCpf);
+    } catch (error) {
+      console.error('Failed to load the CPF', error);
+    }
+  }
+
+  protected get cpfValid() {
+    return isValidCpf(this.cpf);
+  }
+
+  protected onCpfInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.cpf = formatCpf(input.value);
+    input.value = this.cpf;
+  }
+
+  // Only a valid CPF is saved, and only when it changed
+  private async saveCpf() {
+    if (!isValidCpf(this.cpf) || this.cpf === this.savedCpf) return;
+    await setDoc(doc(db, 'professionals', this.uid(), 'private', 'identity'), { cpf: this.cpf }, { merge: true });
+    this.savedCpf = this.cpf;
+  }
+
   // The services that are filled in, ready to be saved
   private completeServices(): Service[] {
     return this.services
@@ -537,7 +571,7 @@ export class ProProfile {
   // The sentinels that delete old fields are left out of the comparison
   private snapshot(fields: object) {
     const { coverImage, coverPosition, ...rest } = fields as Record<string, unknown>;
-    return JSON.stringify(rest);
+    return JSON.stringify({ ...rest, cpf: this.cpf });
   }
 
   protected autoSave() {
@@ -557,6 +591,7 @@ export class ProProfile {
 
     try {
       await updateDoc(doc(db, 'professionals', this.uid()), { ...fields, ...status });
+      await this.saveCpf();
       this.lastSaved = snapshot;
       this.autoSaved.set(true);
       setTimeout(() => this.autoSaved.set(false), 2500);
@@ -609,6 +644,7 @@ export class ProProfile {
         ...(this.signup() ? { submitted: true } : {}),
         ...(this.signup() && this.profile()?.rejected ? { rejected: false } : {}),
       });
+      await this.saveCpf();
       this.lastSaved = this.snapshot(fields);
       // Only deletes the removed photos once the profile no longer points to them
       await Promise.all(this.removedPhotos.map((url) => this.photos.remove(url)));

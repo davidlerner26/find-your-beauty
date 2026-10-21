@@ -1,6 +1,7 @@
 import { isDevMode } from '@angular/core';
 import { Routes } from '@angular/router';
 import { adminGuard } from './guards/admin';
+import { clientGuard } from './guards/client';
 import { proGuard } from './guards/pro';
 
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
   },
   {
     path: 'profissionais/:id/agendar',
+    canActivate: [clientGuard],
     loadComponent: () => import('./pages/booking/booking').then((m) => m.Booking),
   },
   {

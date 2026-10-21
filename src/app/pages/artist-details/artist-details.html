@@ -285,6 +285,11 @@
   </div>
 
   <footer class="book-bar">
+    @if (missingData().length) {
+      <a class="missing-data" routerLink="/perfil">
+        Complete seus dados no perfil para agendar. Falta: {{ missingData().join(', ') }}.
+      </a>
+    }
     <div>
       <p>
         <strong>Total</strong> ({{ selectedServices().length }}
@@ -299,7 +304,7 @@
       <button
         type="button"
         class="book"
-        [disabled]="!selectedServices().length"
+        [disabled]="!selectedServices().length || missingData().length > 0"
         aria-label="Agendar"
         title="Agendar"
         (click)="book()"

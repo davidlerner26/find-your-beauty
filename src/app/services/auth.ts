@@ -25,6 +25,9 @@ export type SignUpData = {
   lastName: string;
   email: string;
   phone: string;
+  cpf: string;
+  address?: string;
+  addressPosition?: { lat: number; lng: number };
   password: string;
 };
 
@@ -99,7 +102,7 @@ export class Auth {
     await this.requireArea(area);
   }
 
-  async signUpWithEmail({ firstName, lastName, email, phone, password }: SignUpData) {
+  async signUpWithEmail({ firstName, lastName, email, phone, cpf, address, addressPosition, password }: SignUpData) {
     const { user } = await createUserWithEmailAndPassword(this.auth, email.trim(), password);
     const name = `${firstName.trim()} ${lastName.trim()}`;
     await updateProfile(user, { displayName: name });
@@ -113,6 +116,9 @@ export class Auth {
         lastName: lastName.trim(),
         email: email.trim(),
         phone,
+        cpf,
+        address: address ?? '',
+        addressPosition: addressPosition ?? { lat: 0, lng: 0 },
         admin: false,
         createdAt: serverTimestamp(),
       });
@@ -122,7 +128,7 @@ export class Auth {
   }
 
   // Professionals are separate accounts: the profile document id is the account uid
-  async signUpProfessional({ firstName, lastName, email, phone, password }: SignUpData) {
+  async signUpProfessional({ firstName, lastName, email, phone, cpf, password }: SignUpData) {
     this.signupSubmitted.set(false);
     const { user } = await createUserWithEmailAndPassword(this.auth, email.trim(), password);
     const name = `${firstName.trim()} ${lastName.trim()}`;
@@ -130,6 +136,10 @@ export class Auth {
     this.user.set({ ...user } as User);
 
     await this.createProfessionalDoc(user, name, email.trim(), phone);
+    // The CPF is private: it is not in the public profile
+    await setDoc(doc(db, 'professionals', user.uid, 'private', 'identity'), { cpf }).catch((error) =>
+      console.error('Failed to save the CPF', error),
+    );
     // Stays signed in: the second step of the sign up completes the profile
     await this.resolveRole(user);
   }

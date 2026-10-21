@@ -524,8 +524,21 @@ section > p,
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   background: #fff;
   box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.08);
+}
+
+// What is missing in the client's profile before booking
+.missing-data {
+  flex: 0 0 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  background: #fde6e7;
+  color: #e5484d;
+  font-size: 0.85rem;
+  text-decoration: none;
 }
 
 .price {

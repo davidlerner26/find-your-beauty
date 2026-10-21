@@ -287,6 +287,89 @@
                 }
               </select>
             </label>
+            <!-- Another price for some days of the week and times -->
+            <div class="rules">
+              <span class="field-label">Preço por dia e horário</span>
+              @for (rule of service.priceRules; track rule.id; let r = $index) {
+                <div class="rule">
+                  <div class="rule-days" role="group" aria-label="Dias da semana">
+                    @for (item of ruleDays; track item.day) {
+                      <button
+                        type="button"
+                        class="rule-day"
+                        [class.active]="rule.days.includes(item.day)"
+                        [attr.aria-pressed]="rule.days.includes(item.day)"
+                        (click)="toggleRuleDay(rule, item.day)"
+                      >
+                        {{ item.label }}
+                      </button>
+                    }
+                  </div>
+                  <div class="rule-fields">
+                    <div class="rule-time">
+                      <label>
+                        <span class="field-label">Das</span>
+                        <input
+                          type="time"
+                          [name]="'rstart' + i + '-' + r"
+                          [disabled]="rule.start === dayStart"
+                          [ngModel]="rule.start === dayStart ? '' : rule.start"
+                          (ngModelChange)="rule.start = $event"
+                        />
+                      </label>
+                      <label class="check">
+                        <input
+                          type="checkbox"
+                          [name]="'rstartday' + i + '-' + r"
+                          [checked]="rule.start === dayStart"
+                          (change)="rule.start = rule.start === dayStart ? '' : dayStart"
+                        />
+                        Início do dia
+                      </label>
+                    </div>
+                    <div class="rule-time">
+                      <label>
+                        <span class="field-label">Até</span>
+                        <input
+                          type="time"
+                          [name]="'rend' + i + '-' + r"
+                          [disabled]="rule.end === dayEnd"
+                          [ngModel]="rule.end === dayEnd ? '' : rule.end"
+                          (ngModelChange)="rule.end = $event"
+                        />
+                      </label>
+                      <label class="check">
+                        <input
+                          type="checkbox"
+                          [name]="'rendday' + i + '-' + r"
+                          [checked]="rule.end === dayEnd"
+                          (change)="rule.end = rule.end === dayEnd ? '' : dayEnd"
+                        />
+                        Fim do dia
+                      </label>
+                    </div>
+                    <label>
+                      <span class="field-label">Preço (R$)</span>
+                      <input
+                        [name]="'rprice' + i + '-' + r"
+                        inputmode="numeric"
+                        maxlength="11"
+                        [value]="rule.price"
+                        (input)="onRulePriceInput(rule, $event)"
+                      />
+                    </label>
+                  </div>
+                  @if (serviceTried() && !ruleComplete(rule)) {
+                    <p class="hint error">Escolha os dias, um horário de início antes do fim e o preço.</p>
+                  }
+                  <button type="button" class="remove" (click)="removeRule(service, rule)">Remover</button>
+                </div>
+              }
+              <button type="button" class="link" (click)="addRule(service)">+ Preço por dia e horário</button>
+              @if (!service.priceRules.length) {
+                <p class="hint muted">Ex: aos sábados o serviço custa mais. O preço vale pelo horário de início do atendimento.</p>
+              }
+            </div>
             <label>
               <span class="field-label">Descrição</span>
               <textarea [name]="'sdesc' + i" rows="2" maxlength="200" [(ngModel)]="service.description"></textarea>

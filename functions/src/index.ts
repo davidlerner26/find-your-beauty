@@ -20,7 +20,30 @@ const notify = (uid: string, id: string, text: TextPart[]) =>
     createdAt: FieldValue.serverTimestamp(),
   });
 
-type Service = { id: string; price: number; durationMinutes: number };
+type PriceRule = { days: number[]; start: string; end: string; price: number };
+type Service = { id: string; price: number; durationMinutes: number; priceRules?: PriceRule[] };
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+// The price of a service for an appointment that starts at `startsAt`, counted in Brazil's time
+// (the same rule as the app: the first price rule that matches the day and the start time wins)
+const priceAt = (service: Service, startsAt: Date) => {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Sao_Paulo',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(startsAt);
+  const part = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+  const weekday = WEEKDAYS.indexOf(part('weekday'));
+  const time = `${part('hour')}:${part('minute')}`;
+
+  return (
+    (service.priceRules ?? []).find((rule) => rule.days.includes(weekday) && time >= rule.start && time < rule.end)
+      ?.price ?? service.price
+  );
+};
 
 // A new booking: the server is the source of truth for prices, then both sides are notified
 export const onBookingCreated = onDocumentCreated('bookings/{bookingId}', async (event) => {
@@ -35,7 +58,8 @@ export const onBookingCreated = onDocumentCreated('bookings/{bookingId}', async 
   const chosen = (booking.services as Service[]).map((s) => catalog.find((c) => c.id === s.id));
   if (professional.exists && chosen.every(Boolean)) {
     const services = chosen as Service[];
-    const total = Math.round(services.reduce((sum, s) => sum + s.price, 0) * 100) / 100;
+    const startsAt: Date = booking.startsAt.toDate();
+    const total = Math.round(services.reduce((sum, s) => sum + priceAt(s, startsAt), 0) * 100) / 100;
     const durationMinutes = services.reduce((sum, s) => sum + s.durationMinutes, 0);
     if (total !== booking.total || durationMinutes !== booking.durationMinutes) {
       await event.data!.ref.update({ total, durationMinutes, correctedByServer: true });

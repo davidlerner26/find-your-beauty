@@ -108,6 +108,13 @@
             @if (service.description) {
               <p class="muted">{{ service.description }}</p>
             }
+            @if (service.priceRules?.length) {
+              <ul class="price-rules muted">
+                @for (rule of service.priceRules; track $index) {
+                  <li>{{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong></li>
+                }
+              </ul>
+            }
           </div>
           <strong>{{ service.price | price }}</strong>
         </article>

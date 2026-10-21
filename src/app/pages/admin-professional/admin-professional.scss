@@ -168,6 +168,17 @@ dl {
     border-bottom: 0;
   }
 
+  .price-rules {
+    margin: 0.35rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.85rem;
+
+    strong {
+      color: var(--text);
+    }
+  }
+
   // The text takes the free space and wraps; the price keeps its width
   > div {
     min-width: 0;

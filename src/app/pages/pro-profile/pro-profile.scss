@@ -491,3 +491,73 @@ h3 {
   font-size: 0.85rem;
   color: var(--muted);
 }
+
+// Prices that change with the day and the time
+.rules {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+
+  .link {
+    padding: 0;
+  }
+}
+
+.rule {
+  width: 100%;
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  border: 1px solid var(--muted);
+  border-radius: 12px;
+  justify-items: start;
+}
+
+.rule-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rule-day {
+  padding: 0.35rem 0.7rem;
+  border: 1.5px solid var(--muted);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  &.active {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+  }
+}
+
+.rule-fields {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 0.5rem;
+
+  align-items: start;
+
+  input:not([type='checkbox']) {
+    min-width: 0;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+  }
+
+  // A time field with its checkbox under it
+  .rule-time {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .check {
+    font-size: 0.85rem;
+  }
+}

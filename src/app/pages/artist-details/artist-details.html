@@ -132,6 +132,13 @@
                 <strong>{{ service.price | price }}</strong>
                 <span class="muted">· {{ formatDuration(service.durationMinutes) }}</span>
               </p>
+              @if (service.priceRules?.length) {
+                <ul class="price-rules muted">
+                  @for (rule of service.priceRules; track $index) {
+                    <li>{{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong></li>
+                  }
+                </ul>
+              }
               <p class="muted service-description">{{ service.description }}</p>
             </div>
             <button

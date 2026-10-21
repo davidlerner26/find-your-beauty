@@ -30,7 +30,11 @@ import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
 
 // A service being edited: nothing is pre-filled, so the fields can be empty
-type ServiceDraft = Omit<Service, 'category' | 'price' | 'durationMinutes'> & {
+type PriceRuleDraft = { id: string; days: number[]; start: string; end: string; price: string };
+
+type ServiceDraft = Omit<Service, 'category' | 'price' | 'durationMinutes' | 'priceRules'> & {
+  // Other prices, by day and time (each price typed like the main one)
+  priceRules: PriceRuleDraft[];
   category: ServiceCategory | '';
   // Typed like a money field, e.g. "15,50"
   price: string;
@@ -127,8 +131,15 @@ export class ProProfile {
       // Profiles from before this choice existed work at their address
       this.serviceMode.set(profile.serviceMode ?? (profile.address ? 'studio' : null));
       this.about = profile.about.join('\n\n');
-      this.services = profile.services.map(({ durationMinutes, price, ...service }) => ({
+      this.services = profile.services.map(({ durationMinutes, price, priceRules, ...service }) => ({
         ...service,
+        priceRules: (priceRules ?? []).map((rule) => ({
+          id: Math.random().toString(36).slice(2, 10),
+          days: [...rule.days],
+          start: rule.start,
+          end: rule.end,
+          price: moneyToText(rule.price),
+        })),
         price: moneyToText(price),
         duration: durationToText(durationMinutes),
       }));
@@ -297,6 +308,7 @@ export class ProProfile {
         name: '',
         category: '',
         price: '0,00',
+        priceRules: [],
         duration: '0:00',
         description: '',
         image: '',
@@ -310,12 +322,54 @@ export class ProProfile {
       !!service.name.trim() &&
       !!service.category &&
       parseMoney(service.price) > 0 &&
-      !!parseDuration(service.duration)
+      !!parseDuration(service.duration) &&
+      service.priceRules.every((rule) => this.ruleComplete(rule))
     );
   }
 
   protected readonly parseDuration = parseDuration;
   protected readonly parseMoney = parseMoney;
+
+  // Other prices of a service: on some days of the week and times
+  protected readonly ruleDays = [
+    { day: 1, label: 'Seg' },
+    { day: 2, label: 'Ter' },
+    { day: 3, label: 'Qua' },
+    { day: 4, label: 'Qui' },
+    { day: 5, label: 'Sex' },
+    { day: 6, label: 'Sáb' },
+    { day: 0, label: 'Dom' },
+  ];
+
+  // "Início do dia" and "Fim do dia" stand for the whole edge of the day (the end is not included)
+  protected readonly dayStart = '00:00';
+  protected readonly dayEnd = '24:00';
+
+  protected addRule(service: ServiceDraft) {
+    service.priceRules = [
+      ...service.priceRules,
+      { id: Math.random().toString(36).slice(2, 10), days: [], start: '', end: '', price: '0,00' },
+    ];
+  }
+
+  protected removeRule(service: ServiceDraft, rule: PriceRuleDraft) {
+    service.priceRules = service.priceRules.filter((r) => r !== rule);
+    this.autoSave();
+  }
+
+  protected toggleRuleDay(rule: PriceRuleDraft, day: number) {
+    rule.days = rule.days.includes(day) ? rule.days.filter((d) => d !== day) : [...rule.days, day];
+  }
+
+  protected ruleComplete(rule: PriceRuleDraft) {
+    return rule.days.length > 0 && !!rule.start && !!rule.end && rule.start < rule.end && parseMoney(rule.price) > 0;
+  }
+
+  protected onRulePriceInput(rule: PriceRuleDraft, event: Event) {
+    const input = event.target as HTMLInputElement;
+    rule.price = maskMoney(input.value);
+    input.value = rule.price;
+  }
 
   protected onPriceInput(service: ServiceDraft, event: Event) {
     const input = event.target as HTMLInputElement;
@@ -415,9 +469,18 @@ export class ProProfile {
   private completeServices(): Service[] {
     return this.services
       .filter((service) => this.serviceComplete(service))
-      .map(({ duration, price, ...service }) => ({
+      .map(({ duration, price, priceRules, ...service }) => ({
         ...service,
         price: parseMoney(price),
+        ...(priceRules.length
+          ? {
+              priceRules: priceRules.map(({ id, price: rulePrice, ...rule }) => ({
+                ...rule,
+                days: [...rule.days].sort(),
+                price: parseMoney(rulePrice),
+              })),
+            }
+          : {}),
         durationMinutes: parseDuration(duration)!,
         category: service.category as ServiceCategory,
         name: service.name.trim(),

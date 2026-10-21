@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { hasLocation, locationLabel, Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
+import { lowestPrice } from '../../utils/pricing';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { isWorkingDay } from '../../utils/slots';
@@ -107,7 +108,7 @@ export class Search {
         distance: user && hasLocation(professional) ? formatDistance(distanceKm(user, professional.position)) : null,
         km: user && hasLocation(professional) ? distanceKm(user, professional.position) : null,
         // The cheapest service: "a partir de"
-        minPrice: professional.services.length ? Math.min(...professional.services.map((s) => s.price)) : null,
+        minPrice: professional.services.length ? Math.min(...professional.services.map(lowestPrice)) : null,
       }));
 
     // No chosen order keeps the order of the catalog. Without a price or a distance, a professional goes last.

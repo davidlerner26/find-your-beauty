@@ -38,11 +38,16 @@ export const SERVICE_NAMES: Record<ServiceCategory, string[]> = {
   ],
 };
 
+// A different price for a service on some days of the week, in a time range ("HH:mm", the end is not included)
+export type PriceRule = { days: number[]; start: string; end: string; price: number };
+
 export type Service = {
   id: string;
   name: string;
   category: ServiceCategory;
   price: number;
+  // Replaces the price when the appointment starts on one of these days and times (the first match wins)
+  priceRules?: PriceRule[];
   durationMinutes: number;
   description: string;
   image: string;

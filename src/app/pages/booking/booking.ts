@@ -10,6 +10,7 @@ import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
 import { Professionals } from '../../services/professionals';
+import { priceAt } from '../../utils/pricing';
 import { busyIdsFor, freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
@@ -32,9 +33,21 @@ export class Booking {
     const ids = (this.servicos() ?? '').split(',');
     return this.artist()?.services.filter((service) => ids.includes(service.id)) ?? [];
   });
-  protected readonly total = computed(() =>
-    roundMoney(this.selectedServices().reduce((sum, service) => sum + service.price, 0)),
-  );
+  // The price follows the start time: before a day and time are chosen, the normal prices
+  private totalAt(day: Date | null, time: string | null) {
+    return roundMoney(
+      this.selectedServices().reduce((sum, service) => sum + (day && time ? priceAt(service, day, time) : service.price), 0),
+    );
+  }
+
+  protected readonly total = computed(() => this.totalAt(this.selectedDay(), this.selectedTime()));
+
+  // Price of a time slot when it is different from the normal total
+  protected timePrice(time: string) {
+    const day = this.selectedDay();
+    const price = this.totalAt(day, time);
+    return price !== this.totalAt(null, null) ? price : null;
+  }
 
   private readonly availability = computed(() => this.artist()?.availability ?? DEFAULT_AVAILABILITY);
   private readonly duration = computed(
@@ -171,7 +184,12 @@ export class Booking {
         professionalId: artist.id,
         professionalUid: artist.ownerUid ?? null,
         professionalName: artist.name,
-        services: services.map(({ id, name, price, durationMinutes }) => ({ id, name, price, durationMinutes })),
+        services: services.map((service) => ({
+          id: service.id,
+          name: service.name,
+          price: priceAt(service, day, time),
+          durationMinutes: service.durationMinutes,
+        })),
         startsAt: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, minute),
         durationMinutes,
         total: this.total(),

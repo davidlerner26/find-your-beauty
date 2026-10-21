@@ -13,6 +13,7 @@ import { Auth } from '../../services/auth';
 import { Professionals } from '../../services/professionals';
 import { Favorites } from '../../services/favorites';
 import { Reviews } from '../../services/reviews';
+import { ruleLabel } from '../../utils/pricing';
 import { instagramUrl } from '../../utils/instagram';
 import { formatRelative } from '../../utils/format-date';
 
@@ -54,6 +55,7 @@ export class ArtistDetails {
   );
 
   protected readonly formatDuration = formatDuration;
+  protected readonly ruleLabel = ruleLabel;
   protected readonly instagramUrl = instagramUrl;
 
   protected readonly reviews = signal<Review[]>([]);

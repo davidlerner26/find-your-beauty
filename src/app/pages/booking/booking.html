@@ -47,6 +47,9 @@
             (click)="selectedTime.set(time)"
           >
             {{ time }}
+            @if (timePrice(time); as price) {
+              <small class="time-price">{{ price | price }}</small>
+            }
           </button>
         } @empty {
           @if (loadingTimes()) {

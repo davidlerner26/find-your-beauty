@@ -8,6 +8,7 @@ import { Admin } from '../../services/admin';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { instagramUrl } from '../../utils/instagram';
 import { PricePipe } from '../../utils/price.pipe';
+import { ruleLabel } from '../../utils/pricing';
 
 const WEEKDAYS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
@@ -30,6 +31,7 @@ export class AdminProfessional {
   protected readonly error = signal('');
   protected readonly formatDuration = formatDuration;
   protected readonly instagramUrl = instagramUrl;
+  protected readonly ruleLabel = ruleLabel;
 
   protected readonly hours = computed(() => {
     const weekly = this.professional.value()?.availability?.weekly ?? {};

@@ -602,3 +602,15 @@ section > p,
   font-size: 1rem;
   cursor: pointer;
 }
+
+// Prices that change with the day and the time
+.price-rules {
+  margin: 0.25rem 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+
+  strong {
+    color: var(--text);
+  }
+}

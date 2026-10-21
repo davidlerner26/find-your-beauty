@@ -52,6 +52,15 @@ export const DEFAULT_AVAILABILITY: Availability = {
 // A photo copied from the professional's connected Instagram
 export type InstagramPhoto = { id: string; url: string; permalink: string; caption: string; video: boolean };
 
+// Where the professional works: at an address, at the client's home, or both
+export type ServiceMode = 'studio' | 'home' | 'both';
+
+// The two places a professional can pick (both together are saved as 'both')
+export const SERVICE_PLACES: { key: 'studio' | 'home'; label: string }[] = [
+  { key: 'studio', label: 'No meu endereço' },
+  { key: 'home', label: 'A domicílio' },
+];
+
 export type Professional = {
   id: string;
   name: string;
@@ -59,6 +68,8 @@ export type Professional = {
   image: string;
   imagePosition?: ImagePosition;
   address: string;
+  // Profiles from before this existed work at their address
+  serviceMode?: ServiceMode;
   tags: string[];
   rating: number;
   reviewsCount: string;
@@ -87,6 +98,14 @@ export type Professional = {
   published?: boolean;
   availability?: Availability;
 };
+
+// Home-only professionals have no address on the map
+export const hasLocation = (professional: Pick<Professional, 'serviceMode' | 'position'>) =>
+  professional.serviceMode !== 'home' && (professional.position.lat !== 0 || professional.position.lng !== 0);
+
+// What cards show where the address goes
+export const locationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
+  professional.serviceMode === 'home' ? 'Atendimento a domicílio' : professional.address;
 
 // 30 -> "30 minutos", 60 -> "1 hora", 90 -> "1 hora e 30 minutos", 120 -> "2 horas"
 export const formatDuration = (totalMinutes: number) => {

@@ -13,6 +13,8 @@ import {
   DEFAULT_AVAILABILITY,
   Service,
   ServiceCategory,
+  SERVICE_PLACES,
+  ServiceMode,
 } from '../../models/professional';
 import { durationToText, maskDuration, parseDuration } from '../../utils/duration';
 import { maskMoney, moneyToText, parseMoney } from '../../utils/money';
@@ -57,6 +59,9 @@ export class ProProfile {
   protected gallery: string[] = [];
   private removedPhotos: string[] = [];
   protected address = '';
+  protected readonly servicePlaces = SERVICE_PLACES;
+  // Nothing is chosen on a new sign up: the professional has to pick one
+  protected readonly serviceMode = signal<ServiceMode | null>(null);
   protected about = '';
   protected services: ServiceDraft[] = [];
   protected readonly serviceTried = signal(false);
@@ -118,6 +123,8 @@ export class ProProfile {
       this.imagePosition.set((profile.image ? profile.imagePosition : legacy.coverPosition) ?? { x: 50, y: 50 });
       this.gallery = [...profile.gallery];
       this.address = profile.address;
+      // Profiles from before this choice existed work at their address
+      this.serviceMode.set(profile.serviceMode ?? (profile.address ? 'studio' : null));
       this.about = profile.about.join('\n\n');
       this.services = profile.services.map(({ durationMinutes, price, ...service }) => ({
         ...service,
@@ -138,6 +145,23 @@ export class ProProfile {
     });
   }
 
+  protected hasPlace(place: 'studio' | 'home') {
+    const mode = this.serviceMode();
+    return mode === place || mode === 'both';
+  }
+
+  // Each place is switched on or off on its own; both on is 'both'
+  protected togglePlace(place: 'studio' | 'home') {
+    const studio = this.hasPlace('studio') !== (place === 'studio');
+    const home = this.hasPlace('home') !== (place === 'home');
+    this.serviceMode.set(studio && home ? 'both' : studio ? 'studio' : home ? 'home' : null);
+  }
+
+  // Only home-only professionals work without an address
+  protected get needsAddress() {
+    return this.serviceMode() !== 'home';
+  }
+
   protected get hasPosition() {
     return this.position.lat !== 0 || this.position.lng !== 0;
   }
@@ -147,8 +171,11 @@ export class ProProfile {
     const missing: string[] = [];
     if (this.name.trim().length < 3) missing.push('nome');
     if (!this.image.trim()) missing.push('foto');
-    if (this.address.trim().length < 5) missing.push('endereço');
-    else if (!this.addressConfirmed()) missing.push('escolher o endereço na lista de sugestões');
+    if (!this.serviceMode()) missing.push('onde você atende');
+    else if (this.needsAddress) {
+      if (this.address.trim().length < 5) missing.push('endereço');
+      else if (!this.addressConfirmed()) missing.push('escolher o endereço na lista de sugestões');
+    }
     if (!this.services.some((service) => this.serviceComplete(service))) {
       missing.push('pelo menos 1 serviço completo');
     }
@@ -412,7 +439,9 @@ export class ProProfile {
         imagePosition: this.imagePosition(),
         coverImage: deleteField(),
         coverPosition: deleteField(),
-        address: this.address.trim(),
+        serviceMode: this.serviceMode(),
+        // Home-only professionals have no address on the map
+        address: this.needsAddress ? this.address.trim() : '',
         about: this.about
           .split(/\n\s*\n/)
           .map((p) => p.trim())
@@ -420,7 +449,7 @@ export class ProProfile {
         services,
         tags: [...new Set(services.map((service) => service.category))],
         gallery: this.gallery,
-        position: this.position,
+        position: this.needsAddress ? this.position : { lat: 0, lng: 0 },
         availability: {
           slotMinutes: Number(this.availability.slotMinutes),
           weekly: this.availability.weekly,

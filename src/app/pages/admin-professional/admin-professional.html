@@ -73,9 +73,17 @@
           </dd>
         </div>
         <div>
-          <dt>Endereço</dt>
-          <dd>{{ p.address || '-' }}</dd>
+          <dt>Atendimento</dt>
+          <dd>
+            {{ p.serviceMode === 'home' ? 'A domicílio' : p.serviceMode === 'both' ? 'No endereço e a domicílio' : 'No endereço' }}
+          </dd>
         </div>
+        @if (p.serviceMode !== 'home') {
+          <div>
+            <dt>Endereço</dt>
+            <dd>{{ p.address || '-' }}</dd>
+          </div>
+        }
       </dl>
     </section>
 

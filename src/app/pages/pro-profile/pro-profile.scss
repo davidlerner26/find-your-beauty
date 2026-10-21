@@ -417,3 +417,28 @@ h3 {
 .hint.confirmed {
   color: #1f8f4d;
 }
+
+// Where the professional works: one of three choices
+.modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mode {
+  padding: 0.6rem 1.25rem;
+  // Colors come from the theme variables, so it also reads on the teal background of the professional area
+  border: 1.5px solid var(--muted);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  &.active {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+  }
+}

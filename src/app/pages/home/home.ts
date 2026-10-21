@@ -8,7 +8,7 @@ import { Auth } from '../../services/auth';
 import { UserLocation } from '../../services/user-location';
 import { Spinner } from '../../components/spinner/spinner';
 import { LocationPrompt } from '../../components/location-prompt/location-prompt';
-import { ImagePosition, Professional } from '../../models/professional';
+import { hasLocation, ImagePosition, locationLabel, Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { distanceKm, formatDistance } from '../../utils/geo';
 
@@ -88,7 +88,7 @@ export class Home {
 
   private toSalon(professional: Professional): Salon {
     const position = this.userLocation.position();
-    const km = position ? distanceKm(position, professional.position) : null;
+    const km = position && hasLocation(professional) ? distanceKm(position, professional.position) : null;
 
     return {
       id: professional.id,
@@ -96,7 +96,7 @@ export class Home {
       image: professional.image,
       imagePosition: professional.imagePosition,
       photos: professional.gallery.length ? professional.gallery : [professional.image],
-      address: professional.address,
+      address: locationLabel(professional),
       rating: professional.rating,
       reviews: professional.reviewsCount,
       tags: professional.tags.join(' . '),

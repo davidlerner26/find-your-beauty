@@ -47,7 +47,10 @@
           <mat-icon>chat_bubble</mat-icon>
         </a>
       </div>
-      <p class="muted">{{ artist.address }}</p>
+      <p class="muted">{{ artist.serviceMode === 'home' ? 'Atendimento a domicílio' : artist.address }}</p>
+      @if (artist.serviceMode === 'both') {
+        <p class="muted">Também atende a domicílio</p>
+      }
       @if (artist.instagram) {
         <a class="instagram" [href]="instagramUrl(artist.instagram)" target="_blank" rel="noopener">
           <svg

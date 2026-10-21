@@ -149,52 +149,69 @@
 
       <section>
         <h2>Localização</h2>
-        <div class="autocomplete">
-          <label>
-            Endereço
-            <input
-              name="address"
-              autocomplete="off"
-              placeholder="Comece a digitar o endereço"
-              role="combobox"
-              [attr.aria-expanded]="addressOpen() && suggestions().length > 0"
-              [ngModel]="address"
-              (ngModelChange)="onAddressInput($event)"
-              (focus)="addressOpen.set(true)"
-              (blur)="closeAddressList()"
-              (keydown.escape)="closeAddressList()"
-            />
-          </label>
-
-          @if (addressOpen() && suggestions().length) {
-            <ul class="suggestions" role="listbox">
-              @for (suggestion of suggestions(); track suggestion.text) {
-                <!-- mousedown is prevented so the input keeps focus and the click still lands -->
-                <li role="option">
-                  <button
-                    type="button"
-                    (mousedown)="$event.preventDefault()"
-                    (click)="chooseAddress(suggestion)"
-                  >
-                    {{ suggestion.text }}
-                  </button>
-                </li>
-              }
-              <li class="powered">Powered by Google</li>
-            </ul>
+        <p class="hint muted">Onde você atende? Pode escolher os dois.</p>
+        <div class="modes" role="group" aria-label="Onde você atende">
+          @for (place of servicePlaces; track place.key) {
+            <button
+              type="button"
+              class="mode"
+              [class.active]="hasPlace(place.key)"
+              [attr.aria-pressed]="hasPlace(place.key)"
+              (click)="togglePlace(place.key)"
+            >
+              {{ place.label }}
+            </button>
           }
         </div>
 
-        @if (addressError()) {
-          <p class="hint error">{{ addressError() }}</p>
-        } @else if (addressConfirmed()) {
-          <p class="hint confirmed">✓ Endereço confirmado no mapa.</p>
-        } @else if (address.trim().length >= 3) {
-          <p class="hint muted">Escolha uma das sugestões para confirmar o endereço.</p>
-        } @else {
-          <p class="hint muted">
-            Busque o endereço e escolha uma sugestão para aparecer no Explorar.
-          </p>
+        @if (serviceMode() && needsAddress) {
+          <div class="autocomplete">
+            <label>
+              Endereço
+              <input
+                name="address"
+                autocomplete="off"
+                placeholder="Comece a digitar o endereço"
+                role="combobox"
+                [attr.aria-expanded]="addressOpen() && suggestions().length > 0"
+                [ngModel]="address"
+                (ngModelChange)="onAddressInput($event)"
+                (focus)="addressOpen.set(true)"
+                (blur)="closeAddressList()"
+                (keydown.escape)="closeAddressList()"
+              />
+            </label>
+
+            @if (addressOpen() && suggestions().length) {
+              <ul class="suggestions" role="listbox">
+                @for (suggestion of suggestions(); track suggestion.text) {
+                  <!-- mousedown is prevented so the input keeps focus and the click still lands -->
+                  <li role="option">
+                    <button
+                      type="button"
+                      (mousedown)="$event.preventDefault()"
+                      (click)="chooseAddress(suggestion)"
+                    >
+                      {{ suggestion.text }}
+                    </button>
+                  </li>
+                }
+                <li class="powered">Powered by Google</li>
+              </ul>
+            }
+          </div>
+
+          @if (addressError()) {
+            <p class="hint error">{{ addressError() }}</p>
+          } @else if (addressConfirmed()) {
+            <p class="hint confirmed">✓ Endereço confirmado no mapa.</p>
+          } @else if (address.trim().length >= 3) {
+            <p class="hint muted">Escolha uma das sugestões para confirmar o endereço.</p>
+          } @else {
+            <p class="hint muted">
+              Busque o endereço e escolha uma sugestão para aparecer no Explorar.
+            </p>
+          }
         }
       </section>
 

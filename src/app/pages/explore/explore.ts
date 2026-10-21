@@ -10,6 +10,7 @@ import { Favorites } from '../../services/favorites';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
+import { hasLocation, locationLabel } from '../../models/professional';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
 
@@ -106,8 +107,11 @@ export class Explore implements OnInit {
         (salon) =>
           active.length === this.filters.length || salon.tags.some((tag) => active.includes(tag)),
       )
+      // Home-only professionals have no place on the map
+      .filter((salon) => hasLocation(salon))
       .map((salon) => ({
         ...salon,
+        address: locationLabel(salon),
         // Work photos (the profile photo when there is no gallery)
         photos: salon.gallery.length ? salon.gallery : [salon.image],
         distance: user ? formatDistance(distanceKm(user, salon.position)) : null,

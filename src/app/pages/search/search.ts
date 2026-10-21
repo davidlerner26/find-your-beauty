@@ -6,7 +6,7 @@ import { PricePipe } from '../../utils/price.pipe';
 import { Location, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Professional } from '../../models/professional';
+import { hasLocation, locationLabel, Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
 import { distanceKm, formatDistance } from '../../utils/geo';
@@ -96,15 +96,16 @@ export class Search {
         if (tags.length && !professional.tags.some((tag) => tags.includes(tag))) return false;
         if (professional.rating < minRating) return false;
         if (date && !isWorkingDay(date, professional.availability ?? DEFAULT_AVAILABILITY)) return false;
-        if (user && maxKm < MAX_KM && distanceKm(user, professional.position) > maxKm) return false;
+        if (user && maxKm < MAX_KM && (!hasLocation(professional) || distanceKm(user, professional.position) > maxKm)) return false;
         return true;
       })
       .map((professional) => ({
         ...professional,
         cardImage: professional.image,
         cardPosition: professional.imagePosition,
-        distance: user ? formatDistance(distanceKm(user, professional.position)) : null,
-        km: user ? distanceKm(user, professional.position) : null,
+        address: locationLabel(professional),
+        distance: user && hasLocation(professional) ? formatDistance(distanceKm(user, professional.position)) : null,
+        km: user && hasLocation(professional) ? distanceKm(user, professional.position) : null,
         // The cheapest service: "a partir de"
         minPrice: professional.services.length ? Math.min(...professional.services.map((s) => s.price)) : null,
       }));

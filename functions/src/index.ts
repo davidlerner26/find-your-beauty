@@ -1,6 +1,9 @@
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
 import { setGlobalOptions } from 'firebase-functions/v2';
+import { HttpsError, onCall } from 'firebase-functions/v2/https';
+import { appUrl, emailOf, money, resendKey, sendEmail, when } from './email';
 import { onDocumentCreated, onDocumentUpdated, onDocumentWritten } from 'firebase-functions/v2/firestore';
 
 // Same region as the Firestore database
@@ -46,7 +49,7 @@ const priceAt = (service: Service, startsAt: Date) => {
 };
 
 // A new booking: the server is the source of truth for prices, then both sides are notified
-export const onBookingCreated = onDocumentCreated('bookings/{bookingId}', async (event) => {
+export const onBookingCreated = onDocumentCreated({ document: 'bookings/{bookingId}', secrets: [resendKey] }, async (event) => {
   const booking = event.data?.data();
   if (!booking) return;
 
@@ -77,7 +80,38 @@ export const onBookingCreated = onDocumentCreated('bookings/{bookingId}', async 
       { text: booking.clientName, bold: true },
     ]);
   }
+
+  // The same news by e-mail
+  const fresh = (await event.data!.ref.get()).data() ?? booking;
+  const details = bookingDetails(fresh);
+  const clientEmail = await emailOf(booking.clientUid);
+  if (clientEmail) {
+    await sendEmail({
+      to: clientEmail,
+      subject: 'Recebemos o seu pedido de agendamento',
+      heading: 'Pedido enviado',
+      paragraphs: [`Você solicitou um horário com ${booking.professionalName}. Assim que ela ou ele responder, você recebe um aviso.`, ...details],
+      button: { label: 'Ver minha agenda', url: `${appUrl.value()}/agenda` },
+    });
+  }
+  const professionalEmail = await emailOf(booking.professionalUid);
+  if (professionalEmail) {
+    await sendEmail({
+      to: professionalEmail,
+      subject: 'Nova solicitação de agendamento',
+      heading: 'Nova solicitação',
+      paragraphs: [`${booking.clientName} pediu um horário com você.`, ...details],
+      button: { label: 'Responder na agenda', url: `${appUrl.value()}/pro` },
+    });
+  }
 });
+
+// What the e-mails say about a booking
+const bookingDetails = (booking: FirebaseFirestore.DocumentData) => [
+  `Quando: ${when(booking.startsAt.toDate())}`,
+  `Serviços: ${(booking.services as { name: string }[]).map((service) => service.name).join(', ')}`,
+  `Total: ${money(booking.total)}`,
+];
 
 const VERB: Record<string, string> = {
   confirmed: 'confirmou',
@@ -87,7 +121,7 @@ const VERB: Record<string, string> = {
 };
 
 // The professional answered the request: tells the client
-export const onBookingUpdated = onDocumentUpdated('bookings/{bookingId}', async (event) => {
+export const onBookingUpdated = onDocumentUpdated({ document: 'bookings/{bookingId}', secrets: [resendKey] }, async (event) => {
   const before = event.data?.before.data();
   const after = event.data?.after.data();
   if (!before || !after || before.status === after.status) return;
@@ -100,6 +134,16 @@ export const onBookingUpdated = onDocumentUpdated('bookings/{bookingId}', async 
         { text: ' cancelou o agendamento' },
       ]);
     }
+    const professionalEmail = await emailOf(after.professionalUid);
+    if (professionalEmail) {
+      await sendEmail({
+        to: professionalEmail,
+        subject: 'Um agendamento foi cancelado',
+        heading: 'Agendamento cancelado',
+        paragraphs: [`${after.clientName} cancelou o agendamento. O horário está livre de novo.`, ...bookingDetails(after)],
+        button: { label: 'Abrir a agenda', url: `${appUrl.value()}/pro` },
+      });
+    }
     return;
   }
 
@@ -110,6 +154,109 @@ export const onBookingUpdated = onDocumentUpdated('bookings/{bookingId}', async 
     { text: after.professionalName, bold: true },
     { text: ` ${verb} o seu agendamento` },
   ]);
+
+  const clientEmail = await emailOf(after.clientUid);
+  if (clientEmail) {
+    await sendEmail({
+      to: clientEmail,
+      subject: `${after.professionalName} ${verb} o seu agendamento`,
+      heading: `Agendamento ${STATUS_TITLE[after.status] ?? ''}`.trim(),
+      paragraphs: [`${after.professionalName} ${verb} o seu agendamento.`, ...bookingDetails(after)],
+      button: { label: 'Ver minha agenda', url: `${appUrl.value()}/agenda` },
+    });
+  }
+});
+
+const STATUS_TITLE: Record<string, string> = {
+  confirmed: 'confirmado',
+  declined: 'recusado',
+  cancelledByProfessional: 'cancelado',
+  completed: 'concluído',
+};
+
+// Welcome e-mails: a client when the account is created, a professional when the sign up starts
+export const onClientCreated = onDocumentCreated({ document: 'users/{uid}', secrets: [resendKey] }, async (event) => {
+  const to = await emailOf(event.params.uid);
+  if (!to) return;
+  const name = (event.data?.data()?.['firstName'] as string | undefined) ?? '';
+  await sendEmail({
+    to,
+    subject: 'Bem-vinda(o) ao Find Your Beauty',
+    heading: name ? `Olá, ${name}!` : 'Bem-vinda(o)!',
+    paragraphs: ['Sua conta foi criada. Agora você pode encontrar profissionais de maquiagem e cabelo perto de você e agendar um horário.'],
+    button: { label: 'Encontrar profissionais', url: `${appUrl.value()}/explore` },
+  });
+});
+
+export const onProfessionalCreated = onDocumentCreated({ document: 'professionals/{uid}', secrets: [resendKey] }, async (event) => {
+  const to = await emailOf(event.params.uid);
+  if (!to) return;
+  await sendEmail({
+    to,
+    subject: 'Bem-vinda(o) ao Find Your Beauty',
+    heading: 'Seu cadastro começou',
+    paragraphs: [
+      'Complete o seu perfil com foto, serviços, horários e onde você atende, e envie o cadastro. Nossa equipe analisa e avisa por e-mail quando ele for aprovado.',
+    ],
+    button: { label: 'Completar o cadastro', url: `${appUrl.value()}/pro/cadastro` },
+  });
+});
+
+// An admin approved or denied a professional: tells her
+export const onProfessionalReviewed = onDocumentUpdated({ document: 'professionals/{uid}', secrets: [resendKey] }, async (event) => {
+  const before = event.data?.before.data();
+  const after = event.data?.after.data();
+  if (!before || !after) return;
+
+  const approved = before['approved'] !== true && after['approved'] === true;
+  const denied = before['rejected'] !== true && after['rejected'] === true;
+  if (!approved && !denied) return;
+
+  const to = await emailOf(event.params.uid);
+  if (!to) return;
+
+  if (approved) {
+    await sendEmail({
+      to,
+      subject: 'Seu cadastro foi aprovado',
+      heading: 'Cadastro aprovado',
+      paragraphs: ['Seu perfil já está público: os clientes encontram você e podem agendar.'],
+      button: { label: 'Entrar na área profissional', url: `${appUrl.value()}/pro/entrar` },
+    });
+  } else {
+    await sendEmail({
+      to,
+      subject: 'Seu cadastro precisa de ajustes',
+      heading: 'Cadastro não aprovado',
+      paragraphs: ['Não conseguimos aprovar o seu cadastro desta vez. Entre na área profissional, revise os dados e envie de novo: tudo o que você preencheu continua lá.'],
+      button: { label: 'Revisar o cadastro', url: `${appUrl.value()}/pro/entrar` },
+    });
+  }
+});
+
+// Password reset, sent by Resend instead of by Firebase. It always answers ok, so nobody can find out
+// which e-mails have an account.
+export const sendPasswordReset = onCall({ secrets: [resendKey] }, async (request) => {
+  const email = String(request.data?.email ?? '').trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new HttpsError('invalid-argument', 'Digite um e-mail válido.');
+
+  try {
+    const link = await getAuth().generatePasswordResetLink(email);
+    const code = new URL(link).searchParams.get('oobCode');
+    if (code) {
+      await sendEmail({
+        to: email,
+        subject: 'Redefinir a sua senha',
+        heading: 'Redefinir a senha',
+        paragraphs: ['Recebemos um pedido para redefinir a senha da sua conta. Se foi você, use o botão abaixo. Se não foi, é só ignorar este e-mail.'],
+        button: { label: 'Escolher uma nova senha', url: `${appUrl.value()}/redefinir-senha?mode=resetPassword&oobCode=${code}` },
+      });
+    }
+  } catch (error) {
+    // No account with this e-mail, or any other failure: nothing is said to the caller
+    console.error('Password reset not sent', (error as { code?: string }).code ?? error);
+  }
+  return { ok: true };
 });
 
 // Keeps the average rating and the count shown on cards in sync with the reviews

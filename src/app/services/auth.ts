@@ -7,7 +7,6 @@ import {
   getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
-  sendPasswordResetEmail,
   setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -17,6 +16,7 @@ import {
   verifyPasswordResetCode,
 } from 'firebase/auth';
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { DEFAULT_AVAILABILITY } from '../models/professional';
 import { db, firebaseApp } from './firebase';
 
@@ -217,8 +217,9 @@ export class Auth {
     await this.requireArea('professional');
   }
 
+  // The e-mail with the link is sent by a Cloud Function (through Resend)
   async sendPasswordReset(email: string) {
-    await sendPasswordResetEmail(this.auth, email.trim());
+    await httpsCallable(getFunctions(firebaseApp, 'southamerica-east1'), 'sendPasswordReset')({ email: email.trim() });
   }
 
   // Checks the code from the e-mail link. Returns the e-mail of the account.

@@ -136,6 +136,14 @@
         <p class="muted range-label">Permita a localização para ordenar por distância.</p>
       }
 
+      <h2>Bairro</h2>
+      <select class="neighborhood" name="neighborhood" aria-label="Bairro" [(ngModel)]="draft.neighborhood">
+        <option [ngValue]="null">Todos os bairros do Rio de Janeiro</option>
+        @for (name of neighborhoods(); track name) {
+          <option [ngValue]="name">{{ name }}</option>
+        }
+      </select>
+
       <h2>Disponível em</h2>
       <div class="month">
         <button

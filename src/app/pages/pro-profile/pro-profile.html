@@ -2,7 +2,9 @@
   <!-- Floats at the top, so it is in view without scrolling. A new text makes a new element, which shows again and fades out by itself. -->
   @for (text of [missingText]; track text) {
     @if (dismissedText() !== text) {
-      <button type="button" class="missing" role="status" (click)="dismissedText.set(text)">{{ text }}</button>
+      <button type="button" class="missing" role="status" (click)="dismissedText.set(text)">
+        {{ text }}
+      </button>
     }
   }
 }
@@ -116,20 +118,39 @@
           <h2>Instagram</h2>
           @if (profile()?.instagramConnected) {
             <p class="hint muted">
-              Conectado como &#64;{{ profile()?.instagram }}. {{ profile()?.instagramPhotos?.length ?? 0 }} fotos aparecem no seu perfil.
-              Elas são atualizadas todas as noites.
+              Conectado como &#64;{{ profile()?.instagram }}.
+              {{ profile()?.instagramPhotos?.length ?? 0 }} fotos aparecem no seu perfil. Elas são
+              atualizadas todas as noites.
             </p>
             <div class="block">
-              <button type="button" class="secondary" [disabled]="instagramBusy()" (click)="refreshInstagram()">
+              <button
+                type="button"
+                class="secondary"
+                [disabled]="instagramBusy()"
+                (click)="refreshInstagram()"
+              >
                 {{ instagramBusy() ? 'Aguarde...' : 'Atualizar fotos' }}
               </button>
-              <button type="button" class="signout" [disabled]="instagramBusy()" (click)="disconnectInstagram()">Desconectar</button>
+              <button
+                type="button"
+                class="signout"
+                [disabled]="instagramBusy()"
+                (click)="disconnectInstagram()"
+              >
+                Desconectar
+              </button>
             </div>
           } @else {
             <p class="hint muted">
-              Conecte a sua conta (comercial ou de criador) para mostrar as fotos do seu Instagram no perfil.
+              Conecte a sua conta (comercial ou de criador) para mostrar as fotos do seu Instagram
+              no perfil.
             </p>
-            <button type="button" class="secondary" [disabled]="!instagramService.available" (click)="connectInstagram()">
+            <button
+              type="button"
+              class="secondary"
+              [disabled]="!instagramService.available"
+              (click)="connectInstagram()"
+            >
               Conectar Instagram
             </button>
             @if (!instagramService.available) {
@@ -375,19 +396,33 @@
                     </label>
                   </div>
                   @if (serviceTried() && !ruleComplete(rule)) {
-                    <p class="hint error">Escolha os dias, um horário de início antes do fim e o preço.</p>
+                    <p class="hint error">
+                      Escolha os dias, um horário de início antes do fim e o preço.
+                    </p>
                   }
-                  <button type="button" class="remove" (click)="removeRule(service, rule)">Remover</button>
+                  <button type="button" class="remove" (click)="removeRule(service, rule)">
+                    Remover
+                  </button>
                 </div>
               }
-              <button type="button" class="link" (click)="addRule(service)">+ Preço por dia e horário</button>
+              <button type="button" class="link" (click)="addRule(service)">
+                + Preço por dia e horário
+              </button>
               @if (!service.priceRules.length) {
-                <p class="hint muted">Ex: aos sábados o serviço custa mais. O preço vale pelo horário de início do atendimento.</p>
+                <p class="hint muted">
+                  Ex: aos sábados o serviço custa mais. O preço vale pelo horário de início do
+                  atendimento.
+                </p>
               }
             </div>
             <label>
               <span class="field-label">Descrição</span>
-              <textarea [name]="'sdesc' + i" rows="2" maxlength="200" [(ngModel)]="service.description"></textarea>
+              <textarea
+                [name]="'sdesc' + i"
+                rows="2"
+                maxlength="200"
+                [(ngModel)]="service.description"
+              ></textarea>
             </label>
             <button type="button" class="remove" (click)="removeService(service)">Remover</button>
           </div>

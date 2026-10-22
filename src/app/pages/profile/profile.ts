@@ -1,7 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, resource, signal } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { UserProfile } from '../../models/user';
 import { Users } from '../../services/users';
@@ -60,7 +60,6 @@ export class Profile {
   constructor(
     protected readonly auth: Auth,
     private readonly users: Users,
-    private readonly router: Router,
   ) {}
 
   protected edit(data: UserProfile | null | undefined) {
@@ -127,9 +126,9 @@ export class Profile {
     return (name || email || '?')[0].toUpperCase();
   }
 
+  // Stays on this screen: it turns into the "you are not signed in" view
   protected signOut() {
-    // Leave right away: don't depend on the sign-out promise to resolve
-    this.router.navigateByUrl('/entrar');
+    this.editing.set(false);
     this.auth.signOut().catch((error) => console.error('Sign out failed', error));
   }
 }

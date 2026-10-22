@@ -6,6 +6,7 @@ import { PricePipe } from '../../utils/price.pipe';
 import { Location, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { RJ_NEIGHBORHOODS } from '../../models/neighborhoods';
 import { hasLocation, locationLabel, Professional } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
@@ -22,17 +23,27 @@ type Filters = {
   minRating: number;
   maxKm: number;
   sort: SortKey | null;
+  // A neighborhood of the city of Rio de Janeiro
+  neighborhood: string | null;
 };
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
 const MAX_KM = 50;
-const NO_FILTERS: Filters = { date: null, tags: [], minRating: 0, maxKm: MAX_KM, sort: null };
+const NO_FILTERS: Filters = { date: null, tags: [], minRating: 0, maxKm: MAX_KM, sort: null, neighborhood: null };
 const RECENTS_KEY = 'recent-searches';
 
 // Compares text ignoring case and accents
 const normalize = (text: string) =>
   text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+// Is the address in this neighborhood of Rio? The addresses come from Google: "Rua X, 12 - Leblon, Rio de Janeiro - RJ"
+const inNeighborhood = (address: string, neighborhood: string) => {
+  const text = normalize(address);
+  // "Freguesia (Jacarepaguá)": the name that is written in the address is the one before the parentheses
+  const name = normalize(neighborhood.split(' (')[0]).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.includes('rio de janeiro') && new RegExp(`(^|[\\s,-])${name}\\s*,`).test(text);
+};
 
 const readRecents = (): string[] => {
   try {
@@ -76,24 +87,33 @@ export class Search {
     ...new Set(this.professionals.published().flatMap((professional) => professional.tags)),
   ]);
 
+  // Only the neighborhoods where there is a professional
+  protected readonly neighborhoods = computed(() => {
+    const addresses = this.professionals.published().map((professional) => professional.address);
+    // "Freguesia (Jacarepaguá)" and "Freguesia (Ilha do Governador)" are searched as "Freguesia"
+    const names = RJ_NEIGHBORHOODS.map((name) => name.split(' (')[0]);
+    return [...new Set(names)].filter((name) => addresses.some((address) => inNeighborhood(address, name)));
+  });
+
   protected readonly popular = computed(() => this.allTags().slice(0, 6));
 
   protected readonly activeFilterCount = computed(() => {
-    const { date, tags, minRating, maxKm, sort } = this.applied();
-    return (date ? 1 : 0) + (tags.length ? 1 : 0) + (minRating ? 1 : 0) + (maxKm < MAX_KM ? 1 : 0) + (sort ? 1 : 0);
+    const { date, tags, minRating, maxKm, sort, neighborhood } = this.applied();
+    return (neighborhood ? 1 : 0) + (date ? 1 : 0) + (tags.length ? 1 : 0) + (minRating ? 1 : 0) + (maxKm < MAX_KM ? 1 : 0) + (sort ? 1 : 0);
   });
 
   protected readonly searching = computed(() => !!this.term().trim() || this.activeFilterCount() > 0);
 
   protected readonly results = computed(() => {
     const term = normalize(this.term().trim());
-    const { date, tags, minRating, maxKm, sort } = this.applied();
+    const { date, tags, minRating, maxKm, sort, neighborhood } = this.applied();
     const user = this.userPosition();
 
     const found = this.professionals
       .published()
       .filter((professional) => {
         if (term && !this.matchesText(professional, term)) return false;
+        if (neighborhood && !inNeighborhood(professional.address, neighborhood)) return false;
         if (tags.length && !professional.tags.some((tag) => tags.includes(tag))) return false;
         if (professional.rating < minRating) return false;
         if (date && !isWorkingDay(date, professional.availability ?? DEFAULT_AVAILABILITY)) return false;

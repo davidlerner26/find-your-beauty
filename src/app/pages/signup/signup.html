@@ -108,9 +108,9 @@
       <label class="field" [class.invalid]="showError('address') && !addressValid">
         <mat-icon class="filled">location_on</mat-icon>
         <input
-          name="address"
+          name="place-search"
           placeholder="Endereço (opcional)"
-          autocomplete="off"
+          autocomplete="nope"
           role="combobox"
           [attr.aria-expanded]="place.open() && place.suggestions().length > 0"
           [ngModel]="place.value"

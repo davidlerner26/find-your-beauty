@@ -30,7 +30,7 @@
       } @else if (profile.error()) {
         <p class="error">Não foi possível carregar seus dados.</p>
       } @else if (editing()) {
-        <form class="edit-form" (ngSubmit)="save()" novalidate>
+        <form class="edit-form" (submit)="$event.preventDefault(); save()" novalidate>
           <label>
             Nome
             <input name="firstName" autocomplete="given-name" [value]="firstName" (input)="onTextInput($event, 'firstName')" />
@@ -99,7 +99,7 @@
           <div><dt>Nome</dt><dd>{{ data.firstName || '-' }}</dd></div>
           <div><dt>Sobrenome</dt><dd>{{ data.lastName || '-' }}</dd></div>
           <div><dt>E-mail</dt><dd>{{ data.email || user.email }}</dd></div>
-          <div><dt><mat-icon class="phone-icon filled">call</mat-icon> Celular</dt><dd>{{ data.phone || '-' }}</dd></div>
+          <div><dt>Celular</dt><dd>{{ data.phone || '-' }}</dd></div>
           <div><dt>CPF</dt><dd>{{ data.cpf || '-' }}</dd></div>
           <div><dt>Endereço</dt><dd>{{ data.address || '-' }}</dd></div>
         </dl>

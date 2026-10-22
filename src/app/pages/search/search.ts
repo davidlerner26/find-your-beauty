@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, ElementRef, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, signal } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { PricePipe } from '../../utils/price.pipe';
@@ -60,6 +60,9 @@ const readRecents = (): string[] => {
   styleUrl: './search.scss',
 })
 export class Search {
+  // A text to search for, from the link of a service on the home (?q=Escova)
+  readonly q = input<string>();
+
   protected readonly maxKm = MAX_KM;
   protected readonly stars = [1, 2, 3, 4, 5];
   protected readonly sortOptions: { key: SortKey; label: string }[] = [
@@ -181,7 +184,14 @@ export class Search {
     protected readonly professionals: Professionals,
     private readonly userLocation: UserLocation,
     private readonly host: ElementRef<HTMLElement>,
-  ) {}
+  ) {
+    effect(() => {
+      const q = this.q();
+      if (!q) return;
+      this.query = q;
+      this.term.set(q);
+    });
+  }
 
   protected goBack() {
     this.location.back();

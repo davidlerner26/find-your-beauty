@@ -41,6 +41,31 @@ export const SERVICE_NAMES: Record<ServiceCategory, string[]> = {
 // A different price for a service on some days of the week, in a time range ("HH:mm", the end is not included)
 export type PriceRule = { days: number[]; start: string; end: string; price: number };
 
+// An icon (Material Symbols) for each service name, shown on the home
+export const SERVICE_ICONS: Record<string, string> = {
+  'Maquiagem social': 'face_retouching_natural',
+  'Maquiagem para festa': 'celebration',
+  'Maquiagem de noiva': 'diamond',
+  'Maquiagem para madrinhas': 'local_florist',
+  'Maquiagem para formatura': 'school',
+  'Maquiagem artística': 'palette',
+  'Maquiagem para fotos e ensaios': 'photo_camera',
+  'Automaquiagem (aula)': 'menu_book',
+  'Design de sobrancelhas': 'visibility',
+  'Aplicação de cílios': 'auto_awesome',
+  'Corte feminino': 'content_cut',
+  'Corte masculino': 'man',
+  'Escova': 'air',
+  'Penteado para festa': 'nightlife',
+  'Penteado de noiva': 'favorite',
+  'Coloração': 'colorize',
+  'Mechas e luzes': 'light_mode',
+  'Hidratação': 'water_drop',
+  'Cauterização': 'local_fire_department',
+  'Progressiva': 'straighten',
+  'Cronograma capilar': 'calendar_month',
+};
+
 export type Service = {
   id: string;
   name: string;

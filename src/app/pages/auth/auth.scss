@@ -224,3 +224,13 @@ h1 {
 .autocomplete {
   position: relative;
 }
+
+.legal {
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+
+  a {
+    color: var(--primary);
+  }
+}

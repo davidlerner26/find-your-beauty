@@ -269,4 +269,10 @@ export const onReviewWritten = onDocumentWritten('professionals/{professionalId}
 });
 
 // Instagram integration (see instagram.ts)
-export { connectInstagram, disconnectInstagram, refreshInstagram, syncInstagramDaily } from './instagram';
+export {
+  connectInstagram,
+  disconnectInstagram,
+  instagramDataDeletion,
+  refreshInstagram,
+  syncInstagramDaily,
+} from './instagram';

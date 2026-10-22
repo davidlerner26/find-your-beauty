@@ -1,0 +1,43 @@
+:host {
+  display: block;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  margin: 2rem 0 0.75rem;
+  font-size: 1.15rem;
+}
+
+p,
+li {
+  line-height: 1.6;
+}
+
+p {
+  margin-bottom: 0.75rem;
+}
+
+ul {
+  margin: 0 0 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.updated {
+  color: var(--muted);
+  font-size: 0.9rem;
+}

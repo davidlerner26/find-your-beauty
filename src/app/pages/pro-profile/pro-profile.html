@@ -58,30 +58,6 @@
             <input name="phone" type="tel" [(ngModel)]="phone" />
           </span>
         </label>
-        <label>
-          Instagram
-          <span class="with-icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4" />
-              <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
-            </svg>
-            <input
-              name="instagram"
-              placeholder="@seuusuario"
-              autocapitalize="none"
-              autocomplete="off"
-              [(ngModel)]="instagram"
-            />
-          </span>
-        </label>
         <h3>Foto</h3>
         <p class="hint muted">Aparece nos cards, no topo da sua página e redonda nas mensagens.</p>
         <div class="photo">
@@ -144,8 +120,10 @@
             </div>
           } @else {
             <p class="hint muted">
-              Conecte a sua conta (comercial ou de criador) para mostrar as fotos do seu Instagram
-              no perfil.
+              Conecte a sua conta para mostrar as 12 fotos mais recentes do seu Instagram no perfil. A
+              conta precisa ser profissional (Criador ou Empresa): conta pessoal não funciona. Para
+              mudar, no Instagram vá em Configurações &gt; Tipo de conta e ferramentas &gt; Mudar para
+              conta profissional.
             </p>
             <button
               type="button"

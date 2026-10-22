@@ -1,7 +1,8 @@
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 import { defineSecret, defineString } from 'firebase-functions/params';
-import { HttpsError, onCall } from 'firebase-functions/v2/https';
+import { createHmac, timingSafeEqual } from 'node:crypto';
+import { HttpsError, onCall, onRequest } from 'firebase-functions/v2/https';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 
 // Instagram API with Instagram Login. The professional connects her own account (Business or Creator).
@@ -11,7 +12,8 @@ const appId = defineString('INSTAGRAM_APP_ID', { default: '' });
 const appSecret = defineSecret('INSTAGRAM_APP_SECRET');
 
 const GRAPH = 'https://graph.instagram.com';
-const MAX_PHOTOS = 30;
+// The latest photos of the feed that are shown on the profile
+const MAX_PHOTOS = 12;
 // Refreshes tokens that expire within this many days (they last 60 days)
 const REFRESH_WITHIN_DAYS = 15;
 
@@ -111,7 +113,9 @@ export const connectInstagram = onCall({ secrets: [appSecret] }, async (request)
     expiresAt: Date.now() + (long['expires_in'] as number) * 1000,
     igUserId: me['user_id'],
   } satisfies Token & { igUserId: string });
-  await db().doc(`professionals/${uid}`).update({ instagram: me['username'], instagramConnected: true });
+  await db()
+    .doc(`professionals/${uid}`)
+    .update({ instagram: me['username'], instagramConnected: true, instagramUserId: String(me['user_id']) });
 
   const photos = await syncPhotos(uid, token);
   return { username: me['username'] as string, photos };
@@ -158,4 +162,43 @@ export const syncInstagramDaily = onSchedule({ schedule: 'every day 04:00', time
       console.error(`Instagram sync failed for ${uid}`, error);
     }
   }
+});
+
+// Meta calls this when a professional removes the app in Instagram (deauthorize) or asks to delete her data.
+// The request is a form with `signed_request`, signed with the app secret. Her token and the photos we copied
+// are deleted. The answer for a data deletion request is a JSON with a page about it and a confirmation code.
+export const instagramDataDeletion = onRequest({ secrets: [appSecret], cors: false }, async (request, response) => {
+  const signed = String(request.body?.signed_request ?? '');
+  const [signature, payload] = signed.split('.');
+  if (!signature || !payload) {
+    response.status(400).json({ error: 'signed_request ausente' });
+    return;
+  }
+
+  const expected = createHmac('sha256', appSecret.value()).update(payload).digest();
+  const received = Buffer.from(signature, 'base64url');
+  if (received.length !== expected.length || !timingSafeEqual(received, expected)) {
+    response.status(403).json({ error: 'assinatura inválida' });
+    return;
+  }
+
+  const { user_id: igUserId } = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as { user_id?: string };
+  if (igUserId) {
+    const found = await db().collection('professionals').where('instagramUserId', '==', String(igUserId)).get();
+    for (const professional of found.docs) {
+      const uid = professional.id;
+      await tokenRef(uid).delete();
+      const [files] = await getStorage().bucket().getFiles({ prefix: `professionals/${uid}/instagram/` });
+      await Promise.all(files.map((file) => file.delete()));
+      await professional.ref.update({
+        instagramConnected: false,
+        instagramPhotos: [],
+        instagramSyncedAt: FieldValue.delete(),
+        instagramUserId: FieldValue.delete(),
+      });
+    }
+  }
+
+  const base = process.env['APP_URL'] || 'https://findyourbeauty.com.br';
+  response.json({ url: `${base}/privacidade`, confirmation_code: String(igUserId ?? 'none') });
 });

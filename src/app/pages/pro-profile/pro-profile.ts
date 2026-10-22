@@ -60,8 +60,16 @@ export class ProProfile {
   protected name = '';
   protected phone = '';
   // Private: kept in professionals/{id}/private/identity, not in the public profile
-  protected cpf = '';
+  // A signal behind the property: the CPF arrives after the form is shown, and the screen has to follow
+  private readonly cpfText = signal('');
+  protected get cpf() {
+    return this.cpfText();
+  }
+  protected set cpf(value: string) {
+    this.cpfText.set(value);
+  }
   private savedCpf = '';
+  private reloadedList = false;
   protected instagram = '';
   protected image = '';
   protected readonly imagePosition = signal<ImagePosition>({ x: 50, y: 50 });
@@ -93,6 +101,8 @@ export class ProProfile {
   protected readonly visible = signal(true);
   protected readonly saving = signal(false);
   protected readonly message = signal('');
+  // A new one each time a message is shown, so the floating message starts over
+  protected messageId = 0;
   // Address search (Google Places): the address only counts once a suggestion was chosen
   protected readonly suggestions = signal<AddressSuggestion[]>([]);
   protected readonly addressOpen = signal(false);
@@ -114,8 +124,13 @@ export class ProProfile {
     private readonly maps: GoogleMapsLoader,
     protected readonly instagramService: Instagram,
   ) {
-    // The profile document was just created by the first step: the list of professionals is stale
-    if (this.signup()) this.professionals.load();
+    // The profile document may have been created after the list of professionals was loaded (first step of the
+    // sign up, with e-mail or Google): the list is read again, once, when the profile is not in it
+    effect(() => {
+      if (this.reloadedList || !this.uid() || this.profile() || this.professionals.status() !== 'ready') return;
+      this.reloadedList = true;
+      void this.professionals.load();
+    });
 
     // Fills the form once, when the profile document arrives
     effect(() => {
@@ -244,8 +259,12 @@ export class ProProfile {
 
   // Shows the feedback at the top of the page and brings it into view
   private show(text: string) {
+    const id = ++this.messageId;
     this.message.set(text);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // The message of what is missing doesn't pop up again behind it, until the list changes
+    this.dismissedText.set(this.missingText);
+    // Floats on top and goes away by itself, like the message of what is missing
+    setTimeout(() => this.messageId === id && this.message.set(''), 5500);
   }
 
   protected async uploadProfilePhoto(input: HTMLInputElement) {

@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { Professional } from '../models/professional';
 import { db } from './firebase';
 
@@ -12,6 +12,15 @@ export class Professionals {
 
   constructor() {
     this.load();
+    // The catalog follows the database: a profile that is approved or published shows up for everyone right away
+    onSnapshot(
+      collection(db, 'professionals'),
+      (snapshot) => {
+        this.list.set(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Professional));
+        this.status.set('ready');
+      },
+      (error) => console.error('Failed to follow the professionals', error),
+    );
   }
 
   async load() {

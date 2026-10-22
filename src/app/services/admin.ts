@@ -61,8 +61,12 @@ export class Admin {
     return (snapshot.data()?.['cpf'] as string | undefined) ?? '';
   }
 
-  approve(id: string) {
-    return updateDoc(doc(db, 'professionals', id), { approved: true, rejected: false });
+  // Approving makes the profile public at once: it was complete when it was sent, so it is published
+  // (unless the professional chose to hide it)
+  async approve(id: string) {
+    const snapshot = await getDoc(doc(db, 'professionals', id));
+    const visible = snapshot.data()?.['visible'] !== false;
+    await updateDoc(doc(db, 'professionals', id), { approved: true, rejected: false, published: visible });
   }
 
   reject(id: string) {

@@ -1,4 +1,7 @@
 @if (artist(); as artist) {
+  @if (toast()) {
+    <app-toast [text]="toast()" (dismiss)="toast.set('')" />
+  }
   <div class="hero">
     <!-- The cover is the gallery: swipe sideways to go through the photos -->
     <div class="hero-photos" (scroll)="onHeroScroll($event)">

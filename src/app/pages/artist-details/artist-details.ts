@@ -6,6 +6,7 @@ import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
+import { Toast } from '../../components/toast/toast';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { formatDuration, Professional, Review, Service, ServiceCategory } from '../../models/professional';
@@ -21,7 +22,7 @@ import { formatRelative } from '../../utils/format-date';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
+  imports: [Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })
@@ -86,6 +87,8 @@ export class ArtistDetails {
 
   // The address was just copied (the button shows a check for a moment)
   protected readonly copied = signal(false);
+  // A message that floats on top for a moment
+  protected readonly toast = signal('');
 
   protected async copyAddress(address: string) {
     try {
@@ -102,7 +105,11 @@ export class ArtistDetails {
       field.remove();
     }
     this.copied.set(true);
-    setTimeout(() => this.copied.set(false), 2000);
+    this.toast.set('Endereço copiado');
+    setTimeout(() => {
+      this.copied.set(false);
+      this.toast.set('');
+    }, 2000);
   }
 
   protected readonly formatDuration = formatDuration;

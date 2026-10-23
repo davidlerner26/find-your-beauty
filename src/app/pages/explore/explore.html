@@ -15,6 +15,8 @@
     >
       @if (userPosition(); as position) {
         <map-circle [center]="position" [radius]="350" [options]="circleOptions" />
+        <map-circle [center]="position" [radius]="210" [options]="ringOptions" />
+        <map-marker [position]="position" [options]="dotOptions" />
       }
       @for (salon of visibleSalons; track salon.name; let i = $index) {
         <map-marker

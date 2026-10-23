@@ -43,11 +43,31 @@ export class Explore implements OnInit {
     disableDefaultUI: true,
     clickableIcons: false,
   };
+  // Where the user is: a soft area, a thin ring inside it and a dot in the middle
   protected readonly circleOptions: google.maps.CircleOptions = {
-    strokeColor: '#ee8b2e',
-    strokeWeight: 1,
+    strokeWeight: 0,
     fillColor: '#f6d58a',
     fillOpacity: 0.4,
+    clickable: false,
+  };
+  protected readonly ringOptions: google.maps.CircleOptions = {
+    strokeColor: '#ee8b2e',
+    strokeWeight: 1,
+    fillOpacity: 0,
+    clickable: false,
+  };
+  protected readonly dotOptions: google.maps.MarkerOptions = {
+    clickable: false,
+    zIndex: 1,
+    icon: {
+      url:
+        'data:image/svg+xml;utf8,' +
+        encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><circle cx="14" cy="14" r="11" fill="#ee8b2e" stroke="#fff" stroke-width="4"/></svg>',
+        ),
+      scaledSize: { width: 28, height: 28, equals: () => false } as google.maps.Size,
+      anchor: { x: 14, y: 14, equals: () => false } as google.maps.Point,
+    },
   };
 
   protected readonly filters = ['Cabelo', 'Maquiagem'];

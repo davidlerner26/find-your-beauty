@@ -180,10 +180,12 @@ const STATUS_TITLE: Record<string, string> = {
 };
 
 // Welcome e-mails: a client when the account is created, a professional when the sign up starts
-export const onClientCreated = onDocumentCreated({ document: 'users/{uid}', secrets: [resendKey] }, async (event) => {
-  const to = await emailOf(event.params.uid);
+// A client gets it once the e-mail is confirmed: right away for Google accounts (Google already confirmed it), and
+// after the code for sign ups with e-mail and password (see verifyEmailCode)
+const welcomeClient = async (uid: string) => {
+  const to = await emailOf(uid);
   if (!to) return;
-  const name = (event.data?.data()?.['firstName'] as string | undefined) ?? '';
+  const name = ((await db.doc(`users/${uid}`).get()).data()?.['firstName'] as string | undefined) ?? '';
   await sendEmail({
     to,
     subject: 'Bem-vinda(o) ao Find Your Beauty',
@@ -191,6 +193,15 @@ export const onClientCreated = onDocumentCreated({ document: 'users/{uid}', secr
     paragraphs: ['Sua conta foi criada. Agora você pode encontrar profissionais de maquiagem e cabelo perto de você e agendar um horário.'],
     button: { label: 'Encontrar profissionais', url: `${appUrl.value()}/explore` },
   });
+};
+
+export const onClientCreated = onDocumentCreated({ document: 'users/{uid}', secrets: [resendKey] }, async (event) => {
+  try {
+    if (!(await getAuth().getUser(event.params.uid)).emailVerified) return;
+  } catch {
+    return;
+  }
+  await welcomeClient(event.params.uid);
 });
 
 export const onProfessionalCreated = onDocumentCreated({ document: 'professionals/{uid}', secrets: [resendKey] }, async (event) => {
@@ -332,7 +343,7 @@ export const sendVerificationCode = onCall({ secrets: [resendKey] }, async (requ
 });
 
 // Checks the code and marks the e-mail as verified
-export const verifyEmailCode = onCall(async (request) => {
+export const verifyEmailCode = onCall({ secrets: [resendKey] }, async (request) => {
   const email = cleanEmail(request.data?.email);
   const code = String(request.data?.code ?? '').trim();
   if (!/^\d{4}$/.test(code)) throw new HttpsError('invalid-argument', 'Digite os 4 números do código.');
@@ -353,5 +364,7 @@ export const verifyEmailCode = onCall(async (request) => {
 
   await getAuth().updateUser(user.uid, { emailVerified: true });
   await ref.delete();
+  // The welcome e-mail goes out now that the address is confirmed
+  await welcomeClient(user.uid);
   return { ok: true };
 });

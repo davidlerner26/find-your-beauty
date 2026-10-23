@@ -147,3 +147,32 @@ h3 a {
 .empty {
   padding: 1rem 0;
 }
+
+// A visitor: a message and the button to sign in
+.visitor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2.5rem 0;
+  text-align: center;
+
+  p:first-child {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+}
+
+.signin {
+  width: 100%;
+  height: 3.5rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 1.05rem;
+  text-decoration: none;
+}

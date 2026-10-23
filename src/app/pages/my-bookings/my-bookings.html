@@ -4,7 +4,11 @@
   @if (!auth.ready() || bookings.mineLoading()) {
     <app-spinner />
   } @else if (!auth.user()) {
-    <p class="empty muted"><a routerLink="/entrar">Entre</a> na sua conta para ver os seus agendamentos.</p>
+    <section class="visitor">
+      <p>Você não está logado.</p>
+      <p class="muted">Entre na sua conta para ver os seus agendamentos.</p>
+      <a class="signin" routerLink="/entrar">Entrar</a>
+    </section>
   } @else {
     <ng-template #card let-booking>
       <article class="booking">

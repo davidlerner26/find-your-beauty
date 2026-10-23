@@ -108,3 +108,35 @@ h1 {
   font-size: 1.05rem;
   text-decoration: none;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  // The text on the left, the photo on the rest of the screen
+  .onboarding {
+    align-items: center;
+    justify-content: flex-start;
+    padding: 4rem 8vw;
+  }
+
+  .shade {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.3) 55%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .panel {
+    max-width: 32rem;
+    text-align: left;
+  }
+
+  h1 {
+    font-size: 3rem;
+    line-height: 1.1;
+  }
+
+  .description {
+    font-size: 1.3rem;
+  }
+
+  .dots {
+    justify-content: flex-start;
+  }
+}

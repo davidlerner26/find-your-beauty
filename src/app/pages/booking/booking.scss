@@ -229,3 +229,71 @@ textarea {
   font-size: 0.7rem;
   opacity: 0.8;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  // The date and the times on the left, the summary of the order on the right
+  :host {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    column-gap: 3rem;
+    align-items: start;
+    padding: 0 2.5rem 4rem;
+  }
+
+  .top {
+    grid-column: 1 / -1;
+    height: 6rem;
+    justify-content: flex-start;
+    padding-left: 3.5rem;
+    border-bottom: 0;
+
+    h1 {
+      font-size: 1.75rem;
+    }
+  }
+
+  .back {
+    left: 0;
+  }
+
+  .content {
+    grid-column: 1;
+    padding: 0;
+  }
+
+  .error {
+    grid-column: 1;
+    margin: 0;
+  }
+
+  .book-bar {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    position: sticky;
+    top: 6.5rem;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1.25rem;
+    padding: 1.75rem;
+    border-radius: 20px;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
+
+    .price {
+      font-size: 2rem;
+    }
+  }
+
+  .book-actions .checkout {
+    flex: 1;
+  }
+
+  // The days fill the width: a week or more at once, without hiding them behind the scroll
+  .days {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+}

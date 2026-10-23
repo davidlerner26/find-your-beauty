@@ -355,3 +355,109 @@ a {
   white-space: nowrap;
   font-size: 0.85rem;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+.search-label {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2.5rem 4rem;
+  }
+
+  // The logo is in the bar on top
+  .logo {
+    display: none;
+  }
+
+  section {
+    margin-bottom: 3.5rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero {
+    padding-top: 3rem;
+    align-items: center;
+
+    h1 {
+      font-size: 2.75rem;
+    }
+
+    .muted {
+      font-size: 1.1rem;
+      margin-top: 0.25rem;
+    }
+  }
+
+  // The search button gets its text
+  .search-btn {
+    width: auto;
+    height: 3.5rem;
+    padding: 0 1.75rem;
+    gap: 0.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+
+  .search-label {
+    display: inline;
+  }
+
+  // The featured professionals are a grid, not a row to scroll
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+  }
+
+  .card {
+    flex: none;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  .card-image {
+    height: 17rem;
+    border-radius: 16px;
+  }
+
+  // Services: all of them show, in as many lines as needed
+  .services {
+    flex-wrap: wrap;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    gap: 1.25rem 1rem;
+  }
+
+  .offers {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .offer {
+    transition: box-shadow 0.2s;
+
+    &:hover {
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.14);
+    }
+  }
+
+  .followed {
+    flex-wrap: wrap;
+    overflow: visible;
+    margin: 0;
+    padding: 6px 0;
+  }
+}

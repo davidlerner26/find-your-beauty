@@ -719,3 +719,73 @@ section > p,
     font-size: 1.1rem;
   }
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  // Two columns: the profile on the left, a card with the total and the buttons on the right
+  :host {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    grid-template-rows: auto 1fr;
+    column-gap: 3rem;
+    align-items: start;
+    padding: 2rem 2.5rem 4rem;
+  }
+
+  // The messages and the screen of a service float over the page: they take no place in the grid
+  app-toast,
+  app-service-sheet {
+    display: contents;
+  }
+
+  .hero {
+    grid-column: 1;
+    height: 26rem;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .content {
+    grid-column: 1;
+    padding: 0;
+  }
+
+  // The bar of the bottom becomes a card that follows the page
+  .book-bar {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    position: sticky;
+    top: 6.5rem;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 1.25rem;
+    padding: 1.75rem;
+    border-radius: 20px;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.12);
+
+    .missing-data {
+      margin-bottom: 0;
+    }
+
+    .price {
+      font-size: 2rem;
+    }
+  }
+
+  .book-actions .book {
+    flex: 1;
+  }
+
+  // The cards of the services answer to the mouse
+  .service {
+    transition: box-shadow 0.2s;
+  }
+
+  .service:hover {
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.14);
+  }
+}

@@ -247,3 +247,37 @@ h1 {
   font-weight: 600;
   text-decoration: none;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  // A photo on the left half, the form on the right half
+  :host(:has(.auth)) {
+    position: relative;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  :host(:has(.auth))::before {
+    content: '';
+    position: absolute;
+    inset: 0 50% 0 0;
+    background:
+      linear-gradient(to top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0) 45%),
+      url('/images/makeup/3.jpg') center / cover;
+  }
+
+  .auth {
+    position: relative;
+    width: 50%;
+    max-width: none;
+    min-height: 100vh;
+    justify-content: center;
+    padding: 3rem clamp(3rem, 9vw, 9rem);
+    background: #fff;
+  }
+
+  // The professional area keeps its teal
+  :host-context(.pro-theme) .auth {
+    background: transparent;
+  }
+}

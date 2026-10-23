@@ -176,3 +176,28 @@ h3 a {
   font-size: 1.05rem;
   text-decoration: none;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  .agenda {
+    max-width: 64rem;
+    padding: 3rem 2.5rem 4rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  // The bookings in two columns
+  .list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  // A visitor: the button doesn't need the whole width
+  .signin {
+    width: 22rem;
+    max-width: 100%;
+  }
+}

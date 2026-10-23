@@ -246,7 +246,7 @@
         }
       </section>
 
-      <section>
+      <section class="wide">
         <div class="head">
           <h2>Serviços</h2>
           <button type="button" class="link" (click)="addService()">+ Adicionar</button>
@@ -449,7 +449,7 @@
         }
       </section>
 
-      <section>
+      <section class="wide">
         <h2>Horários de atendimento</h2>
         <div class="week">
           @for (day of weekdays; track day.key) {
@@ -525,7 +525,7 @@
         </div>
       </section>
 
-      <section>
+      <section class="wide">
         @if (!signup()) {
           <label class="check">
             <input

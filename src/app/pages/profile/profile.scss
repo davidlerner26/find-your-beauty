@@ -233,3 +233,11 @@ h1 {
   color: #1f8f4d;
   font-size: 0.85rem;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  .profile {
+    max-width: 44rem;
+    padding: 3rem 2.5rem 4rem;
+  }
+}

@@ -65,3 +65,147 @@ $tabs-height: 5rem;
   border-radius: 50%;
   background: transparent;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+.topbar {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  $topbar-height: 4.5rem;
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    height: $topbar-height;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    // The content of the bar lines up with the 72 rem column of the pages
+    padding: 0 max(2.5rem, calc((100% - 72rem) / 2 + 2.5rem));
+    background: #fff;
+    box-shadow: 0 1px 0 #ececf1;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 2.4rem;
+      width: auto;
+    }
+  }
+
+  .topbar nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+
+    a {
+      position: relative;
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      color: #6b7280;
+      font-weight: 600;
+      transition: background 0.15s, color 0.15s;
+
+      &:hover {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      &.active {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+    }
+
+    .badge {
+      position: absolute;
+      top: 0.35rem;
+      right: 0.45rem;
+      width: 0.6rem;
+      height: 0.6rem;
+      margin: 0;
+    }
+  }
+
+  .signin,
+  .account {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    padding: 0 1.4rem;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+
+  .signin {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  .account {
+    background: var(--primary-light);
+    color: var(--primary);
+
+    mat-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+      font-size: 1.25rem;
+    }
+  }
+
+  // The bottom tabs are replaced by the bar on top
+  .tabs {
+    display: none;
+  }
+
+  .with-tabs {
+    padding-bottom: 0;
+  }
+
+  // The content stays in a centered column
+  .screen {
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+
+  .screen.wide {
+    max-width: none;
+  }
+
+  // The professional area is teal: the bar follows
+  :host-context(.pro-theme) .topbar {
+    background: #245765;
+    box-shadow: none;
+
+    .brand img {
+      filter: brightness(0) invert(1);
+    }
+
+    nav a {
+      color: rgba(255, 255, 255, 0.75);
+
+      &:hover,
+      &.active {
+        background: rgba(255, 255, 255, 0.16);
+        color: #fff;
+      }
+    }
+
+    .signin {
+      background: #fff;
+      color: #2f6b7a;
+    }
+
+    .account {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+  }
+}

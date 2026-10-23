@@ -111,3 +111,11 @@ h2 {
   background: #fff;
   color: #e5484d;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  .admin {
+    max-width: 64rem;
+    padding: 3rem 2.5rem 4rem;
+  }
+}

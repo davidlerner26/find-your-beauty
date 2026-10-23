@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { Auth } from './services/auth';
 import { Messages } from './services/messages';
 
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean };
@@ -21,6 +22,18 @@ const TAB_SCREENS = [
   '/pro/mensagens',
   '/pro/notificacoes',
   '/pro/perfil',
+];
+
+// Sign in and welcome screens: no navigation bar (on wide screens)
+const AUTH_SCREENS = [
+  '/entrar',
+  '/cadastro',
+  '/pro/entrar',
+  '/pro/cadastro',
+  '/boas-vindas',
+  '/verificar-email',
+  '/esqueci-senha',
+  '/redefinir-senha',
 ];
 
 @Component({
@@ -93,6 +106,7 @@ export class App {
   constructor(
     router: Router,
     protected readonly messages: Messages,
+    protected readonly auth: Auth,
     icons: MatIconRegistry,
   ) {
     // Material Symbols (outlined), loaded in index.html
@@ -109,6 +123,20 @@ export class App {
 
   protected get showTabs() {
     return TAB_SCREENS.includes(this.url()) || this.isAdminScreen;
+  }
+
+  // Wide screens have a navigation bar on top instead of the tabs at the bottom (see app.scss)
+  protected get showTopbar() {
+    return !AUTH_SCREENS.includes(this.url());
+  }
+
+  // Screens that use the whole width on wide screens (the others stay in the centered column)
+  protected get fullWidth() {
+    return this.url() === '/explore' || AUTH_SCREENS.includes(this.url());
+  }
+
+  protected get profilePath() {
+    return isProArea(this.url()) ? '/pro/perfil' : '/perfil';
   }
 
   protected isActive(tab: Tab) {

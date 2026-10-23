@@ -127,3 +127,22 @@ h2 {
 .empty {
   padding: 1rem 0;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  .agenda {
+    max-width: 64rem;
+    padding: 3rem 2.5rem 4rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  // The bookings in two columns
+  .list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+}

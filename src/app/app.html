@@ -1,4 +1,31 @@
-<div class="screen" [class.with-tabs]="showTabs">
+@if (showTopbar) {
+  <!-- Wide screens only (hidden on phones and tablets): the navigation of the tabs, on top -->
+  <header class="topbar">
+    <a class="brand" routerLink="/" aria-label="Find Your Beauty">
+      <img src="logo-full.svg" alt="Find Your Beauty" />
+    </a>
+    <nav aria-label="Principal">
+      @for (tab of tabs; track tab.path) {
+        <a [routerLink]="tab.path" [class.active]="isActive(tab)">
+          {{ tab.label }}
+          @if (tab.badge && messages.unreadTotal() > 0) {
+            <span class="badge"></span>
+          }
+        </a>
+      }
+    </nav>
+    @if (auth.user()) {
+      <a class="account" [routerLink]="profilePath">
+        <mat-icon class="filled">person</mat-icon>
+        Minha conta
+      </a>
+    } @else {
+      <a class="signin" routerLink="/entrar">Entrar</a>
+    }
+  </header>
+}
+
+<div class="screen" [class.with-tabs]="showTabs" [class.wide]="fullWidth">
   <router-outlet />
 </div>
 

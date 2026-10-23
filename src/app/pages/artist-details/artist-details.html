@@ -47,7 +47,20 @@
           <mat-icon>chat_bubble</mat-icon>
         </a>
       </div>
-      <p class="muted">{{ artist.serviceMode === 'home' ? 'Atendimento a domicílio' : artist.address }}</p>
+      <div class="address">
+        <p class="muted">{{ artist.serviceMode === 'home' ? 'Atendimento a domicílio' : artist.address }}</p>
+        @if (artist.serviceMode !== 'home' && artist.address) {
+          <button
+            type="button"
+            class="copy"
+            [attr.aria-label]="copied() ? 'Endereço copiado' : 'Copiar endereço'"
+            [title]="copied() ? 'Endereço copiado' : 'Copiar endereço'"
+            (click)="copyAddress(artist.address)"
+          >
+            <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
+          </button>
+        }
+      </div>
       @if (artist.serviceMode === 'both') {
         <p class="muted">Também atende a domicílio</p>
       }

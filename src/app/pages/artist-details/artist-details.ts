@@ -84,6 +84,27 @@ export class ArtistDetails {
     roundMoney(this.selectedServices().reduce((sum, service) => sum + service.price, 0)),
   );
 
+  // The address was just copied (the button shows a check for a moment)
+  protected readonly copied = signal(false);
+
+  protected async copyAddress(address: string) {
+    try {
+      await navigator.clipboard.writeText(address);
+    } catch {
+      // Without the clipboard API (or without permission): the old way, with a hidden field
+      const field = document.createElement('textarea');
+      field.value = address;
+      field.style.position = 'fixed';
+      field.style.opacity = '0';
+      document.body.appendChild(field);
+      field.select();
+      document.execCommand('copy');
+      field.remove();
+    }
+    this.copied.set(true);
+    setTimeout(() => this.copied.set(false), 2000);
+  }
+
   protected readonly formatDuration = formatDuration;
   protected readonly ruleLabel = ruleLabel;
   protected readonly instagramUrl = instagramUrl;

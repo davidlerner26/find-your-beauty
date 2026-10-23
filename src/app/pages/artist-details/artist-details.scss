@@ -247,7 +247,8 @@ a {
 
 .services {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  // min(): on a phone narrower than 24 rem the column shrinks to the screen instead of overflowing it
+  grid-template-columns: repeat(auto-fill, minmax(min(24rem, 100%), 1fr));
   gap: 1.25rem;
 }
 

@@ -1,4 +1,4 @@
-import { effect, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { collection, deleteDoc, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import { Auth } from './auth';
@@ -8,6 +8,8 @@ import { db } from './firebase';
 @Injectable({ providedIn: 'root' })
 export class Favorites {
   readonly ids = signal<string[]>([]);
+  // Visitors don't see the heart: favorites belong to an account
+  readonly available = computed(() => !!this.auth.user());
   readonly loading = signal(true);
 
   constructor(

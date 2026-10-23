@@ -24,14 +24,16 @@
       <mat-icon>chevron_left</mat-icon>
     </button>
     <div class="hero-actions">
-      <button
-        type="button"
-        class="round heart"
-        [attr.aria-label]="favorites.has(artist.id) ? 'Remover dos favoritos' : 'Favoritar'"
-        (click)="toggleFavorite()"
-      >
-        <mat-icon [class.filled]="favorites.has(artist.id)">favorite</mat-icon>
-      </button>
+      @if (favorites.available()) {
+        <button
+          type="button"
+          class="round heart"
+          [attr.aria-label]="favorites.has(artist.id) ? 'Remover dos favoritos' : 'Favoritar'"
+          (click)="toggleFavorite()"
+        >
+          <mat-icon [class.filled]="favorites.has(artist.id)">favorite</mat-icon>
+        </button>
+      }
       <a class="round" routerLink="/explore" aria-label="Ver no mapa">
         <mat-icon class="filled">map</mat-icon>
       </a>

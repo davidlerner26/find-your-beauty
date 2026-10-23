@@ -57,14 +57,16 @@
                 </div>
               }
             </div>
-            <button
-              type="button"
-              class="heart"
-              [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
-              (click)="toggleFavorite($event, salon.id)"
-            >
-              <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
-            </button>
+            @if (favorites.available()) {
+              <button
+                type="button"
+                class="heart"
+                [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
+                (click)="toggleFavorite($event, salon.id)"
+              >
+                <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
+              </button>
+            }
             @if (salon.photos.length > 1) {
               <div class="dots" aria-hidden="true">
                 @for (photo of salon.photos; track photo; let n = $index) {

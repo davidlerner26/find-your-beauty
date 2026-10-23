@@ -45,14 +45,13 @@
   position: relative;
   flex: 1;
   overflow-y: auto;
-  padding: 1rem 1rem 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
-// The photos, inside the sheet with round corners
+// The photos fill the top of the sheet edge to edge (the round corners of the sheet cut them)
 .screen-photo {
   position: relative;
-  height: 17rem;
-  border-radius: 20px;
+  height: 18rem;
   overflow: hidden;
   background: var(--primary-light);
 }
@@ -115,7 +114,7 @@
 // The bar on top of the photo: tap it to close the sheet
 .screen-handle {
   position: absolute;
-  top: 1.6rem;
+  top: 0.6rem;
   left: 50%;
   width: 3.5rem;
   height: 1.5rem;
@@ -150,7 +149,7 @@
 }
 
 .screen-info {
-  padding: 1.25rem 0.5rem 0;
+  padding: 1.5rem 1.5rem 0;
 
   h1 {
     font-size: 1.5rem;

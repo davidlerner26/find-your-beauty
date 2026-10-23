@@ -26,7 +26,7 @@ export class Signup {
   protected email = '';
   protected phone = '';
   protected cpf = '';
-  // Clients only, optional: when typed, it has to be chosen from the suggestions
+  // Clients only: it has to be chosen from the suggestions
   private readonly maps = inject(GoogleMapsLoader);
   protected readonly place = new PlaceSearch(this.maps);
   protected password = '';
@@ -55,7 +55,8 @@ export class Signup {
   }
 
   protected get addressValid() {
-    return !this.place.value.trim() || this.place.confirmed();
+    // Required for clients (professionals give theirs in the second step): searched and chosen from the suggestions
+    return this.pro() || (!!this.place.value.trim() && this.place.confirmed());
   }
 
   protected get cpfValid() {

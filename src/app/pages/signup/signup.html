@@ -109,7 +109,7 @@
         <mat-icon class="filled">location_on</mat-icon>
         <input
           name="place-search"
-          placeholder="Endereço (opcional)"
+          placeholder="Endereço"
           autocomplete="nope"
           role="combobox"
           [attr.aria-expanded]="place.open() && place.suggestions().length > 0"
@@ -127,7 +127,7 @@
     @if (place.error()) {
       <p class="error">{{ place.error() }}</p>
     } @else if (showError('address') && !addressValid) {
-      <p class="error">Escolha uma das sugestões para confirmar o endereço.</p>
+      <p class="error">Busque o endereço e escolha uma das sugestões.</p>
     }
   }
 

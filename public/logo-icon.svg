@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Find Your Beauty">
+  <rect width="512" height="512" rx="112" fill="#e3f4f7"/>
+  <g transform="translate(146 96) scale(2.2)">
+  <path d="M50 130C50 130 5 78 5 48A45 45 0 1 1 95 48C95 78 50 130 50 130Z" fill="#ee8b2e"/>
+  <circle cx="50" cy="48" r="27" fill="#e3f4f7"/>
+  <path d="M50 27Q52.5 45.5 71 48Q52.5 50.5 50 69Q47.5 50.5 29 48Q47.5 45.5 50 27Z" fill="#ee8b2e" transform="rotate(14 50 48)"/></g>
+</svg>

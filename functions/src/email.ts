@@ -41,7 +41,7 @@ const render = ({ heading, paragraphs, details, button }: Email) => `<!doctype h
   </head>
   <body style="margin:0;padding:0;background:#ffffff;font-family:${FONT};color:${TEXT};">
     <div style="max-width:30rem;margin:0 auto;padding:32px 24px 40px;">
-      <p style="margin:0 0 36px;font-size:16px;font-weight:800;letter-spacing:0.2px;color:${TEAL};">Find Your Beauty</p>
+      <p style="margin:0 0 36px;"><img src="${appUrl.value()}/logo-full.png" alt="Find Your Beauty" width="190" style="display:block;border:0;height:auto;max-width:190px;font-size:16px;font-weight:800;color:${TEAL};"></p>
       <h1 style="margin:0 0 12px;font-size:30px;line-height:1.2;font-weight:800;color:${TEXT};">${escape(heading)}</h1>
       ${paragraphs
         .map((p) => `<p style="margin:0 0 16px;font-size:16px;line-height:1.55;color:${MUTED};">${escape(p)}</p>`)

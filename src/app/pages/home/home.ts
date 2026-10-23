@@ -89,7 +89,7 @@ export class Home {
   // Photo being shown in each featured card
   // Photos that finished loading (or failed), so the spinner stops
   protected readonly loadedPhotos = signal<string[]>([]);
-  protected readonly photoIndex = signal<Record<string, number>>({});
+  protected readonly photoIndex = signal<Record<string, number | undefined>>({});
 
   constructor(
     private readonly auth: Auth,

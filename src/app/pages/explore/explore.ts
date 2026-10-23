@@ -129,7 +129,7 @@ export class Explore implements OnInit {
   protected readonly listOpen = signal(false);
 
   // Photo being shown in each card (for the dots under the image)
-  protected readonly photoIndex = signal<Record<string, number>>({});
+  protected readonly photoIndex = signal<Record<string, number | undefined>>({});
 
   protected onPhotosScroll(event: Event, id: string) {
     const strip = event.target as HTMLElement;

@@ -162,6 +162,22 @@ export type Professional = {
 export const hasLocation = (professional: Pick<Professional, 'serviceMode' | 'position'>) =>
   professional.serviceMode !== 'home' && (professional.position.lat !== 0 || professional.position.lng !== 0);
 
+// "Av. Afrânio de Melo Franco, 141 - Leblon, Rio de Janeiro - RJ, 22430-060" -> "Av. Afrânio de Melo Franco, 141 - Leblon, RJ":
+// street and number (when there is one), neighborhood and state, without the city and the postal code
+export const shortAddress = (address: string) => {
+  const text = address
+    .replace(/,?\s*Brasil$/i, '')
+    .replace(/,?\s*\d{5}-?\d{3}$/, '')
+    .trim();
+  // The end is "City - UF"
+  const match = text.match(/^(.*?),\s*[^,]+\s-\s([A-Z]{2})$/);
+  return match ? `${match[1]}, ${match[2]}` : text;
+};
+
+// What the cards of the map and of the home show where the address goes: the short address
+export const shortLocationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
+  professional.serviceMode === 'home' ? 'Atendimento a domicílio' : shortAddress(professional.address);
+
 // What cards show where the address goes
 export const locationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
   professional.serviceMode === 'home' ? 'Atendimento a domicílio' : professional.address;

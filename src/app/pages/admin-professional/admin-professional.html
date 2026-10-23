@@ -3,7 +3,7 @@
     <button type="button" class="back" aria-label="Voltar" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
     </button>
-    <h1>Perfil da profissional</h1>
+    <h1>Perfil do profissional</h1>
   </header>
 
   @if (professional.isLoading()) {
@@ -79,7 +79,13 @@
         <div>
           <dt>Atendimento</dt>
           <dd>
-            {{ p.serviceMode === 'home' ? 'A domicílio' : p.serviceMode === 'both' ? 'No endereço e a domicílio' : 'No endereço' }}
+            {{
+              p.serviceMode === 'home'
+                ? 'A domicílio'
+                : p.serviceMode === 'both'
+                  ? 'No endereço e a domicílio'
+                  : 'No endereço'
+            }}
           </dd>
         </div>
         @if (p.serviceMode !== 'home') {
@@ -115,7 +121,9 @@
             @if (service.priceRules?.length) {
               <ul class="price-rules muted">
                 @for (rule of service.priceRules; track $index) {
-                  <li>{{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong></li>
+                  <li>
+                    {{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong>
+                  </li>
                 }
               </ul>
             }

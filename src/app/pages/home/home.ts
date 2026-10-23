@@ -11,7 +11,7 @@ import { LocationPrompt } from '../../components/location-prompt/location-prompt
 import {
   hasLocation,
   ImagePosition,
-  locationLabel,
+  shortLocationLabel,
   Professional,
   SERVICE_ICONS,
   SERVICE_NAMES,
@@ -124,7 +124,7 @@ export class Home {
       image: professional.image,
       imagePosition: professional.imagePosition,
       photos: professional.gallery.length ? professional.gallery : [professional.image],
-      address: locationLabel(professional),
+      address: shortLocationLabel(professional),
       rating: professional.rating,
       reviews: professional.reviewsCount,
       tags: professional.tags.join(' . '),

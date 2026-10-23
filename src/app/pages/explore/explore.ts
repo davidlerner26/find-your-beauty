@@ -10,7 +10,7 @@ import { Favorites } from '../../services/favorites';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
-import { hasLocation, locationLabel } from '../../models/professional';
+import { hasLocation, shortLocationLabel } from '../../models/professional';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
 
@@ -111,7 +111,7 @@ export class Explore implements OnInit {
       .filter((salon) => hasLocation(salon))
       .map((salon) => ({
         ...salon,
-        address: locationLabel(salon),
+        address: shortLocationLabel(salon),
         // Work photos (the profile photo when there is no gallery)
         photos: salon.gallery.length ? salon.gallery : [salon.image],
         distance: user ? formatDistance(distanceKm(user, salon.position)) : null,

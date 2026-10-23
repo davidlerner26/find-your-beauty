@@ -5,6 +5,11 @@
   z-index: 49;
   background: rgba(0, 0, 0, 0.4);
   animation: screen-fade 0.25s ease-out;
+  transition: opacity 0.25s;
+
+  &.dragging {
+    transition: none;
+  }
 }
 
 @keyframes screen-fade {
@@ -26,6 +31,13 @@
   background: #fff;
   overflow: hidden;
   animation: screen-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  // Settles back (or goes away) with the same curve; while pulling it follows the finger with no delay
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+
+  &.dragging {
+    transition: none;
+  }
 }
 
 @keyframes screen-in {
@@ -48,6 +60,22 @@
   padding-bottom: 1.5rem;
 }
 
+// The photo and the bar: the part that is pulled down to close
+.screen-top {
+  position: relative;
+  touch-action: pan-x;
+
+  // Without photos, the bar is gray over the white of the sheet
+  &.no-photo {
+    height: 2.25rem;
+
+    .screen-handle::after {
+      background: #d6d6d6;
+      box-shadow: none;
+    }
+  }
+}
+
 // The photos fill the top of the sheet edge to edge (the round corners of the sheet cut them)
 .screen-photo {
   position: relative;
@@ -57,6 +85,9 @@
 }
 
 .screen-photos {
+  // Pulling the photo down must not start dragging the image itself
+  user-select: none;
+  -webkit-user-drag: none;
   position: absolute;
   inset: 0;
   display: flex;

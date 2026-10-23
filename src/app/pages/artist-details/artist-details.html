@@ -140,14 +140,20 @@
       </div>
       <div class="services">
         @for (service of visibleServices(); track service.id) {
-          <article class="service">
+          <!-- The whole card opens the screen of the service; only the + button adds it -->
+          <article
+            class="service"
+            tabindex="0"
+            (click)="detailId.set(service.id)"
+            (keydown.enter)="$event.target === $event.currentTarget && detailId.set(service.id)"
+          >
             <!-- The photos of the service (swipe sideways). Without photos, the card has no picture. -->
             @if (service.photos?.length) {
               <div class="service-image">
                 <div class="service-photos" (scroll)="onServicePhotos($event, service.id)">
                   @for (photo of service.photos; track photo) {
                     <div class="service-slide">
-                      <img [src]="photo" [alt]="service.name" loading="lazy" />
+                      <img [src]="photo" [alt]="service.name" loading="lazy" draggable="false" />
                     </div>
                   }
                 </div>
@@ -179,7 +185,7 @@
                 </p>
                 <!-- Only when the text is really cut: opens the screen of the service -->
                 @if (text.clamped()) {
-                  <button type="button" class="read-more" (click)="detailId.set(service.id)">Ler mais</button>
+                  <button type="button" class="read-more">Ler mais</button>
                 }
               }
             </div>
@@ -188,7 +194,7 @@
               class="toggle"
               [class.on]="isSelected(service)"
               [attr.aria-label]="(isSelected(service) ? 'Remover ' : 'Adicionar ') + service.name"
-              (click)="toggleService(service)"
+              (click)="$event.stopPropagation(); toggleService(service)"
             >
               {{ isSelected(service) ? '−' : '+' }}
             </button>

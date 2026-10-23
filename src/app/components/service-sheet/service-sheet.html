@@ -1,12 +1,33 @@
-<div class="screen-backdrop" (click)="closed.emit()"></div>
-<div class="service-screen" role="dialog" [attr.aria-label]="service().name" (keydown.escape)="closed.emit()">
+<div
+  class="screen-backdrop"
+  [class.dragging]="dragging()"
+  [style.opacity]="backdropOpacity()"
+  (click)="closed.emit()"
+></div>
+<div
+  class="service-screen"
+  role="dialog"
+  [attr.aria-label]="service().name"
+  [class.dragging]="dragging()"
+  [style.transform]="'translateY(' + offset() + 'px)'"
+  (keydown.escape)="closed.emit()"
+>
   <div class="screen-scroll">
+    <!-- Pull the photo (or the bar) down to close the sheet -->
+    <div
+      class="screen-top"
+      [class.no-photo]="!service().photos?.length"
+      (pointerdown)="onDown($event)"
+      (pointermove)="onMove($event)"
+      (pointerup)="onUp()"
+      (pointercancel)="onUp()"
+    >
     @if (service().photos?.length) {
       <div class="screen-photo">
         <div class="screen-photos" (scroll)="onScroll($event)">
           @for (photo of service().photos; track photo) {
             <div class="screen-slide">
-              <img [src]="photo" [alt]="service().name" />
+              <img [src]="photo" [alt]="service().name" draggable="false" />
             </div>
           }
         </div>
@@ -20,7 +41,8 @@
       </div>
     }
     <!-- Tap the bar to close -->
-    <button type="button" class="screen-handle" aria-label="Fechar" (click)="closed.emit()"></button>
+    <button type="button" class="screen-handle" aria-label="Fechar" (click)="onHandleClick()"></button>
+    </div>
 
     <div class="screen-info">
       <h1>{{ service().name }}</h1>

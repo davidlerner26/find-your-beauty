@@ -146,7 +146,11 @@
         <div class="head">
           <h2>Galeria</h2>
           <label class="link upload-link">
-            {{ uploading() ? 'Enviando...' : '+ Adicionar fotos' }}
+            @if (uploading()) {
+              <app-spinner [small]="true" />
+            } @else {
+              + Adicionar fotos
+            }
             <input
               type="file"
               accept="image/*"

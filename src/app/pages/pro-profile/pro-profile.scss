@@ -318,6 +318,11 @@ h3 {
 .upload-link {
   padding: 0;
   border: 0;
+
+  // The spinner takes the place of the text, with no room around it
+  app-spinner {
+    padding: 0;
+  }
 }
 
 .gallery {

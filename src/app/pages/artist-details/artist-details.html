@@ -173,7 +173,22 @@
                   }
                 </ul>
               }
-              <p class="muted service-description">{{ service.description }}</p>
+              @if (service.description) {
+                <p
+                  class="muted service-description"
+                  #text="clamped"
+                  [appClamped]="isDescriptionOpen(service.id)"
+                  [class.open]="isDescriptionOpen(service.id)"
+                >
+                  {{ service.description }}
+                </p>
+                <!-- Only when the text is really cut -->
+                @if (text.clamped() || isDescriptionOpen(service.id)) {
+                  <button type="button" class="read-more" (click)="toggleDescription(service.id)">
+                    {{ isDescriptionOpen(service.id) ? 'Ler menos' : 'Ler mais' }}
+                  </button>
+                }
+              }
             </div>
             <button
               type="button"

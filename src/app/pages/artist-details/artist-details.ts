@@ -16,13 +16,14 @@ import { Favorites } from '../../services/favorites';
 import { Reviews } from '../../services/reviews';
 import { Users } from '../../services/users';
 import { missingProfileData } from '../../models/user';
+import { Clamped } from '../../utils/clamped.directive';
 import { ruleLabel } from '../../utils/pricing';
 import { instagramUrl } from '../../utils/instagram';
 import { formatRelative } from '../../utils/format-date';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
+  imports: [Clamped, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })
@@ -31,6 +32,17 @@ export class ArtistDetails {
 
   protected readonly artist = computed(() => this.professionals.byId(this.id()));
   protected readonly aboutExpanded = signal(false);
+
+  // Services whose long description is open
+  private readonly openDescriptions = signal<string[]>([]);
+
+  protected isDescriptionOpen(id: string) {
+    return this.openDescriptions().includes(id);
+  }
+
+  protected toggleDescription(id: string) {
+    this.openDescriptions.update((open) => (open.includes(id) ? open.filter((item) => item !== id) : [...open, id]));
+  }
   protected readonly stars = [1, 2, 3, 4, 5];
 
   protected readonly categories: { name: ServiceCategory; icon: string }[] = [

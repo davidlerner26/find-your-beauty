@@ -355,6 +355,23 @@ a {
   overflow: hidden;
 }
 
+// The whole text, after "Ler mais"
+.service-description.open {
+  display: block;
+  overflow: visible;
+}
+
+.read-more {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .toggle {
   align-self: flex-end;
   margin-bottom: 1rem;

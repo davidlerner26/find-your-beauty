@@ -33,16 +33,9 @@ export class ArtistDetails {
   protected readonly artist = computed(() => this.professionals.byId(this.id()));
   protected readonly aboutExpanded = signal(false);
 
-  // Services whose long description is open
-  private readonly openDescriptions = signal<string[]>([]);
-
-  protected isDescriptionOpen(id: string) {
-    return this.openDescriptions().includes(id);
-  }
-
-  protected toggleDescription(id: string) {
-    this.openDescriptions.update((open) => (open.includes(id) ? open.filter((item) => item !== id) : [...open, id]));
-  }
+  // The service whose screen is open ("Ler mais" of a long description)
+  protected readonly detailId = signal<string | null>(null);
+  protected readonly detail = computed(() => this.artist()?.services.find((service) => service.id === this.detailId()) ?? null);
   protected readonly stars = [1, 2, 3, 4, 5];
 
   protected readonly categories: { name: ServiceCategory; icon: string }[] = [

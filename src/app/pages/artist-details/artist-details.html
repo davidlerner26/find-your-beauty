@@ -174,19 +174,12 @@
                 </ul>
               }
               @if (service.description) {
-                <p
-                  class="muted service-description"
-                  #text="clamped"
-                  [appClamped]="isDescriptionOpen(service.id)"
-                  [class.open]="isDescriptionOpen(service.id)"
-                >
+                <p class="muted service-description" #text="clamped" [appClamped]="false">
                   {{ service.description }}
                 </p>
-                <!-- Only when the text is really cut -->
-                @if (text.clamped() || isDescriptionOpen(service.id)) {
-                  <button type="button" class="read-more" (click)="toggleDescription(service.id)">
-                    {{ isDescriptionOpen(service.id) ? 'Ler menos' : 'Ler mais' }}
-                  </button>
+                <!-- Only when the text is really cut: opens the screen of the service -->
+                @if (text.clamped()) {
+                  <button type="button" class="read-more" (click)="detailId.set(service.id)">Ler mais</button>
                 }
               }
             </div>
@@ -363,6 +356,55 @@
       </button>
     </div>
   </footer>
+
+  <!-- The screen of a service: all the photos, the price and the whole description -->
+  @if (detail(); as service) {
+    <div class="service-screen" role="dialog" [attr.aria-label]="service.name" (keydown.escape)="detailId.set(null)">
+      <div class="service-screen-top" [class.with-photos]="service.photos?.length">
+        @if (service.photos?.length) {
+          <div class="screen-photos" (scroll)="onServicePhotos($event, 'screen-' + service.id)">
+            @for (photo of service.photos; track photo) {
+              <div class="screen-slide">
+                <img [src]="photo" [alt]="service.name" />
+              </div>
+            }
+          </div>
+          @if (service.photos!.length > 1) {
+            <div class="service-dots screen-dots" aria-hidden="true">
+              @for (photo of service.photos; track photo; let n = $index) {
+                <span [class.on]="n === (serviceSlide()['screen-' + service.id] ?? 0)"></span>
+              }
+            </div>
+          }
+        }
+        <button type="button" class="round screen-back" aria-label="Voltar" (click)="detailId.set(null)">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+      </div>
+
+      <div class="service-screen-body">
+        <h1>{{ service.name }}</h1>
+        <p class="service-meta">
+          <strong>{{ service.price | price }}</strong>
+          <span class="muted">· {{ formatDuration(service.durationMinutes) }}</span>
+        </p>
+        @if (service.priceRules?.length) {
+          <ul class="price-rules muted">
+            @for (rule of service.priceRules; track $index) {
+              <li>{{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong></li>
+            }
+          </ul>
+        }
+        <p class="screen-description">{{ service.description }}</p>
+      </div>
+
+      <div class="service-screen-bar">
+        <button type="button" class="screen-add" [class.on]="isSelected(service)" (click)="toggleService(service)">
+          {{ isSelected(service) ? 'Remover do agendamento' : 'Adicionar ao agendamento' }}
+        </button>
+      </div>
+    </div>
+  }
 } @else if (professionals.status() === 'loading') {
   <app-spinner />
 } @else if (professionals.status() === 'error') {

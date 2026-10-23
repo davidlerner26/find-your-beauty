@@ -6,6 +6,7 @@ import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
+import { ServiceSheet } from '../../components/service-sheet/service-sheet';
 import { Toast } from '../../components/toast/toast';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -23,7 +24,7 @@ import { formatRelative } from '../../utils/format-date';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [Clamped, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
+  imports: [Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })

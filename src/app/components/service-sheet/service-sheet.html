@@ -1,0 +1,53 @@
+<div class="screen-backdrop" (click)="closed.emit()"></div>
+<div class="service-screen" role="dialog" [attr.aria-label]="service().name" (keydown.escape)="closed.emit()">
+  <div class="screen-scroll">
+    @if (service().photos?.length) {
+      <div class="screen-photo">
+        <div class="screen-photos" (scroll)="onScroll($event)">
+          @for (photo of service().photos; track photo) {
+            <div class="screen-slide">
+              <img [src]="photo" [alt]="service().name" />
+            </div>
+          }
+        </div>
+        @if (service().photos!.length > 1) {
+          <div class="screen-dots" aria-hidden="true">
+            @for (photo of service().photos; track photo; let n = $index) {
+              <span [class.on]="n === slide()"></span>
+            }
+          </div>
+        }
+      </div>
+    }
+    <!-- Tap the bar to close -->
+    <button type="button" class="screen-handle" aria-label="Fechar" (click)="closed.emit()"></button>
+
+    <div class="screen-info">
+      <h1>{{ service().name }}</h1>
+      <p class="screen-duration">
+        <mat-icon>schedule</mat-icon>
+        {{ formatDuration(service().durationMinutes) }}
+      </p>
+      <p class="screen-price">{{ service().price | price }}</p>
+      @if (service().priceRules?.length) {
+        <ul class="price-rules muted">
+          @for (rule of service().priceRules; track $index) {
+            <li>{{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong></li>
+          }
+        </ul>
+      }
+      @if (service().description) {
+        <div class="screen-about">
+          <h2>Sobre o serviço</h2>
+          <p class="screen-description">{{ service().description }}</p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="screen-bar">
+    <button type="button" class="screen-add" [class.on]="selected()" (click)="toggle.emit()">
+      {{ selected() ? 'Remover do agendamento' : 'Adicionar ao agendamento' }}
+    </button>
+  </div>
+</div>

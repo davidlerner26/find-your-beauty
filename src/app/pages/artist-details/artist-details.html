@@ -141,11 +141,25 @@
       <div class="services">
         @for (service of visibleServices(); track service.id) {
           <article class="service">
-            <div
-              class="service-image"
-              [style.background-image]="'url(' + artist.image + ')'"
-              [style.background-position]="artist.imagePosition | focus"
-            ></div>
+            <!-- The photos of the service (swipe sideways). Without photos, the card has no picture. -->
+            @if (service.photos?.length) {
+              <div class="service-image">
+                <div class="service-photos" (scroll)="onServicePhotos($event, service.id)">
+                  @for (photo of service.photos; track photo) {
+                    <div class="service-slide">
+                      <img [src]="photo" [alt]="service.name" loading="lazy" />
+                    </div>
+                  }
+                </div>
+                @if (service.photos!.length > 1) {
+                  <div class="service-dots" aria-hidden="true">
+                    @for (photo of service.photos; track photo; let n = $index) {
+                      <span [class.on]="n === (serviceSlide()[service.id] ?? 0)"></span>
+                    }
+                  </div>
+                }
+              </div>
+            }
             <div class="service-info">
               <h3>{{ service.name }}</h3>
               <p class="service-meta">

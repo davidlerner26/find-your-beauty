@@ -401,6 +401,38 @@
                 </p>
               }
             </div>
+            <!-- Photos of the service: the card of the service on the professional page shows them as a gallery -->
+            <div class="service-photos">
+              <div class="head">
+                <span class="field-label">Fotos do serviço</span>
+                <label class="link upload-link">
+                  @if (uploadingService() === service.id) {
+                    <app-spinner [small]="true" />
+                  } @else {
+                    + Adicionar fotos
+                  }
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    hidden
+                    [disabled]="uploadingService() !== null"
+                    #serviceFile
+                    (change)="uploadServicePhotos(service, serviceFile)"
+                  />
+                </label>
+              </div>
+              @if (service.photos.length) {
+                <div class="gallery">
+                  @for (photo of service.photos; track photo) {
+                    <div class="thumb">
+                      <img [src]="photo" alt="Foto do serviço" />
+                      <button type="button" aria-label="Remover foto" (click)="removeServicePhoto(service, photo)">✕</button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
             <label>
               <span class="field-label">Descrição</span>
               <textarea

@@ -564,3 +564,15 @@ h3 {
     font-size: 0.85rem;
   }
 }
+
+// Photos of a service, inside its card
+.service-photos {
+  display: grid;
+  gap: 0.6rem;
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

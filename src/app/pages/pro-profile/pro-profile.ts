@@ -33,7 +33,9 @@ import { Professionals } from '../../services/professionals';
 // A service being edited: nothing is pre-filled, so the fields can be empty
 type PriceRuleDraft = { id: string; days: number[]; start: string; end: string; price: string };
 
-type ServiceDraft = Omit<Service, 'category' | 'price' | 'durationMinutes' | 'priceRules'> & {
+type ServiceDraft = Omit<Service, 'category' | 'price' | 'durationMinutes' | 'priceRules' | 'photos'> & {
+  // Photos of this service (the card shows them as a gallery)
+  photos: string[];
   // Other prices, by day and time (each price typed like the main one)
   priceRules: PriceRuleDraft[];
   category: ServiceCategory | '';
@@ -150,8 +152,9 @@ export class ProProfile {
       // Profiles from before this choice existed work at their address
       this.serviceMode.set(profile.serviceMode ?? (profile.address ? 'studio' : null));
       this.about = profile.about.join('\n\n');
-      this.services = profile.services.map(({ durationMinutes, price, priceRules, ...service }) => ({
+      this.services = profile.services.map(({ durationMinutes, price, priceRules, photos, image, ...service }: Service & { image?: string }) => ({
         ...service,
+        photos: [...(photos ?? [])],
         priceRules: (priceRules ?? []).map((rule) => ({
           id: Math.random().toString(36).slice(2, 10),
           days: [...rule.days],
@@ -305,6 +308,32 @@ export class ProProfile {
     }
   }
 
+  // Photos of a service: the id of the service that is uploading
+  protected readonly uploadingService = signal<string | null>(null);
+
+  protected async uploadServicePhotos(service: ServiceDraft, input: HTMLInputElement) {
+    const files = Array.from(input.files ?? []);
+    input.value = '';
+    if (!files.length) return;
+
+    this.uploadingService.set(service.id);
+    try {
+      const urls = await Promise.all(files.map((file) => this.photos.upload(this.uid(), 'services', file)));
+      service.photos = [...service.photos, ...urls];
+      this.autoSave();
+    } catch (error) {
+      this.showUploadError(error);
+    } finally {
+      this.uploadingService.set(null);
+    }
+  }
+
+  protected removeServicePhoto(service: ServiceDraft, url: string) {
+    service.photos = service.photos.filter((photo) => photo !== url);
+    this.removedPhotos.push(url);
+    this.autoSave();
+  }
+
   protected removeGalleryPhoto(url: string) {
     this.gallery = this.gallery.filter((photo) => photo !== url);
     this.removedPhotos.push(url);
@@ -337,9 +366,9 @@ export class ProProfile {
         category: '',
         price: '0,00',
         priceRules: [],
+        photos: [],
         duration: '0:00',
         description: '',
-        image: '',
       },
     ];
   }
@@ -418,6 +447,8 @@ export class ProProfile {
   }
 
   protected removeService(service: ServiceDraft) {
+    // Its photos go away from the storage once the profile is saved
+    this.removedPhotos.push(...service.photos);
     this.services = this.services.filter((item) => item !== service);
   }
 
@@ -525,8 +556,9 @@ export class ProProfile {
   private completeServices(): Service[] {
     return this.services
       .filter((service) => this.serviceComplete(service))
-      .map(({ duration, price, priceRules, ...service }) => ({
+      .map(({ duration, price, priceRules, photos, ...service }) => ({
         ...service,
+        ...(photos.length ? { photos } : {}),
         price: parseMoney(price),
         ...(priceRules.length
           ? {
@@ -541,7 +573,6 @@ export class ProProfile {
         category: service.category as ServiceCategory,
         name: service.name.trim(),
         description: service.description.trim(),
-        image: service.image || this.image.trim(),
       }));
   }
 

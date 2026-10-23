@@ -75,7 +75,8 @@ export type Service = {
   priceRules?: PriceRule[];
   durationMinutes: number;
   description: string;
-  image: string;
+  // Photos of the service, shown in its card. There is no default photo: without them the card has no picture.
+  photos?: string[];
 };
 
 // Focal point of the profile photo, in percent: where the photo is anchored when it gets cropped

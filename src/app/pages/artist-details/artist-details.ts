@@ -112,6 +112,15 @@ export class ArtistDetails {
     }, 2000);
   }
 
+  // Photo being shown in the card of each service (for the dots)
+  protected readonly serviceSlide = signal<Record<string, number | undefined>>({});
+
+  protected onServicePhotos(event: Event, id: string) {
+    const strip = event.target as HTMLElement;
+    const index = Math.round(strip.scrollLeft / strip.clientWidth);
+    if ((this.serviceSlide()[id] ?? 0) !== index) this.serviceSlide.update((all) => ({ ...all, [id]: index }));
+  }
+
   protected readonly formatDuration = formatDuration;
   protected readonly ruleLabel = ruleLabel;
   protected readonly instagramUrl = instagramUrl;

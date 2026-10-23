@@ -10,7 +10,13 @@ const from = defineString('RESEND_FROM', { default: 'Find Your Beauty <onboardin
 // Where the links of the e-mails open
 export const appUrl = defineString('APP_URL', { default: 'https://findyourbeauty.com.br' });
 
+// The look of the app: white, a big bold title, gray text, round teal buttons and light gray boxes
 const TEAL = '#2f6b7a';
+const TEXT = '#1c1c1c';
+const MUTED = '#6b6b6b';
+const SOFT = '#f1f2f6';
+// Mulish is the font of the app. Only some mail apps load it, the others use the fallbacks.
+const FONT = "'Mulish','Nunito','Trebuchet MS',Arial,Helvetica,sans-serif";
 
 const escape = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -21,24 +27,41 @@ export type Email = {
   heading: string;
   // Each one is a paragraph (plain text)
   paragraphs: string[];
+  // Lines of a box under the text, like the when and the services of a booking
+  details?: { label: string; value: string }[];
   button?: { label: string; url: string };
 };
 
-const render = ({ heading, paragraphs, button }: Email) => `<!doctype html>
+const render = ({ heading, paragraphs, details, button }: Email) => `<!doctype html>
 <html lang="pt-BR">
-  <body style="margin:0;padding:24px 12px;background:#f1f2f6;font-family:Arial,Helvetica,sans-serif;color:#1c1c1c;">
-    <div style="max-width:32rem;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;">
-      <div style="background:${TEAL};padding:20px 28px;color:#ffffff;font-size:18px;font-weight:bold;">Find Your Beauty</div>
-      <div style="padding:28px;">
-        <h1 style="margin:0 0 16px;font-size:22px;">${escape(heading)}</h1>
-        ${paragraphs.map((p) => `<p style="margin:0 0 14px;font-size:15px;line-height:1.5;">${escape(p)}</p>`).join('')}
-        ${
-          button
-            ? `<p style="margin:24px 0 8px;"><a href="${escape(button.url)}" style="background:${TEAL};color:#ffffff;text-decoration:none;padding:14px 26px;border-radius:999px;font-weight:bold;display:inline-block;">${escape(button.label)}</a></p>`
-            : ''
-        }
-      </div>
-      <div style="padding:16px 28px;background:#f8f8fa;color:#777;font-size:12px;">Você recebeu este e-mail porque tem uma conta no Find Your Beauty.</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body style="margin:0;padding:0;background:#ffffff;font-family:${FONT};color:${TEXT};">
+    <div style="max-width:30rem;margin:0 auto;padding:32px 24px 40px;">
+      <p style="margin:0 0 36px;font-size:16px;font-weight:800;letter-spacing:0.2px;color:${TEAL};">Find Your Beauty</p>
+      <h1 style="margin:0 0 12px;font-size:30px;line-height:1.2;font-weight:800;color:${TEXT};">${escape(heading)}</h1>
+      ${paragraphs
+        .map((p) => `<p style="margin:0 0 16px;font-size:16px;line-height:1.55;color:${MUTED};">${escape(p)}</p>`)
+        .join('')}
+      ${
+        details?.length
+          ? `<div style="margin:24px 0;padding:18px 20px;background:${SOFT};border-radius:16px;">${details
+              .map(
+                (d, i) =>
+                  `<p style="margin:${i ? '12px' : '0'} 0 0;font-size:13px;color:${MUTED};">${escape(d.label)}</p><p style="margin:2px 0 0;font-size:16px;font-weight:700;color:${TEXT};">${escape(d.value)}</p>`,
+              )
+              .join('')}</div>`
+          : ''
+      }
+      ${
+        button
+          ? `<p style="margin:32px 0 0;"><a href="${escape(button.url)}" style="display:block;background:${TEAL};color:#ffffff;text-decoration:none;text-align:center;padding:17px 24px;border-radius:999px;font-size:16px;font-weight:700;">${escape(button.label)}</a></p>`
+          : ''
+      }
+      <p style="margin:40px 0 0;font-size:12px;line-height:1.5;color:#9a9aa3;">Você recebeu este e-mail porque tem uma conta no Find Your Beauty.</p>
     </div>
   </body>
 </html>`;

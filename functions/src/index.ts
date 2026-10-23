@@ -90,7 +90,8 @@ export const onBookingCreated = onDocumentCreated({ document: 'bookings/{booking
       to: clientEmail,
       subject: 'Recebemos o seu pedido de agendamento',
       heading: 'Pedido enviado',
-      paragraphs: [`Você solicitou um horário com ${booking.professionalName}. Assim que ela ou ele responder, você recebe um aviso.`, ...details],
+      paragraphs: [`Você solicitou um horário com ${booking.professionalName}. Assim que ela ou ele responder, você recebe um aviso.`],
+      details,
       button: { label: 'Ver minha agenda', url: `${appUrl.value()}/agenda` },
     });
   }
@@ -100,7 +101,8 @@ export const onBookingCreated = onDocumentCreated({ document: 'bookings/{booking
       to: professionalEmail,
       subject: 'Nova solicitação de agendamento',
       heading: 'Nova solicitação',
-      paragraphs: [`${booking.clientName} pediu um horário com você.`, ...details],
+      paragraphs: [`${booking.clientName} pediu um horário com você.`],
+      details,
       button: { label: 'Responder na agenda', url: `${appUrl.value()}/pro` },
     });
   }
@@ -108,9 +110,9 @@ export const onBookingCreated = onDocumentCreated({ document: 'bookings/{booking
 
 // What the e-mails say about a booking
 const bookingDetails = (booking: FirebaseFirestore.DocumentData) => [
-  `Quando: ${when(booking.startsAt.toDate())}`,
-  `Serviços: ${(booking.services as { name: string }[]).map((service) => service.name).join(', ')}`,
-  `Total: ${money(booking.total)}`,
+  { label: 'Quando', value: when(booking.startsAt.toDate()) },
+  { label: 'Serviços', value: (booking.services as { name: string }[]).map((service) => service.name).join(', ') },
+  { label: 'Total', value: money(booking.total) },
 ];
 
 const VERB: Record<string, string> = {
@@ -140,7 +142,8 @@ export const onBookingUpdated = onDocumentUpdated({ document: 'bookings/{booking
         to: professionalEmail,
         subject: 'Um agendamento foi cancelado',
         heading: 'Agendamento cancelado',
-        paragraphs: [`${after.clientName} cancelou o agendamento. O horário está livre de novo.`, ...bookingDetails(after)],
+        paragraphs: [`${after.clientName} cancelou o agendamento. O horário está livre de novo.`],
+        details: bookingDetails(after),
         button: { label: 'Abrir a agenda', url: `${appUrl.value()}/pro` },
       });
     }
@@ -161,7 +164,8 @@ export const onBookingUpdated = onDocumentUpdated({ document: 'bookings/{booking
       to: clientEmail,
       subject: `${after.professionalName} ${verb} o seu agendamento`,
       heading: `Agendamento ${STATUS_TITLE[after.status] ?? ''}`.trim(),
-      paragraphs: [`${after.professionalName} ${verb} o seu agendamento.`, ...bookingDetails(after)],
+      paragraphs: [`${after.professionalName} ${verb} o seu agendamento.`],
+      details: bookingDetails(after),
       button: { label: 'Ver minha agenda', url: `${appUrl.value()}/agenda` },
     });
   }

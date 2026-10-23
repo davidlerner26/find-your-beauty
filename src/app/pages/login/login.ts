@@ -52,6 +52,10 @@ export class Login {
       }
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
+      if ((error as { code?: string }).code === 'auth/email-not-verified') {
+        this.router.navigateByUrl('/verificar-email');
+        return;
+      }
       this.formError.set(authErrorMessage(error));
     } finally {
       this.submitting.set(false);

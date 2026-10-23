@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { createHash, randomInt } from 'node:crypto';
 import { getAuth } from 'firebase-admin/auth';
 import { setGlobalOptions } from 'firebase-functions/v2';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
@@ -280,3 +281,77 @@ export {
   refreshInstagram,
   syncInstagramDaily,
 } from './instagram';
+
+// ----- E-mail verification with a 4 digit code (clients that sign up with e-mail and password)
+// The code is kept hashed in emailCodes/{uid}, which no rule opens: only these functions use it.
+const CODE_MINUTES = 10;
+const RESEND_SECONDS = 60;
+const MAX_ATTEMPTS = 5;
+
+const hashCode = (uid: string, code: string) => createHash('sha256').update(`${uid}:${code}`).digest('hex');
+const cleanEmail = (value: unknown) => {
+  const email = String(value ?? '').trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new HttpsError('invalid-argument', 'Digite um e-mail válido.');
+  return email;
+};
+const userByEmail = async (email: string) => {
+  try {
+    return await getAuth().getUserByEmail(email);
+  } catch {
+    return null;
+  }
+};
+
+// Sends a new code. It says ok for an unknown or already verified e-mail, so nobody can find out which have an account.
+export const sendVerificationCode = onCall({ secrets: [resendKey] }, async (request) => {
+  const email = cleanEmail(request.data?.email);
+  const user = await userByEmail(email);
+  if (!user || user.emailVerified) return { ok: true };
+
+  const ref = db.doc(`emailCodes/${user.uid}`);
+  const saved = (await ref.get()).data();
+  if (saved && Date.now() - (saved['sentAt'] as number) < RESEND_SECONDS * 1000) {
+    throw new HttpsError('resource-exhausted', 'Aguarde um instante para pedir outro código.');
+  }
+
+  const code = String(randomInt(0, 10000)).padStart(4, '0');
+  await ref.set({
+    hash: hashCode(user.uid, code),
+    sentAt: Date.now(),
+    expiresAt: Date.now() + CODE_MINUTES * 60_000,
+    attempts: 0,
+  });
+  await sendEmail({
+    to: email,
+    subject: `${code} é o seu código de verificação`,
+    heading: 'Confirme o seu e-mail',
+    paragraphs: [`Digite este código no app para confirmar o seu e-mail. Ele vale por ${CODE_MINUTES} minutos.`],
+    details: [{ label: 'Seu código', value: code.split('').join(' ') }],
+  });
+  return { ok: true };
+});
+
+// Checks the code and marks the e-mail as verified
+export const verifyEmailCode = onCall(async (request) => {
+  const email = cleanEmail(request.data?.email);
+  const code = String(request.data?.code ?? '').trim();
+  if (!/^\d{4}$/.test(code)) throw new HttpsError('invalid-argument', 'Digite os 4 números do código.');
+
+  const user = await userByEmail(email);
+  if (!user) throw new HttpsError('failed-precondition', 'Código inválido ou expirado.');
+  if (user.emailVerified) return { ok: true };
+
+  const ref = db.doc(`emailCodes/${user.uid}`);
+  const saved = (await ref.get()).data();
+  if (!saved || Date.now() > (saved['expiresAt'] as number) || (saved['attempts'] as number) >= MAX_ATTEMPTS) {
+    throw new HttpsError('failed-precondition', 'Código expirado. Peça um novo código.');
+  }
+  if (saved['hash'] !== hashCode(user.uid, code)) {
+    await ref.update({ attempts: FieldValue.increment(1) });
+    throw new HttpsError('invalid-argument', 'Código incorreto.');
+  }
+
+  await getAuth().updateUser(user.uid, { emailVerified: true });
+  await ref.delete();
+  return { ok: true };
+});

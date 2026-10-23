@@ -24,6 +24,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/booking/booking').then((m) => m.Booking),
   },
   {
+    path: 'verificar-email',
+    loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
+  },
+  {
     path: 'privacidade',
     loadComponent: () => import('./pages/legal/privacy').then((m) => m.Privacy),
   },

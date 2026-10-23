@@ -113,7 +113,7 @@ export class Signup {
         await this.auth.signUpProfessional(data);
       } else {
         await this.auth.signUpWithEmail(data);
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/verificar-email');
       }
     } catch (error) {
       this.formError.set(authErrorMessage(error));

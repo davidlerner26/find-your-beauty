@@ -33,6 +33,14 @@ export type SignUpData = {
 
 export type Role = 'client' | 'professional';
 
+// Clients that sign up with e-mail and password confirm the e-mail with a code. Accounts from before this
+// existed are not asked to.
+const VERIFICATION_FROM = new Date('2026-10-23T00:00:00-03:00').getTime();
+const VERIFICATION_KEY = 'email-verification';
+
+const functions = getFunctions(firebaseApp, 'southamerica-east1');
+const call = <Request, Response>(name: string) => httpsCallable<Request, Response>(functions, name);
+
 @Injectable({ providedIn: 'root' })
 export class Auth {
   private readonly auth = getAuth(firebaseApp);
@@ -51,6 +59,9 @@ export class Auth {
   readonly signupSubmitted = signal(false);
   // true when the last sign in was a professional still waiting for an admin (that session is closed right away)
   readonly pendingApproval = signal(false);
+  // The e-mail waiting for its code (kept for a reload of the page). The password stays only in memory,
+  // to sign in right after the code is accepted.
+  readonly verification = signal<{ email: string; password: string | null } | null>(this.restoreVerification());
   // false until Firebase tells us whether there is a session (and its role)
   readonly ready = signal(false);
   readonly whenReady = new Promise<void>((resolve) => (this.markReady = resolve));
@@ -125,6 +136,52 @@ export class Auth {
     } catch (error) {
       console.error('Failed to save user', error);
     }
+
+    // Not signed in until the e-mail is confirmed with the code
+    await signOut(this.auth);
+    await this.startVerification(email.trim(), password);
+  }
+
+  private restoreVerification() {
+    try {
+      const email = sessionStorage.getItem(VERIFICATION_KEY);
+      return email ? { email, password: null } : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Remembers the e-mail and sends a first code
+  async startVerification(email: string, password: string | null) {
+    this.verification.set({ email, password });
+    try {
+      sessionStorage.setItem(VERIFICATION_KEY, email);
+    } catch {
+      // Without storage a reload forgets the e-mail
+    }
+    await this.sendVerificationCode(email).catch((error) => console.error('Failed to send the code', error));
+  }
+
+  async sendVerificationCode(email: string) {
+    await call<{ email: string }, { ok: boolean }>('sendVerificationCode')({ email });
+  }
+
+  // Checks the code, then signs in with the password the sign up used (or asks for the login when it was lost)
+  async verifyEmail(code: string) {
+    const pending = this.verification();
+    if (!pending) return false;
+
+    await call<{ email: string; code: string }, { ok: boolean }>('verifyEmailCode')({ email: pending.email, code });
+    this.verification.set(null);
+    try {
+      sessionStorage.removeItem(VERIFICATION_KEY);
+    } catch {
+      // ignored
+    }
+    if (!pending.password) return false;
+
+    await this.signInWithEmail(pending.email, pending.password, true);
+    return true;
   }
 
   // Professionals are separate accounts: the profile document id is the account uid
@@ -209,6 +266,16 @@ export class Auth {
 
   async signInClient(email: string, password: string, remember = true) {
     await this.signInWithEmail(email, password, remember);
+
+    // A new account that never confirmed the e-mail goes to the code screen
+    const user = this.auth.currentUser;
+    const createdAt = Date.parse(user?.metadata.creationTime ?? '');
+    if (user && !user.emailVerified && createdAt >= VERIFICATION_FROM && user.providerData.some((p) => p.providerId === 'password')) {
+      await signOut(this.auth);
+      await this.startVerification(email.trim(), password);
+      throw { code: 'auth/email-not-verified' };
+    }
+
     await this.requireArea('client');
   }
 

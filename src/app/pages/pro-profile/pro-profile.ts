@@ -242,10 +242,13 @@ export class ProProfile {
       );
     }
     this.pending.set({ start: null, end: null });
+    // Blocking a period saves right away
+    this.autoSave();
   }
 
   protected unblock(range: DateRange) {
     this.availability.blockedRanges = this.availability.blockedRanges.filter((r) => r !== range);
+    this.autoSave();
   }
 
   // "10/03/2026" for a single day, "10/03/2026 a 15/03/2026" for a period

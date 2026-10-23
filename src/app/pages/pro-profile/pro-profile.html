@@ -510,9 +510,6 @@
         }
       </section>
 
-      @if (autoSaved()) {
-        <p class="autosaved" role="status">✓ Alterações salvas</p>
-      }
       <button type="submit" class="primary" [disabled]="saving()">
         {{
           saving()

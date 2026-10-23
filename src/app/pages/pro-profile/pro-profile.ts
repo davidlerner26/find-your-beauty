@@ -261,13 +261,13 @@ export class ProProfile {
   }
 
   // Shows the feedback at the top of the page and brings it into view
-  private show(text: string) {
+  private show(text: string, milliseconds = 5500) {
     const id = ++this.messageId;
     this.message.set(text);
     // The message of what is missing doesn't pop up again behind it, until the list changes
     this.dismissedText.set(this.missingText);
     // Floats on top and goes away by itself, like the message of what is missing
-    setTimeout(() => this.messageId === id && this.message.set(''), 5500);
+    setTimeout(() => this.messageId === id && this.message.set(''), milliseconds);
   }
 
   protected async uploadProfilePhoto(input: HTMLInputElement) {
@@ -588,7 +588,6 @@ export class ProProfile {
   // Saved by itself when a field loses focus: a draft, nothing is sent for approval
   private autoSaveTimer?: ReturnType<typeof setTimeout>;
   private lastSaved = '';
-  protected readonly autoSaved = signal(false);
 
   // The sentinels that delete old fields are left out of the comparison
   private snapshot(fields: object) {
@@ -615,8 +614,8 @@ export class ProProfile {
       await updateDoc(doc(db, 'professionals', this.uid()), { ...fields, ...status });
       await this.saveCpf();
       this.lastSaved = snapshot;
-      this.autoSaved.set(true);
-      setTimeout(() => this.autoSaved.set(false), 2500);
+      // A short toast, like the other messages of the screen
+      this.show('Alterações salvas', 2500);
     } catch (error) {
       console.error('Failed to auto save the profile', error);
     }

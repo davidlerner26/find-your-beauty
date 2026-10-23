@@ -95,3 +95,16 @@ h1 {
     color: var(--accent);
   }
 }
+
+// Look around without an account
+.visitor {
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 1.05rem;
+  text-decoration: none;
+}

@@ -234,3 +234,16 @@ h1 {
     color: var(--primary);
   }
 }
+
+// Look around without an account
+.visitor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.25rem;
+  border: 1.5px solid var(--primary);
+  border-radius: 999px;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}

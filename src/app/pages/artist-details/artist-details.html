@@ -47,9 +47,10 @@
           <mat-icon>chat_bubble</mat-icon>
         </a>
       </div>
-      <div class="address">
-        <p class="muted">{{ artist.serviceMode === 'home' ? 'Atendimento a domicílio' : artist.address }}</p>
+      <p class="muted address">
+        {{ artist.serviceMode === 'home' ? 'Atendimento a domicílio' : artist.address }}
         @if (artist.serviceMode !== 'home' && artist.address) {
+          <!-- Right after the last word of the address, even when the address breaks into lines -->
           <button
             type="button"
             class="copy"
@@ -60,7 +61,7 @@
             <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
           </button>
         }
-      </div>
+      </p>
       @if (artist.serviceMode === 'both') {
         <p class="muted">Também atende a domicílio</p>
       }

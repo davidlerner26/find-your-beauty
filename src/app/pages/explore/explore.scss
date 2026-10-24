@@ -414,24 +414,17 @@
     display: none;
   }
 
-  // The page of the professional floats over the map
-  .floating-backdrop {
+  // The page of the professional is a card on the map, on the right (above the button of the location)
+  .floating-card {
     position: fixed;
-    z-index: 40;
-    inset: 4.5rem 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    background: rgba(0, 0, 0, 0.45);
-  }
-
-  .floating-window {
-    width: min(80rem, 100%);
-    height: 100%;
+    z-index: 4;
+    top: 6rem;
+    right: 1.5rem;
+    bottom: 6.5rem;
+    width: 28rem;
     overflow-y: auto;
     border-radius: 20px;
     background: #fff;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
   }
 }

@@ -173,10 +173,8 @@
 </ng-template>
 
 @if (floatingId(); as id) {
-  <!-- Wide screens: the page of the professional on top of the map -->
-  <div class="floating-backdrop" (click)="closeFloating()">
-    <div class="floating-window" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
-      <app-artist-details [id]="id" [floating]="true" (closed)="closeFloating()" />
-    </div>
+  <!-- Wide screens: the page of the professional as a card on top of the map (the map stays usable) -->
+  <div class="floating-card" role="dialog">
+    <app-artist-details [id]="id" [floating]="true" (closed)="closeFloating()" />
   </div>
 }

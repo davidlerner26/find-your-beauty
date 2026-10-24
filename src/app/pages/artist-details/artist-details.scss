@@ -744,15 +744,6 @@ section > p,
     padding: 2rem 2.5rem 4rem;
   }
 
-  // Floating over the map: inside a window, the card follows the scroll of the window
-  :host(.floating) {
-    padding-top: 1.5rem;
-
-    .book-bar {
-      top: 1.5rem;
-    }
-  }
-
   // The messages and the screen of a service float over the page: they take no place in the grid
   app-toast,
   app-service-sheet {
@@ -808,5 +799,37 @@ section > p,
 
   .service:hover {
     box-shadow: 0 6px 22px rgba(0, 0, 0, 0.14);
+  }
+
+  // Floating over the map, as a small card: the layout of the phone (one column, the bar of the booking at the bottom)
+  :host(.floating) {
+    display: block;
+    padding: 0;
+
+    .hero {
+      height: 16rem;
+      border-radius: 0;
+    }
+
+    .content {
+      padding: 0 1.25rem;
+    }
+
+    .book-bar {
+      position: sticky;
+      bottom: 0;
+      top: auto;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 1.25rem;
+      border-radius: 0;
+      box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.08);
+
+      .price {
+        font-size: 1.4rem;
+      }
+    }
   }
 }

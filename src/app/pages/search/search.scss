@@ -411,7 +411,7 @@ h2 {
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
   :host {
-    max-width: 64rem;
+    max-width: none;
     padding: 0 2.5rem 4rem;
   }
 
@@ -430,7 +430,7 @@ h2 {
 
   // The results in two columns
   .list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
     gap: 1.5rem;
   }
 

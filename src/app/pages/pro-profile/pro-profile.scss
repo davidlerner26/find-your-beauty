@@ -580,7 +580,7 @@ h3 {
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
   .profile {
-    max-width: 64rem;
+    max-width: none;
     padding: 3rem 2.5rem 4rem;
   }
 

@@ -82,8 +82,8 @@ $tabs-height: 5rem;
     display: flex;
     align-items: center;
     gap: 2rem;
-    // The content of the bar lines up with the 72 rem column of the pages
-    padding: 0 max(2.5rem, calc((100% - 72rem) / 2 + 2.5rem));
+    // The bar takes the whole width, like the pages
+    padding: 0 2.5rem;
     background: #fff;
     box-shadow: 0 1px 0 #ececf1;
   }
@@ -157,15 +157,6 @@ $tabs-height: 5rem;
     padding-bottom: 0;
   }
 
-  // The content stays in a centered column
-  .screen {
-    max-width: 72rem;
-    margin: 0 auto;
-  }
-
-  .screen.wide {
-    max-width: none;
-  }
 
   // The professional area is teal: the bar follows
   :host-context(.pro-theme) .topbar {

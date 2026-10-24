@@ -215,7 +215,7 @@ dl {
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
   .page {
-    max-width: 56rem;
+    max-width: none;
     padding: 3rem 2.5rem 4rem;
   }
 }

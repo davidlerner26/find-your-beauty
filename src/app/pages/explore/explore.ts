@@ -13,7 +13,7 @@ import { Favorites } from '../../services/favorites';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
-import { hasLocation, shortLocationLabel } from '../../models/professional';
+import { hasLocation, SERVICE_NAMES, ServiceCategory, shortLocationLabel } from '../../models/professional';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
 import { INTL_LOCALE } from '../../utils/locale';
@@ -80,12 +80,15 @@ export class Explore implements OnInit {
   protected readonly filters = ['Cabelo', 'Maquiagem'];
   // Tag chosen on the home page (?tag=Cabelo)
   readonly tag = input<string>();
+  // Service chosen on the home page (?service=Maquiagem de noiva): its chip comes selected
+  readonly service = input<string>();
   // Every chip starts selected, unless a tag came from the home page
   protected readonly activeFilters = signal<string[]>([...this.filters]);
   // The services under the chips of the categories: none chosen means every service
   protected readonly activeServices = signal<string[]>([]);
   protected readonly selected = signal(-1);
   private restored = false;
+  private chipShown = false;
   // Card photos that finished loading (or failed), so the spinner stops
   protected readonly loadedPhotos = signal<string[]>([]);
 
@@ -97,6 +100,21 @@ export class Explore implements OnInit {
     protected readonly favorites: Favorites,
     private readonly router: Router,
   ) {
+    effect(() => {
+      const service = this.service();
+      if (!service) return;
+      const category = (Object.keys(SERVICE_NAMES) as ServiceCategory[]).find((key) => SERVICE_NAMES[key].includes(service));
+      if (category) this.activeFilters.set([category]);
+      this.activeServices.set([service]);
+    });
+
+    // The chip of the service that came from the home page is brought into view, once the chips are there
+    effect(() => {
+      if (!this.service() || !this.serviceTags().length || this.chipShown) return;
+      this.chipShown = true;
+      setTimeout(() => this.host.nativeElement.querySelector('.filter.small.active')?.scrollIntoView({ inline: 'center', block: 'nearest' }), 0);
+    });
+
     effect(() => {
       const tag = this.tag();
       if (tag && this.filters.includes(tag)) this.activeFilters.set([tag]);

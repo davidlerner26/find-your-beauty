@@ -113,7 +113,7 @@
     @for (row of serviceRows(); track row.category) {
       <div class="services">
         @for (service of row.services; track service.name) {
-          <a class="service" routerLink="/busca" [queryParams]="{ q: service.name }">
+          <a class="service" routerLink="/explore" [queryParams]="{ service: service.name }">
             <span class="service-icon">
               <mat-icon>{{ service.icon }}</mat-icon>
             </span>

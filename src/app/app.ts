@@ -121,6 +121,20 @@ export class App {
     return isProArea(this.url()) ? this.proTabs : this.clientTabs;
   }
 
+  // The top bar (wide screens) has a screen of its own for the notifications; on phones they are a tab of the messages
+  protected get topTabs(): Tab[] {
+    const pro = isProArea(this.url());
+    const notifications = pro ? '/pro/notificacoes' : '/notificacoes';
+    return this.tabs.flatMap((tab) =>
+      tab.badge
+        ? [
+            { ...tab, match: [tab.path] },
+            { label: $localize`Notificações`, path: notifications, match: [notifications], icon: 'notifications' },
+          ]
+        : [tab],
+    );
+  }
+
   protected get showTabs() {
     return TAB_SCREENS.includes(this.url()) || this.isAdminScreen;
   }

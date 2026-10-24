@@ -11,71 +11,61 @@
       <p i18n class="muted">@if (tab() === 'mensagens') { Entre na sua conta para ver suas mensagens. } @else { Entre na sua conta para ver suas notificações. }</p>
       <a i18n class="signin" routerLink="/entrar">Entrar</a>
     </div>
+  } @else if (tab() === 'mensagens') {
+    <label class="search">
+      <mat-icon>search</mat-icon>
+      <input type="search" [placeholder]="t.searchMessages(auth.role() === 'professional')" [(ngModel)]="search" (ngModelChange)="onSearch()" name="search" />
+    </label>
+
+    <ul class="list">
+      @for (item of filteredConversations; track item.id) {
+        <li>
+          <a class="conversation" [routerLink]="item.link">
+            @if (item.image) {
+              <img referrerpolicy="no-referrer" [src]="item.image" [alt]="item.title" [style.object-position]="item.imagePosition | focus" />
+            } @else {
+              <span class="avatar-initial">{{ item.title[0] }}</span>
+            }
+            <div class="conversation-body">
+              <h3>{{ item.title }}</h3>
+              <p class="muted">{{ item.lastMessage }}</p>
+            </div>
+            <div class="conversation-meta">
+              <span class="muted">{{ relative(item.lastMessageAt) }}</span>
+              @if (item.unread) {
+                <span class="badge">{{ item.unread }}</span>
+              }
+            </div>
+          </a>
+        </li>
+      } @empty {
+        <li i18n class="empty muted">@if (auth.role() === 'professional') { Você ainda não recebeu mensagens. } @else { Você ainda não tem conversas. Abra o perfil de um profissional para começar uma. }</li>
+      }
+    </ul>
+  } @else if (notifications.loading()) {
+    <app-spinner />
   } @else {
-    <!-- On phones one pane shows at a time (the tabs); on wide screens both show side by side -->
-    <div class="panes">
-      <section class="pane" [class.current]="tab() === 'mensagens'">
-        <h2 i18n class="pane-title">Mensagens</h2>
-        <label class="search">
-          <mat-icon>search</mat-icon>
-          <input type="search" [placeholder]="t.searchMessages(auth.role() === 'professional')" [(ngModel)]="search" (ngModelChange)="onSearch()" name="search" />
-        </label>
+    @if (newNotifications().length) {
+      <h2 i18n>Novas</h2>
+      <ul class="list">
+        @for (notification of newNotifications(); track notification.id) {
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
+        }
+      </ul>
+    }
 
-        <ul class="list">
-          @for (item of filteredConversations; track item.id) {
-            <li>
-              <a class="conversation" [routerLink]="item.link">
-                @if (item.image) {
-                  <img referrerpolicy="no-referrer" [src]="item.image" [alt]="item.title" [style.object-position]="item.imagePosition | focus" />
-                } @else {
-                  <span class="avatar-initial">{{ item.title[0] }}</span>
-                }
-                <div class="conversation-body">
-                  <h3>{{ item.title }}</h3>
-                  <p class="muted">{{ item.lastMessage }}</p>
-                </div>
-                <div class="conversation-meta">
-                  <span class="muted">{{ relative(item.lastMessageAt) }}</span>
-                  @if (item.unread) {
-                    <span class="badge">{{ item.unread }}</span>
-                  }
-                </div>
-              </a>
-            </li>
-          } @empty {
-            <li i18n class="empty muted">@if (auth.role() === 'professional') { Você ainda não recebeu mensagens. } @else { Você ainda não tem conversas. Abra o perfil de um profissional para começar uma. }</li>
-          }
-        </ul>
-      </section>
-      <section class="pane" [class.current]="tab() === 'notificacoes'">
-        <h2 i18n class="pane-title">Notificações</h2>
-        @if (notifications.loading()) {
-          <app-spinner />
-        } @else {
-        @if (newNotifications().length) {
-          <h2 i18n>Novas</h2>
-          <ul class="list">
-            @for (notification of newNotifications(); track notification.id) {
-              <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
-            }
-          </ul>
+    @if (earlierNotifications().length) {
+      <h2 i18n>Anteriores</h2>
+      <ul class="list">
+        @for (notification of earlierNotifications(); track notification.id) {
+          <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
         }
+      </ul>
+    }
 
-        @if (earlierNotifications().length) {
-          <h2 i18n>Anteriores</h2>
-          <ul class="list">
-            @for (notification of earlierNotifications(); track notification.id) {
-              <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
-            }
-          </ul>
-        }
-
-        @if (!notifications.list().length) {
-          <p i18n class="empty muted">Você não tem notificações.</p>
-        }
-        }
-      </section>
-    </div>
+    @if (!notifications.list().length) {
+      <p i18n class="empty muted">Você não tem notificações.</p>
+    }
   }
 </div>
 

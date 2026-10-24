@@ -5,7 +5,7 @@
       <img i18n-alt src="logo-full.svg" alt="Find Your Beauty" />
     </a>
     <nav i18n-aria-label aria-label="Principal">
-      @for (tab of tabs; track tab.path) {
+      @for (tab of topTabs; track tab.path) {
         <a [routerLink]="tab.path" [class.active]="isActive(tab)">
           {{ tab.label }}
           @if (tab.badge && messages.unreadTotal() > 0) {

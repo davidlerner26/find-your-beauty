@@ -18,6 +18,7 @@ import {
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { DEFAULT_AVAILABILITY } from '../models/professional';
+import { APP_LANGUAGE } from '../utils/locale';
 import { db, firebaseApp } from './firebase';
 
 export type SignUpData = {
@@ -131,6 +132,8 @@ export class Auth {
         address: address ?? '',
         addressPosition: addressPosition ?? { lat: 0, lng: 0 },
         admin: false,
+        // The language of the page: the e-mails of the account go in it
+        lang: APP_LANGUAGE,
         createdAt: serverTimestamp(),
       });
     } catch (error) {
@@ -163,7 +166,7 @@ export class Auth {
   }
 
   async sendVerificationCode(email: string) {
-    await call<{ email: string }, { ok: boolean }>('sendVerificationCode')({ email });
+    await call<{ email: string; lang: string }, { ok: boolean }>('sendVerificationCode')({ email, lang: APP_LANGUAGE });
   }
 
   // Checks the code, then signs in with the password the sign up used (or asks for the login when it was lost)
@@ -171,7 +174,11 @@ export class Auth {
     const pending = this.verification();
     if (!pending) return false;
 
-    await call<{ email: string; code: string }, { ok: boolean }>('verifyEmailCode')({ email: pending.email, code });
+    await call<{ email: string; code: string; lang: string }, { ok: boolean }>('verifyEmailCode')({
+      email: pending.email,
+      code,
+      lang: APP_LANGUAGE,
+    });
     this.verification.set(null);
     try {
       sessionStorage.removeItem(VERIFICATION_KEY);
@@ -250,6 +257,7 @@ export class Auth {
       approved: false,
       submitted: false,
       admin: false,
+      lang: APP_LANGUAGE,
       createdAt: serverTimestamp(),
     });
   }
@@ -286,7 +294,10 @@ export class Auth {
 
   // The e-mail with the link is sent by a Cloud Function (through Resend)
   async sendPasswordReset(email: string) {
-    await httpsCallable(getFunctions(firebaseApp, 'southamerica-east1'), 'sendPasswordReset')({ email: email.trim() });
+    await httpsCallable(getFunctions(firebaseApp, 'southamerica-east1'), 'sendPasswordReset')({
+      email: email.trim(),
+      lang: APP_LANGUAGE,
+    });
   }
 
   // Checks the code from the e-mail link. Returns the e-mail of the account.
@@ -376,6 +387,7 @@ export class Auth {
         email: user.email,
         phone: user.phoneNumber ?? '',
         admin: false,
+        lang: APP_LANGUAGE,
         createdAt: serverTimestamp(),
       });
     } catch (error) {

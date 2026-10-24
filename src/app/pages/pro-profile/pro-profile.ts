@@ -29,7 +29,7 @@ import { PhotoPositioner } from '../../components/photo-positioner/photo-positio
 import { DateRangePicker, PendingRange } from '../../components/date-range-picker/date-range-picker';
 import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
-import { INTL_LOCALE } from '../../utils/locale';
+import { APP_LANGUAGE, INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
@@ -593,6 +593,7 @@ export class ProProfile {
       coverImage: deleteField(),
       coverPosition: deleteField(),
       serviceMode: this.serviceMode(),
+      lang: APP_LANGUAGE,
       ...(keepAddress
         ? {}
         : {

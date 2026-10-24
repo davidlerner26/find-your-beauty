@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore';
 import { Booking, BookingStatus } from '../models/booking';
 import { Auth } from './auth';
+import { APP_LANGUAGE } from '../utils/locale';
 import { db } from './firebase';
 
 @Injectable({ providedIn: 'root' })
@@ -88,6 +89,8 @@ export class Bookings {
       clientUid: user.uid,
       clientName,
       status: 'pending',
+      // The language of the page: the e-mails about this booking go in it
+      lang: APP_LANGUAGE,
       createdAt: serverTimestamp(),
     });
     await batch.commit();

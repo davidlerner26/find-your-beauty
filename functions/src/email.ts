@@ -11,6 +11,23 @@ const from = defineString('RESEND_FROM', { default: 'Find Your Beauty <onboardin
 export const appUrl = defineString('APP_URL', { default: 'https://findyourbeauty.com.br' });
 
 // The look of the app: white, a big bold title, gray text, round teal buttons and light gray boxes
+// The languages of the site: the e-mail goes in the language of the page where the action was made
+export type Lang = 'pt' | 'en' | 'es';
+export const asLang = (value: unknown): Lang => (value === 'en' || value === 'es' ? value : 'pt');
+
+// Picks the text of the language
+export const L = (lang: Lang, text: Record<Lang, string>) => text[lang];
+
+// The page of the site, in the language (Portuguese is at the root, the others under /en and /es)
+export const link = (lang: Lang, path: string) => `${appUrl.value()}${lang === 'pt' ? '' : '/' + lang}${path}`;
+
+const LOCALE: Record<Lang, string> = { pt: 'pt-BR', en: 'en-US', es: 'es' };
+const FOOTER: Record<Lang, string> = {
+  pt: 'Você recebeu este e-mail porque tem uma conta no Find Your Beauty.',
+  en: 'You received this email because you have an account on Find Your Beauty.',
+  es: 'Recibiste este correo porque tienes una cuenta en Find Your Beauty.',
+};
+
 const TEAL = '#2f6b7a';
 const TEXT = '#1c1c1c';
 const MUTED = '#6b6b6b';
@@ -23,6 +40,7 @@ const escape = (text: string) =>
 
 export type Email = {
   to: string;
+  lang?: Lang;
   subject: string;
   heading: string;
   // Each one is a paragraph (plain text)
@@ -32,8 +50,8 @@ export type Email = {
   button?: { label: string; url: string };
 };
 
-const render = ({ heading, paragraphs, details, button }: Email) => `<!doctype html>
-<html lang="pt-BR">
+const render = ({ heading, paragraphs, details, button, lang = 'pt' }: Email) => `<!doctype html>
+<html lang="${LOCALE[lang]}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -61,7 +79,7 @@ const render = ({ heading, paragraphs, details, button }: Email) => `<!doctype h
           ? `<p style="margin:32px 0 0;"><a href="${escape(button.url)}" style="display:block;background:${TEAL};color:#ffffff;text-decoration:none;text-align:center;padding:17px 24px;border-radius:999px;font-size:16px;font-weight:700;">${escape(button.label)}</a></p>`
           : ''
       }
-      <p style="margin:40px 0 0;font-size:12px;line-height:1.5;color:#9a9aa3;">Você recebeu este e-mail porque tem uma conta no Find Your Beauty.</p>
+      <p style="margin:40px 0 0;font-size:12px;line-height:1.5;color:#9a9aa3;">${FOOTER[lang]}</p>
     </div>
   </body>
 </html>`;
@@ -99,22 +117,23 @@ export async function emailOf(uid: string | null | undefined) {
   }
 }
 
-// "sábado, 24 de outubro, às 12:00", in Brazil's time
-export const when = (date: Date) => {
-  const day = new Intl.DateTimeFormat('pt-BR', {
+// "sábado, 24 de outubro, às 12:00" / "Saturday, October 24, at 12:00", in Brazil's time
+export const when = (date: Date, lang: Lang = 'pt') => {
+  const locale = LOCALE[lang];
+  const day = new Intl.DateTimeFormat(locale, {
     timeZone: 'America/Sao_Paulo',
     weekday: 'long',
     day: 'numeric',
     month: 'long',
   }).format(date);
-  const time = new Intl.DateTimeFormat('pt-BR', {
+  const time = new Intl.DateTimeFormat(locale, {
     timeZone: 'America/Sao_Paulo',
     hour: '2-digit',
     minute: '2-digit',
     hourCycle: 'h23',
   }).format(date);
-  return `${day}, às ${time}`;
+  return `${day}${L(lang, { pt: ', às ', en: ', at ', es: ', a las ' })}${time}`;
 };
 
-export const money = (value: number) =>
-  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+export const money = (value: number, lang: Lang = 'pt') =>
+  value.toLocaleString(LOCALE[lang], { style: 'currency', currency: 'BRL' });

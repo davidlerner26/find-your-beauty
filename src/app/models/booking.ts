@@ -17,6 +17,8 @@ export type Booking = {
   // Ids of the documents in professionals/{id}/busy that hold this booking's time slots
   busyIds: string[];
   status: BookingStatus;
+  // Language of the page where the booking was made (the e-mails go in it)
+  lang?: 'pt' | 'en' | 'es';
   // No payment integration yet: bookings are created with the payment pending
   paymentStatus: 'pending' | 'paid';
 };

@@ -124,6 +124,21 @@ h2 {
   color: #e5484d;
 }
 
+.actions .cancel {
+  flex: none;
+  width: 2.9rem;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 1.4rem;
+  }
+}
+
 .empty {
   padding: 1rem 0;
 }

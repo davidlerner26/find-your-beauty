@@ -36,7 +36,9 @@
       } @else if (booking.status === 'confirmed') {
         <!-- It is completed by itself when its time is over (a Cloud Function) -->
         <div class="actions">
-          <button i18n type="button" class="decline" (click)="answer(booking, 'cancelledByProfessional')">Cancelar</button>
+          <button i18n-title i18n-aria-label type="button" class="decline cancel" aria-label="Cancelar" title="Cancelar" (click)="answer(booking, 'cancelledByProfessional')">
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
       }
     </article>

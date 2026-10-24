@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, computed } from '@angular/core';
 import { PricePipe } from '../../utils/price.pipe';
 import { NgTemplateOutlet } from '@angular/common';
@@ -21,7 +22,7 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
 
 @Component({
   selector: 'app-pro-agenda',
-  imports: [CatalogPipe, PricePipe, RouterLink, NgTemplateOutlet],
+  imports: [CatalogPipe, PricePipe, RouterLink, NgTemplateOutlet, MatIconModule],
   templateUrl: './pro-agenda.html',
   styleUrl: './pro-agenda.scss',
 })
@@ -63,7 +64,7 @@ export class ProAgenda {
 
   protected answer(booking: Booking, status: 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional') {
     // Cancelling a confirmed booking can't be undone: the client is told and the time is released
-    if (status === 'cancelledByProfessional' && !confirm($localize`Cancelar este agendamento? A cliente será avisada.`)) return;
+    if (status === 'cancelledByProfessional' && !confirm($localize`Tem certeza que deseja cancelar este agendamento? A cliente será avisada e o horário será liberado.`)) return;
 
     this.bookings
       .setStatus(booking, status)

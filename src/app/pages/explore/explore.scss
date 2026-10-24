@@ -378,9 +378,9 @@
     z-index: 2;
   }
 
-  // The row of services has a limit of width: the rest is reached with the arrows
+  // The row of services takes the width of the map (up to the margin on the right): the rest is reached with the arrows
   .tags-box {
-    max-width: 60rem;
+    max-width: none;
   }
 
   // The filters float over the map

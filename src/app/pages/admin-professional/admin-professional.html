@@ -144,12 +144,17 @@
     <section class="card">
       <h3 i18n>Galeria</h3>
       <div class="gallery">
-        @for (photo of p.gallery; track photo) {
-          <img [src]="photo" [alt]="t.workOf(p.name)" />
+        @for (photo of p.gallery; track photo; let i = $index) {
+          <button type="button" class="photo-btn" [attr.aria-label]="t.workOf(p.name)" (click)="openPhoto.set(i)">
+            <img [src]="photo" [alt]="t.workOf(p.name)" />
+          </button>
         } @empty {
           <p i18n class="muted">Nenhuma foto.</p>
         }
       </div>
+      @if (openPhoto() !== null) {
+        <app-photo-viewer [photos]="p.gallery" [start]="openPhoto()!" [alt]="t.workOf(p.name)" (closed)="openPhoto.set(null)" />
+      }
     </section>
   } @else {
     <p i18n class="muted">Profissional não encontrada.</p>

@@ -196,7 +196,15 @@ dl {
   grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
   gap: 0.5rem;
 
+  .photo-btn {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+
   img {
+    display: block;
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;

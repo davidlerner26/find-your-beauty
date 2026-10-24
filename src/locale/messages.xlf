@@ -231,8 +231,26 @@
       <trans-unit id="1333450866373555458" datatype="html">
         <source>Fechar</source>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/photo-viewer/photo-viewer.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/service-sheet/service-sheet.html</context>
           <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9060500803868918960" datatype="html">
+        <source>Foto anterior</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/photo-viewer/photo-viewer.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4696519236987684755" datatype="html">
+        <source>Próxima foto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/photo-viewer/photo-viewer.html</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4450594804566442438" datatype="html">
@@ -548,21 +566,21 @@
         <source>Nenhuma foto.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">150,151</context>
+          <context context-type="linenumber">152,153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7518409256195508267" datatype="html">
         <source>Profissional não encontrada.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">155,157</context>
+          <context context-type="linenumber">160,162</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6270278858592007485" datatype="html">
         <source>Domingo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -573,7 +591,7 @@
         <source>Segunda</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -584,7 +602,7 @@
         <source>Terça</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -595,7 +613,7 @@
         <source>Quarta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -606,7 +624,7 @@
         <source>Quinta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -617,7 +635,7 @@
         <source>Sexta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -628,7 +646,7 @@
         <source>Sábado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -639,14 +657,14 @@
         <source>Negado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2767412899656600903" datatype="html">
         <source>Aguardando aprovação</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">54</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
@@ -657,14 +675,14 @@
         <source>Aprovado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8940801839372169284" datatype="html">
         <source>Negar o cadastro de <x id="name" equiv-text="professional.name"/>?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">69</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
@@ -675,7 +693,7 @@
         <source>Não foi possível concluir. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">80</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
@@ -2761,14 +2779,14 @@
         <source>Não foi possível enviar a foto. Use uma imagem e tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7909834918901815344" datatype="html">
         <source>Seg</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">395</context>
+          <context context-type="linenumber">397</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -2779,7 +2797,7 @@
         <source>Ter</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">396</context>
+          <context context-type="linenumber">398</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -2790,7 +2808,7 @@
         <source>Qua</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">397</context>
+          <context context-type="linenumber">399</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -2801,7 +2819,7 @@
         <source>Qui</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">398</context>
+          <context context-type="linenumber">400</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -2812,7 +2830,7 @@
         <source>Sex</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">399</context>
+          <context context-type="linenumber">401</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -2823,7 +2841,7 @@
         <source>Sáb</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">400</context>
+          <context context-type="linenumber">402</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -2834,7 +2852,7 @@
         <source>Dom</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">401</context>
+          <context context-type="linenumber">403</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -2845,7 +2863,7 @@
         <source>Não foi possível buscar endereços agora. Tente novamente em instantes.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">502</context>
+          <context context-type="linenumber">504</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/place-search.ts</context>
@@ -2856,7 +2874,7 @@
         <source>Não foi possível carregar este endereço. Escolha outro.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">522</context>
+          <context context-type="linenumber">524</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/place-search.ts</context>
@@ -2867,56 +2885,56 @@
         <source>Alterações salvas</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">659</context>
+          <context context-type="linenumber">661</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3196289827039678406" datatype="html">
         <source>O horário de fechamento precisa ser depois do de abertura.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">668</context>
+          <context context-type="linenumber">670</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7035888761323906659" datatype="html">
         <source>Usuário do Instagram inválido. Use o formato @usuario.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">674</context>
+          <context context-type="linenumber">676</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5883100616914724429" datatype="html">
         <source>Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">686</context>
+          <context context-type="linenumber">688</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1778918188915026966" datatype="html">
         <source>Perfil salvo e publicado! As clientes já podem encontrar você.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">721</context>
+          <context context-type="linenumber">723</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3051415935902225202" datatype="html">
         <source>Perfil salvo, mas oculto. Marque &quot;Mostrar meu perfil para as clientes&quot; para publicar.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">723</context>
+          <context context-type="linenumber">725</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6354780736820198284" datatype="html">
         <source>Perfil salvo, mas ainda não publicado. Falta: <x id="missing" equiv-text="this.missing.join(&apos;, &apos;)"/>.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">724</context>
+          <context context-type="linenumber">726</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6122773539640954774" datatype="html">
         <source>Não foi possível salvar. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">728</context>
+          <context context-type="linenumber">730</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.ts</context>
@@ -2927,35 +2945,35 @@
         <source>Fotos do Instagram atualizadas (<x id="photos" equiv-text="photos"/>).</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">745</context>
+          <context context-type="linenumber">747</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8631977451140373700" datatype="html">
         <source>Não foi possível atualizar as fotos do Instagram. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">748</context>
+          <context context-type="linenumber">750</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4314473457784935681" datatype="html">
         <source>Desconectar o Instagram? As fotos importadas deixam de aparecer no seu perfil.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">755</context>
+          <context context-type="linenumber">757</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8674635572779802359" datatype="html">
         <source>Instagram desconectado.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">761</context>
+          <context context-type="linenumber">763</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4549358426228706083" datatype="html">
         <source>Não foi possível desconectar. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">764</context>
+          <context context-type="linenumber">766</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1016389177530675692" datatype="html">

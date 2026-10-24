@@ -1,3 +1,4 @@
+import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
@@ -42,7 +43,7 @@ type Salon = {
 
 @Component({
   selector: 'app-home',
-  imports: [CatalogPipe, ReviewsLabelPipe, FocusPipe, RouterLink, LocationPrompt, Spinner, MatIconModule],
+  imports: [CarouselArrows, CatalogPipe, ReviewsLabelPipe, FocusPipe, RouterLink, LocationPrompt, Spinner, MatIconModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })

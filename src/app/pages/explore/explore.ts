@@ -1,3 +1,4 @@
+import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
@@ -27,7 +28,7 @@ let lastSelectedId: string | null = null;
 
 @Component({
   selector: 'app-explore',
-  imports: [CatalogPipe, ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
+  imports: [CarouselArrows, CatalogPipe, ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })

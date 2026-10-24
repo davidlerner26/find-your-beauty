@@ -122,7 +122,7 @@
     >
       <div class="offer-image">
         <!-- The photos of the professional: swipe sideways to see them -->
-        <div class="photos" (scroll)="onPhotosScroll($event, salon.id)">
+        <div #photosEl class="photos" (scroll)="onPhotosScroll($event, salon.id)">
           @for (photo of salon.photos; track photo) {
             <div class="slide">
               @if (!loadedPhotos().includes(photo)) {
@@ -140,7 +140,8 @@
           }
         </div>
         @if (salon.photos.length > 1) {
-          <div class="dots" aria-hidden="true">
+          <app-carousel-arrows [target]="photosEl" />
+<div class="dots" aria-hidden="true">
             @for (photo of salon.photos; track photo; let n = $index) {
               <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
             }

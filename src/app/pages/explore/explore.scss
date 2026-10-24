@@ -338,6 +338,11 @@
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
+  // The arrows take the place of the dots
+  .dots {
+    display: none;
+  }
+
   $panel: 26rem;
 
   // A panel with the list on the left, the map on the rest of the screen

@@ -723,6 +723,17 @@ section > p,
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
+  // The arrows take the place of the dots
+  .dots,
+  .service-dots {
+    display: none;
+  }
+
+  .hero-photos img,
+  .service-slide img {
+    cursor: zoom-in;
+  }
+
   // Two columns: the profile on the left, a card with the total and the buttons on the right
   :host {
     display: grid;

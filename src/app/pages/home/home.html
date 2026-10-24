@@ -41,7 +41,7 @@
       @for (salon of featuredSalons(); track salon.id) {
         <article class="card" [routerLink]="['/profissionais', salon.id]">
           <div class="card-image">
-            <div class="photos" (scroll)="onPhotosScroll($event, salon.id)">
+            <div #photosEl class="photos" (scroll)="onPhotosScroll($event, salon.id)">
               @for (photo of salon.photos; track photo) {
                 <div class="slide">
                   @if (!loadedPhotos().includes(photo)) {
@@ -70,7 +70,8 @@
               </button>
             }
             @if (salon.photos.length > 1) {
-              <div class="dots" aria-hidden="true">
+              <app-carousel-arrows [target]="photosEl" />
+<div class="dots" aria-hidden="true">
                 @for (photo of salon.photos; track photo; let n = $index) {
                   <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
                 }
@@ -132,7 +133,7 @@
       @for (offer of nearbyOffers(); track offer.id) {
         <article class="offer" [routerLink]="['/profissionais', offer.id]">
           <div class="offer-image">
-            <div class="photos" (scroll)="onPhotosScroll($event, 'near-' + offer.id)">
+            <div #photosEl class="photos" (scroll)="onPhotosScroll($event, 'near-' + offer.id)">
               @for (photo of offer.photos; track photo) {
                 <div class="slide">
                   @if (!loadedPhotos().includes(photo)) {
@@ -152,7 +153,8 @@
               }
             </div>
             @if (offer.photos.length > 1) {
-              <div class="dots" aria-hidden="true">
+              <app-carousel-arrows [target]="photosEl" />
+<div class="dots" aria-hidden="true">
                 @for (photo of offer.photos; track photo; let n = $index) {
                   <span [class.on]="n === (photoIndex()['near-' + offer.id] ?? 0)"></span>
                 }

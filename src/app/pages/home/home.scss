@@ -362,6 +362,11 @@ a {
 }
 
 @media (min-width: 1024px) {
+  // The arrows take the place of the dots
+  .dots {
+    display: none;
+  }
+
   .container {
     padding: 0 2.5rem 4rem;
   }

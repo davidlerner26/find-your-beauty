@@ -1,3 +1,4 @@
+import { CarouselArrows } from '../carousel-arrows/carousel-arrows';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, input, output, signal } from '@angular/core';
 import { formatDuration, Service } from '../../models/professional';
@@ -9,7 +10,7 @@ import { CatalogPipe } from '../../utils/catalog.pipe';
 // the price, the duration and the whole description. Opened by "Ler mais" in the card of the service.
 @Component({
   selector: 'app-service-sheet',
-  imports: [CatalogPipe, MatIconModule, PricePipe],
+  imports: [CarouselArrows, CatalogPipe, MatIconModule, PricePipe],
   templateUrl: './service-sheet.html',
   styleUrl: './service-sheet.scss',
 })

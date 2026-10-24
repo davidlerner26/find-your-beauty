@@ -1,12 +1,16 @@
 @if (artist(); as artist) {
+  @if (viewer(); as open) {
+    <app-photo-viewer [photos]="open.photos" [start]="open.index" [alt]="artist.name" (closed)="viewer.set(null)" />
+  }
   @if (toast()) {
     <app-toast [text]="toast()" (dismiss)="toast.set('')" />
   }
   <div class="hero">
     <!-- The cover is the gallery: swipe sideways to go through the photos -->
-    <div class="hero-photos" (scroll)="onHeroScroll($event)">
-      @for (photo of heroPhotos(artist); track photo) {
+    <div #heroPhotosEl class="hero-photos" (scroll)="onHeroScroll($event)">
+      @for (photo of heroPhotos(artist); track photo; let i = $index) {
         <img
+          (click)="openViewer($event, heroPhotos(artist), i)"
           [src]="photo"
           [alt]="t.photoOf(artist.name)"
           [style.object-position]="(photo === artist.image ? artist.imagePosition : undefined) | focus"
@@ -14,6 +18,7 @@
       }
     </div>
     @if (heroPhotos(artist).length > 1) {
+      <app-carousel-arrows [target]="heroPhotosEl" />
       <div class="dots" aria-hidden="true">
         @for (photo of heroPhotos(artist); track photo; let i = $index) {
           <span [class.on]="i === heroIndex()"></span>
@@ -152,14 +157,15 @@
             <!-- The photos of the service (swipe sideways). Without photos, the card has no picture. -->
             @if (service.photos?.length) {
               <div class="service-image">
-                <div class="service-photos" (scroll)="onServicePhotos($event, service.id)">
-                  @for (photo of service.photos; track photo) {
+                <div #servicePhotosEl class="service-photos" (scroll)="onServicePhotos($event, service.id)">
+                  @for (photo of service.photos; track photo; let n = $index) {
                     <div class="service-slide">
-                      <img [src]="photo" [alt]="service.name" loading="lazy" draggable="false" />
+                      <img (click)="openViewer($event, service.photos!, n)" [src]="photo" [alt]="service.name" loading="lazy" draggable="false" />
                     </div>
                   }
                 </div>
                 @if (service.photos!.length > 1) {
+                  <app-carousel-arrows [target]="servicePhotosEl" />
                   <div class="service-dots" aria-hidden="true">
                     @for (photo of service.photos; track photo; let n = $index) {
                       <span [class.on]="n === (serviceSlide()[service.id] ?? 0)"></span>

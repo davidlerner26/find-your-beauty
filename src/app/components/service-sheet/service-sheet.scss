@@ -255,6 +255,11 @@
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
+  // The arrows take the place of the dots
+  .screen-dots {
+    display: none;
+  }
+
   .service-screen {
     top: 5vh;
     bottom: 5vh;

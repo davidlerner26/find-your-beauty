@@ -8,6 +8,8 @@ import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { ServiceSheet } from '../../components/service-sheet/service-sheet';
 import { copyText } from '../../utils/clipboard';
+import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
+import { PhotoViewer } from '../../components/photo-viewer/photo-viewer';
 import { Toast } from '../../components/toast/toast';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -27,7 +29,7 @@ import { CatalogPipe } from '../../utils/catalog.pipe';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [CatalogPipe, Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
+  imports: [CarouselArrows, PhotoViewer, CatalogPipe, Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })
@@ -39,6 +41,15 @@ export class ArtistDetails {
   protected readonly aboutExpanded = signal(false);
 
   // The service whose screen is open ("Ler mais" of a long description)
+  // The photos in full screen (wide screens: on phones a tap on the photo does what it did before)
+  protected readonly viewer = signal<{ photos: string[]; index: number } | null>(null);
+
+  protected openViewer(event: Event, photos: string[], index: number) {
+    if (!window.matchMedia('(min-width: 1024px)').matches) return;
+    event.stopPropagation();
+    this.viewer.set({ photos, index });
+  }
+
   protected readonly detailId = signal<string | null>(null);
   protected readonly detail = computed(() => this.artist()?.services.find((service) => service.id === this.detailId()) ?? null);
   protected readonly stars = [1, 2, 3, 4, 5];

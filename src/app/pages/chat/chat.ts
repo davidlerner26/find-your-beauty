@@ -46,11 +46,18 @@ export class Chat {
   protected readonly peer = computed(() => {
     if (this.pro()) {
       const conversation = this.conversation();
-      return conversation ? { name: conversation.clientName, image: conversation.clientImage ?? null, position: undefined } : null;
+      return conversation
+        ? { name: conversation.clientName, image: conversation.clientImage ?? null, position: undefined, link: null }
+        : null;
     }
     const professional = this.professional();
     return professional
-      ? { name: professional.name, image: professional.image, position: professional.imagePosition }
+      ? {
+          name: professional.name,
+          image: professional.image,
+          position: professional.imagePosition,
+          link: ['/profissionais', professional.id],
+        }
       : null;
   });
 

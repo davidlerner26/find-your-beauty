@@ -26,7 +26,7 @@
       </div>
     }
     <button i18n-aria-label type="button" class="round" aria-label="Voltar" (click)="goBack()">
-      <mat-icon>chevron_left</mat-icon>
+      <mat-icon>{{ floating() ? 'close' : 'chevron_left' }}</mat-icon>
     </button>
     <div class="hero-actions">
       @if (favorites.available()) {

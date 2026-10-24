@@ -3,14 +3,17 @@
     <button i18n-aria-label type="button" class="icon-btn back" aria-label="Voltar" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
     </button>
-    @if (peer.image) {
-      <img class="avatar" referrerpolicy="no-referrer" [src]="peer.image" [alt]="peer.name" [style.object-position]="peer.position | focus" />
-    } @else {
-      <span class="avatar initial">{{ peer.name[0] }}</span>
-    }
-    <div class="who">
-      <strong>{{ peer.name }}</strong>
-    </div>
+    <!-- For clients, the photo and the name lead to the page of the professional -->
+    <a class="peer-link" [routerLink]="peer.link">
+      @if (peer.image) {
+        <img class="avatar" referrerpolicy="no-referrer" [src]="peer.image" [alt]="peer.name" [style.object-position]="peer.position | focus" />
+      } @else {
+        <span class="avatar initial">{{ peer.name[0] }}</span>
+      }
+      <div class="who">
+        <strong>{{ peer.name }}</strong>
+      </div>
+    </a>
   </header>
 
   <div class="messages">

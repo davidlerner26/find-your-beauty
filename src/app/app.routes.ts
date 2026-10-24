@@ -15,8 +15,7 @@ export const routes: Routes = [
   },
   {
     path: 'profissionais/:id',
-    loadComponent: () =>
-      import('./pages/artist-details/artist-details').then((m) => m.ArtistDetails),
+    loadComponent: () => import('./pages/professional/professional').then((m) => m.ProfessionalPage),
   },
   {
     path: 'profissionais/:id/agendar',

@@ -98,6 +98,18 @@ export class Explore implements OnInit {
       if (tag && this.filters.includes(tag)) this.activeFilters.set([tag]);
     });
 
+    // The card of a professional is open: their pin is selected and the map goes there
+    effect(() => {
+      const id = this.openId();
+      if (!id) return;
+      const index = this.visibleSalons.findIndex((salon) => salon.id === id);
+      if (index < 0) return;
+      lastSelectedId = id;
+      this.restored = true;
+      this.selected.set(index);
+      this.center.set(this.visibleSalons[index].position);
+    });
+
     // Centers the map on the user as soon as the position is known
     effect(() => {
       const position = this.userLocation.position();
@@ -246,21 +258,22 @@ export class Explore implements OnInit {
     this.showCard(index, 'smooth');
   }
 
-  // The professional whose page floats over the map (wide screens)
-  protected readonly floatingId = signal<string | null>(null);
+  // The professional whose page is a card over the map (wide screens: the route /profissionais/:id)
+  readonly openId = input<string>();
+  protected readonly floatingId = computed(() => this.openId() ?? null);
 
+  // Closing the card goes back to the map
   protected closeFloating(event?: Event) {
     event?.stopPropagation();
-    this.floatingId.set(null);
+    this.router.navigate(['/explore']);
   }
 
   // First tap on a carousel card selects it; tapping the selected card (or any card of the list) opens the page
   protected openSalon(index: number, id: string) {
-    // Wide screens: the page of the professional floats over the map (the map keeps its place)
+    // Wide screens: the page of the professional is a card over the map
     if (window.matchMedia('(min-width: 1024px)').matches) {
-      if (index >= 0 && index !== this.selected()) this.selectSalon(index);
       lastSelectedId = id;
-      this.floatingId.set(id);
+      this.router.navigate(['/profissionais', id]);
       return;
     }
     if (index >= 0 && index !== this.selected()) {

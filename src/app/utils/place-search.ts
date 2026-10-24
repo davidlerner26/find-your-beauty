@@ -1,5 +1,6 @@
 import { signal } from '@angular/core';
 import { GoogleMapsLoader } from '../services/google-maps-loader';
+import { INTL_LOCALE } from './locale';
 
 export type PlaceSuggestion = { text: string; prediction: google.maps.places.PlacePrediction };
 
@@ -60,7 +61,7 @@ export class PlaceSearch {
         input,
         sessionToken: this.sessionToken,
         includedRegionCodes: ['br'],
-        language: 'pt-BR',
+        language: INTL_LOCALE,
         region: 'br',
       });
 

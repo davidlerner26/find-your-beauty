@@ -1,7 +1,8 @@
+import { INTL_LOCALE } from './locale';
 const startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
 export const formatClock = (date: Date | null) =>
-  date ? date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+  date ? date.toLocaleTimeString(INTL_LOCALE, { hour: '2-digit', minute: '2-digit' }) : '';
 
 // Clock for today, "Ontem", "Há N dias" within a week, otherwise "3 mar"
 export const formatRelative = (date: Date | null) => {
@@ -11,5 +12,5 @@ export const formatRelative = (date: Date | null) => {
   if (days <= 0) return formatClock(date);
   if (days === 1) return 'Ontem';
   if (days < 7) return `Há ${days} dias`;
-  return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' }).replace('.', '');
+  return date.toLocaleDateString(INTL_LOCALE, { day: 'numeric', month: 'short' }).replace('.', '');
 };

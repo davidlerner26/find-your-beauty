@@ -14,6 +14,7 @@ import { missingProfileData } from '../../models/user';
 import { Professionals } from '../../services/professionals';
 import { priceAt } from '../../utils/pricing';
 import { busyIdsFor, freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
+import { INTL_LOCALE } from '../../utils/locale';
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
@@ -75,7 +76,7 @@ export class Booking {
   protected notes = '';
 
   protected readonly monthLabel = computed(() =>
-    new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(this.month()),
+    new Intl.DateTimeFormat(INTL_LOCALE, { month: 'long', year: 'numeric' }).format(this.month()),
   );
 
   protected readonly isCurrentMonth = computed(
@@ -85,7 +86,7 @@ export class Booking {
   protected readonly days = computed<Day[]>(() => {
     const month = this.month();
     const total = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
-    const weekday = new Intl.DateTimeFormat('pt-BR', { weekday: 'short' });
+    const weekday = new Intl.DateTimeFormat(INTL_LOCALE, { weekday: 'short' });
 
     return Array.from({ length: total }, (_, i) => {
       const date = new Date(month.getFullYear(), month.getMonth(), i + 1);

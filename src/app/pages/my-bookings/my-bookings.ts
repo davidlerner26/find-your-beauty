@@ -8,6 +8,7 @@ import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
 import { formatClock } from '../../utils/format-date';
 import { PricePipe } from '../../utils/price.pipe';
+import { INTL_LOCALE } from '../../utils/locale';
 
 const STATUS_LABEL: Record<BookingStatus, string> = {
   pending: 'Aguardando',
@@ -48,7 +49,7 @@ export class MyBookings {
   }
 
   protected dateLabel(booking: Booking) {
-    return booking.startsAt.toLocaleDateString('pt-BR', {
+    return booking.startsAt.toLocaleDateString(INTL_LOCALE, {
       weekday: 'short',
       day: 'numeric',
       month: 'long',

@@ -7,6 +7,7 @@ import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
 import { Professionals } from '../../services/professionals';
 import { formatClock } from '../../utils/format-date';
+import { INTL_LOCALE } from '../../utils/locale';
 
 const STATUS_LABEL: Record<BookingStatus, string> = {
   pending: 'Aguardando',
@@ -52,7 +53,7 @@ export class ProAgenda {
   }
 
   protected dateLabel(booking: Booking) {
-    return booking.startsAt.toLocaleDateString('pt-BR', {
+    return booking.startsAt.toLocaleDateString(INTL_LOCALE, {
       weekday: 'short',
       day: 'numeric',
       month: 'long',

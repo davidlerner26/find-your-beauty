@@ -9,7 +9,18 @@
   # in Google Cloud, so the secrets scanner is told to ignore these two values.
   SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I,AIzaSyBGcq0sRf1RW7h4v9M-ZU-hR2RYstQnUzM"
 
-# The app is a single page app: every route is served by index.html
+# The app is a single page app, built once per language: Portuguese at the root, English under /en and Spanish under /es.
+# Every route of a language is served by the index.html of that language (the order matters: the first match wins)
+[[redirects]]
+  from = "/en/*"
+  to = "/en/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/es/*"
+  to = "/es/index.html"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -28,6 +39,38 @@
 
 [[headers]]
   for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/en/ngsw-worker.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/en/ngsw.json"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/en/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/es/ngsw-worker.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/es/ngsw.json"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/es/manifest.webmanifest"
   [headers.values]
     Content-Type = "application/manifest+json"
     Cache-Control = "no-cache"

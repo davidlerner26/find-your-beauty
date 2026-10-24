@@ -1,3 +1,4 @@
+import { INTL_LOCALE } from './locale';
 type Point = { lat: number; lng: number };
 
 // Distance in km between two coordinates (haversine)
@@ -11,4 +12,4 @@ export const distanceKm = (a: Point, b: Point) => {
 };
 
 export const formatDistance = (km: number) =>
-  km < 1 ? `${Math.round(km * 1000)} m` : `${km.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} km`;
+  km < 1 ? `${Math.round(km * 1000)} m` : `${km.toLocaleString(INTL_LOCALE, { maximumFractionDigits: 1 })} km`;

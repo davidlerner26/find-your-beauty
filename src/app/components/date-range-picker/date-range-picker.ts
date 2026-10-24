@@ -2,6 +2,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, input, model, signal } from '@angular/core';
 import { DateRange } from '../../models/professional';
 import { toDateKey } from '../../utils/slots';
+import { INTL_LOCALE } from '../../utils/locale';
 
 export type PendingRange = { start: string | null; end: string | null };
 
@@ -26,7 +27,7 @@ export class DateRangePicker {
   protected readonly month = signal(this.startOfMonth(new Date()));
 
   protected readonly monthLabel = computed(() =>
-    new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(this.month()),
+    new Intl.DateTimeFormat(INTL_LOCALE, { month: 'long', year: 'numeric' }).format(this.month()),
   );
 
   protected readonly cells = computed<Cell[]>(() => {

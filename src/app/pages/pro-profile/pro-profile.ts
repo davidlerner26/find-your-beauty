@@ -29,6 +29,7 @@ import { PhotoPositioner } from '../../components/photo-positioner/photo-positio
 import { DateRangePicker, PendingRange } from '../../components/date-range-picker/date-range-picker';
 import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
+import { INTL_LOCALE } from '../../utils/locale';
 
 // A service being edited: nothing is pre-filled, so the fields can be empty
 type PriceRuleDraft = { id: string; days: number[]; start: string; end: string; price: string };
@@ -258,7 +259,7 @@ export class ProProfile {
   protected rangeLabel(start: string, end: string | null) {
     const format = (key: string) => {
       const [year, month, day] = key.split('-').map(Number);
-      return new Date(year, month - 1, day).toLocaleDateString('pt-BR');
+      return new Date(year, month - 1, day).toLocaleDateString(INTL_LOCALE);
     };
     return !end || end === start ? format(start) : `${format(start)} a ${format(end)}`;
   }
@@ -478,7 +479,7 @@ export class ProProfile {
         input,
         sessionToken: this.sessionToken,
         includedRegionCodes: ['br'],
-        language: 'pt-BR',
+        language: INTL_LOCALE,
         region: 'br',
       });
 

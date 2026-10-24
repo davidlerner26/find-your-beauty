@@ -31,7 +31,11 @@
             ],
             "styles": [
               "src/styles.scss"
-            ]
+            ],
+            "polyfills": [
+              "@angular/localize/init"
+            ],
+            "i18nMissingTranslation": "warning"
           },
           "configurations": {
             "production": {
@@ -48,9 +52,26 @@
                   "maximumError": "14kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "localize": true
             },
             "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            },
+            "en": {
+              "localize": [
+                "en"
+              ],
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            },
+            "es": {
+              "localize": [
+                "es"
+              ],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -66,12 +87,41 @@
             },
             "development": {
               "buildTarget": "find-your-beauty:build:development"
+            },
+            "en": {
+              "buildTarget": "find-your-beauty:build:en"
+            },
+            "es": {
+              "buildTarget": "find-your-beauty:build:es"
             }
           },
           "defaultConfiguration": "development"
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n",
+          "options": {
+            "outputPath": "src/locale",
+            "format": "xlf"
+          }
+        }
+      },
+      "i18n": {
+        "sourceLocale": {
+          "code": "pt",
+          "subPath": ""
+        },
+        "locales": {
+          "en": {
+            "translation": "src/locale/messages.en.xlf",
+            "subPath": "en"
+          },
+          "es": {
+            "translation": "src/locale/messages.es.xlf",
+            "subPath": "es"
+          }
         }
       }
     }

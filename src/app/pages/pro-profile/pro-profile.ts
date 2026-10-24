@@ -115,7 +115,9 @@ export class ProProfile {
   protected readonly addressError = signal('');
   private addressTimer?: ReturnType<typeof setTimeout>;
   private sessionToken?: google.maps.places.AutocompleteSessionToken;
+  // The profile photo and the gallery have their own loading
   protected readonly uploading = signal(false);
+  protected readonly uploadingGallery = signal(false);
   private filled = false;
 
   private readonly uid = computed(() => this.auth.user()?.uid ?? '');
@@ -299,7 +301,7 @@ export class ProProfile {
     input.value = '';
     if (!files.length) return;
 
-    this.uploading.set(true);
+    this.uploadingGallery.set(true);
     this.message.set('');
     try {
       const urls = await Promise.all(files.map((file) => this.photos.upload(this.uid(), 'gallery', file)));
@@ -308,7 +310,7 @@ export class ProProfile {
     } catch (error) {
       this.showUploadError(error);
     } finally {
-      this.uploading.set(false);
+      this.uploadingGallery.set(false);
     }
   }
 

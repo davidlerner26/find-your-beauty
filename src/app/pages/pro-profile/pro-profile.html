@@ -146,7 +146,7 @@
         <div class="head">
           <h2 i18n>Galeria</h2>
           <label i18n class="link upload-link">
-            @if (uploading()) {
+            @if (uploadingGallery()) {
               <app-spinner [small]="true" />
             } @else {
               + Adicionar fotos
@@ -156,7 +156,7 @@
               accept="image/*"
               multiple
               hidden
-              [disabled]="uploading()"
+              [disabled]="uploadingGallery()"
               #galleryFile
               (change)="uploadGalleryPhotos(galleryFile)"
             />

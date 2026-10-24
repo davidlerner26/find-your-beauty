@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { parseInstagram } from '../../utils/instagram';
 import { deleteField, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
+import { formatPhone } from '../../utils/phone';
 import {
   Availability,
   Professional,
@@ -143,7 +144,7 @@ export class ProProfile {
 
       this.filled = true;
       this.name = profile.name;
-      this.phone = profile.phone ?? '';
+      this.phone = profile.phone ? formatPhone(profile.phone) : '';
       this.instagram = profile.instagram ? '@' + profile.instagram : '';
       // Accounts from when there were two photos: the old cover is used when there is no profile photo
       const legacy = profile as Professional & { coverImage?: string; coverPosition?: ImagePosition };
@@ -539,6 +540,12 @@ export class ProProfile {
 
   protected get cpfValid() {
     return isValidCpf(this.cpf);
+  }
+
+  protected onPhoneInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.phone = formatPhone(input.value);
+    input.value = this.phone;
   }
 
   protected onCpfInput(event: Event) {

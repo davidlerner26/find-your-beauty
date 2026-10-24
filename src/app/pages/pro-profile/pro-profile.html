@@ -55,7 +55,7 @@
           Celular
           <span class="with-icon">
             <mat-icon class="filled">call</mat-icon>
-            <input name="phone" type="tel" [(ngModel)]="phone" />
+            <input name="phone" type="tel" inputmode="numeric" maxlength="20" autocomplete="tel-national" [value]="phone" (input)="onPhoneInput($event)" />
           </span>
         </label>
         <h3 i18n>Foto</h3>

@@ -205,7 +205,7 @@ h2 {
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
   .inbox {
-    max-width: none;
+    max-width: 44rem;
     padding: 1rem 2.5rem 4rem;
   }
 }

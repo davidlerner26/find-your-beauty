@@ -304,6 +304,7 @@ export class ProProfile {
     try {
       const urls = await Promise.all(files.map((file) => this.photos.upload(this.uid(), 'gallery', file)));
       this.gallery = [...this.gallery, ...urls];
+      this.autoSave();
     } catch (error) {
       this.showUploadError(error);
     } finally {
@@ -340,6 +341,7 @@ export class ProProfile {
   protected removeGalleryPhoto(url: string) {
     this.gallery = this.gallery.filter((photo) => photo !== url);
     this.removedPhotos.push(url);
+    this.autoSave();
   }
 
   private showUploadError(error: unknown) {

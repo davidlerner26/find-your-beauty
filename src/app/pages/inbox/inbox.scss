@@ -202,15 +202,45 @@ h2 {
   justify-content: center;
 }
 
+// Phones show one pane at a time (the tabs choose it)
+.pane {
+  display: none;
+
+  &.current {
+    display: block;
+  }
+}
+
+.pane-title {
+  display: none;
+}
+
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
   .inbox {
     max-width: none;
-    padding: 1rem 2.5rem 4rem;
+    padding: 2rem 2.5rem 4rem;
   }
 
-  // The search field keeps the width of the profile
-  .search {
-    max-width: 44rem;
+  // Messages and notifications side by side, without the tabs
+  .tabs {
+    display: none;
+  }
+
+  .panes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .pane {
+    display: block;
+  }
+
+  .pane-title {
+    display: block;
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
   }
 }

@@ -10,11 +10,10 @@ import { PlaceSearch } from '../../utils/place-search';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import { authErrorMessage, isValidEmail, isValidPassword, PASSWORD_RULE } from '../../utils/validators';
-import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 @Component({
   selector: 'app-signup',
-  imports: [LanguageSwitcher, FormsModule, RouterLink, ProProfile, MatIconModule, PlaceSuggestions],
+  imports: [FormsModule, RouterLink, ProProfile, MatIconModule, PlaceSuggestions],
   templateUrl: './signup.html',
   styleUrl: '../auth/auth.scss',
 })

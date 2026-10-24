@@ -4,11 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { authErrorMessage, isValidEmail } from '../../utils/validators';
-import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 @Component({
   selector: 'app-login',
-  imports: [LanguageSwitcher, FormsModule, RouterLink, MatIconModule],
+  imports: [FormsModule, RouterLink, MatIconModule],
   templateUrl: './login.html',
   styleUrl: '../auth/auth.scss',
 })

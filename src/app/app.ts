@@ -4,7 +4,6 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { filter } from 'rxjs';
 import { Auth } from './services/auth';
 import { Messages } from './services/messages';
-import { LanguageSwitcher } from './components/language-switcher/language-switcher';
 
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean };
 
@@ -39,7 +38,7 @@ const AUTH_SCREENS = [
 
 @Component({
   selector: 'app-root',
-  imports: [LanguageSwitcher, RouterOutlet, RouterLink, MatIconModule],
+  imports: [RouterOutlet, RouterLink, MatIconModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

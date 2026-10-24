@@ -3,13 +3,12 @@ import { Component, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { T } from '../../utils/texts';
-import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 type Step = { title: string; description: string; image: string };
 
 @Component({
   selector: 'app-onboarding',
-  imports: [LanguageSwitcher, RouterLink, MatIconModule],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './onboarding.html',
   styleUrl: './onboarding.scss',
 })

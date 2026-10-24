@@ -31,7 +31,6 @@ import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
 import { APP_LANGUAGE, INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
-import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 // A service being edited: nothing is pre-filled, so the fields can be empty
 type PriceRuleDraft = { id: string; days: number[]; start: string; end: string; price: string };
@@ -52,7 +51,7 @@ type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePre
 
 @Component({
   selector: 'app-pro-profile',
-  imports: [LanguageSwitcher, CatalogPipe, PhotoPositioner, DateRangePicker, Spinner, FormsModule, MatIconModule],
+  imports: [CatalogPipe, PhotoPositioner, DateRangePicker, Spinner, FormsModule, MatIconModule],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
 })

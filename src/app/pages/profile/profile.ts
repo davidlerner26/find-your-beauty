@@ -11,11 +11,10 @@ import { PlaceSearch } from '../../utils/place-search';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import { T } from '../../utils/texts';
-import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 @Component({
   selector: 'app-profile',
-  imports: [LanguageSwitcher, Spinner, RouterLink, MatIconModule, PlaceSuggestions],
+  imports: [Spinner, RouterLink, MatIconModule, PlaceSuggestions],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

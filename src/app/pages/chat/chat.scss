@@ -216,3 +216,12 @@
   text-decoration: underline;
   word-break: break-all;
 }
+
+// ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+@media (min-width: 1024px) {
+  // The bar on top takes 4.5 rem of the screen: the chat (and its field to write) fits in the rest
+  :host {
+    height: calc(100vh - 4.5rem);
+    height: calc(100dvh - 4.5rem);
+  }
+}

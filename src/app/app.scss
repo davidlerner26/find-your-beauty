@@ -101,11 +101,14 @@ $tabs-height: 5rem;
   .topbar nav {
     flex: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     gap: 0.5rem;
 
     a {
       position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       padding: 0.6rem 1.1rem;
       border-radius: 999px;
       color: #6b7280;
@@ -121,6 +124,12 @@ $tabs-height: 5rem;
         background: var(--primary-light);
         color: var(--primary);
       }
+    }
+
+    mat-icon {
+      width: 1.3rem;
+      height: 1.3rem;
+      font-size: 1.3rem;
     }
 
     .badge {

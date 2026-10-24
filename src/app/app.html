@@ -7,6 +7,7 @@
     <nav i18n-aria-label aria-label="Principal">
       @for (tab of topTabs; track tab.path) {
         <a [routerLink]="tab.path" [class.active]="isActive(tab)">
+          <mat-icon [class.filled]="isActive(tab)">{{ tab.icon }}</mat-icon>
           {{ tab.label }}
           @if (tab.badge && messages.unreadTotal() > 0) {
             <span class="badge"></span>

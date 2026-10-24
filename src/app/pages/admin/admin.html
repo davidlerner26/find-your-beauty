@@ -1,19 +1,19 @@
 <div class="admin">
-  <h1>Administração</h1>
+  <h1 i18n>Administração</h1>
 
   <ng-template #card let-professional>
     <article class="item">
       <a class="info" [routerLink]="['/admin/profissionais', professional.id]">
         <h3>{{ professional.name }}</h3>
         <p class="muted">{{ professional.email }}</p>
-        <p class="muted">{{ professional.phone || 'Sem celular' }}</p>
+        <p i18n class="muted">@if (professional.phone) { {{ professional.phone }} } @else { Sem celular }</p>
         @if (professional.createdAt) {
-          <p class="muted">Cadastro: {{ relative(professional.createdAt) }}</p>
+          <p i18n class="muted">Cadastro: {{ relative(professional.createdAt) }}</p>
         }
-        <span class="view">Ver perfil completo</span>
+        <span i18n class="view">Ver perfil completo</span>
       </a>
       <div class="actions">
-        <button
+        <button i18n
           type="button"
           class="approve"
           [disabled]="working() === professional.id"
@@ -22,7 +22,7 @@
           <mat-icon>check</mat-icon>
           Aprovar
         </button>
-        <button
+        <button i18n
           type="button"
           class="deny"
           [disabled]="working() === professional.id"
@@ -43,13 +43,13 @@
     }
 
     @if (waiting().length) {
-      <h2>Aguardando aprovação</h2>
+      <h2 i18n>Aguardando aprovação</h2>
     }
     <div class="list">
       @for (professional of waiting(); track professional.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: professional }" />
       } @empty {
-        <p class="muted">Nenhum cadastro aguardando aprovação.</p>
+        <p i18n class="muted">Nenhum cadastro aguardando aprovação.</p>
       }
     </div>
   }

@@ -15,6 +15,8 @@ import { distanceKm, formatDistance } from '../../utils/geo';
 import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { isWorkingDay } from '../../utils/slots';
 import { INTL_LOCALE } from '../../utils/locale';
+import { T } from '../../utils/texts';
+import { CatalogPipe, catalogLabel } from '../../utils/catalog.pipe';
 
 type SortKey = 'price-asc' | 'rating' | 'distance' | 'price-desc';
 
@@ -56,21 +58,22 @@ const readRecents = (): string[] => {
 
 @Component({
   selector: 'app-search',
-  imports: [ReviewsLabelPipe, PricePipe, FocusPipe, FormsModule, RouterLink, NgTemplateOutlet, MatIconModule],
+  imports: [CatalogPipe, ReviewsLabelPipe, PricePipe, FocusPipe, FormsModule, RouterLink, NgTemplateOutlet, MatIconModule],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
 export class Search {
+  protected readonly t = T;
   // A text to search for, from the link of a service on the home (?q=Escova)
   readonly q = input<string>();
 
   protected readonly maxKm = MAX_KM;
   protected readonly stars = [1, 2, 3, 4, 5];
   protected readonly sortOptions: { key: SortKey; label: string }[] = [
-    { key: 'price-asc', label: 'Menor preço' },
-    { key: 'rating', label: 'Melhor avaliação' },
-    { key: 'distance', label: 'Mais próximo' },
-    { key: 'price-desc', label: 'Maior preço' },
+    { key: 'price-asc', label: $localize`Menor preço` },
+    { key: 'rating', label: $localize`Melhor avaliação` },
+    { key: 'distance', label: $localize`Mais próximo` },
+    { key: 'price-desc', label: $localize`Maior preço` },
   ];
 
   protected query = '';
@@ -295,7 +298,7 @@ export class Search {
       professional.name,
       professional.address,
       ...professional.tags,
-      ...professional.services.map((service) => service.name),
+      ...professional.services.flatMap((service) => [service.name, catalogLabel(service.name)]),
     ]
       .map(normalize)
       .join(' ');

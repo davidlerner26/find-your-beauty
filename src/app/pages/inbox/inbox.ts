@@ -12,6 +12,7 @@ import { Messages } from '../../services/messages';
 import { Notifications } from '../../services/notifications';
 import { Professionals } from '../../services/professionals';
 import { formatRelative } from '../../utils/format-date';
+import { T } from '../../utils/texts';
 
 type Row = Conversation & {
   title: string;
@@ -27,6 +28,7 @@ type Row = Conversation & {
   styleUrl: './inbox.scss',
 })
 export class Inbox {
+  protected readonly t = T;
   readonly tab = input<'mensagens' | 'notificacoes'>('mensagens');
 
   protected readonly relative = formatRelative;

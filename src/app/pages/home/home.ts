@@ -19,6 +19,8 @@ import {
 } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { distanceKm, formatDistance } from '../../utils/geo';
+import { T } from '../../utils/texts';
+import { CatalogPipe } from '../../utils/catalog.pipe';
 
 const CATEGORY_ICONS: Record<string, string> = { Maquiagem: 'brush', Cabelo: 'content_cut' };
 
@@ -40,13 +42,14 @@ type Salon = {
 
 @Component({
   selector: 'app-home',
-  imports: [ReviewsLabelPipe, FocusPipe, RouterLink, LocationPrompt, Spinner, MatIconModule],
+  imports: [CatalogPipe, ReviewsLabelPipe, FocusPipe, RouterLink, LocationPrompt, Spinner, MatIconModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
+  protected readonly t = T;
   protected readonly firstName = computed(
-    () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || 'visitante',
+    () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || $localize`visitante`,
   );
 
   private readonly salons = computed<Salon[]>(() =>

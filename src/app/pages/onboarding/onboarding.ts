@@ -2,35 +2,38 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { T } from '../../utils/texts';
+import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 type Step = { title: string; description: string; image: string };
 
 @Component({
   selector: 'app-onboarding',
-  imports: [RouterLink, MatIconModule],
+  imports: [LanguageSwitcher, RouterLink, MatIconModule],
   templateUrl: './onboarding.html',
   styleUrl: './onboarding.scss',
 })
 export class Onboarding {
+  protected readonly t = T;
   protected readonly steps: Step[] = [
     {
-      title: 'O melhor profissional para você',
-      description: 'Realce sua beleza de acordo com o seu estilo de vida',
+      title: $localize`O melhor profissional para você`,
+      description: $localize`Realce sua beleza de acordo com o seu estilo de vida`,
       image: 'images/makeup/1.jpg',
     },
     {
-      title: 'Conheça nossas especialistas',
-      description: 'Há muitos profissionais incríveis para escolher, todas perto de você',
+      title: $localize`Conheça nossas especialistas`,
+      description: $localize`Há muitos profissionais incríveis para escolher, todas perto de você`,
       image: 'images/makeup/2.jpg',
     },
     {
-      title: 'Encontre o melhor serviço',
-      description: 'Vários serviços das melhores profissionais que são nossas parceiras',
+      title: $localize`Encontre o melhor serviço`,
+      description: $localize`Vários serviços das melhores profissionais que são nossas parceiras`,
       image: 'images/makeup/3.jpg',
     },
     {
-      title: 'Junte-se a nós',
-      description: 'Encontre e agende maquiagem e penteado onde e quando quiser',
+      title: $localize`Junte-se a nós`,
+      description: $localize`Encontre e agende maquiagem e penteado onde e quando quiser`,
       image: 'images/makeup/4.jpg',
     },
   ];

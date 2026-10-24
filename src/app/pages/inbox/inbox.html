@@ -1,20 +1,20 @@
 <div class="inbox">
   <div class="tabs">
-    <a [routerLink]="base() + '/mensagens'" [class.active]="tab() === 'mensagens'">Mensagens</a>
-    <a [routerLink]="base() + '/notificacoes'" [class.active]="tab() === 'notificacoes'">Notificações</a>
+    <a i18n [routerLink]="base() + '/mensagens'" [class.active]="tab() === 'mensagens'">Mensagens</a>
+    <a i18n [routerLink]="base() + '/notificacoes'" [class.active]="tab() === 'notificacoes'">Notificações</a>
   </div>
 
   @if (!auth.ready()) {
     <app-spinner />
   } @else if (!auth.user()) {
     <div class="empty">
-      <p class="muted">Entre na sua conta para ver {{ tab() === 'mensagens' ? 'suas mensagens' : 'suas notificações' }}.</p>
-      <a class="signin" routerLink="/entrar">Entrar</a>
+      <p i18n class="muted">@if (tab() === 'mensagens') { Entre na sua conta para ver suas mensagens. } @else { Entre na sua conta para ver suas notificações. }</p>
+      <a i18n class="signin" routerLink="/entrar">Entrar</a>
     </div>
   } @else if (tab() === 'mensagens') {
     <label class="search">
       <mat-icon>search</mat-icon>
-      <input type="search" [placeholder]="auth.role() === 'professional' ? 'Buscar mensagens ou cliente' : 'Buscar mensagens ou profissional'" [(ngModel)]="search" name="search" />
+      <input type="search" [placeholder]="t.searchMessages(auth.role() === 'professional')" [(ngModel)]="search" name="search" />
     </label>
 
     <ul class="list">
@@ -39,14 +39,14 @@
           </a>
         </li>
       } @empty {
-        <li class="empty muted">{{ auth.role() === 'professional' ? 'Você ainda não recebeu mensagens.' : 'Você ainda não tem conversas. Abra o perfil de um profissional para começar uma.' }}</li>
+        <li i18n class="empty muted">@if (auth.role() === 'professional') { Você ainda não recebeu mensagens. } @else { Você ainda não tem conversas. Abra o perfil de um profissional para começar uma. }</li>
       }
     </ul>
   } @else if (notifications.loading()) {
     <app-spinner />
   } @else {
     @if (newNotifications().length) {
-      <h2>Novas</h2>
+      <h2 i18n>Novas</h2>
       <ul class="list">
         @for (notification of newNotifications(); track notification.id) {
           <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
@@ -55,7 +55,7 @@
     }
 
     @if (earlierNotifications().length) {
-      <h2>Anteriores</h2>
+      <h2 i18n>Anteriores</h2>
       <ul class="list">
         @for (notification of earlierNotifications(); track notification.id) {
           <ng-container *ngTemplateOutlet="row; context: { $implicit: notification }" />
@@ -64,7 +64,7 @@
     }
 
     @if (!notifications.list().length) {
-      <p class="empty muted">Você não tem notificações.</p>
+      <p i18n class="empty muted">Você não tem notificações.</p>
     }
   }
 </div>

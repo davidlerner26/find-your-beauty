@@ -10,10 +10,11 @@ import { PlaceSearch } from '../../utils/place-search';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import { authErrorMessage, isValidEmail, isValidPassword, PASSWORD_RULE } from '../../utils/validators';
+import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule, RouterLink, ProProfile, MatIconModule, PlaceSuggestions],
+  imports: [LanguageSwitcher, FormsModule, RouterLink, ProProfile, MatIconModule, PlaceSuggestions],
   templateUrl: './signup.html',
   styleUrl: '../auth/auth.scss',
 })
@@ -140,7 +141,7 @@ export class Signup {
         this.googleError.set(authErrorMessage(error));
         return;
       }
-      this.googleError.set('Não foi possível entrar com o Google. Tente novamente.');
+      this.googleError.set($localize`Não foi possível entrar com o Google. Tente novamente.`);
     }
   }
 }

@@ -79,7 +79,7 @@ export class PlaceSearch {
     } catch (error) {
       console.error('Address search failed', error);
       this.suggestions.set([]);
-      this.error.set('Não foi possível buscar endereços agora. Tente novamente em instantes.');
+      this.error.set($localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`);
     }
   }
 
@@ -99,7 +99,7 @@ export class PlaceSearch {
       this.sessionToken = undefined;
     } catch (error) {
       console.error('Failed to load the place', error);
-      this.error.set('Não foi possível carregar este endereço. Escolha outro.');
+      this.error.set($localize`Não foi possível carregar este endereço. Escolha outro.`);
     }
   }
 

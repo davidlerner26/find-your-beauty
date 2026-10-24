@@ -32,14 +32,14 @@ export class Admin {
       this.all.set(await this.admin.pending());
     } catch (error) {
       console.error('Failed to load pending professionals', error);
-      this.error.set('Não foi possível carregar os cadastros.');
+      this.error.set($localize`Não foi possível carregar os cadastros.`);
     } finally {
       this.loading.set(false);
     }
   }
 
   protected async answer(professional: PendingProfessional, approve: boolean) {
-    if (!approve && !confirm(`Negar o cadastro de ${professional.name}?`)) return;
+    if (!approve && !confirm($localize`Negar o cadastro de ${professional.name}:name:?`)) return;
 
     this.working.set(professional.id);
     this.error.set('');
@@ -53,7 +53,7 @@ export class Admin {
       }
     } catch (error) {
       console.error('Failed to answer', error);
-      this.error.set('Não foi possível concluir. Tente novamente.');
+      this.error.set($localize`Não foi possível concluir. Tente novamente.`);
     } finally {
       this.working.set(null);
     }

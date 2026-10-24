@@ -209,3 +209,14 @@ $tabs-height: 5rem;
     }
   }
 }
+
+// The language switcher is part of the top bar (wide screens only)
+app-language-switcher {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .topbar app-language-switcher {
+    display: inline-block;
+  }
+}

@@ -187,7 +187,7 @@ export class Booking {
       }
     } catch (error) {
       console.error('Failed to check the profile data', error);
-      this.error.set('Não foi possível verificar seus dados. Tente novamente.');
+      this.error.set($localize`Não foi possível verificar seus dados. Tente novamente.`);
       return;
     } finally {
       this.saving.set(false);
@@ -223,8 +223,8 @@ export class Booking {
       // Slots can only be created once, so a denied write means someone took this time first
       this.error.set(
         (error as { code?: string }).code === 'permission-denied'
-          ? 'Este horário acabou de ser ocupado. Escolha outro.'
-          : 'Não foi possível enviar a solicitação. Tente novamente.',
+          ? $localize`Este horário acabou de ser ocupado. Escolha outro.`
+          : $localize`Não foi possível enviar a solicitação. Tente novamente.`,
       );
     } finally {
       this.saving.set(false);

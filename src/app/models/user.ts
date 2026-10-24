@@ -17,10 +17,10 @@ export type UserProfile = {
 // What a client has to fill in on the profile before booking (empty when everything is filled in)
 export const missingProfileData = (profile: UserProfile | null | undefined) => {
   const missing: string[] = [];
-  if (!profile?.firstName?.trim()) missing.push('nome');
-  if (!profile?.lastName?.trim()) missing.push('sobrenome');
-  if ((profile?.phone ?? '').replace(/\D/g, '').length < 10) missing.push('celular');
+  if (!profile?.firstName?.trim()) missing.push($localize`nome`);
+  if (!profile?.lastName?.trim()) missing.push($localize`sobrenome`);
+  if ((profile?.phone ?? '').replace(/\D/g, '').length < 10) missing.push($localize`celular`);
   if (!isValidCpf(profile?.cpf ?? '')) missing.push('CPF');
-  if (!profile?.address?.trim()) missing.push('endereço');
+  if (!profile?.address?.trim()) missing.push($localize`endereço`);
   return missing;
 };

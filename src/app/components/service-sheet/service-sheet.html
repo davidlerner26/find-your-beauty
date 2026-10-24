@@ -41,11 +41,11 @@
       </div>
     }
     <!-- Tap the bar to close -->
-    <button type="button" class="screen-handle" aria-label="Fechar" (click)="onHandleClick()"></button>
+    <button i18n-aria-label type="button" class="screen-handle" aria-label="Fechar" (click)="onHandleClick()"></button>
     </div>
 
     <div class="screen-info">
-      <h1>{{ service().name }}</h1>
+      <h1>{{ service().name | catalog }}</h1>
       <p class="screen-duration">
         <mat-icon>schedule</mat-icon>
         {{ formatDuration(service().durationMinutes) }}
@@ -60,7 +60,7 @@
       }
       @if (service().description) {
         <div class="screen-about">
-          <h2>Sobre o serviço</h2>
+          <h2 i18n>Sobre o serviço</h2>
           <p class="screen-description">{{ service().description }}</p>
         </div>
       }
@@ -68,8 +68,8 @@
   </div>
 
   <div class="screen-bar">
-    <button type="button" class="screen-add" [class.on]="selected()" (click)="toggle.emit()">
-      {{ selected() ? 'Remover do agendamento' : 'Adicionar ao agendamento' }}
+    <button i18n type="button" class="screen-add" [class.on]="selected()" (click)="toggle.emit()">
+      @if (selected()) { Remover do agendamento } @else { Adicionar ao agendamento }
     </button>
   </div>
 </div>

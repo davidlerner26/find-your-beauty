@@ -13,6 +13,8 @@ import { UserLocation } from '../../services/user-location';
 import { hasLocation, shortLocationLabel } from '../../models/professional';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
+import { T } from '../../utils/texts';
+import { CatalogPipe } from '../../utils/catalog.pipe';
 
 const pin = (color: string) =>
   'data:image/svg+xml;utf8,' +
@@ -25,11 +27,12 @@ let lastSelectedId: string | null = null;
 
 @Component({
   selector: 'app-explore',
-  imports: [ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
+  imports: [CatalogPipe, ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })
 export class Explore implements OnInit {
+  protected readonly t = T;
   protected readonly hasKey = !!environment.googleMapsApiKey;
   protected readonly loaded = signal(false);
 

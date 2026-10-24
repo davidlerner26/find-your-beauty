@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start:en": "ng serve --configuration en",
+    "start:es": "ng serve --configuration es",
+    "i18n": "ng extract-i18n"
   },
   "private": true,
   "packageManager": "npm@11.9.0",

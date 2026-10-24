@@ -21,14 +21,17 @@ import { Clamped } from '../../utils/clamped.directive';
 import { ruleLabel } from '../../utils/pricing';
 import { instagramUrl } from '../../utils/instagram';
 import { formatRelative } from '../../utils/format-date';
+import { T } from '../../utils/texts';
+import { CatalogPipe } from '../../utils/catalog.pipe';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
+  imports: [CatalogPipe, Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
 })
 export class ArtistDetails {
+  protected readonly t = T;
   readonly id = input.required<string>();
 
   protected readonly artist = computed(() => this.professionals.byId(this.id()));
@@ -111,7 +114,7 @@ export class ArtistDetails {
       field.remove();
     }
     this.copied.set(true);
-    this.toast.set('Endereço copiado');
+    this.toast.set($localize`Endereço copiado`);
     setTimeout(() => {
       this.copied.set(false);
       this.toast.set('');
@@ -187,7 +190,7 @@ export class ArtistDetails {
   }
 
   protected async deleteReview() {
-    if (!confirm('Excluir a sua avaliação?')) return;
+    if (!confirm($localize`Excluir a sua avaliação?`)) return;
 
     try {
       await this.reviewsService.remove(this.id());
@@ -198,14 +201,14 @@ export class ArtistDetails {
       this.reviewMessage.set('');
     } catch (error) {
       console.error('Failed to delete review', error);
-      this.reviewMessage.set('Não foi possível excluir a avaliação. Tente novamente.');
+      this.reviewMessage.set($localize`Não foi possível excluir a avaliação. Tente novamente.`);
     }
   }
 
   protected async sendReview() {
     const bookingId = this.reviewBookingId();
     if (!bookingId || !this.myStars()) {
-      this.reviewMessage.set('Escolha de 1 a 5 estrelas.');
+      this.reviewMessage.set($localize`Escolha de 1 a 5 estrelas.`);
       return;
     }
 
@@ -215,10 +218,10 @@ export class ArtistDetails {
       await this.reviewsService.save(this.id(), bookingId, this.myStars(), this.myText);
       this.reviews.set(await this.reviewsService.list(this.id()));
       this.editingReview.set(false);
-      this.reviewMessage.set('Avaliação enviada. Obrigada!');
+      this.reviewMessage.set($localize`Avaliação enviada. Obrigada!`);
     } catch (error) {
       console.error('Failed to save review', error);
-      this.reviewMessage.set('Não foi possível enviar a avaliação. Tente novamente.');
+      this.reviewMessage.set($localize`Não foi possível enviar a avaliação. Tente novamente.`);
     } finally {
       this.savingReview.set(false);
     }

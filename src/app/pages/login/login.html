@@ -1,26 +1,22 @@
 <form class="auth" (ngSubmit)="submit()" novalidate>
   <!-- Which area this is: the other one is one tap away -->
-  <nav class="role-tabs" aria-label="Tipo de conta">
-    <a [class.active]="!pro()" [attr.aria-current]="!pro() ? 'page' : null" routerLink="/entrar"
+  <nav i18n-aria-label class="role-tabs" aria-label="Tipo de conta">
+    <a i18n [class.active]="!pro()" [attr.aria-current]="!pro() ? 'page' : null" routerLink="/entrar"
       >Sou cliente</a
     >
-    <a [class.active]="pro()" [attr.aria-current]="pro() ? 'page' : null" routerLink="/pro/entrar"
+    <a i18n [class.active]="pro()" [attr.aria-current]="pro() ? 'page' : null" routerLink="/pro/entrar"
       >Sou profissional</a
     >
   </nav>
 
-  <h1>{{ pro() ? 'Área do profissional' : 'Bem-vindo de volta' }}</h1>
-  <p class="subtitle">
-    {{
-      pro()
-        ? 'Entre para gerenciar sua agenda e seus clientes.'
-        : 'Que bom te ver de novo! Entre para usar o app.'
-    }}
+  <h1 i18n>@if (pro()) { Área do profissional } @else { Bem-vindo de volta }</h1>
+  <p i18n class="subtitle">
+    @if (pro()) { Entre para gerenciar sua agenda e seus clientes. } @else { Que bom te ver de novo! Entre para usar o app. }
   </p>
 
   <label class="field" [class.invalid]="showError('email') && !emailValid">
     <mat-icon class="filled">mail</mat-icon>
-    <input
+    <input i18n-placeholder
       type="email"
       name="email"
       (blur)="touch('email')"
@@ -30,12 +26,12 @@
     />
   </label>
   @if (showError('email') && !emailValid) {
-    <p class="error">Digite um e-mail válido.</p>
+    <p i18n class="error">Digite um e-mail válido.</p>
   }
 
   <label class="field" [class.invalid]="showError('password') && !password">
     <mat-icon class="filled">lock</mat-icon>
-    <input
+    <input i18n-placeholder
       name="password"
       (blur)="touch('password')"
       placeholder="Senha"
@@ -43,7 +39,7 @@
       [type]="showPassword() ? 'text' : 'password'"
       [(ngModel)]="password"
     />
-    <button
+    <button i18n-aria-label
       type="button"
       class="toggle"
       aria-label="Mostrar senha"
@@ -53,28 +49,28 @@
     </button>
   </label>
   @if (showError('password') && !password) {
-    <p class="error">Digite sua senha.</p>
+    <p i18n class="error">Digite sua senha.</p>
   }
 
   <div class="options">
-    <label class="remember">
+    <label i18n class="remember">
       <input type="checkbox" name="remember" [(ngModel)]="rememberMe" />
       Lembrar de mim
     </label>
-    <a class="forgot" routerLink="/esqueci-senha">Esqueceu a senha?</a>
+    <a i18n class="forgot" routerLink="/esqueci-senha">Esqueceu a senha?</a>
   </div>
 
   @if (formError()) {
     <p class="error">{{ formError() }}</p>
   }
 
-  <button type="submit" class="primary" [disabled]="submitting()">
-    {{ submitting() ? 'Aguarde...' : 'Entrar' }}
+  <button i18n type="submit" class="primary" [disabled]="submitting()">
+    @if (submitting()) { Aguarde... } @else { Entrar }
   </button>
 
-  <p class="divider">ou</p>
+  <p i18n class="divider">ou</p>
 
-  <button type="button" class="google" (click)="signInWithGoogle()">
+  <button i18n type="button" class="google" (click)="signInWithGoogle()">
     <svg viewBox="0 0 48 48" aria-hidden="true">
       <path
         fill="#EA4335"
@@ -100,9 +96,10 @@
   }
 
   @if (pro()) {
-    <p class="switch">Não tem uma conta? <a routerLink="/pro/cadastro">Cadastre-se</a></p>
+    <p i18n class="switch">Não tem uma conta? <a routerLink="/pro/cadastro">Cadastre-se</a></p>
   } @else {
-    <p class="switch">Não tem uma conta? <a routerLink="/cadastro">Cadastre-se</a></p>
-    <a class="visitor" routerLink="/">Continuar como visitante</a>
+    <p i18n class="switch">Não tem uma conta? <a routerLink="/cadastro">Cadastre-se</a></p>
+    <a i18n class="visitor" routerLink="/">Continuar como visitante</a>
   }
+  <div class="language-row"><app-language-switcher /></div>
 </form>

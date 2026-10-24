@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { filter } from 'rxjs';
 import { Auth } from './services/auth';
 import { Messages } from './services/messages';
+import { LanguageSwitcher } from './components/language-switcher/language-switcher';
 
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean };
 
@@ -38,39 +39,39 @@ const AUTH_SCREENS = [
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, MatIconModule],
+  imports: [LanguageSwitcher, RouterOutlet, RouterLink, MatIconModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
   private readonly clientTabs: Tab[] = [
     {
-      label: 'Início',
+      label: $localize`Início`,
       path: '/',
       match: ['/'],
       icon: 'home',
     },
     {
-      label: 'Explorar',
+      label: $localize`Explorar`,
       path: '/explore',
       match: ['/explore'],
       icon: 'explore',
     },
     {
-      label: 'Agenda',
+      label: $localize`Agenda`,
       path: '/agenda',
       match: ['/agenda'],
       icon: 'calendar_today',
     },
     {
-      label: 'Mensagens',
+      label: $localize`Mensagens`,
       path: '/mensagens',
       match: ['/mensagens', '/notificacoes'],
       icon: 'chat_bubble',
       badge: true,
     },
     {
-      label: 'Perfil',
+      label: $localize`Perfil`,
       path: '/perfil',
       match: ['/perfil'],
       icon: 'person',
@@ -79,20 +80,20 @@ export class App {
 
   private readonly proTabs: Tab[] = [
     {
-      label: 'Agenda',
+      label: $localize`Agenda`,
       path: '/pro',
       match: ['/pro'],
       icon: 'calendar_today',
     },
     {
-      label: 'Mensagens',
+      label: $localize`Mensagens`,
       path: '/pro/mensagens',
       match: ['/pro/mensagens', '/pro/notificacoes'],
       icon: 'chat_bubble',
       badge: true,
     },
     {
-      label: 'Perfil',
+      label: $localize`Perfil`,
       path: '/pro/perfil',
       match: ['/pro/perfil'],
       icon: 'person',

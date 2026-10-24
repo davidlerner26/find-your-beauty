@@ -1,6 +1,6 @@
 <main class="verify">
-  <h1>Verifique o seu e-mail</h1>
-  <p class="subtitle">Digite o código de 4 números que enviamos para <strong>{{ email() }}</strong>.</p>
+  <h1 i18n>Verifique o seu e-mail</h1>
+  <p i18n class="subtitle">Digite o código de 4 números que enviamos para <strong>{{ email() }}</strong>.</p>
 
   <div class="boxes">
     @for (index of boxes; track index) {
@@ -11,7 +11,7 @@
         inputmode="numeric"
         autocomplete="one-time-code"
         maxlength="4"
-        [attr.aria-label]="'Número ' + (index + 1) + ' do código'"
+        [attr.aria-label]="t.digit(index + 1)"
         [class.filled]="digits()[index]"
         (input)="onInput(index, $event)"
         (keydown)="onKeydown(index, $event)"
@@ -27,7 +27,7 @@
     <p class="notice" role="status">{{ notice() }}</p>
   }
 
-  <p class="resend">
+  <p i18n class="resend">
     @if (wait() > 0) {
       Reenviar em <strong>{{ clock() }}</strong>
     } @else {
@@ -35,9 +35,9 @@
     }
   </p>
 
-  <button type="button" class="primary" [disabled]="!complete() || submitting()" (click)="submit()">
-    {{ submitting() ? 'Verificando...' : 'Verificar e-mail' }}
+  <button i18n type="button" class="primary" [disabled]="!complete() || submitting()" (click)="submit()">
+    @if (submitting()) { Verificando... } @else { Verificar e-mail }
   </button>
 
-  <p class="back"><a routerLink="/entrar">Voltar ao login</a></p>
+  <p class="back"><a i18n routerLink="/entrar">Voltar ao login</a></p>
 </main>

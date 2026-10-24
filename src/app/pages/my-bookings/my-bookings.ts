@@ -9,19 +9,20 @@ import { Bookings } from '../../services/bookings';
 import { formatClock } from '../../utils/format-date';
 import { PricePipe } from '../../utils/price.pipe';
 import { INTL_LOCALE } from '../../utils/locale';
+import { CatalogPipe } from '../../utils/catalog.pipe';
 
 const STATUS_LABEL: Record<BookingStatus, string> = {
-  pending: 'Aguardando',
-  confirmed: 'Confirmado',
-  declined: 'Recusado',
-  completed: 'Concluído',
-  cancelled: 'Cancelado',
-  cancelledByProfessional: 'Cancelado pelo profissional',
+  pending: $localize`Aguardando`,
+  confirmed: $localize`Confirmado`,
+  declined: $localize`Recusado`,
+  completed: $localize`Concluído`,
+  cancelled: $localize`Cancelado`,
+  cancelledByProfessional: $localize`Cancelado pelo profissional`,
 };
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [PricePipe, RouterLink, Spinner, NgTemplateOutlet, MatIconModule],
+  imports: [CatalogPipe, PricePipe, RouterLink, Spinner, NgTemplateOutlet, MatIconModule],
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.scss',
 })
@@ -57,7 +58,7 @@ export class MyBookings {
   }
 
   protected cancel(booking: Booking) {
-    if (!confirm(`Cancelar o agendamento com ${booking.professionalName}?`)) return;
+    if (!confirm($localize`Cancelar o agendamento com ${booking.professionalName}:professionalName:?`)) return;
     this.bookings.cancel(booking).catch((error) => console.error('Failed to cancel booking', error));
   }
 }

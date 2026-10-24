@@ -3,12 +3,13 @@ import { Component, computed, input, output, signal } from '@angular/core';
 import { formatDuration, Service } from '../../models/professional';
 import { PricePipe } from '../../utils/price.pipe';
 import { ruleLabel } from '../../utils/pricing';
+import { CatalogPipe } from '../../utils/catalog.pipe';
 
 // The screen of a service: a sheet over the page with the photos (swipe sideways, with slide dots),
 // the price, the duration and the whole description. Opened by "Ler mais" in the card of the service.
 @Component({
   selector: 'app-service-sheet',
-  imports: [MatIconModule, PricePipe],
+  imports: [CatalogPipe, MatIconModule, PricePipe],
   templateUrl: './service-sheet.html',
   styleUrl: './service-sheet.scss',
 })

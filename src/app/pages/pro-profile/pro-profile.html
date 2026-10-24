@@ -15,14 +15,14 @@
 }
 
 <div class="profile">
-  <h1>{{ signup() ? 'Complete seu cadastro' : 'Meu perfil' }}</h1>
+  <h1 i18n>@if (signup()) { Complete seu cadastro } @else { Meu perfil }</h1>
   @if (signup() && profile()?.rejected) {
-    <p class="message" role="status">
+    <p i18n class="message" role="status">
       Seu cadastro anterior não foi aprovado. Revise os dados abaixo e envie novamente.
     </p>
   }
   @if (signup()) {
-    <p class="muted">
+    <p i18n class="muted">
       Preencha todos os dados abaixo para enviar o cadastro. Depois, ele passa pela aprovação da
       nossa equipe.
     </p>
@@ -34,9 +34,9 @@
   } @else {
     <form (ngSubmit)="save()" (focusout)="autoSave()">
       <section>
-        <h2>Dados</h2>
-        <label>Nome<input name="name" [(ngModel)]="name" /></label>
-        <label>
+        <h2 i18n>Dados</h2>
+        <label i18n>Nome<input name="name" [(ngModel)]="name" /></label>
+        <label i18n>
           CPF
           <input
             name="cpf"
@@ -49,23 +49,23 @@
           />
         </label>
         @if (cpf && !cpfValid) {
-          <p class="hint error">Digite um CPF válido.</p>
+          <p i18n class="hint error">Digite um CPF válido.</p>
         }
-        <label>
+        <label i18n>
           Celular
           <span class="with-icon">
             <mat-icon class="filled">call</mat-icon>
             <input name="phone" type="tel" [(ngModel)]="phone" />
           </span>
         </label>
-        <h3>Foto</h3>
-        <p class="hint muted">Aparece nos cards, no topo da sua página e redonda nas mensagens.</p>
+        <h3 i18n>Foto</h3>
+        <p i18n class="hint muted">Aparece nos cards, no topo da sua página e redonda nas mensagens.</p>
         <div class="photo">
           @if (!image) {
-            <span class="preview empty">Sem foto</span>
+            <span i18n class="preview empty">Sem foto</span>
           }
-          <label class="upload">
-            {{ uploading() ? 'Enviando...' : image ? 'Trocar foto' : 'Escolher foto' }}
+          <label i18n class="upload">
+            @if (uploading()) { Enviando... } @else if (image) { Trocar foto } @else { Escolher foto }
             <input
               type="file"
               accept="image/*"
@@ -80,9 +80,9 @@
           <app-photo-positioner [src]="image" [(position)]="imagePosition" />
         }
 
-        <label>
+        <label i18n>
           Sobre você
-          <textarea
+          <textarea i18n-placeholder
             name="about"
             rows="5"
             placeholder="Conte sobre o seu trabalho"
@@ -108,7 +108,7 @@
                 [disabled]="instagramBusy()"
                 (click)="refreshInstagram()"
               >
-                {{ instagramBusy() ? 'Aguarde...' : 'Atualizar fotos' }}
+                @if (instagramBusy()) { Aguarde... } @else { Atualizar fotos }
               </button>
               <button
                 type="button"
@@ -144,8 +144,8 @@
 -->
       <section>
         <div class="head">
-          <h2>Galeria</h2>
-          <label class="link upload-link">
+          <h2 i18n>Galeria</h2>
+          <label i18n class="link upload-link">
             @if (uploading()) {
               <app-spinner [small]="true" />
             } @else {
@@ -165,13 +165,13 @@
         <div class="gallery">
           @for (photo of gallery; track photo) {
             <div class="thumb">
-              <img [src]="photo" alt="Foto da galeria" />
-              <button type="button" aria-label="Remover foto" (click)="removeGalleryPhoto(photo)">
+              <img i18n-alt [src]="photo" alt="Foto da galeria" />
+              <button i18n-aria-label type="button" aria-label="Remover foto" (click)="removeGalleryPhoto(photo)">
                 ✕
               </button>
             </div>
           } @empty {
-            <p class="hint muted">
+            <p i18n class="hint muted">
               Mostre o seu trabalho: as fotos aparecem na galeria do seu perfil.
             </p>
           }
@@ -179,9 +179,9 @@
       </section>
 
       <section>
-        <h2>Localização</h2>
-        <p class="hint muted">Onde você atende? Pode escolher os dois.</p>
-        <div class="modes" role="group" aria-label="Onde você atende">
+        <h2 i18n>Localização</h2>
+        <p i18n class="hint muted">Onde você atende? Pode escolher os dois.</p>
+        <div i18n-aria-label class="modes" role="group" aria-label="Onde você atende">
           @for (place of servicePlaces; track place.key) {
             <button
               type="button"
@@ -197,9 +197,9 @@
 
         @if (serviceMode() && needsAddress) {
           <div class="autocomplete">
-            <label>
+            <label i18n>
               Endereço
-              <input
+              <input i18n-placeholder
                 name="place-search"
                 autocomplete="nope"
                 placeholder="Comece a digitar o endereço"
@@ -227,7 +227,7 @@
                     </button>
                   </li>
                 }
-                <li class="powered">Powered by Google</li>
+                <li i18n class="powered">Powered by Google</li>
               </ul>
             }
           </div>
@@ -235,11 +235,11 @@
           @if (addressError()) {
             <p class="hint error">{{ addressError() }}</p>
           } @else if (addressConfirmed()) {
-            <p class="hint confirmed">✓ Endereço confirmado no mapa.</p>
+            <p i18n class="hint confirmed">✓ Endereço confirmado no mapa.</p>
           } @else if (address.trim().length >= 3) {
-            <p class="hint muted">Escolha uma das sugestões para confirmar o endereço.</p>
+            <p i18n class="hint muted">Escolha uma das sugestões para confirmar o endereço.</p>
           } @else {
-            <p class="hint muted">
+            <p i18n class="hint muted">
               Busque o endereço e escolha uma sugestão para aparecer no Explorar.
             </p>
           }
@@ -248,15 +248,15 @@
 
       <section class="wide">
         <div class="head">
-          <h2>Serviços</h2>
-          <button type="button" class="link" (click)="addService()">+ Adicionar</button>
+          <h2 i18n>Serviços</h2>
+          <button i18n type="button" class="link" (click)="addService()">+ Adicionar</button>
         </div>
 
         @for (service of services; track service.id; let i = $index) {
           <div class="service">
             <div class="row">
               <label>
-                <span class="field-label">Categoria *</span>
+                <span i18n class="field-label">Categoria *</span>
                 <select
                   [name]="'scat' + i"
                   [class.invalid]="fieldInvalid(!service.category)"
@@ -264,14 +264,14 @@
                   [ngModel]="service.category"
                   (ngModelChange)="setCategory(service, $event)"
                 >
-                  <option value="" disabled>Selecione</option>
+                  <option i18n value="" disabled>Selecione</option>
                   @for (category of categories; track category) {
-                    <option [value]="category">{{ category }}</option>
+                    <option [value]="category">{{ category | catalog }}</option>
                   }
                 </select>
               </label>
               <label>
-                <span class="field-label">Preço (R$) *</span>
+                <span i18n class="field-label">Preço (R$) *</span>
                 <input
                   [name]="'sprice' + i"
                   inputmode="numeric"
@@ -282,7 +282,7 @@
                 />
               </label>
               <label>
-                <span class="field-label">Duração *</span>
+                <span i18n class="field-label">Duração *</span>
                 <input
                   [name]="'sdur' + i"
                   inputmode="numeric"
@@ -295,7 +295,7 @@
             </div>
             <!-- Names come from the chosen category, so it stays disabled until one is picked -->
             <label>
-              <span class="field-label">Nome do serviço *</span>
+              <span i18n class="field-label">Nome do serviço *</span>
               <select
                 [name]="'sname' + i"
                 [disabled]="!service.category"
@@ -303,18 +303,18 @@
                 [class.empty]="!service.name"
                 [(ngModel)]="service.name"
               >
-                <option value="" disabled>Selecione</option>
+                <option i18n value="" disabled>Selecione</option>
                 @for (name of serviceNames(service); track name) {
-                  <option [value]="name">{{ name }}</option>
+                  <option [value]="name">{{ name | catalog }}</option>
                 }
               </select>
             </label>
             <!-- Another price for some days of the week and times -->
             <div class="rules">
-              <span class="field-label">Preço por dia e horário</span>
+              <span i18n class="field-label">Preço por dia e horário</span>
               @for (rule of service.priceRules; track rule.id; let r = $index) {
                 <div class="rule">
-                  <div class="rule-days" role="group" aria-label="Dias da semana">
+                  <div i18n-aria-label class="rule-days" role="group" aria-label="Dias da semana">
                     @for (item of ruleDays; track item.day) {
                       <button
                         type="button"
@@ -330,7 +330,7 @@
                   <div class="rule-fields">
                     <div class="rule-time">
                       <label>
-                        <span class="field-label">Das</span>
+                        <span i18n class="field-label">Das</span>
                         <input
                           type="time"
                           [name]="'rstart' + i + '-' + r"
@@ -339,7 +339,7 @@
                           (ngModelChange)="rule.start = $event"
                         />
                       </label>
-                      <label class="check">
+                      <label i18n class="check">
                         <input
                           type="checkbox"
                           [name]="'rstartday' + i + '-' + r"
@@ -351,7 +351,7 @@
                     </div>
                     <div class="rule-time">
                       <label>
-                        <span class="field-label">Até</span>
+                        <span i18n class="field-label">Até</span>
                         <input
                           type="time"
                           [name]="'rend' + i + '-' + r"
@@ -360,7 +360,7 @@
                           (ngModelChange)="rule.end = $event"
                         />
                       </label>
-                      <label class="check">
+                      <label i18n class="check">
                         <input
                           type="checkbox"
                           [name]="'rendday' + i + '-' + r"
@@ -371,7 +371,7 @@
                       </label>
                     </div>
                     <label>
-                      <span class="field-label">Preço (R$)</span>
+                      <span i18n class="field-label">Preço (R$)</span>
                       <input
                         [name]="'rprice' + i + '-' + r"
                         inputmode="numeric"
@@ -382,20 +382,20 @@
                     </label>
                   </div>
                   @if (serviceTried() && !ruleComplete(rule)) {
-                    <p class="hint error">
+                    <p i18n class="hint error">
                       Escolha os dias, um horário de início antes do fim e o preço.
                     </p>
                   }
-                  <button type="button" class="remove" (click)="removeRule(service, rule)">
+                  <button i18n type="button" class="remove" (click)="removeRule(service, rule)">
                     Remover
                   </button>
                 </div>
               }
-              <button type="button" class="link" (click)="addRule(service)">
+              <button i18n type="button" class="link" (click)="addRule(service)">
                 + Preço por dia e horário
               </button>
               @if (!service.priceRules.length) {
-                <p class="hint muted">
+                <p i18n class="hint muted">
                   Ex: aos sábados o serviço custa mais. O preço vale pelo horário de início do
                   atendimento.
                 </p>
@@ -404,8 +404,8 @@
             <!-- Photos of the service: the card of the service on the professional page shows them as a gallery -->
             <div class="service-photos">
               <div class="head">
-                <span class="field-label">Fotos do serviço</span>
-                <label class="link upload-link">
+                <span i18n class="field-label">Fotos do serviço</span>
+                <label i18n class="link upload-link">
                   @if (uploadingService() === service.id) {
                     <app-spinner [small]="true" />
                   } @else {
@@ -426,15 +426,15 @@
                 <div class="gallery">
                   @for (photo of service.photos; track photo) {
                     <div class="thumb">
-                      <img [src]="photo" alt="Foto do serviço" />
-                      <button type="button" aria-label="Remover foto" (click)="removeServicePhoto(service, photo)">✕</button>
+                      <img i18n-alt [src]="photo" alt="Foto do serviço" />
+                      <button i18n-aria-label type="button" aria-label="Remover foto" (click)="removeServicePhoto(service, photo)">✕</button>
                     </div>
                   }
                 </div>
               }
             </div>
             <label>
-              <span class="field-label">Descrição</span>
+              <span i18n class="field-label">Descrição</span>
               <textarea
                 [name]="'sdesc' + i"
                 rows="3"
@@ -442,15 +442,15 @@
                 [(ngModel)]="service.description"
               ></textarea>
             </label>
-            <button type="button" class="remove" (click)="removeService(service)">Remover</button>
+            <button i18n type="button" class="remove" (click)="removeService(service)">Remover</button>
           </div>
         } @empty {
-          <p class="muted">Nenhum serviço ainda.</p>
+          <p i18n class="muted">Nenhum serviço ainda.</p>
         }
       </section>
 
       <section class="wide">
-        <h2>Horários de atendimento</h2>
+        <h2 i18n>Horários de atendimento</h2>
         <div class="week">
           @for (day of weekdays; track day.key) {
             <div class="weekday">
@@ -469,7 +469,7 @@
                     [name]="'start' + day.key"
                     [(ngModel)]="availability.weekly[day.key].start"
                   />
-                  <span>às</span>
+                  <span i18n>às</span>
                   <input
                     type="time"
                     [name]="'end' + day.key"
@@ -477,19 +477,19 @@
                   />
                 </div>
               } @else {
-                <span class="muted">Folga</span>
+                <span i18n class="muted">Folga</span>
               }
             </div>
           }
         </div>
         @if (invalidDays.length) {
-          <p class="error">
+          <p i18n class="error">
             O fechamento precisa ser depois da abertura em: {{ invalidDays.length }} dia(s).
           </p>
         }
 
-        <h3>Dias bloqueados</h3>
-        <p class="hint muted">
+        <h3 i18n>Dias bloqueados</h3>
+        <p i18n class="hint muted">
           Clique no dia que quer bloquear. Para um período, clique também no último dia.
         </p>
         <app-date-range-picker
@@ -498,11 +498,11 @@
           [(range)]="pending"
         />
         @if (pending().start; as start) {
-          <p class="selected">
+          <p i18n class="selected">
             Selecionado: <strong>{{ rangeLabel(start, pending().end) }}</strong>
           </p>
         }
-        <button
+        <button i18n
           type="button"
           class="secondary"
           [disabled]="!pending().start"
@@ -515,19 +515,19 @@
           @for (range of availability.blockedRanges; track range.start + range.end) {
             <span class="chip">
               {{ rangeLabel(range.start, range.end) }}
-              <button type="button" aria-label="Desbloquear período" (click)="unblock(range)">
+              <button i18n-aria-label type="button" aria-label="Desbloquear período" (click)="unblock(range)">
                 ✕
               </button>
             </span>
           } @empty {
-            <p class="hint muted">Nenhum período bloqueado. Use para férias e folgas.</p>
+            <p i18n class="hint muted">Nenhum período bloqueado. Use para férias e folgas.</p>
           }
         </div>
       </section>
 
       <section class="wide">
         @if (!signup()) {
-          <label class="check">
+          <label i18n class="check">
             <input
               type="checkbox"
               name="published"
@@ -538,23 +538,16 @@
           </label>
         }
         @if (!missing.length && !visible()) {
-          <p class="hint muted">Seu perfil está completo, mas oculto para as clientes.</p>
+          <p i18n class="hint muted">Seu perfil está completo, mas oculto para as clientes.</p>
         }
       </section>
 
-      <button type="submit" class="primary" [disabled]="saving()">
-        {{
-          saving()
-            ? signup()
-              ? 'Enviando...'
-              : 'Salvando...'
-            : signup()
-              ? 'Enviar cadastro'
-              : 'Salvar perfil'
-        }}
+      <button i18n type="submit" class="primary" [disabled]="saving()">
+        @if (saving() && signup()) { Enviando... } @else if (saving()) { Salvando... } @else if (signup()) { Enviar cadastro } @else { Salvar perfil }
       </button>
     </form>
 
-    <button type="button" class="signout" (click)="signOut()">Sair</button>
+    <div class="language-row"><app-language-switcher /></div>
+    <button i18n type="button" class="signout" (click)="signOut()">Sair</button>
   }
 </div>

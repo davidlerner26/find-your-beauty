@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { authErrorMessage, isValidEmail } from '../../utils/validators';
+import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, RouterLink, MatIconModule],
+  imports: [LanguageSwitcher, FormsModule, RouterLink, MatIconModule],
   templateUrl: './login.html',
   styleUrl: '../auth/auth.scss',
 })
@@ -79,7 +80,7 @@ export class Login {
         this.googleError.set(authErrorMessage(error));
         return;
       }
-      this.googleError.set('Não foi possível entrar com o Google. Tente novamente.');
+      this.googleError.set($localize`Não foi possível entrar com o Google. Tente novamente.`);
     }
   }
 }

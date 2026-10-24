@@ -1,13 +1,13 @@
 <div class="agenda">
-  <h1>Meus agendamentos</h1>
+  <h1 i18n>Meus agendamentos</h1>
 
   @if (!auth.ready() || bookings.mineLoading()) {
     <app-spinner />
   } @else if (!auth.user()) {
     <section class="visitor">
-      <p>Você não está logado.</p>
-      <p class="muted">Entre na sua conta para ver os seus agendamentos.</p>
-      <a class="signin" routerLink="/entrar">Entrar</a>
+      <p i18n>Você não está logado.</p>
+      <p i18n class="muted">Entre na sua conta para ver os seus agendamentos.</p>
+      <a i18n class="signin" routerLink="/entrar">Entrar</a>
     </section>
   } @else {
     <ng-template #card let-booking>
@@ -22,37 +22,37 @@
 
         <ul class="services">
           @for (service of booking.services; track service.id) {
-            <li><span>{{ service.name }}</span><span>{{ service.price | price }}</span></li>
+            <li><span>{{ service.name | catalog }}</span><span>{{ service.price | price }}</span></li>
           }
         </ul>
-        <p class="total"><strong>Total</strong> <strong>{{ booking.total | price }}</strong></p>
+        <p class="total"><strong i18n>Total</strong> <strong>{{ booking.total | price }}</strong></p>
 
         @if (booking.status === 'pending' || booking.status === 'confirmed') {
           <div class="actions">
-            <a class="chat-icon" [routerLink]="['/mensagens', booking.professionalId]" aria-label="Conversar com {{ booking.professionalName }}" title="Conversar">
+            <a i18n-title i18n-aria-label class="chat-icon" [routerLink]="['/mensagens', booking.professionalId]" aria-label="Conversar com {{ booking.professionalName }}" title="Conversar">
               <mat-icon>chat_bubble</mat-icon>
             </a>
-            <button type="button" class="cancel" (click)="cancel(booking)">Cancelar</button>
+            <button i18n type="button" class="cancel" (click)="cancel(booking)">Cancelar</button>
           </div>
         } @else if (booking.status === 'completed') {
           <div class="actions">
-            <a class="chat" [routerLink]="['/profissionais', booking.professionalId]" fragment="avaliacoes">Avaliar</a>
+            <a i18n class="chat" [routerLink]="['/profissionais', booking.professionalId]" fragment="avaliacoes">Avaliar</a>
           </div>
         }
       </article>
     </ng-template>
 
-    <h2>Próximos</h2>
+    <h2 i18n>Próximos</h2>
     <div class="list">
       @for (booking of upcoming(); track booking.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
       } @empty {
-        <p class="empty muted">Você não tem agendamentos. <a routerLink="/explore">Encontre um profissional</a>.</p>
+        <p i18n class="empty muted">Você não tem agendamentos. <a routerLink="/explore">Encontre um profissional</a>.</p>
       }
     </div>
 
     @if (history().length) {
-      <h2>Histórico</h2>
+      <h2 i18n>Histórico</h2>
       <div class="list">
         @for (booking of history(); track booking.id) {
           <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />

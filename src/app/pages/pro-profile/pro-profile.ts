@@ -30,6 +30,8 @@ import { DateRangePicker, PendingRange } from '../../components/date-range-picke
 import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
 import { INTL_LOCALE } from '../../utils/locale';
+import { CatalogPipe } from '../../utils/catalog.pipe';
+import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 // A service being edited: nothing is pre-filled, so the fields can be empty
 type PriceRuleDraft = { id: string; days: number[]; start: string; end: string; price: string };
@@ -50,7 +52,7 @@ type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePre
 
 @Component({
   selector: 'app-pro-profile',
-  imports: [PhotoPositioner, DateRangePicker, Spinner, FormsModule, MatIconModule],
+  imports: [LanguageSwitcher, CatalogPipe, PhotoPositioner, DateRangePicker, Spinner, FormsModule, MatIconModule],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
 })
@@ -92,13 +94,13 @@ export class ProProfile {
 
   // Monday first, as in the Brazilian calendar
   protected readonly weekdays = [
-    { key: '1', label: 'Segunda' },
-    { key: '2', label: 'Terça' },
-    { key: '3', label: 'Quarta' },
-    { key: '4', label: 'Quinta' },
-    { key: '5', label: 'Sexta' },
-    { key: '6', label: 'Sábado' },
-    { key: '0', label: 'Domingo' },
+    { key: '1', label: $localize`Segunda` },
+    { key: '2', label: $localize`Terça` },
+    { key: '3', label: $localize`Quarta` },
+    { key: '4', label: $localize`Quinta` },
+    { key: '5', label: $localize`Sexta` },
+    { key: '6', label: $localize`Sábado` },
+    { key: '0', label: $localize`Domingo` },
   ];
 
   protected readonly visible = signal(true);
@@ -208,13 +210,13 @@ export class ProProfile {
     if (this.name.trim().length < 3) missing.push('nome');
     if (!isValidCpf(this.cpf)) missing.push('CPF');
     if (!this.image.trim()) missing.push('foto');
-    if (!this.serviceMode()) missing.push('onde você atende');
+    if (!this.serviceMode()) missing.push($localize`onde você atende`);
     else if (this.needsAddress) {
-      if (this.address.trim().length < 5) missing.push('endereço');
-      else if (!this.addressConfirmed()) missing.push('escolher o endereço na lista de sugestões');
+      if (this.address.trim().length < 5) missing.push($localize`endereço`);
+      else if (!this.addressConfirmed()) missing.push($localize`escolher o endereço na lista de sugestões`);
     }
     if (!this.services.some((service) => this.serviceComplete(service))) {
-      missing.push('pelo menos 1 serviço completo');
+      missing.push($localize`pelo menos 1 serviço completo`);
     }
     return missing;
   }
@@ -342,7 +344,7 @@ export class ProProfile {
 
   private showUploadError(error: unknown) {
     console.error('Upload failed', error);
-    this.show('Não foi possível enviar a foto. Use uma imagem e tente novamente.');
+    this.show($localize`Não foi possível enviar a foto. Use uma imagem e tente novamente.`);
   }
 
   // The names of the chosen category (a name saved before this list existed is kept as an option)
@@ -390,13 +392,13 @@ export class ProProfile {
 
   // Other prices of a service: on some days of the week and times
   protected readonly ruleDays = [
-    { day: 1, label: 'Seg' },
-    { day: 2, label: 'Ter' },
-    { day: 3, label: 'Qua' },
-    { day: 4, label: 'Qui' },
-    { day: 5, label: 'Sex' },
-    { day: 6, label: 'Sáb' },
-    { day: 0, label: 'Dom' },
+    { day: 1, label: $localize`Seg` },
+    { day: 2, label: $localize`Ter` },
+    { day: 3, label: $localize`Qua` },
+    { day: 4, label: $localize`Qui` },
+    { day: 5, label: $localize`Sex` },
+    { day: 6, label: $localize`Sáb` },
+    { day: 0, label: $localize`Dom` },
   ];
 
   // "Início do dia" and "Fim do dia" stand for the whole edge of the day (the end is not included)
@@ -497,7 +499,7 @@ export class ProProfile {
     } catch (error) {
       console.error('Address search failed', error);
       this.suggestions.set([]);
-      this.addressError.set('Não foi possível buscar endereços agora. Tente novamente em instantes.');
+      this.addressError.set($localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`);
     }
   }
 
@@ -517,7 +519,7 @@ export class ProProfile {
       this.sessionToken = undefined;
     } catch (error) {
       console.error('Failed to load the place', error);
-      this.addressError.set('Não foi possível carregar este endereço. Escolha outro.');
+      this.addressError.set($localize`Não foi possível carregar este endereço. Escolha outro.`);
     }
   }
 
@@ -647,7 +649,7 @@ export class ProProfile {
       await this.saveCpf();
       this.lastSaved = snapshot;
       // A short toast, like the other messages of the screen
-      this.show('Alterações salvas', 2500);
+      this.show($localize`Alterações salvas`, 2500);
     } catch (error) {
       console.error('Failed to auto save the profile', error);
     }
@@ -656,13 +658,13 @@ export class ProProfile {
   protected async save() {
     clearTimeout(this.autoSaveTimer);
     if (this.invalidDays.length) {
-      this.show('O horário de fechamento precisa ser depois do de abertura.');
+      this.show($localize`O horário de fechamento precisa ser depois do de abertura.`);
       return;
     }
 
     const instagram = parseInstagram(this.instagram);
     if (instagram === null) {
-      this.show('Usuário do Instagram inválido. Use o formato @usuario.');
+      this.show($localize`Usuário do Instagram inválido. Use o formato @usuario.`);
       return;
     }
 
@@ -674,7 +676,7 @@ export class ProProfile {
 
     this.serviceTried.set(true);
     if (!this.services.every((service) => this.serviceComplete(service))) {
-      this.show('Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.');
+      this.show($localize`Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.`);
       return;
     }
 
@@ -709,14 +711,14 @@ export class ProProfile {
       await this.professionals.load();
       this.show(
         published
-          ? 'Perfil salvo e publicado! As clientes já podem encontrar você.'
+          ? $localize`Perfil salvo e publicado! As clientes já podem encontrar você.`
           : !visible
-            ? 'Perfil salvo, mas oculto. Marque "Mostrar meu perfil para as clientes" para publicar.'
-            : `Perfil salvo, mas ainda não publicado. Falta: ${this.missing.join(', ')}.`,
+            ? $localize`Perfil salvo, mas oculto. Marque "Mostrar meu perfil para as clientes" para publicar.`
+            : $localize`Perfil salvo, mas ainda não publicado. Falta: ${this.missing.join(', ')}:missing:.`,
       );
     } catch (error) {
       console.error('Failed to save profile', error);
-      this.show('Não foi possível salvar. Tente novamente.');
+      this.show($localize`Não foi possível salvar. Tente novamente.`);
     } finally {
       this.saving.set(false);
     }
@@ -733,26 +735,26 @@ export class ProProfile {
     try {
       const { photos } = await this.instagramService.refresh();
       await this.professionals.load();
-      this.show(`Fotos do Instagram atualizadas (${photos}).`);
+      this.show($localize`Fotos do Instagram atualizadas (${photos}:photos:).`);
     } catch (error) {
       console.error('Failed to refresh Instagram', error);
-      this.show('Não foi possível atualizar as fotos do Instagram. Tente novamente.');
+      this.show($localize`Não foi possível atualizar as fotos do Instagram. Tente novamente.`);
     } finally {
       this.instagramBusy.set(false);
     }
   }
 
   protected async disconnectInstagram() {
-    if (!confirm('Desconectar o Instagram? As fotos importadas deixam de aparecer no seu perfil.')) return;
+    if (!confirm($localize`Desconectar o Instagram? As fotos importadas deixam de aparecer no seu perfil.`)) return;
 
     this.instagramBusy.set(true);
     try {
       await this.instagramService.disconnect();
       await this.professionals.load();
-      this.show('Instagram desconectado.');
+      this.show($localize`Instagram desconectado.`);
     } catch (error) {
       console.error('Failed to disconnect Instagram', error);
-      this.show('Não foi possível desconectar. Tente novamente.');
+      this.show($localize`Não foi possível desconectar. Tente novamente.`);
     } finally {
       this.instagramBusy.set(false);
     }

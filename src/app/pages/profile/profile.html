@@ -1,26 +1,29 @@
 <div class="profile">
-  <h1>Perfil</h1>
+  <div class="title-row">
+    <h1 i18n>Perfil</h1>
+    <app-language-switcher />
+  </div>
 
   @if (!auth.ready()) {
     <app-spinner />
   } @else if (auth.user(); as user) {
     <section class="card">
       @if (user.photoURL) {
-        <img class="avatar" [src]="user.photoURL" [alt]="user.displayName || 'Foto do perfil'" referrerpolicy="no-referrer" />
+        <img class="avatar" [src]="user.photoURL" [alt]="user.displayName || t.profilePhoto()" referrerpolicy="no-referrer" />
       } @else {
         <span class="avatar initial">{{ initial(user.displayName, user.email) }}</span>
       }
       <div>
-        <h2>{{ user.displayName || 'Sem nome' }}</h2>
+        <h2 i18n>@if (user.displayName) { {{ user.displayName }} } @else { Sem nome }</h2>
         <p class="muted">{{ user.email }}</p>
       </div>
     </section>
 
     <section class="details">
       <div class="details-head">
-        <h3>Meus dados</h3>
+        <h3 i18n>Meus dados</h3>
         @if (!editing() && !profile.isLoading() && !profile.error()) {
-          <button type="button" class="edit" aria-label="Editar meus dados" title="Editar" (click)="edit(profile.value())">
+          <button i18n-title i18n-aria-label type="button" class="edit" aria-label="Editar meus dados" title="Editar" (click)="edit(profile.value())">
             <mat-icon>edit</mat-icon>
           </button>
         }
@@ -28,41 +31,41 @@
       @if (profile.isLoading()) {
         <app-spinner [small]="true" />
       } @else if (profile.error()) {
-        <p class="error">Não foi possível carregar seus dados.</p>
+        <p i18n class="error">Não foi possível carregar seus dados.</p>
       } @else if (editing()) {
         <form class="edit-form" (submit)="$event.preventDefault(); save()" novalidate>
-          <label>
+          <label i18n>
             Nome
             <input name="firstName" autocomplete="given-name" [value]="firstName" (input)="onTextInput($event, 'firstName')" />
           </label>
           @if (submitted() && !nameValid) {
-            <p class="error">O nome precisa ter pelo menos 3 caracteres.</p>
+            <p i18n class="error">O nome precisa ter pelo menos 3 caracteres.</p>
           }
-          <label>
+          <label i18n>
             Sobrenome
             <input name="lastName" autocomplete="family-name" [value]="lastName" (input)="onTextInput($event, 'lastName')" />
           </label>
           @if (submitted() && !lastNameValid) {
-            <p class="error">O sobrenome precisa ter pelo menos 2 caracteres.</p>
+            <p i18n class="error">O sobrenome precisa ter pelo menos 2 caracteres.</p>
           }
-          <label>
+          <label i18n>
             Celular
             <input type="tel" name="phone" inputmode="numeric" maxlength="20" autocomplete="tel-national" [value]="phone" (input)="onPhoneInput($event)" />
           </label>
           @if (submitted() && !phoneValid) {
-            <p class="error">Digite o celular completo, com DDD e 9 dígitos.</p>
+            <p i18n class="error">Digite o celular completo, com DDD e 9 dígitos.</p>
           }
-          <label>
+          <label i18n>
             CPF
             <input name="cpf" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="000.000.000-00" [value]="cpf" (input)="onCpfInput($event)" />
           </label>
           @if (submitted() && !cpfValid) {
-            <p class="error">Digite um CPF válido.</p>
+            <p i18n class="error">Digite um CPF válido.</p>
           }
           <div class="autocomplete">
-            <label>
+            <label i18n>
               Endereço
-              <input
+              <input i18n-placeholder
                 name="place-search"
                 autocomplete="nope"
                 placeholder="Comece a digitar o endereço"
@@ -82,46 +85,46 @@
           @if (place.error()) {
             <p class="error">{{ place.error() }}</p>
           } @else if (submitted() && !addressValid) {
-            <p class="error">Busque o endereço e escolha uma das sugestões.</p>
+            <p i18n class="error">Busque o endereço e escolha uma das sugestões.</p>
           } @else if (place.confirmed()) {
-            <p class="hint-ok">✓ Endereço confirmado.</p>
+            <p i18n class="hint-ok">✓ Endereço confirmado.</p>
           }
           @if (saveError()) {
             <p class="error">{{ saveError() }}</p>
           }
           <div class="form-actions">
-            <button type="button" class="cancel" [disabled]="saving()" (click)="editing.set(false)">Cancelar</button>
-            <button type="submit" class="save" [disabled]="saving()">{{ saving() ? 'Salvando...' : 'Salvar' }}</button>
+            <button i18n type="button" class="cancel" [disabled]="saving()" (click)="editing.set(false)">Cancelar</button>
+            <button i18n type="submit" class="save" [disabled]="saving()">@if (saving()) { Salvando... } @else { Salvar }</button>
           </div>
         </form>
       } @else if (profile.value(); as data) {
         <dl>
-          <div><dt>Nome</dt><dd>{{ data.firstName || '-' }}</dd></div>
-          <div><dt>Sobrenome</dt><dd>{{ data.lastName || '-' }}</dd></div>
-          <div><dt>E-mail</dt><dd>{{ data.email || user.email }}</dd></div>
-          <div><dt>Celular</dt><dd>{{ data.phone || '-' }}</dd></div>
-          <div><dt>CPF</dt><dd>{{ data.cpf || '-' }}</dd></div>
-          <div><dt>Endereço</dt><dd>{{ data.address || '-' }}</dd></div>
+          <div><dt i18n>Nome</dt><dd>{{ data.firstName || '-' }}</dd></div>
+          <div><dt i18n>Sobrenome</dt><dd>{{ data.lastName || '-' }}</dd></div>
+          <div><dt i18n>E-mail</dt><dd>{{ data.email || user.email }}</dd></div>
+          <div><dt i18n>Celular</dt><dd>{{ data.phone || '-' }}</dd></div>
+          <div><dt i18n>CPF</dt><dd>{{ data.cpf || '-' }}</dd></div>
+          <div><dt i18n>Endereço</dt><dd>{{ data.address || '-' }}</dd></div>
         </dl>
       } @else {
-        <p class="muted">Seus dados ainda não foram salvos.</p>
-        <button type="button" class="save" (click)="edit(null)">Preencher meus dados</button>
+        <p i18n class="muted">Seus dados ainda não foram salvos.</p>
+        <button i18n type="button" class="save" (click)="edit(null)">Preencher meus dados</button>
       }
     </section>
 
-    <p class="status">
+    <p i18n class="status">
       <span class="dot"></span> Você está logado
     </p>
 
     @if (auth.isAdmin()) {
-      <a class="admin-link" routerLink="/admin">Administração</a>
+      <a i18n class="admin-link" routerLink="/admin">Administração</a>
     }
 
-    <button type="button" class="signout" (click)="signOut()">Sair</button>
+    <button i18n type="button" class="signout" (click)="signOut()">Sair</button>
   } @else {
     <section class="card empty">
-      <p>Você não está logado.</p>
-      <a class="signin" routerLink="/entrar">Entrar</a>
+      <p i18n>Você não está logado.</p>
+      <a i18n class="signin" routerLink="/entrar">Entrar</a>
     </section>
   }
 </div>

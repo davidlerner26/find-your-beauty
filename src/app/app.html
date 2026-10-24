@@ -1,10 +1,10 @@
 @if (showTopbar) {
   <!-- Wide screens only (hidden on phones and tablets): the navigation of the tabs, on top -->
   <header class="topbar">
-    <a class="brand" routerLink="/" aria-label="Find Your Beauty">
-      <img src="logo-full.svg" alt="Find Your Beauty" />
+    <a i18n-aria-label class="brand" routerLink="/" aria-label="Find Your Beauty">
+      <img i18n-alt src="logo-full.svg" alt="Find Your Beauty" />
     </a>
-    <nav aria-label="Principal">
+    <nav i18n-aria-label aria-label="Principal">
       @for (tab of tabs; track tab.path) {
         <a [routerLink]="tab.path" [class.active]="isActive(tab)">
           {{ tab.label }}
@@ -14,13 +14,14 @@
         </a>
       }
     </nav>
+    <app-language-switcher />
     @if (auth.user()) {
-      <a class="account" [routerLink]="profilePath">
+      <a i18n class="account" [routerLink]="profilePath">
         <mat-icon class="filled">person</mat-icon>
         Minha conta
       </a>
     } @else {
-      <a class="signin" routerLink="/entrar">Entrar</a>
+      <a i18n class="signin" routerLink="/entrar">Entrar</a>
     }
   </header>
 }

@@ -117,8 +117,8 @@ export type ServiceMode = 'studio' | 'home' | 'both';
 
 // The two places a professional can pick (both together are saved as 'both')
 export const SERVICE_PLACES: { key: 'studio' | 'home'; label: string }[] = [
-  { key: 'studio', label: 'No meu endereço' },
-  { key: 'home', label: 'A domicílio' },
+  { key: 'studio', label: $localize`No meu endereço` },
+  { key: 'home', label: $localize`A domicílio` },
 ];
 
 export type Professional = {
@@ -177,11 +177,11 @@ export const shortAddress = (address: string) => {
 
 // What the cards of the map and of the home show where the address goes: the short address
 export const shortLocationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
-  professional.serviceMode === 'home' ? 'Atendimento a domicílio' : shortAddress(professional.address);
+  professional.serviceMode === 'home' ? $localize`Atendimento a domicílio` : shortAddress(professional.address);
 
 // What cards show where the address goes
 export const locationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
-  professional.serviceMode === 'home' ? 'Atendimento a domicílio' : professional.address;
+  professional.serviceMode === 'home' ? $localize`Atendimento a domicílio` : professional.address;
 
 // 30 -> "30 minutos", 60 -> "1 hora", 90 -> "1 hora e 30 minutos", 120 -> "2 horas"
 export const formatDuration = (totalMinutes: number) => {

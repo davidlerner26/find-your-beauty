@@ -1,6 +1,6 @@
 @if (peer(); as peer) {
   <header class="top">
-    <button type="button" class="icon-btn" aria-label="Voltar" (click)="goBack()">
+    <button i18n-aria-label type="button" class="icon-btn" aria-label="Voltar" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
     </button>
     @if (peer.image) {
@@ -26,7 +26,7 @@
         <div class="stack">
           <div class="bubble" [class.image]="message.image">
             @if (message.image) {
-              <a [href]="message.image" target="_blank" rel="noopener"><img [src]="message.image" alt="Foto enviada" /></a>
+              <a [href]="message.image" target="_blank" rel="noopener"><img i18n-alt [src]="message.image" alt="Foto enviada" /></a>
             } @else if (message.file) {
               <a class="file" [href]="message.file.url" target="_blank" rel="noopener">{{ message.file.name }}</a>
             } @else {
@@ -37,35 +37,35 @@
         </div>
       </div>
     } @empty {
-      <p class="empty">Envie uma mensagem para {{ peer.name }}.</p>
+      <p i18n class="empty">Envie uma mensagem para {{ peer.name }}.</p>
     }
   </div>
 
   @if (auth.user()) {
   @if (uploading()) {
-    <p class="attach-note">Enviando arquivo...</p>
+    <p i18n class="attach-note">Enviando arquivo...</p>
   } @else if (attachError()) {
     <p class="attach-note error">{{ attachError() }}</p>
   }
   <form class="composer" (ngSubmit)="send()">
     <input #files type="file" multiple hidden (change)="attach($event)" />
-    <button type="button" class="icon-btn" aria-label="Anexar arquivo" [disabled]="uploading()" (click)="files.click()">
+    <button i18n-aria-label type="button" class="icon-btn" aria-label="Anexar arquivo" [disabled]="uploading()" (click)="files.click()">
       <mat-icon>attach_file</mat-icon>
     </button>
-    <input class="draft" name="draft" placeholder="Digite uma mensagem" autocomplete="off" [(ngModel)]="draft" />
-    <button type="submit" class="send" aria-label="Enviar">
+    <input i18n-placeholder class="draft" name="draft" placeholder="Digite uma mensagem" autocomplete="off" [(ngModel)]="draft" />
+    <button i18n-aria-label type="submit" class="send" aria-label="Enviar">
       <mat-icon>send</mat-icon>
     </button>
   </form>
   } @else if (auth.ready()) {
-    <p class="login-hint">
+    <p i18n class="login-hint">
       <a routerLink="/entrar">Entre</a> na sua conta para enviar mensagens.
     </p>
   }
 } @else if (professionals.status() === 'loading') {
   <app-spinner />
 } @else if (professionals.status() === 'error') {
-  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
+  <p i18n class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {
-  <p class="not-found">Conversa não encontrada.</p>
+  <p i18n class="not-found">Conversa não encontrada.</p>
 }

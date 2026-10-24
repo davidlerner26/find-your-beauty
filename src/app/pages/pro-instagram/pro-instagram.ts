@@ -11,12 +11,12 @@ import { Professionals } from '../../services/professionals';
   template: `
     <div class="page">
       @if (error()) {
-        <h1>Não foi possível conectar</h1>
+        <h1 i18n>Não foi possível conectar</h1>
         <p>{{ error() }}</p>
-        <a routerLink="/pro/perfil">Voltar ao perfil</a>
+        <a i18n routerLink="/pro/perfil">Voltar ao perfil</a>
       } @else {
         <app-spinner />
-        <p>Conectando o seu Instagram...</p>
+        <p i18n>Conectando o seu Instagram...</p>
       }
     </div>
   `,
@@ -50,7 +50,7 @@ export class ProInstagram {
   private async finish() {
     const code = this.code();
     if (!code) {
-      this.error.set(this.error_description() || 'O acesso não foi autorizado.');
+      this.error.set(this.error_description() || $localize`O acesso não foi autorizado.`);
       return;
     }
 
@@ -63,8 +63,8 @@ export class ProInstagram {
       const message = (error as { message?: string }).message ?? '';
       this.error.set(
         message === 'invalid-state'
-          ? 'A conexão expirou. Tente conectar de novo.'
-          : message.replace(/^.*?Instagram:/, 'Instagram:') || 'Tente novamente em instantes.',
+          ? $localize`A conexão expirou. Tente conectar de novo.`
+          : message.replace(/^.*?Instagram:/, 'Instagram:') || $localize`Tente novamente em instantes.`,
       );
     }
   }

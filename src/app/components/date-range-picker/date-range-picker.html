@@ -1,10 +1,10 @@
 <div class="picker">
   <div class="month">
-    <button type="button" aria-label="Mês anterior" [disabled]="!canGoBack()" (click)="changeMonth(-1)">
+    <button i18n-aria-label type="button" aria-label="Mês anterior" [disabled]="!canGoBack()" (click)="changeMonth(-1)">
       <mat-icon>chevron_left</mat-icon>
     </button>
     <strong>{{ monthLabel() }}</strong>
-    <button type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
+    <button i18n-aria-label type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
       <mat-icon>chevron_right</mat-icon>
     </button>
   </div>
@@ -37,6 +37,6 @@
   </div>
 
   @if (blocked().length) {
-    <p class="legend"><span class="swatch"></span> Dias já bloqueados</p>
+    <p i18n class="legend"><span class="swatch"></span> Dias já bloqueados</p>
   }
 </div>

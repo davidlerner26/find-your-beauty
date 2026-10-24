@@ -597,3 +597,9 @@ h3 {
     grid-column: 1 / -1;
   }
 }
+
+.language-row {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}

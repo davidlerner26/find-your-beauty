@@ -33,7 +33,7 @@ export class ResetPassword implements OnInit {
 
   async ngOnInit() {
     if (this.mode() !== 'resetPassword' || !this.oobCode()) {
-      this.formError.set('Este link não é válido. Peça um novo link de redefinição.');
+      this.formError.set($localize`Este link não é válido. Peça um novo link de redefinição.`);
       this.state.set('invalid');
       return;
     }

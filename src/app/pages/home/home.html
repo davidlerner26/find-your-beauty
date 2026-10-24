@@ -1,22 +1,22 @@
 <main class="container">
-  <img class="logo" src="logo-full.svg" alt="Find Your Beauty" />
+  <img i18n-alt class="logo" src="logo-full.svg" alt="Find Your Beauty" />
   <section class="hero">
     <div>
       @if (firstName(); as name) {
-        <h1>Olá, {{ name }}</h1>
+        <h1 i18n>Olá, {{ name }}</h1>
       }
-      <p class="muted">Encontre o serviço que você quer e se cuide</p>
+      <p i18n class="muted">Encontre o serviço que você quer e se cuide</p>
     </div>
-    <a class="search-btn" routerLink="/busca" aria-label="Buscar">
+    <a i18n-aria-label class="search-btn" routerLink="/busca" aria-label="Buscar">
       <mat-icon>search</mat-icon>
       <!-- Only on wide screens -->
-      <span class="search-label">Buscar profissionais</span>
+      <span i18n class="search-label">Buscar profissionais</span>
     </a>
   </section>
 
   @if (followed().length) {
     <section>
-      <h2>Profissionais favoritos</h2>
+      <h2 i18n>Profissionais favoritos</h2>
       <div class="followed">
         @for (salon of followed(); track salon.id) {
           <a class="follow" [routerLink]="['/profissionais', salon.id]">
@@ -34,7 +34,7 @@
 
   <section>
     <div class="section-head">
-      <h2>Profissionais em destaque</h2>
+      <h2 i18n>Profissionais em destaque</h2>
       <!-- <a href="#">Ver todos</a> -->
     </div>
     <div class="cards">
@@ -63,7 +63,7 @@
               <button
                 type="button"
                 class="heart"
-                [attr.aria-label]="favorites.has(salon.id) ? 'Remover dos favoritos' : 'Favoritar'"
+                [attr.aria-label]="t.favorite(favorites.has(salon.id))"
                 (click)="toggleFavorite($event, salon.id)"
               >
                 <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
@@ -77,7 +77,7 @@
               </div>
             }
           </div>
-          <p class="tags">{{ salon.tags }}</p>
+          <p class="tags">{{ salon.tagList | catalog }}</p>
           <h3>{{ salon.name }}</h3>
           <p class="muted">{{ salon.address }}</p>
           <p class="rating">
@@ -91,7 +91,7 @@
   </section>
 
   <section>
-    <h2>Mais buscados</h2>
+    <h2 i18n>Mais buscados</h2>
     <div class="interests">
       @for (interest of interests; track interest) {
         <button
@@ -101,14 +101,14 @@
           [attr.aria-pressed]="activeInterests().includes(interest)"
           (click)="toggleInterest(interest)"
         >
-          {{ interest }}
+          {{ interest | catalog }}
         </button>
       }
     </div>
   </section>
 
   <section>
-    <h2>O que você quer fazer?</h2>
+    <h2 i18n>O que você quer fazer?</h2>
     @for (row of serviceRows(); track row.category) {
       <div class="services">
         @for (service of row.services; track service.name) {
@@ -116,7 +116,7 @@
             <span class="service-icon">
               <mat-icon>{{ service.icon }}</mat-icon>
             </span>
-            {{ service.name }}
+            {{ service.name | catalog }}
           </a>
         }
       </div>
@@ -125,7 +125,7 @@
 
   <section>
     <div class="section-head">
-      <h2>Profissionais próximos</h2>
+      <h2 i18n>Profissionais próximos</h2>
       <!-- <a href="#">Ver todos</a> -->
     </div>
     <div class="offers">
@@ -163,7 +163,7 @@
             }
           </div>
           <div class="offer-info">
-            <p class="tags">{{ offer.tags }}</p>
+            <p class="tags">{{ offer.tagList | catalog }}</p>
             <h3>{{ offer.name }}</h3>
             <p class="muted">{{ offer.address }}</p>
             <p class="rating">

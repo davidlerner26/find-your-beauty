@@ -1,9 +1,9 @@
 <header class="top">
-  <button type="button" class="icon-btn" aria-label="Voltar" (click)="goBack()">
+  <button i18n-aria-label type="button" class="icon-btn" aria-label="Voltar" (click)="goBack()">
     <mat-icon>chevron_left</mat-icon>
   </button>
-  <h1>Buscar</h1>
-  <button type="button" class="icon-btn filter-btn" aria-label="Filtros" (click)="openSheet()">
+  <h1 i18n>Buscar</h1>
+  <button i18n-aria-label type="button" class="icon-btn filter-btn" aria-label="Filtros" (click)="openSheet()">
     <mat-icon>filter_list</mat-icon>
     @if (activeFilterCount() > 0) {
       <span class="count">{{ activeFilterCount() }}</span>
@@ -14,7 +14,7 @@
 <div class="content">
   <form class="search" (ngSubmit)="submit()">
     <mat-icon>search</mat-icon>
-    <input
+    <input i18n-placeholder
       name="query"
       type="search"
       placeholder="Busque profissional ou serviço.."
@@ -23,19 +23,19 @@
       (ngModelChange)="onType()"
     />
     @if (query) {
-      <button type="button" class="clear" aria-label="Limpar" (click)="clearQuery()">✕</button>
+      <button i18n-aria-label type="button" class="clear" aria-label="Limpar" (click)="clearQuery()">✕</button>
     }
   </form>
 
   @if (searching()) {
-    <p class="count-label muted">
-      {{ results().length }} {{ results().length === 1 ? 'resultado' : 'resultados' }}
+    <p i18n class="count-label muted">
+      {{ results().length }} @if (results().length === 1) { resultado } @else { resultados }
     </p>
     <div class="list">
       @for (item of results(); track item.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: item }" />
       } @empty {
-        <p class="empty muted">
+        <p i18n class="empty muted">
           Nenhum profissional encontrado. Tente outra busca ou mude os filtros.
         </p>
       }
@@ -43,8 +43,8 @@
   } @else {
     @if (recents().length) {
       <div class="section-head">
-        <h2 class="muted">Recentes</h2>
-        <button type="button" class="link" (click)="clearRecents()">Limpar tudo</button>
+        <h2 i18n class="muted">Recentes</h2>
+        <button i18n type="button" class="link" (click)="clearRecents()">Limpar tudo</button>
       </div>
       <ul class="recents">
         @for (recent of recents(); track recent) {
@@ -53,7 +53,7 @@
             <button
               type="button"
               class="remove"
-              [attr.aria-label]="'Remover ' + recent"
+              [attr.aria-label]="t.removeRecent(recent)"
               (click)="removeRecent(recent)"
             >
               ✕
@@ -64,20 +64,20 @@
     }
 
     @if (popular().length) {
-      <h2>Buscas populares</h2>
+      <h2 i18n>Buscas populares</h2>
       <div class="chips">
         @for (tag of popular(); track tag) {
-          <button type="button" class="chip" (click)="searchFor(tag)">{{ tag }}</button>
+          <button type="button" class="chip" (click)="searchFor(tag)">{{ tag | catalog }}</button>
         }
       </div>
     }
 
-    <h2>Sugestões para você</h2>
+    <h2 i18n>Sugestões para você</h2>
     <div class="list">
       @for (item of suggestions(); track item.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: item }" />
       } @empty {
-        <p class="empty muted">Ainda não há profissionais para sugerir.</p>
+        <p i18n class="empty muted">Ainda não há profissionais para sugerir.</p>
       }
     </div>
   }
@@ -91,11 +91,11 @@
       [style.background-position]="item.cardPosition | focus"
     ></div>
     <div class="result-info">
-      <p class="tags">{{ item.tags.join(' . ') }}</p>
+      <p class="tags">{{ item.tags | catalog }}</p>
       <h3>{{ item.name }}</h3>
       <p class="muted address">{{ item.address }}</p>
       @if (item.minPrice !== null && item.minPrice !== undefined) {
-        <p class="from-price">A partir de {{ item.minPrice | price }}</p>
+        <p i18n class="from-price">A partir de {{ item.minPrice | price }}</p>
       }
       <p class="rating">
         <mat-icon class="star filled">star</mat-icon> <strong>{{ item.rating }}</strong> ({{ item.reviewsCount }} {{ item.reviewsCount | reviewsLabel }})
@@ -109,16 +109,16 @@
 
 @if (sheetOpen()) {
   <div class="backdrop" (click)="cancelSheet()"></div>
-  <div class="sheet" role="dialog" aria-label="Filtros">
+  <div i18n-aria-label class="sheet" role="dialog" aria-label="Filtros">
     <div class="handle"></div>
     <div class="sheet-head">
-      <button type="button" class="link" (click)="cancelSheet()">Cancelar</button>
-      <strong>Filtros</strong>
-      <button type="button" class="reset" (click)="resetDraft()">Redefinir</button>
+      <button i18n type="button" class="link" (click)="cancelSheet()">Cancelar</button>
+      <strong i18n>Filtros</strong>
+      <button i18n type="button" class="reset" (click)="resetDraft()">Redefinir</button>
     </div>
 
     <div class="sheet-body">
-      <h2>Ordenar por</h2>
+      <h2 i18n>Ordenar por</h2>
       <div class="chips">
         @for (option of sortOptions; track option.key) {
           <button
@@ -133,20 +133,20 @@
         }
       </div>
       @if (!userPosition()) {
-        <p class="muted range-label">Permita a localização para ordenar por distância.</p>
+        <p i18n class="muted range-label">Permita a localização para ordenar por distância.</p>
       }
 
-      <h2>Bairro</h2>
-      <select class="neighborhood" name="neighborhood" aria-label="Bairro" [(ngModel)]="draft.neighborhood">
-        <option [ngValue]="null">Todos os bairros do Rio de Janeiro</option>
+      <h2 i18n>Bairro</h2>
+      <select i18n-aria-label class="neighborhood" name="neighborhood" aria-label="Bairro" [(ngModel)]="draft.neighborhood">
+        <option i18n [ngValue]="null">Todos os bairros do Rio de Janeiro</option>
         @for (name of neighborhoods(); track name) {
           <option [ngValue]="name">{{ name }}</option>
         }
       </select>
 
-      <h2>Disponível em</h2>
+      <h2 i18n>Disponível em</h2>
       <div class="month">
-        <button
+        <button i18n-aria-label
           type="button"
           aria-label="Mês anterior"
           [disabled]="isCurrentMonth()"
@@ -155,7 +155,7 @@
           <mat-icon>chevron_left</mat-icon>
         </button>
         <strong>{{ monthLabel() }}</strong>
-        <button type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
+        <button i18n-aria-label type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
           <mat-icon>chevron_right</mat-icon>
         </button>
       </div>
@@ -175,7 +175,7 @@
         }
       </div>
 
-      <h2>Serviço</h2>
+      <h2 i18n>Serviço</h2>
       <div class="chips">
         @for (tag of allTags(); track tag) {
           <button
@@ -184,31 +184,29 @@
             [class.active]="draft.tags.includes(tag)"
             (click)="toggleTag(tag)"
           >
-            {{ tag }}
+            {{ tag | catalog }}
           </button>
         }
       </div>
 
-      <h2>Avaliação</h2>
+      <h2 i18n>Avaliação</h2>
       <div class="rating-filter">
         <div class="stars">
           @for (star of stars; track star) {
             <button
               type="button"
               [class.on]="star <= draft.minRating"
-              [attr.aria-label]="star + ' estrelas'"
+              [attr.aria-label]="t.stars(star)"
               (click)="setRating(star)"
             >
               <mat-icon class="filled">star</mat-icon>
             </button>
           }
         </div>
-        <span class="rating-label">{{
-          draft.minRating ? draft.minRating + ' estrelas ou mais' : 'Qualquer nota'
-        }}</span>
+        <span i18n class="rating-label">@if (draft.minRating) { {{ draft.minRating }} estrelas ou mais } @else { Qualquer nota }</span>
       </div>
 
-      <h2>Distância</h2>
+      <h2 i18n>Distância</h2>
       <input
         class="range"
         type="range"
@@ -218,15 +216,15 @@
         [disabled]="!userPosition()"
         [(ngModel)]="draft.maxKm"
       />
-      <p class="muted range-label">
+      <p i18n class="muted range-label">
         @if (!userPosition()) {
           Permita a localização para filtrar por distância.
         } @else {
-          {{ draft.maxKm >= maxKm ? 'Sem limite' : 'Até ' + draft.maxKm + ' km' }}
+          @if (draft.maxKm >= maxKm) { Sem limite } @else { Até {{ draft.maxKm }} km }
         }
       </p>
     </div>
 
-    <button type="button" class="show" (click)="showResults()">Mostrar resultados</button>
+    <button i18n type="button" class="show" (click)="showResults()">Mostrar resultados</button>
   </div>
 }

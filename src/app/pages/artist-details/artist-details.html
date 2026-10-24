@@ -8,7 +8,7 @@
       @for (photo of heroPhotos(artist); track photo) {
         <img
           [src]="photo"
-          [alt]="'Foto de ' + artist.name"
+          [alt]="t.photoOf(artist.name)"
           [style.object-position]="(photo === artist.image ? artist.imagePosition : undefined) | focus"
         />
       }
@@ -20,7 +20,7 @@
         }
       </div>
     }
-    <button type="button" class="round" aria-label="Voltar" (click)="goBack()">
+    <button i18n-aria-label type="button" class="round" aria-label="Voltar" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
     </button>
     <div class="hero-actions">
@@ -28,13 +28,13 @@
         <button
           type="button"
           class="round heart"
-          [attr.aria-label]="favorites.has(artist.id) ? 'Remover dos favoritos' : 'Favoritar'"
+          [attr.aria-label]="t.favorite(favorites.has(artist.id))"
           (click)="toggleFavorite()"
         >
           <mat-icon [class.filled]="favorites.has(artist.id)">favorite</mat-icon>
         </button>
       }
-      <a class="round" routerLink="/explore" aria-label="Ver no mapa">
+      <a i18n-aria-label class="round" routerLink="/explore" aria-label="Ver no mapa">
         <mat-icon class="filled">map</mat-icon>
       </a>
     </div>
@@ -44,7 +44,7 @@
     <header class="intro">
       <div class="name-row">
         <h1>{{ artist.name }}</h1>
-        <a
+        <a i18n-aria-label
           class="chat-icon"
           [routerLink]="['/mensagens', artist.id]"
           aria-label="Conversar com {{ artist.name }}"
@@ -52,15 +52,15 @@
           <mat-icon>chat_bubble</mat-icon>
         </a>
       </div>
-      <p class="muted address">
-        {{ artist.serviceMode === 'home' ? 'Atendimento a domicílio' : artist.address }}
+      <p i18n class="muted address">
+        @if (artist.serviceMode === 'home') { Atendimento a domicílio } @else { {{ artist.address }} }
         @if (artist.serviceMode !== 'home' && artist.address) {
           <!-- Right after the last word of the address, even when the address breaks into lines -->
           <button
             type="button"
             class="copy"
-            [attr.aria-label]="copied() ? 'Endereço copiado' : 'Copiar endereço'"
-            [title]="copied() ? 'Endereço copiado' : 'Copiar endereço'"
+            [attr.aria-label]="t.copyAddress(copied())"
+            [title]="t.copyAddress(copied())"
             (click)="copyAddress(artist.address)"
           >
             <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
@@ -68,7 +68,7 @@
         }
       </p>
       @if (artist.serviceMode === 'both') {
-        <p class="muted">Também atende a domicílio</p>
+        <p i18n class="muted">Também atende a domicílio</p>
       }
 <!-- Instagram desligado por enquanto (a integração ainda não foi configurada na Meta). Para voltar, é só tirar este comentário.
       @if (artist.instagram) {
@@ -90,11 +90,11 @@
       }
 
 -->      <div class="facts">
-        <p>
+        <p i18n>
           <mat-icon>schedule</mat-icon>
           Aberto hoje
         </p>
-        <p>
+        <p i18n>
           <mat-icon>visibility</mat-icon>
           {{ artist.views }} visualizações
         </p>
@@ -105,27 +105,27 @@
     </header>
 
     <section>
-      <h2>Sobre</h2>
+      <h2 i18n>Sobre</h2>
       <div class="about" [class.collapsed]="!aboutExpanded()">
         @for (paragraph of artist.about; track paragraph) {
           <p class="muted">{{ paragraph }}</p>
         }
       </div>
-      <button type="button" class="link" (click)="aboutExpanded.set(!aboutExpanded())">
-        {{ aboutExpanded() ? 'Ler menos' : 'Ler mais' }}
+      <button i18n type="button" class="link" (click)="aboutExpanded.set(!aboutExpanded())">
+        @if (aboutExpanded()) { Ler menos } @else { Ler mais }
       </button>
     </section>
 
     <section>
-      <h2>Horário de funcionamento</h2>
+      <h2 i18n>Horário de funcionamento</h2>
       <div class="hours">
-        <p><span class="muted">Segunda a sexta</span><strong>08:00 - 15:00</strong></p>
-        <p><span class="muted">Sábado e domingo</span><strong>09:00 - 14:00</strong></p>
+        <p><span i18n class="muted">Segunda a sexta</span><strong>08:00 - 15:00</strong></p>
+        <p><span i18n class="muted">Sábado e domingo</span><strong>09:00 - 14:00</strong></p>
       </div>
     </section>
 
     <section>
-      <h2>Nossos serviços</h2>
+      <h2 i18n>Nossos serviços</h2>
       <div class="categories">
         @for (category of availableCategories(); track category.name) {
           <button
@@ -136,7 +136,7 @@
             (click)="toggleCategory(category.name)"
           >
             <mat-icon>{{ category.icon }}</mat-icon>
-            {{ category.name }}
+            {{ category.name | catalog }}
           </button>
         }
       </div>
@@ -169,7 +169,7 @@
               </div>
             }
             <div class="service-info">
-              <h3>{{ service.name }}</h3>
+              <h3>{{ service.name | catalog }}</h3>
               <p class="service-meta">
                 <strong>{{ service.price | price }}</strong>
                 <span class="muted">· {{ formatDuration(service.durationMinutes) }}</span>
@@ -187,7 +187,7 @@
                 </p>
                 <!-- Only when the text is really cut: opens the screen of the service -->
                 @if (text.clamped()) {
-                  <button type="button" class="read-more">Ler mais</button>
+                  <button i18n type="button" class="read-more">Ler mais</button>
                 }
               }
             </div>
@@ -195,10 +195,10 @@
               type="button"
               class="toggle"
               [class.on]="isSelected(service)"
-              [attr.aria-label]="(isSelected(service) ? 'Remover ' : 'Adicionar ') + service.name"
+              [attr.aria-label]="t.addService(isSelected(service), service.name)"
               (click)="$event.stopPropagation(); toggleService(service)"
             >
-              {{ isSelected(service) ? '−' : '+' }}
+              @if (isSelected(service)) { − } @else { + }
             </button>
           </article>
         }
@@ -221,7 +221,7 @@
             <a [href]="photo.permalink" target="_blank" rel="noopener">
               <img
                 [src]="photo.url"
-                [alt]="photo.caption || 'Foto do Instagram de ' + artist.name"
+                [alt]="photo.caption || t.instagramPhotoOf(artist.name)"
                 loading="lazy"
               />
             </a>
@@ -232,42 +232,36 @@
 
 -->
     <section id="avaliacoes">
-      <h2>Avaliações</h2>
+      <h2 i18n>Avaliações</h2>
 
       @if (auth.role() === 'client') {
         @if (reviewBookingId() && (!myReview || editingReview())) {
           <form class="review-form" (ngSubmit)="sendReview()">
-            <p class="review-title">{{ myReview ? 'Sua avaliação' : 'Avalie este profissional' }}</p>
+            <p i18n class="review-title">@if (myReview) { Sua avaliação } @else { Avalie este profissional }</p>
             <p class="stars pick">
               @for (star of stars; track star) {
                 <button
                   type="button"
                   [class.on]="star <= myStars()"
-                  [attr.aria-label]="star + ' estrelas'"
+                  [attr.aria-label]="t.stars(star)"
                   (click)="myStars.set(star)"
                 >
                   <mat-icon class="filled">star</mat-icon>
                 </button>
               }
             </p>
-            <textarea
+            <textarea i18n-placeholder
               name="text"
               rows="3"
               maxlength="500"
               placeholder="Conte como foi (opcional)"
               [(ngModel)]="myText"
             ></textarea>
-            <button type="submit" class="send" [disabled]="savingReview()">
-              {{
-                savingReview()
-                  ? 'Enviando...'
-                  : myReview
-                    ? 'Atualizar avaliação'
-                    : 'Enviar avaliação'
-              }}
+            <button i18n type="submit" class="send" [disabled]="savingReview()">
+              @if (savingReview()) { Enviando... } @else if (myReview) { Atualizar avaliação } @else { Enviar avaliação }
             </button>
             @if (editingReview()) {
-              <button type="button" class="cancel-edit" (click)="editingReview.set(false)">
+              <button i18n type="button" class="cancel-edit" (click)="editingReview.set(false)">
                 Cancelar
               </button>
             }
@@ -279,7 +273,7 @@
           <p class="muted">{{ reviewMessage() }}</p>
         }
       } @else if (!auth.user()) {
-        <p class="muted">
+        <p i18n class="muted">
           <a routerLink="/entrar">Entre</a> para avaliar depois de um atendimento.
         </p>
       }
@@ -306,7 +300,7 @@
                 </div>
                 @if (review.id === auth.user()?.uid) {
                   <div class="review-actions">
-                    <button
+                    <button i18n-title i18n-aria-label
                       type="button"
                       aria-label="Editar avaliação"
                       title="Editar"
@@ -314,7 +308,7 @@
                     >
                       <mat-icon>edit</mat-icon>
                     </button>
-                    <button
+                    <button i18n-title i18n-aria-label
                       type="button"
                       class="danger"
                       aria-label="Excluir avaliação"
@@ -329,7 +323,7 @@
             </div>
           </article>
         } @empty {
-          <p class="muted">Ainda não há avaliações.</p>
+          <p i18n class="muted">Ainda não há avaliações.</p>
         }
       </div>
     </section>
@@ -337,14 +331,14 @@
 
   <footer class="book-bar">
     @if (missingData().length) {
-      <a class="missing-data" routerLink="/perfil">
+      <a i18n class="missing-data" routerLink="/perfil">
         Complete seus dados no perfil para agendar. Falta: {{ missingData().join(', ') }}.
       </a>
     }
     <div>
-      <p>
+      <p i18n>
         <strong>Total</strong> ({{ selectedServices().length }}
-        {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})
+        @if (selectedServices().length === 1) { serviço } @else { serviços })
       </p>
       <p class="price">{{ total() | price }}</p>
     </div>
@@ -352,7 +346,7 @@
       <a class="chat" [routerLink]="['/mensagens', artist.id]">
         <mat-icon>chat_bubble</mat-icon>
       </a>
-      <button
+      <button i18n-title i18n-aria-label
         type="button"
         class="book"
         [disabled]="!selectedServices().length || missingData().length > 0"
@@ -377,7 +371,7 @@
 } @else if (professionals.status() === 'loading') {
   <app-spinner />
 } @else if (professionals.status() === 'error') {
-  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
+  <p i18n class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {
-  <p class="not-found">Profissional não encontrado.</p>
+  <p i18n class="not-found">Profissional não encontrado.</p>
 }

@@ -9,17 +9,20 @@ import { FocusPipe } from '../../utils/focus.pipe';
 import { instagramUrl } from '../../utils/instagram';
 import { PricePipe } from '../../utils/price.pipe';
 import { ruleLabel } from '../../utils/pricing';
+import { T } from '../../utils/texts';
+import { CatalogPipe } from '../../utils/catalog.pipe';
 
-const WEEKDAYS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+const WEEKDAYS = [$localize`Domingo`, $localize`Segunda`, $localize`Terça`, $localize`Quarta`, $localize`Quinta`, $localize`Sexta`, $localize`Sábado`];
 
 // The whole profile of a professional for an admin to review, even when it is not published
 @Component({
   selector: 'app-admin-professional',
-  imports: [FocusPipe, PricePipe, Spinner, MatIconModule],
+  imports: [CatalogPipe, FocusPipe, PricePipe, Spinner, MatIconModule],
   templateUrl: './admin-professional.html',
   styleUrl: './admin-professional.scss',
 })
 export class AdminProfessional {
+  protected readonly t = T;
   readonly id = input.required<string>();
 
   protected readonly professional = resource({
@@ -45,8 +48,8 @@ export class AdminProfessional {
 
   protected readonly status = computed(() => {
     const professional = this.professional.value();
-    if (professional?.approved === false) return professional.rejected ? 'Negado' : 'Aguardando aprovação';
-    return 'Aprovado';
+    if (professional?.approved === false) return professional.rejected ? $localize`Negado` : $localize`Aguardando aprovação`;
+    return $localize`Aprovado`;
   });
 
   constructor(
@@ -60,7 +63,7 @@ export class AdminProfessional {
   }
 
   protected async answer(professional: Professional, approve: boolean) {
-    if (!approve && !confirm(`Negar o cadastro de ${professional.name}?`)) return;
+    if (!approve && !confirm($localize`Negar o cadastro de ${professional.name}:name:?`)) return;
 
     this.working.set(true);
     this.error.set('');
@@ -71,7 +74,7 @@ export class AdminProfessional {
       this.router.navigateByUrl('/admin');
     } catch (error) {
       console.error('Failed to answer', error);
-      this.error.set('Não foi possível concluir. Tente novamente.');
+      this.error.set($localize`Não foi possível concluir. Tente novamente.`);
     } finally {
       this.working.set(false);
     }

@@ -241,3 +241,10 @@ h1 {
     padding: 3rem 2.5rem 4rem;
   }
 }
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}

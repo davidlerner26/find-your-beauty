@@ -1,4 +1,4 @@
-<div
+<div i18n-aria-label
   class="frame"
   [class.dragging]="dragging()"
   tabindex="0"
@@ -10,10 +10,10 @@
   (pointercancel)="onUp()"
   (keydown)="onKey($event)"
 >
-  <img #photo [src]="src()" alt="Foto" draggable="false" [style.object-position]="position() | focus" />
-  <span class="hint">Arraste para ajustar</span>
+  <img i18n-alt #photo [src]="src()" alt="Foto" draggable="false" [style.object-position]="position() | focus" />
+  <span i18n class="hint">Arraste para ajustar</span>
   <!-- stopPropagation: pressing the button must not start a drag of the photo -->
-  <button
+  <button i18n-title i18n-aria-label
     type="button"
     class="center"
     aria-label="Centralizar foto"
@@ -28,14 +28,14 @@
 <div class="previews">
   <div class="preview-item">
     <img class="circle" [src]="src()" alt="" [style.object-position]="position() | focus" />
-    <span>Mensagens</span>
+    <span i18n>Mensagens</span>
   </div>
   <div class="preview-item">
     <img class="card" [src]="src()" alt="" [style.object-position]="position() | focus" />
-    <span>Card</span>
+    <span i18n>Card</span>
   </div>
   <div class="preview-item grow">
     <img class="strip" [src]="src()" alt="" [style.object-position]="position() | focus" />
-    <span>Topo da página</span>
+    <span i18n>Topo da página</span>
   </div>
 </div>

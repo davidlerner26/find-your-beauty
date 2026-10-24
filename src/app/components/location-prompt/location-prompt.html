@@ -13,13 +13,13 @@
         <path d="M32 4v8M32 52v8M4 32h8M52 32h8" />
       </svg>
 
-      <h2 id="location-title">Ative sua localização</h2>
-      <p>Ative para usar a sua localização e mostrar os serviços próximos no mapa.</p>
+      <h2 i18n id="location-title">Ative sua localização</h2>
+      <p i18n>Ative para usar a sua localização e mostrar os serviços próximos no mapa.</p>
 
-      <button type="button" class="enable" [disabled]="location.requesting()" (click)="enable()">
-        {{ location.requesting() ? 'Aguardando...' : 'Ativar minha localização' }}
+      <button i18n type="button" class="enable" [disabled]="location.requesting()" (click)="enable()">
+        @if (location.requesting()) { Aguardando... } @else { Ativar minha localização }
       </button>
-      <button type="button" class="later" (click)="dismiss()">Agora não</button>
+      <button i18n type="button" class="later" (click)="dismiss()">Agora não</button>
     </div>
   </div>
 }

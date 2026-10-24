@@ -8,19 +8,20 @@ import { Bookings } from '../../services/bookings';
 import { Professionals } from '../../services/professionals';
 import { formatClock } from '../../utils/format-date';
 import { INTL_LOCALE } from '../../utils/locale';
+import { CatalogPipe } from '../../utils/catalog.pipe';
 
 const STATUS_LABEL: Record<BookingStatus, string> = {
-  pending: 'Aguardando',
-  confirmed: 'Confirmado',
-  declined: 'Recusado',
-  completed: 'Concluído',
-  cancelled: 'Cancelado',
-  cancelledByProfessional: 'Cancelado pelo profissional',
+  pending: $localize`Aguardando`,
+  confirmed: $localize`Confirmado`,
+  declined: $localize`Recusado`,
+  completed: $localize`Concluído`,
+  cancelled: $localize`Cancelado`,
+  cancelledByProfessional: $localize`Cancelado pelo profissional`,
 };
 
 @Component({
   selector: 'app-pro-agenda',
-  imports: [PricePipe, RouterLink, NgTemplateOutlet],
+  imports: [CatalogPipe, PricePipe, RouterLink, NgTemplateOutlet],
   templateUrl: './pro-agenda.html',
   styleUrl: './pro-agenda.scss',
 })
@@ -62,7 +63,7 @@ export class ProAgenda {
 
   protected answer(booking: Booking, status: 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional') {
     // Cancelling a confirmed booking can't be undone: the client is told and the time is released
-    if (status === 'cancelledByProfessional' && !confirm('Cancelar este agendamento? A cliente será avisada.')) return;
+    if (status === 'cancelledByProfessional' && !confirm($localize`Cancelar este agendamento? A cliente será avisada.`)) return;
 
     this.bookings
       .setStatus(booking, status)

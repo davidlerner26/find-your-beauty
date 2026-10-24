@@ -10,14 +10,17 @@ import { PlaceSuggestions } from '../../components/place-suggestions/place-sugge
 import { PlaceSearch } from '../../utils/place-search';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
+import { T } from '../../utils/texts';
+import { LanguageSwitcher } from '../../components/language-switcher/language-switcher';
 
 @Component({
   selector: 'app-profile',
-  imports: [Spinner, RouterLink, MatIconModule, PlaceSuggestions],
+  imports: [LanguageSwitcher, Spinner, RouterLink, MatIconModule, PlaceSuggestions],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
 export class Profile {
+  protected readonly t = T;
   // Loads the `users/{uid}` document whenever the logged in user changes
   protected readonly profile = resource({
     params: () => this.auth.user()?.uid,
@@ -116,7 +119,7 @@ export class Profile {
       this.editing.set(false);
     } catch (error) {
       console.error('Failed to save profile', error);
-      this.saveError.set('Não foi possível salvar. Tente novamente.');
+      this.saveError.set($localize`Não foi possível salvar. Tente novamente.`);
     } finally {
       this.saving.set(false);
     }

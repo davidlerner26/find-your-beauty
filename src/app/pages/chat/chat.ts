@@ -99,14 +99,14 @@ export class Chat {
     try {
       for (const file of files) {
         if (file.size > MAX_FILE_SIZE) {
-          this.attachError.set('Cada arquivo pode ter até 10 MB.');
+          this.attachError.set($localize`Cada arquivo pode ter até 10 MB.`);
           continue;
         }
         await this.deliver(await this.messagesService.upload(this.conversationId(), file));
       }
     } catch (error) {
       console.error('Failed to send file', error);
-      this.attachError.set('Não foi possível enviar o arquivo. Tente novamente.');
+      this.attachError.set($localize`Não foi possível enviar o arquivo. Tente novamente.`);
     } finally {
       this.uploading.set(false);
     }

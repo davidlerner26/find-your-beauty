@@ -1,22 +1,22 @@
 @if (artist(); as artist) {
   <header class="top">
-    <button type="button" class="back" aria-label="Voltar" (click)="goBack()">
+    <button i18n-aria-label type="button" class="back" aria-label="Voltar" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
     </button>
-    <h1>Agendar serviço</h1>
+    <h1 i18n>Agendar serviço</h1>
   </header>
 
   <div class="content">
-    <p class="artist muted">com <strong>{{ artist.name }}</strong></p>
+    <p i18n class="artist muted">com <strong>{{ artist.name }}</strong></p>
 
     <section>
-      <h2>Data</h2>
+      <h2 i18n>Data</h2>
       <div class="month">
-        <button type="button" aria-label="Mês anterior" [disabled]="isCurrentMonth()" (click)="changeMonth(-1)">
+        <button i18n-aria-label type="button" aria-label="Mês anterior" [disabled]="isCurrentMonth()" (click)="changeMonth(-1)">
           <mat-icon>chevron_left</mat-icon>
         </button>
         <strong>{{ monthLabel() }}</strong>
-        <button type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
+        <button i18n-aria-label type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
           <mat-icon>chevron_right</mat-icon>
         </button>
       </div>
@@ -37,7 +37,7 @@
     </section>
 
     <section>
-      <h2>Horário</h2>
+      <h2 i18n>Horário</h2>
       <div class="times">
         @for (time of times(); track time) {
           <button
@@ -55,8 +55,8 @@
           @if (loadingTimes()) {
             <app-spinner [small]="true" />
           } @else {
-            <p class="muted">
-              {{ !selectedDay() ? 'Escolha um dia para ver os horários.' : 'Não há horários livres neste dia. Escolha outro.' }}
+            <p i18n class="muted">
+              @if (!selectedDay()) { Escolha um dia para ver os horários. } @else { Não há horários livres neste dia. Escolha outro. }
             </p>
           }
         }
@@ -64,8 +64,8 @@
     </section>
 
     <section>
-      <h2>Observações</h2>
-      <textarea rows="5" placeholder="Digite suas observações aqui" [(ngModel)]="notes"></textarea>
+      <h2 i18n>Observações</h2>
+      <textarea i18n-placeholder rows="5" placeholder="Digite suas observações aqui" [(ngModel)]="notes"></textarea>
     </section>
   </div>
 
@@ -75,14 +75,14 @@
 
   <footer class="book-bar">
     <div>
-      <p><strong>Total</strong> ({{ selectedServices().length }} {{ selectedServices().length === 1 ? 'serviço' : 'serviços' }})</p>
+      <p i18n><strong>Total</strong> ({{ selectedServices().length }} @if (selectedServices().length === 1) { serviço } @else { serviços })</p>
       <p class="price">{{ total() | price }}</p>
     </div>
     <div class="book-actions">
-      <a class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar" title="Conversar">
+      <a i18n-title i18n-aria-label class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar" title="Conversar">
         <mat-icon>chat_bubble</mat-icon>
       </a>
-      <button type="button" class="checkout" [disabled]="!canCheckout()" aria-label="Finalizar" title="Finalizar" (click)="checkout()">
+      <button i18n-title i18n-aria-label type="button" class="checkout" [disabled]="!canCheckout()" aria-label="Finalizar" title="Finalizar" (click)="checkout()">
         <mat-icon>check</mat-icon>
       </button>
     </div>
@@ -90,7 +90,7 @@
 } @else if (professionals.status() === 'loading') {
   <app-spinner />
 } @else if (professionals.status() === 'error') {
-  <p class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
+  <p i18n class="not-found">Não foi possível carregar os dados. Tente novamente.</p>
 } @else {
-  <p class="not-found">Profissional não encontrado.</p>
+  <p i18n class="not-found">Profissional não encontrado.</p>
 }

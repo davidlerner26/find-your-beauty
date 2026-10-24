@@ -1,15 +1,15 @@
 <div class="page">
   <header class="top">
-    <button type="button" class="back" aria-label="Voltar" (click)="goBack()">
+    <button i18n-aria-label type="button" class="back" aria-label="Voltar" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
     </button>
-    <h1>Perfil do profissional</h1>
+    <h1 i18n>Perfil do profissional</h1>
   </header>
 
   @if (professional.isLoading()) {
     <app-spinner />
   } @else if (professional.error()) {
-    <p class="error">Não foi possível carregar o perfil.</p>
+    <p i18n class="error">Não foi possível carregar o perfil.</p>
   } @else if (professional.value(); as p) {
     <section class="card head">
       @if (p.image) {
@@ -20,7 +20,7 @@
           [style.object-position]="p.imagePosition | focus"
         />
       } @else {
-        <span class="photo empty">Sem foto</span>
+        <span i18n class="photo empty">Sem foto</span>
       }
       <div>
         <h2>{{ p.name }}</h2>
@@ -38,11 +38,11 @@
     }
     @if (p.approved === false) {
       <div class="answer">
-        <button type="button" class="approve" [disabled]="working()" (click)="answer(p, true)">
+        <button i18n type="button" class="approve" [disabled]="working()" (click)="answer(p, true)">
           Aprovar
         </button>
         @if (!p.rejected) {
-          <button type="button" class="deny" [disabled]="working()" (click)="answer(p, false)">
+          <button i18n type="button" class="deny" [disabled]="working()" (click)="answer(p, false)">
             Negar
           </button>
         }
@@ -50,22 +50,22 @@
     }
 
     <section class="card">
-      <h3>Contato</h3>
+      <h3 i18n>Contato</h3>
       <dl>
         <div>
-          <dt>E-mail</dt>
+          <dt i18n>E-mail</dt>
           <dd>{{ p.email || '-' }}</dd>
         </div>
         <div>
-          <dt>Celular</dt>
+          <dt i18n>Celular</dt>
           <dd>{{ p.phone || '-' }}</dd>
         </div>
         <div>
-          <dt>CPF</dt>
+          <dt i18n>CPF</dt>
           <dd>{{ cpf.value() || '-' }}</dd>
         </div>
         <div>
-          <dt>Instagram</dt>
+          <dt i18n>Instagram</dt>
           <dd>
             @if (p.instagram) {
               <a [href]="instagramUrl(p.instagram)" target="_blank" rel="noopener"
@@ -77,20 +77,14 @@
           </dd>
         </div>
         <div>
-          <dt>Atendimento</dt>
-          <dd>
-            {{
-              p.serviceMode === 'home'
-                ? 'A domicílio'
-                : p.serviceMode === 'both'
-                  ? 'No endereço e a domicílio'
-                  : 'No endereço'
-            }}
+          <dt i18n>Atendimento</dt>
+          <dd i18n>
+            @if (p.serviceMode === 'home') { A domicílio } @else if (p.serviceMode === 'both') { No endereço e a domicílio } @else { No endereço }
           </dd>
         </div>
         @if (p.serviceMode !== 'home') {
           <div>
-            <dt>Endereço</dt>
+            <dt i18n>Endereço</dt>
             <dd>{{ p.address || '-' }}</dd>
           </div>
         }
@@ -98,22 +92,22 @@
     </section>
 
     <section class="card">
-      <h3>Sobre</h3>
+      <h3 i18n>Sobre</h3>
       @for (paragraph of p.about; track $index) {
         <p>{{ paragraph }}</p>
       } @empty {
-        <p class="muted">Não preenchido.</p>
+        <p i18n class="muted">Não preenchido.</p>
       }
     </section>
 
     <section class="card">
-      <h3>Serviços</h3>
+      <h3 i18n>Serviços</h3>
       @for (service of p.services; track service.id) {
         <article class="service">
           <div>
-            <strong>{{ service.name }}</strong>
+            <strong>{{ service.name | catalog }}</strong>
             <p class="muted">
-              {{ service.category }} · {{ formatDuration(service.durationMinutes) }}
+              {{ service.category | catalog }} · {{ formatDuration(service.durationMinutes) }}
             </p>
             @if (service.description) {
               <p class="muted">{{ service.description }}</p>
@@ -131,33 +125,33 @@
           <strong>{{ service.price | price }}</strong>
         </article>
       } @empty {
-        <p class="muted">Nenhum serviço cadastrado.</p>
+        <p i18n class="muted">Nenhum serviço cadastrado.</p>
       }
     </section>
 
     <section class="card">
-      <h3>Horários</h3>
+      <h3 i18n>Horários</h3>
       <dl>
         @for (item of hours(); track item.name) {
           <div>
             <dt>{{ item.name }}</dt>
-            <dd>{{ item.day.enabled ? item.day.start + ' - ' + item.day.end : 'Fechado' }}</dd>
+            <dd i18n>@if (item.day.enabled) { {{ item.day.start }} - {{ item.day.end }} } @else { Fechado }</dd>
           </div>
         }
       </dl>
     </section>
 
     <section class="card">
-      <h3>Galeria</h3>
+      <h3 i18n>Galeria</h3>
       <div class="gallery">
         @for (photo of p.gallery; track photo) {
-          <img [src]="photo" [alt]="'Trabalho de ' + p.name" />
+          <img [src]="photo" [alt]="t.workOf(p.name)" />
         } @empty {
-          <p class="muted">Nenhuma foto.</p>
+          <p i18n class="muted">Nenhuma foto.</p>
         }
       </div>
     </section>
   } @else {
-    <p class="muted">Profissional não encontrada.</p>
+    <p i18n class="muted">Profissional não encontrada.</p>
   }
 </div>

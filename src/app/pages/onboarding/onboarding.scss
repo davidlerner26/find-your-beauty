@@ -140,3 +140,11 @@ h1 {
     justify-content: flex-start;
   }
 }
+
+// The language, on the corner of the photo
+.language-corner {
+  position: absolute;
+  z-index: 1;
+  top: 1.25rem;
+  right: 1.25rem;
+}

@@ -1,6 +1,7 @@
 import { Component, computed, ElementRef, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { T } from '../../utils/texts';
 
 const LENGTH = 4;
 const RESEND_SECONDS = 60;
@@ -13,6 +14,7 @@ const RESEND_SECONDS = 60;
   styleUrl: './verify-email.scss',
 })
 export class VerifyEmail implements OnInit, OnDestroy {
+  protected readonly t = T;
   protected readonly boxes = Array.from({ length: LENGTH }, (_, i) => i);
   protected readonly digits = signal<string[]>(Array(LENGTH).fill(''));
   protected readonly fields = viewChildren<ElementRef<HTMLInputElement>>('box');
@@ -106,7 +108,7 @@ export class VerifyEmail implements OnInit, OnDestroy {
       // Without the password (the page was reloaded), the client signs in by hand
       this.router.navigateByUrl(signedIn ? this.auth.homePath() : '/entrar');
     } catch (error) {
-      this.error.set((error as { message?: string }).message || 'Não foi possível verificar o código.');
+      this.error.set((error as { message?: string }).message || $localize`Não foi possível verificar o código.`);
       this.digits.set(Array(LENGTH).fill(''));
       this.fields().forEach((field) => (field.nativeElement.value = ''));
       this.fields()[0]?.nativeElement.focus();
@@ -121,10 +123,10 @@ export class VerifyEmail implements OnInit, OnDestroy {
     this.notice.set('');
     try {
       await this.auth.sendVerificationCode(this.email());
-      this.notice.set('Enviamos um novo código.');
+      this.notice.set($localize`Enviamos um novo código.`);
       this.startTimer();
     } catch (error) {
-      this.error.set((error as { message?: string }).message || 'Não foi possível enviar o código.');
+      this.error.set((error as { message?: string }).message || $localize`Não foi possível enviar o código.`);
     }
   }
 }

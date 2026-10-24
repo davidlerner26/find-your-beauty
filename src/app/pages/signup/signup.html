@@ -1,22 +1,22 @@
 @if (auth.signupSubmitted()) {
   <div class="auth">
-    <h1>Cadastro enviado!</h1>
-    <p class="subtitle">
+    <h1 i18n>Cadastro enviado!</h1>
+    <p i18n class="subtitle">
       Sua conta está em análise. Você poderá entrar na área do profissional assim que ela for
       aprovada.
     </p>
-    <a class="primary" routerLink="/pro/entrar">Ir para o login</a>
+    <a i18n class="primary" routerLink="/pro/entrar">Ir para o login</a>
   </div>
 } @else if (pro() && auth.signupIncomplete()) {
   <app-pro-profile [signup]="true" />
 } @else {
   <form class="auth" (ngSubmit)="submit()" novalidate>
     <!-- Which area this is: the other one is one tap away -->
-    <nav class="role-tabs" aria-label="Tipo de conta">
-      <a [class.active]="!pro()" [attr.aria-current]="!pro() ? 'page' : null" routerLink="/cadastro"
+    <nav i18n-aria-label class="role-tabs" aria-label="Tipo de conta">
+      <a i18n [class.active]="!pro()" [attr.aria-current]="!pro() ? 'page' : null" routerLink="/cadastro"
         >Sou cliente</a
       >
-      <a
+      <a i18n
         [class.active]="pro()"
         [attr.aria-current]="pro() ? 'page' : null"
         routerLink="/pro/cadastro"
@@ -24,18 +24,14 @@
       >
     </nav>
 
-    <h1>{{ pro() ? 'Cadastro de profissional' : 'Crie uma conta' }}</h1>
-    <p class="subtitle">
-      {{
-        pro()
-          ? 'Crie a conta do profissional. No próximo passo você completa o perfil: foto, endereço e serviços.'
-          : 'Preencha todas as informações abaixo para criar sua conta.'
-      }}
+    <h1 i18n>@if (pro()) { Cadastro de profissional } @else { Crie uma conta }</h1>
+    <p i18n class="subtitle">
+      @if (pro()) { Crie a conta do profissional. No próximo passo você completa o perfil: foto, endereço e serviços. } @else { Preencha todas as informações abaixo para criar sua conta. }
     </p>
 
     <label class="field" [class.invalid]="showError('name') && !nameValid">
       <mat-icon class="filled">person</mat-icon>
-      <input
+      <input i18n-placeholder
         name="name"
         (blur)="touch('name')"
         placeholder="Nome"
@@ -44,12 +40,12 @@
       />
     </label>
     @if (showError('name') && !nameValid) {
-      <p class="error">O nome precisa ter pelo menos 3 caracteres.</p>
+      <p i18n class="error">O nome precisa ter pelo menos 3 caracteres.</p>
     }
 
     <label class="field" [class.invalid]="showError('lastName') && !lastNameValid">
       <mat-icon class="filled">person</mat-icon>
-      <input
+      <input i18n-placeholder
         name="lastName"
         (blur)="touch('lastName')"
         placeholder="Sobrenome"
@@ -58,12 +54,12 @@
       />
     </label>
     @if (showError('lastName') && !lastNameValid) {
-      <p class="error">O sobrenome precisa ter pelo menos 2 caracteres.</p>
+      <p i18n class="error">O sobrenome precisa ter pelo menos 2 caracteres.</p>
     }
 
     <label class="field" [class.invalid]="showError('email') && !emailValid">
       <mat-icon class="filled">mail</mat-icon>
-      <input
+      <input i18n-placeholder
         type="email"
         name="email"
         (blur)="touch('email')"
@@ -73,12 +69,12 @@
       />
     </label>
     @if (showError('email') && !emailValid) {
-      <p class="error">Digite um e-mail válido.</p>
+      <p i18n class="error">Digite um e-mail válido.</p>
     }
 
     <label class="field" [class.invalid]="showError('phone') && !phoneValid">
       <mat-icon class="filled">call</mat-icon>
-      <input
+      <input i18n-placeholder
         type="tel"
         name="phone"
         (blur)="touch('phone')"
@@ -91,12 +87,12 @@
       />
     </label>
     @if (showError('phone') && !phoneValid) {
-      <p class="error">Digite o celular completo, com DDD e 9 dígitos.</p>
+      <p i18n class="error">Digite o celular completo, com DDD e 9 dígitos.</p>
     }
 
     <label class="field" [class.invalid]="showError('cpf') && !cpfValid">
       <mat-icon class="filled">badge</mat-icon>
-      <input
+      <input i18n-placeholder
         name="cpf"
         (blur)="touch('cpf')"
         placeholder="CPF"
@@ -108,14 +104,14 @@
       />
     </label>
     @if (showError('cpf') && !cpfValid) {
-      <p class="error">Digite um CPF válido.</p>
+      <p i18n class="error">Digite um CPF válido.</p>
     }
 
     @if (!pro()) {
       <div class="autocomplete">
         <label class="field" [class.invalid]="showError('address') && !addressValid">
           <mat-icon class="filled">location_on</mat-icon>
-          <input
+          <input i18n-placeholder
             name="place-search"
             placeholder="Endereço"
             autocomplete="nope"
@@ -138,13 +134,13 @@
       @if (place.error()) {
         <p class="error">{{ place.error() }}</p>
       } @else if (showError('address') && !addressValid) {
-        <p class="error">Busque o endereço e escolha uma das sugestões.</p>
+        <p i18n class="error">Busque o endereço e escolha uma das sugestões.</p>
       }
     }
 
     <label class="field" [class.invalid]="showError('password') && !passwordValid">
       <mat-icon class="filled">lock</mat-icon>
-      <input
+      <input i18n-placeholder
         name="password"
         (blur)="touch('password')"
         placeholder="Senha"
@@ -152,7 +148,7 @@
         [type]="showPassword() ? 'text' : 'password'"
         [(ngModel)]="password"
       />
-      <button
+      <button i18n-aria-label
         type="button"
         class="toggle"
         aria-label="Mostrar senha"
@@ -173,13 +169,13 @@
       <p class="error">{{ formError() }}</p>
     }
 
-    <button type="submit" class="primary" [disabled]="submitting()">
-      {{ submitting() ? 'Aguarde...' : 'Cadastrar' }}
+    <button i18n type="submit" class="primary" [disabled]="submitting()">
+      @if (submitting()) { Aguarde... } @else { Cadastrar }
     </button>
 
-    <p class="divider">ou</p>
+    <p i18n class="divider">ou</p>
 
-    <button type="button" class="google" (click)="signInWithGoogle()">
+    <button i18n type="button" class="google" (click)="signInWithGoogle()">
       <svg viewBox="0 0 48 48" aria-hidden="true">
         <path
           fill="#EA4335"
@@ -204,15 +200,16 @@
       <p class="error">{{ googleError() }}</p>
     }
 
-    <p class="legal">
+    <p i18n class="legal">
       Ao criar a conta você concorda com os <a routerLink="/termos">Termos de Uso</a> e a
       <a routerLink="/privacidade">Política de Privacidade</a>.
     </p>
 
     @if (pro()) {
-      <p class="switch">Já tem uma conta? <a routerLink="/pro/entrar">Entrar</a></p>
+      <p i18n class="switch">Já tem uma conta? <a routerLink="/pro/entrar">Entrar</a></p>
     } @else {
-      <p class="switch">Já tem uma conta? <a routerLink="/entrar">Entrar</a></p>
+      <p i18n class="switch">Já tem uma conta? <a routerLink="/entrar">Entrar</a></p>
     }
+    <div class="language-row"><app-language-switcher /></div>
   </form>
 }

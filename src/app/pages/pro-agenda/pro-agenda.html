@@ -1,8 +1,8 @@
 <div class="agenda">
-  <h1>Agenda</h1>
+  <h1 i18n>Agenda</h1>
 
   @if (profile() && !profile()!.published) {
-    <a class="notice" routerLink="/pro/perfil">
+    <a i18n class="notice" routerLink="/pro/perfil">
       Seu perfil não está publicado, então as clientes não encontram você. Abra o perfil, complete os dados e marque para mostrar.
     </a>
   }
@@ -19,10 +19,10 @@
 
       <ul class="services">
         @for (service of booking.services; track service.id) {
-          <li><span>{{ service.name }}</span><span>{{ service.price | price }}</span></li>
+          <li><span>{{ service.name | catalog }}</span><span>{{ service.price | price }}</span></li>
         }
       </ul>
-      <p class="total"><strong>Total</strong> <strong>{{ booking.total | price }}</strong></p>
+      <p class="total"><strong i18n>Total</strong> <strong>{{ booking.total | price }}</strong></p>
 
       @if (booking.notes) {
         <p class="notes muted">“{{ booking.notes }}”</p>
@@ -30,20 +30,20 @@
 
       @if (booking.status === 'pending') {
         <div class="actions">
-          <button type="button" class="decline" (click)="answer(booking, 'declined')">Recusar</button>
-          <button type="button" class="accept" (click)="answer(booking, 'confirmed')">Aceitar</button>
+          <button i18n type="button" class="decline" (click)="answer(booking, 'declined')">Recusar</button>
+          <button i18n type="button" class="accept" (click)="answer(booking, 'confirmed')">Aceitar</button>
         </div>
       } @else if (booking.status === 'confirmed') {
         <div class="actions">
-          <button type="button" class="decline" (click)="answer(booking, 'cancelledByProfessional')">Cancelar</button>
-          <button type="button" class="accept" (click)="answer(booking, 'completed')">Concluir</button>
+          <button i18n type="button" class="decline" (click)="answer(booking, 'cancelledByProfessional')">Cancelar</button>
+          <button i18n type="button" class="accept" (click)="answer(booking, 'completed')">Concluir</button>
         </div>
       }
     </article>
   </ng-template>
 
   @if (pending().length) {
-    <h2>Solicitações</h2>
+    <h2 i18n>Solicitações</h2>
     <div class="list">
       @for (booking of pending(); track booking.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
@@ -51,17 +51,17 @@
     </div>
   }
 
-  <h2>Próximos</h2>
+  <h2 i18n>Próximos</h2>
   <div class="list">
     @for (booking of upcoming(); track booking.id) {
       <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />
     } @empty {
-      <p class="empty muted">Nenhum agendamento confirmado.</p>
+      <p i18n class="empty muted">Nenhum agendamento confirmado.</p>
     }
   </div>
 
   @if (history().length) {
-    <h2>Histórico</h2>
+    <h2 i18n>Histórico</h2>
     <div class="list">
       @for (booking of history(); track booking.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: booking }" />

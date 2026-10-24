@@ -1,4 +1,4 @@
-import { effect, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import { collection, doc, onSnapshot, orderBy, query, Timestamp, updateDoc } from 'firebase/firestore';
 import { Notification } from '../models/message';
 import { Auth } from './auth';
@@ -8,6 +8,7 @@ import { db } from './firebase';
 export class Notifications {
   readonly list = signal<Notification[]>([]);
   readonly loading = signal(true);
+  readonly unreadTotal = computed(() => this.list().filter((notification) => notification.unread).length);
 
   constructor(private readonly auth: Auth) {
     effect((onCleanup) => {

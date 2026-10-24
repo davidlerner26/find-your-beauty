@@ -4,8 +4,10 @@ import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router
 import { filter } from 'rxjs';
 import { Auth } from './services/auth';
 import { Messages } from './services/messages';
+import { Notifications } from './services/notifications';
 
-type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean };
+// `badge`: the dot for new messages; `news`: the tab is the one of the notifications (the dot is for the new ones)
+type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean; news?: boolean };
 
 // The professional area is /pro and what is under it (not /profissionais, the public page of a professional)
 const isProArea = (url: string) => url === '/pro' || url.startsWith('/pro/');
@@ -106,6 +108,7 @@ export class App {
   constructor(
     router: Router,
     protected readonly messages: Messages,
+    private readonly notifications: Notifications,
     protected readonly auth: Auth,
     icons: MatIconRegistry,
   ) {
@@ -129,7 +132,7 @@ export class App {
       tab.badge
         ? [
             { ...tab, match: [tab.path] },
-            { label: $localize`Notificações`, path: notifications, match: [notifications], icon: 'notifications' },
+            { label: $localize`Notificações`, path: notifications, match: [notifications], icon: 'notifications', news: true },
           ]
         : [tab],
     );
@@ -147,6 +150,14 @@ export class App {
   // Screens that use the whole width on wide screens (the others stay in the centered column)
   protected get fullWidth() {
     return this.url() === '/explore' || AUTH_SCREENS.includes(this.url());
+  }
+
+  // The dot of new things. The bar of the phone has one tab for the messages and the notifications, so it lights up
+  // for both; the bar on top has one item for each.
+  protected hasNews(tab: Tab, bottomBar: boolean) {
+    if (tab.news) return this.notifications.unreadTotal() > 0;
+    if (!tab.badge) return false;
+    return this.messages.unreadTotal() > 0 || (bottomBar && this.notifications.unreadTotal() > 0);
   }
 
   protected isActive(tab: Tab) {

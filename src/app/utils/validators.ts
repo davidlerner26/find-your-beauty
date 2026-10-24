@@ -19,6 +19,7 @@ const AUTH_ERRORS: Record<string, string> = {
   'auth/network-request-failed': $localize`Sem conexão. Verifique sua internet.`,
   'auth/pending-approval': $localize`Seu cadastro ainda está em análise. Você poderá entrar assim que for aprovado.`,
   'auth/not-professional': $localize`Esta conta não é de profissional. Use o login de cliente.`,
+  'auth/professional-not-registered': $localize`Esta conta do Google ainda não está cadastrada. Faça o cadastro de profissional primeiro.`,
   'auth/account-is-client': $localize`Esta conta do Google já é de cliente. Use outra conta para se cadastrar como profissional.`,
   'auth/not-client': $localize`Esta conta é de profissional. Use o login da área profissional.`,
   'auth/expired-action-code': $localize`Este link expirou. Peça um novo link de redefinição.`,

@@ -75,7 +75,7 @@ export class Login {
     } catch (error) {
       const code = (error as { code?: string }).code;
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
-      if (code === 'auth/not-professional' || code === 'auth/not-client' || code === 'auth/pending-approval') {
+      if (code === 'auth/not-professional' || code === 'auth/not-client' || code === 'auth/professional-not-registered' || code === 'auth/pending-approval') {
         this.googleError.set(authErrorMessage(error));
         return;
       }

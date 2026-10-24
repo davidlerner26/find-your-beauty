@@ -5,6 +5,7 @@ import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   getAuth,
+  deleteUser,
   GoogleAuthProvider,
   onAuthStateChanged,
   setPersistence,
@@ -111,6 +112,15 @@ export class Auth {
       throw { code: 'auth/pending-approval' };
     }
     if (area === 'client' && this.role() === 'client') await this.createUserDocIfMissing(user);
+    if (area === 'professional' && this.role() !== 'professional' && !this.signupIncomplete()) {
+      // A Google account with no account here (not even a client) has to sign up first
+      const client = await getDoc(doc(db, 'users', user.uid)).catch(() => null);
+      if (client && !client.exists()) {
+        // Signing in with Google created the account in Firebase: it is removed, since the sign up wasn't done
+        await deleteUser(user).catch(() => signOut(this.auth));
+        throw { code: 'auth/professional-not-registered' };
+      }
+    }
     await this.requireArea(area);
   }
 

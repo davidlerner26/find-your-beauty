@@ -265,6 +265,9 @@ export class Explore implements OnInit {
   // Closing the card goes back to the map
   protected closeFloating(event?: Event) {
     event?.stopPropagation();
+    // Nothing stays selected (the map screen is rebuilt, so the memory of the last card is cleared too)
+    lastSelectedId = null;
+    this.selected.set(-1);
     this.router.navigate(['/explore']);
   }
 

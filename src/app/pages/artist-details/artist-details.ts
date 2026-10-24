@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, input, resource, signal } from '@angular/core';
+import { Component, computed, effect, input, output, resource, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
@@ -32,10 +32,14 @@ import { CatalogPipe } from '../../utils/catalog.pipe';
   imports: [CarouselArrows, PhotoViewer, CatalogPipe, Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
+  host: { '[class.floating]': 'floating()' },
 })
 export class ArtistDetails {
   protected readonly t = T;
   readonly id = input.required<string>();
+  // Shown floating over another screen (the map): going back closes it instead of leaving the screen
+  readonly floating = input(false);
+  readonly closed = output<void>();
 
   protected readonly artist = computed(() => this.professionals.byId(this.id()));
   protected readonly aboutExpanded = signal(false);
@@ -240,7 +244,8 @@ export class ArtistDetails {
   }
 
   protected goBack() {
-    this.location.back();
+    if (this.floating()) this.closed.emit();
+    else this.location.back();
   }
 
   protected toggleFavorite() {

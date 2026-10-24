@@ -744,6 +744,15 @@ section > p,
     padding: 2rem 2.5rem 4rem;
   }
 
+  // Floating over the map: inside a window, the card follows the scroll of the window
+  :host(.floating) {
+    padding-top: 1.5rem;
+
+    .book-bar {
+      top: 1.5rem;
+    }
+  }
+
   // The messages and the screen of a service float over the page: they take no place in the grid
   app-toast,
   app-service-sheet {

@@ -171,3 +171,12 @@
       </div>
     </article>
 </ng-template>
+
+@if (floatingId(); as id) {
+  <!-- Wide screens: the page of the professional on top of the map -->
+  <div class="floating-backdrop" (click)="closeFloating()">
+    <div class="floating-window" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+      <app-artist-details [id]="id" [floating]="true" (closed)="closeFloating()" />
+    </div>
+  </div>
+}

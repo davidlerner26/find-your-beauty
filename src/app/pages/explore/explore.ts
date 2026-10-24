@@ -1,3 +1,4 @@
+import { ArtistDetails } from '../artist-details/artist-details';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -28,7 +29,7 @@ let lastSelectedId: string | null = null;
 
 @Component({
   selector: 'app-explore',
-  imports: [CarouselArrows, CatalogPipe, ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
+  imports: [ArtistDetails, CarouselArrows, CatalogPipe, ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })
@@ -245,8 +246,23 @@ export class Explore implements OnInit {
     this.showCard(index, 'smooth');
   }
 
+  // The professional whose page floats over the map (wide screens)
+  protected readonly floatingId = signal<string | null>(null);
+
+  protected closeFloating(event?: Event) {
+    event?.stopPropagation();
+    this.floatingId.set(null);
+  }
+
   // First tap on a carousel card selects it; tapping the selected card (or any card of the list) opens the page
   protected openSalon(index: number, id: string) {
+    // Wide screens: the page of the professional floats over the map (the map keeps its place)
+    if (window.matchMedia('(min-width: 1024px)').matches) {
+      if (index >= 0 && index !== this.selected()) this.selectSalon(index);
+      lastSelectedId = id;
+      this.floatingId.set(id);
+      return;
+    }
     if (index >= 0 && index !== this.selected()) {
       this.selectSalon(index);
       return;

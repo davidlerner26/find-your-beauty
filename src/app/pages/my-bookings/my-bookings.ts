@@ -1,11 +1,15 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Toast } from '../../components/toast/toast';
 import { Spinner } from '../../components/spinner/spinner';
 import { Booking, BookingStatus } from '../../models/booking';
 import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
+import { Professionals } from '../../services/professionals';
+import { copyText } from '../../utils/clipboard';
+import { T } from '../../utils/texts';
 import { formatClock } from '../../utils/format-date';
 import { PricePipe } from '../../utils/price.pipe';
 import { INTL_LOCALE } from '../../utils/locale';
@@ -22,12 +26,17 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [CatalogPipe, PricePipe, RouterLink, Spinner, NgTemplateOutlet, MatIconModule],
+  imports: [CatalogPipe, PricePipe, RouterLink, Spinner, Toast, NgTemplateOutlet, MatIconModule],
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.scss',
 })
 export class MyBookings {
   protected readonly clock = formatClock;
+  protected readonly t = T;
+
+  // The address that was just copied (its button shows a check for a moment) and the message about it
+  protected readonly copiedId = signal('');
+  protected readonly toast = signal('');
 
   // Still going to happen: waiting for an answer or confirmed
   protected readonly upcoming = computed(() =>
@@ -43,7 +52,24 @@ export class MyBookings {
   constructor(
     protected readonly auth: Auth,
     protected readonly bookings: Bookings,
+    private readonly professionals: Professionals,
   ) {}
+
+  // Where the appointment is: the address of the professional (nothing for home visits)
+  protected addressOf(booking: Booking) {
+    const professional = this.professionals.byId(booking.professionalId);
+    return professional && professional.serviceMode !== 'home' ? professional.address : '';
+  }
+
+  protected async copyAddress(booking: Booking, address: string) {
+    await copyText(address);
+    this.copiedId.set(booking.id ?? '');
+    this.toast.set($localize`Endereço copiado`);
+    setTimeout(() => {
+      this.copiedId.set('');
+      this.toast.set('');
+    }, 2000);
+  }
 
   protected label(booking: Booking) {
     return STATUS_LABEL[booking.status];

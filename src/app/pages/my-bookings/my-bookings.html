@@ -1,3 +1,4 @@
+<app-toast [text]="toast()" (dismiss)="toast.set('')" />
 <div class="agenda">
   <h1 i18n>Meus agendamentos</h1>
 
@@ -16,6 +17,21 @@
           <div>
             <h3><a [routerLink]="['/profissionais', booking.professionalId]">{{ booking.professionalName }}</a></h3>
             <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
+            @if (addressOf(booking); as address) {
+              <p class="muted address">
+                {{ address }}
+                <!-- Right after the last word of the address, even when it breaks into lines -->
+                <button
+                  type="button"
+                  class="copy"
+                  [attr.aria-label]="t.copyAddress(copiedId() === booking.id)"
+                  [title]="t.copyAddress(copiedId() === booking.id)"
+                  (click)="copyAddress(booking, address)"
+                >
+                  <mat-icon>{{ copiedId() === booking.id ? 'check' : 'content_copy' }}</mat-icon>
+                </button>
+              </p>
+            }
           </div>
           <span class="status" [class]="booking.status">{{ label(booking) }}</span>
         </div>
@@ -32,7 +48,9 @@
             <a i18n-title i18n-aria-label class="chat-icon" [routerLink]="['/mensagens', booking.professionalId]" aria-label="Conversar com {{ booking.professionalName }}" title="Conversar">
               <mat-icon>chat_bubble</mat-icon>
             </a>
-            <button i18n type="button" class="cancel" (click)="cancel(booking)">Cancelar</button>
+            <button i18n-title i18n-aria-label type="button" class="cancel" aria-label="Cancelar" title="Cancelar" (click)="cancel(booking)">
+              <mat-icon>close</mat-icon>
+            </button>
           </div>
         } @else if (booking.status === 'completed') {
           <div class="actions">

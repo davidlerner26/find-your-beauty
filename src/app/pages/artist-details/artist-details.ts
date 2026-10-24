@@ -7,6 +7,7 @@ import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { ServiceSheet } from '../../components/service-sheet/service-sheet';
+import { copyText } from '../../utils/clipboard';
 import { Toast } from '../../components/toast/toast';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -100,19 +101,7 @@ export class ArtistDetails {
   protected readonly toast = signal('');
 
   protected async copyAddress(address: string) {
-    try {
-      await navigator.clipboard.writeText(address);
-    } catch {
-      // Without the clipboard API (or without permission): the old way, with a hidden field
-      const field = document.createElement('textarea');
-      field.value = address;
-      field.style.position = 'fixed';
-      field.style.opacity = '0';
-      document.body.appendChild(field);
-      field.select();
-      document.execCommand('copy');
-      field.remove();
-    }
+    await copyText(address);
     this.copied.set(true);
     this.toast.set($localize`Endereço copiado`);
     setTimeout(() => {

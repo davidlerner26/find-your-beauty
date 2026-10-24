@@ -1526,14 +1526,6 @@
           <context context-type="linenumber">37,38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="96936188381589746" datatype="html">
-        <source>Mais buscados</source>
-        <target>Most searched</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/home/home.html</context>
-          <context context-type="linenumber">94,95</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="507966127234232666" datatype="html">
         <source>O que você quer fazer?</source>
         <target>What would you like to do?</target>
@@ -4588,6 +4580,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
           <context context-type="linenumber">55,61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6201089368133165687" datatype="html">
+        <source>Categorias</source>
+        <target>Categories</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/home/home.html</context>
+          <context context-type="linenumber">95,96</context>
         </context-group>
       </trans-unit>
     </body>

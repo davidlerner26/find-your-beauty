@@ -15,6 +15,7 @@ import { UserLocation } from '../../services/user-location';
 import { hasLocation, shortLocationLabel } from '../../models/professional';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
+import { INTL_LOCALE } from '../../utils/locale';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 
@@ -80,6 +81,8 @@ export class Explore implements OnInit {
   readonly tag = input<string>();
   // Every chip starts selected, unless a tag came from the home page
   protected readonly activeFilters = signal<string[]>([...this.filters]);
+  // The services under the chips of the categories: none chosen means every service
+  protected readonly activeServices = signal<string[]>([]);
   protected readonly selected = signal(-1);
   private restored = false;
   // Card photos that finished loading (or failed), so the spinner stops
@@ -133,8 +136,25 @@ export class Explore implements OnInit {
     this.loader.load().then(() => this.loaded.set(true));
   }
 
+  // The services offered by the professionals on the map, in the chosen categories
+  protected readonly serviceTags = computed(() => {
+    const categories = this.activeFilters();
+    const names = new Set<string>();
+    for (const salon of this.professionals.published()) {
+      if (!hasLocation(salon)) continue;
+      for (const service of salon.services) if (categories.includes(service.category)) names.add(service.name);
+    }
+    return [...names].sort((a, b) => a.localeCompare(b, INTL_LOCALE));
+  });
+
+  protected toggleService(name: string) {
+    this.activeServices.update((all) => (all.includes(name) ? all.filter((n) => n !== name) : [...all, name]));
+    this.selected.set(-1);
+  }
+
   protected get visibleSalons() {
     const active = this.activeFilters();
+    const services = this.activeServices().filter((name) => this.serviceTags().includes(name));
     const user = this.userPosition();
 
     return this.professionals
@@ -144,6 +164,8 @@ export class Explore implements OnInit {
         (salon) =>
           active.length === this.filters.length || salon.tags.some((tag) => active.includes(tag)),
       )
+      // A service chosen under the chips: only who offers one of them
+      .filter((salon) => !services.length || salon.services.some((service) => services.includes(service.name)))
       // Home-only professionals have no place on the map
       .filter((salon) => hasLocation(salon))
       .map((salon) => ({

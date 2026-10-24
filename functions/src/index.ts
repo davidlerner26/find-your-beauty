@@ -99,7 +99,7 @@ export const onBookingCreated = onDocumentCreated({ document: 'bookings/{booking
       heading: L(clientLang, { pt: 'Pedido enviado', en: 'Request sent', es: 'Solicitud enviada' }),
       paragraphs: [
         L(clientLang, {
-          pt: `Você solicitou um horário com ${booking.professionalName}. Assim que ela ou ele responder, você recebe um aviso.`,
+          pt: `Você solicitou um horário com ${booking.professionalName}. Assim que o profissional responder, você recebe um aviso.`,
           en: `You requested a time with ${booking.professionalName}. As soon as they reply, you will get a notice.`,
           es: `Solicitaste un horario con ${booking.professionalName}. En cuanto responda, recibirás un aviso.`,
         }),
@@ -250,10 +250,10 @@ const welcomeClient = async (uid: string, language?: unknown) => {
   await sendEmail({
     to,
     lang,
-    subject: L(lang, { pt: 'Bem-vinda(o) ao Find Your Beauty', en: 'Welcome to Find Your Beauty', es: 'Te damos la bienvenida a Find Your Beauty' }),
+    subject: L(lang, { pt: 'Bem-vindo ao Find Your Beauty', en: 'Welcome to Find Your Beauty', es: 'Te damos la bienvenida a Find Your Beauty' }),
     heading: name
       ? L(lang, { pt: `Olá, ${name}!`, en: `Hello, ${name}!`, es: `¡Hola, ${name}!` })
-      : L(lang, { pt: 'Bem-vinda(o)!', en: 'Welcome!', es: '¡Bienvenida(o)!' }),
+      : L(lang, { pt: 'Bem-vindo!', en: 'Welcome!', es: '¡Bienvenido!' }),
     paragraphs: [
       L(lang, {
         pt: 'Sua conta foi criada. Agora você pode encontrar profissionais de maquiagem e cabelo perto de você e agendar um horário.',
@@ -281,7 +281,7 @@ export const onProfessionalCreated = onDocumentCreated({ document: 'professional
   await sendEmail({
     to,
     lang,
-    subject: L(lang, { pt: 'Bem-vinda(o) ao Find Your Beauty', en: 'Welcome to Find Your Beauty', es: 'Te damos la bienvenida a Find Your Beauty' }),
+    subject: L(lang, { pt: 'Bem-vindo ao Find Your Beauty', en: 'Welcome to Find Your Beauty', es: 'Te damos la bienvenida a Find Your Beauty' }),
     heading: L(lang, { pt: 'Seu cadastro começou', en: 'Your registration has started', es: 'Tu registro comenzó' }),
     paragraphs: [
       L(lang, {

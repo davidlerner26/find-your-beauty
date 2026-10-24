@@ -534,11 +534,11 @@
               [ngModel]="visible()"
               (ngModelChange)="visible.set($event)"
             />
-            Mostrar meu perfil para as clientes
+            Mostrar meu perfil para os clientes
           </label>
         }
         @if (!missing.length && !visible()) {
-          <p i18n class="hint muted">Seu perfil está completo, mas oculto para as clientes.</p>
+          <p i18n class="hint muted">Seu perfil está completo, mas oculto para os clientes.</p>
         }
       </section>
 

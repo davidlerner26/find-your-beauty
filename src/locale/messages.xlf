@@ -580,11 +580,19 @@
           <context context-type="linenumber">152,153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7518409256195508267" datatype="html">
-        <source>Profissional não encontrada.</source>
+      <trans-unit id="5134519185093650006" datatype="html">
+        <source>Profissional não encontrado.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
           <context context-type="linenumber">160,162</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/artist-details/artist-details.html</context>
+          <context context-type="linenumber">376,378</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
+          <context context-type="linenumber">95,97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6270278858592007485" datatype="html">
@@ -984,17 +992,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/chat/chat.html</context>
           <context context-type="linenumber">68,69</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5134519185093650006" datatype="html">
-        <source>Profissional não encontrado.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/artist-details/artist-details.html</context>
-          <context context-type="linenumber">376,378</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">95,97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4261785528976330931" datatype="html">
@@ -2169,8 +2166,8 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5913196533106568157" datatype="html">
-        <source> Seu perfil não está publicado, então as clientes não encontram você. Abra o perfil, complete os dados e marque para mostrar. </source>
+      <trans-unit id="581352304024147958" datatype="html">
+        <source> Seu perfil não está publicado, então os clientes não encontram você. Abra o perfil, complete os dados e marque para mostrar. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
           <context context-type="linenumber">6,7</context>
@@ -2204,8 +2201,8 @@
           <context context-type="linenumber">61,63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3306578993280809187" datatype="html">
-        <source>Tem certeza que deseja cancelar este agendamento? A cliente será avisada e o horário será liberado.</source>
+      <trans-unit id="9218880752388706214" datatype="html">
+        <source>Tem certeza que deseja cancelar este agendamento? O cliente será avisado e o horário será liberado.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
           <context context-type="linenumber">67</context>
@@ -2733,20 +2730,20 @@
           <context context-type="linenumber">523,524</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7756223122185032231" datatype="html">
+      <trans-unit id="6396813498052575544" datatype="html">
         <source><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
               type=&quot;checkbox&quot;
               name=&quot;published&quot;
               [ngModel]=&quot;visible()&quot;
               (ngModelChange)=&quot;visible.set($event)&quot;
-            /&gt;"/> Mostrar meu perfil para as clientes </source>
+            /&gt;"/> Mostrar meu perfil para os clientes </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
           <context context-type="linenumber">532,538</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="316937385625495896" datatype="html">
-        <source>Seu perfil está completo, mas oculto para as clientes.</source>
+      <trans-unit id="8135257608545154681" datatype="html">
+        <source>Seu perfil está completo, mas oculto para os clientes.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
           <context context-type="linenumber">541,542</context>
@@ -2925,15 +2922,15 @@
           <context context-type="linenumber">688</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1778918188915026966" datatype="html">
-        <source>Perfil salvo e publicado! As clientes já podem encontrar você.</source>
+      <trans-unit id="7885556857110789877" datatype="html">
+        <source>Perfil salvo e publicado! Os clientes já podem encontrar você.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
           <context context-type="linenumber">723</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3051415935902225202" datatype="html">
-        <source>Perfil salvo, mas oculto. Marque &quot;Mostrar meu perfil para as clientes&quot; para publicar.</source>
+      <trans-unit id="1108548409948214572" datatype="html">
+        <source>Perfil salvo, mas oculto. Marque &quot;Mostrar meu perfil para os clientes&quot; para publicar.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
           <context context-type="linenumber">725</context>

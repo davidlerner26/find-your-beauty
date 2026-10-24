@@ -720,9 +720,9 @@ export class ProProfile {
       await this.professionals.load();
       this.show(
         published
-          ? $localize`Perfil salvo e publicado! As clientes já podem encontrar você.`
+          ? $localize`Perfil salvo e publicado! Os clientes já podem encontrar você.`
           : !visible
-            ? $localize`Perfil salvo, mas oculto. Marque "Mostrar meu perfil para as clientes" para publicar.`
+            ? $localize`Perfil salvo, mas oculto. Marque "Mostrar meu perfil para os clientes" para publicar.`
             : $localize`Perfil salvo, mas ainda não publicado. Falta: ${this.missing.join(', ')}:missing:.`,
       );
     } catch (error) {

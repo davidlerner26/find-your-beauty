@@ -64,7 +64,7 @@ export class ProAgenda {
 
   protected answer(booking: Booking, status: 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional') {
     // Cancelling a confirmed booking can't be undone: the client is told and the time is released
-    if (status === 'cancelledByProfessional' && !confirm($localize`Tem certeza que deseja cancelar este agendamento? A cliente será avisada e o horário será liberado.`)) return;
+    if (status === 'cancelledByProfessional' && !confirm($localize`Tem certeza que deseja cancelar este agendamento? O cliente será avisado e o horário será liberado.`)) return;
 
     this.bookings
       .setStatus(booking, status)

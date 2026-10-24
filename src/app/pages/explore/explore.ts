@@ -1,4 +1,5 @@
 import { ArtistDetails } from '../artist-details/artist-details';
+import { ChipsRow } from '../../components/chips-row/chips-row';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -30,7 +31,7 @@ let lastSelectedId: string | null = null;
 
 @Component({
   selector: 'app-explore',
-  imports: [ArtistDetails, CarouselArrows, CatalogPipe, ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
+  imports: [ArtistDetails, CarouselArrows, ChipsRow, CatalogPipe, ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })

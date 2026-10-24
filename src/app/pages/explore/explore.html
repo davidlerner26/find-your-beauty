@@ -44,21 +44,18 @@
     <!-- Under the chips: the services of the professionals on the map. On wide screens the row has a limit of
          width and arrows to the sides. -->
     @if (serviceTags().length) {
-      <div class="tags-box">
-        <div #tagsRow class="filter-row tags">
-          @for (name of serviceTags(); track name) {
-            <button
-              type="button"
-              class="filter small"
-              [class.active]="activeServices().includes(name)"
-              (click)="toggleService(name)"
-            >
-              {{ name | catalog }}
-            </button>
-          }
-        </div>
-        <app-carousel-arrows [target]="tagsRow" />
-      </div>
+      <app-chips-row class="tags-box">
+        @for (name of serviceTags(); track name) {
+          <button
+            type="button"
+            class="filter small"
+            [class.active]="activeServices().includes(name)"
+            (click)="toggleService(name)"
+          >
+            {{ name | catalog }}
+          </button>
+        }
+      </app-chips-row>
     }
   </div>
 

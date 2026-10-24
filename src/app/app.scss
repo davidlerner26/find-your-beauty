@@ -133,8 +133,7 @@ $tabs-height: 5rem;
     }
   }
 
-  .signin,
-  .account {
+  .signin {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -147,17 +146,6 @@ $tabs-height: 5rem;
   .signin {
     background: var(--primary);
     color: #fff;
-  }
-
-  .account {
-    background: var(--primary-light);
-    color: var(--primary);
-
-    mat-icon {
-      width: 1.25rem;
-      height: 1.25rem;
-      font-size: 1.25rem;
-    }
   }
 
   // The bottom tabs are replaced by the bar on top
@@ -201,11 +189,6 @@ $tabs-height: 5rem;
     .signin {
       background: #fff;
       color: #2f6b7a;
-    }
-
-    .account {
-      background: rgba(255, 255, 255, 0.16);
-      color: #fff;
     }
   }
 }

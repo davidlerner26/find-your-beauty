@@ -135,10 +135,6 @@ export class App {
     return this.url() === '/explore' || AUTH_SCREENS.includes(this.url());
   }
 
-  protected get profilePath() {
-    return isProArea(this.url()) ? '/pro/perfil' : '/perfil';
-  }
-
   protected isActive(tab: Tab) {
     return tab.match.includes(this.isAdminScreen ? this.lastTab() : this.url());
   }

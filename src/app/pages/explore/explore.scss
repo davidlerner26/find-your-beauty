@@ -414,13 +414,13 @@
     display: none;
   }
 
-  // The page of the professional is a card on the map, on the right (above the button of the location)
+  // The page of the professional is a card on the map, right under the chips of the categories
   .floating-card {
     position: fixed;
     z-index: 4;
-    top: 6rem;
-    right: 1.5rem;
-    bottom: 6.5rem;
+    top: 10.5rem;
+    left: calc(#{$panel} + 1.5rem);
+    bottom: 1.5rem;
     width: 28rem;
     overflow-y: auto;
     border-radius: 20px;

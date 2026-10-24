@@ -205,7 +205,12 @@ h2 {
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
   .inbox {
-    max-width: 44rem;
+    max-width: none;
     padding: 1rem 2.5rem 4rem;
+  }
+
+  // The search field keeps the width of the profile
+  .search {
+    max-width: 44rem;
   }
 }

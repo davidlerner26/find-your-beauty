@@ -3,6 +3,8 @@ export type Conversation = {
   id: string;
   clientUid: string;
   clientName: string;
+  // The photo of the client's account (Google), when there is one
+  clientImage?: string;
   professionalId: string;
   lastMessage: string;
   lastMessageAt: Date | null;

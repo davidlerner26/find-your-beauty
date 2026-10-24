@@ -50,7 +50,7 @@ export class Inbox {
           {
             ...conversation,
             title: conversation.clientName,
-            image: null,
+            image: conversation.clientImage ?? null,
             link: ['/pro/mensagens', conversation.id],
           },
         ];

@@ -4,7 +4,7 @@
       <mat-icon>chevron_left</mat-icon>
     </button>
     @if (peer.image) {
-      <img class="avatar" [src]="peer.image" [alt]="peer.name" [style.object-position]="peer.position | focus" />
+      <img class="avatar" referrerpolicy="no-referrer" [src]="peer.image" [alt]="peer.name" [style.object-position]="peer.position | focus" />
     } @else {
       <span class="avatar initial">{{ peer.name[0] }}</span>
     }
@@ -18,7 +18,7 @@
       <div class="row" [class.mine]="isMine(message)">
         @if (!isMine(message)) {
           @if (peer.image) {
-            <img class="avatar small" [src]="peer.image" [alt]="peer.name" [style.object-position]="peer.position | focus" />
+            <img class="avatar small" referrerpolicy="no-referrer" [src]="peer.image" [alt]="peer.name" [style.object-position]="peer.position | focus" />
           } @else {
             <span class="avatar small initial">{{ peer.name[0] }}</span>
           }

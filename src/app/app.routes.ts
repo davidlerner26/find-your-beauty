@@ -63,7 +63,8 @@ export const routes: Routes = [
   },
   {
     path: 'mensagens/:id',
-    loadComponent: () => import('./pages/chat/chat').then((m) => m.Chat),
+    data: { tab: 'mensagens' },
+    loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
   },
   {
     path: 'esqueci-senha',
@@ -126,8 +127,8 @@ export const routes: Routes = [
   {
     path: 'pro/mensagens/:id',
     canActivate: [proGuard],
-    data: { pro: true },
-    loadComponent: () => import('./pages/chat/chat').then((m) => m.Chat),
+    data: { tab: 'mensagens' },
+    loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
   },
   {
     path: 'pro/instagram',

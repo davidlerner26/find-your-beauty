@@ -202,6 +202,23 @@ h2 {
   justify-content: center;
 }
 
+// Messages: on phones either the list or the chat shows
+.split.chat-open {
+  padding: 0;
+
+  .list-pane {
+    display: none;
+  }
+}
+
+.split:not(.chat-open) .chat-pane {
+  display: none;
+}
+
+.conversation.selected {
+  background: var(--primary-light);
+}
+
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
 @media (min-width: 1024px) {
   .inbox {
@@ -212,6 +229,47 @@ h2 {
   // The menu on top has one screen for the messages and another for the notifications
   .tabs {
     display: none;
+  }
+
+  // The list on the left, the chat that is open on the right
+  .split,
+  .split.chat-open {
+    display: grid;
+    grid-template-columns: 26rem minmax(0, 1fr);
+    max-width: none;
+    height: calc(100vh - 4.5rem);
+    height: calc(100dvh - 4.5rem);
+    padding: 0;
+  }
+
+  // A visitor has no list: the chat takes the whole width
+  .split.no-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .split .list-pane,
+  .split.chat-open .list-pane {
+    display: block;
+    overflow-y: auto;
+    padding: 1rem 1.5rem 2rem;
+    border-right: 1px solid #eee;
+  }
+
+  .split .chat-pane,
+  .split:not(.chat-open) .chat-pane {
+    display: block;
+    min-width: 0;
+    background: #f9fafb;
+  }
+
+  .pick {
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+
+  .conversation {
+    padding: 0.85rem 0.75rem;
+    border-radius: 14px;
   }
 
   // The search field keeps the width of the profile

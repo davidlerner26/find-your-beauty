@@ -1,8 +1,23 @@
-<div class="inbox">
-  <div class="tabs">
-    <a i18n [routerLink]="base() + '/mensagens'" [class.active]="tab() === 'mensagens'">Mensagens</a>
-    <a i18n [routerLink]="base() + '/notificacoes'" [class.active]="tab() === 'notificacoes'">Notificações</a>
+@if (isSplit()) {
+  <!-- Messages: the list of conversations and, next to it, the chat that is open (on phones only one of them shows) -->
+  <div class="inbox split" [class.chat-open]="!!id()" [class.no-list]="!auth.user()">
+    @if (auth.user()) {
+      <div class="list-pane">
+        <ng-container *ngTemplateOutlet="tabsBar" />
+        <ng-container *ngTemplateOutlet="messageList" />
+      </div>
+    }
+    <div class="chat-pane">
+      @if (id()) {
+        <app-chat [id]="id()!" [pro]="auth.role() === 'professional'" />
+      } @else {
+        <p i18n class="pick muted">Escolha uma conversa para abrir o chat.</p>
+      }
+    </div>
   </div>
+} @else {
+<div class="inbox">
+  <ng-container *ngTemplateOutlet="tabsBar" />
 
   @if (!auth.ready()) {
     <app-spinner />
@@ -11,37 +26,6 @@
       <p i18n class="muted">@if (tab() === 'mensagens') { Entre na sua conta para ver suas mensagens. } @else { Entre na sua conta para ver suas notificações. }</p>
       <a i18n class="signin" routerLink="/entrar">Entrar</a>
     </div>
-  } @else if (tab() === 'mensagens') {
-    <label class="search">
-      <mat-icon>search</mat-icon>
-      <input type="search" [placeholder]="t.searchMessages(auth.role() === 'professional')" [(ngModel)]="search" (ngModelChange)="onSearch()" name="search" />
-    </label>
-
-    <ul class="list">
-      @for (item of filteredConversations; track item.id) {
-        <li>
-          <a class="conversation" [routerLink]="item.link">
-            @if (item.image) {
-              <img referrerpolicy="no-referrer" [src]="item.image" [alt]="item.title" [style.object-position]="item.imagePosition | focus" />
-            } @else {
-              <span class="avatar-initial">{{ item.title[0] }}</span>
-            }
-            <div class="conversation-body">
-              <h3>{{ item.title }}</h3>
-              <p class="muted">{{ item.lastMessage }}</p>
-            </div>
-            <div class="conversation-meta">
-              <span class="muted">{{ relative(item.lastMessageAt) }}</span>
-              @if (item.unread) {
-                <span class="badge">{{ item.unread }}</span>
-              }
-            </div>
-          </a>
-        </li>
-      } @empty {
-        <li i18n class="empty muted">@if (auth.role() === 'professional') { Você ainda não recebeu mensagens. } @else { Você ainda não tem conversas. Abra o perfil de um profissional para começar uma. }</li>
-      }
-    </ul>
   } @else if (notifications.loading()) {
     <app-spinner />
   } @else {
@@ -68,6 +52,47 @@
     }
   }
 </div>
+}
+
+<ng-template #tabsBar>
+<div class="tabs">
+  <a i18n [routerLink]="base() + '/mensagens'" [class.active]="tab() === 'mensagens'">Mensagens</a>
+  <a i18n [routerLink]="base() + '/notificacoes'" [class.active]="tab() === 'notificacoes'">Notificações</a>
+</div>
+</ng-template>
+
+<ng-template #messageList>
+<label class="search">
+  <mat-icon>search</mat-icon>
+  <input type="search" [placeholder]="t.searchMessages(auth.role() === 'professional')" [(ngModel)]="search" (ngModelChange)="onSearch()" name="search" />
+</label>
+
+<ul class="list">
+  @for (item of filteredConversations; track item.id) {
+    <li>
+      <a class="conversation" [class.selected]="item.link[item.link.length - 1] === id()" [routerLink]="item.link">
+        @if (item.image) {
+          <img referrerpolicy="no-referrer" [src]="item.image" [alt]="item.title" [style.object-position]="item.imagePosition | focus" />
+        } @else {
+          <span class="avatar-initial">{{ item.title[0] }}</span>
+        }
+        <div class="conversation-body">
+          <h3>{{ item.title }}</h3>
+          <p class="muted">{{ item.lastMessage }}</p>
+        </div>
+        <div class="conversation-meta">
+          <span class="muted">{{ relative(item.lastMessageAt) }}</span>
+          @if (item.unread) {
+            <span class="badge">{{ item.unread }}</span>
+          }
+        </div>
+      </a>
+    </li>
+  } @empty {
+    <li i18n class="empty muted">@if (auth.role() === 'professional') { Você ainda não recebeu mensagens. } @else { Você ainda não tem conversas. Abra o perfil de um profissional para começar uma. }</li>
+  }
+</ul>
+</ng-template>
 
 <ng-template #row let-notification>
   <li class="notification" role="link" tabindex="0" (click)="openNotification(notification)" (keydown.enter)="openNotification(notification)">

@@ -4574,6 +4574,14 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3477276292482988120" datatype="html">
+        <source>Escolha uma conversa para abrir o chat.</source>
+        <target>Elige una conversación para abrir el chat.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

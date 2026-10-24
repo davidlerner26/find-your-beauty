@@ -1,6 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, input } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { Chat } from '../chat/chat';
 import { Spinner } from '../../components/spinner/spinner';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -26,13 +27,20 @@ type Row = Conversation & {
 
 @Component({
   selector: 'app-inbox',
-  imports: [FocusPipe, Spinner, RouterLink, FormsModule, NgTemplateOutlet, MatIconModule],
+  imports: [Chat, FocusPipe, Spinner, RouterLink, FormsModule, NgTemplateOutlet, MatIconModule],
   templateUrl: './inbox.html',
   styleUrl: './inbox.scss',
 })
 export class Inbox {
   protected readonly t = T;
   readonly tab = input<'mensagens' | 'notificacoes'>('mensagens');
+  // The conversation that is open (the professional id for clients, the conversation id for professionals)
+  readonly id = input<string>();
+
+  // The messages screen: the list and the chat side by side (a visitor only sees it with a chat open)
+  protected readonly isSplit = computed(
+    () => this.tab() === 'mensagens' && this.auth.ready() && (!!this.auth.user() || !!this.id()),
+  );
 
   protected readonly relative = formatRelative;
 

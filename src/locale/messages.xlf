@@ -32,7 +32,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">12,13</context>
+          <context context-type="linenumber">27,28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.html</context>
@@ -92,11 +92,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">3,4</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">18,19</context>
+          <context context-type="linenumber">59,60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5797087197643200257" datatype="html">
@@ -112,6 +108,17 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.html</context>
           <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5970759306298930698" datatype="html">
+        <source>Notificações</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
+          <context context-type="linenumber">60,61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5562708575440017986" datatype="html">
@@ -1384,50 +1391,46 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5970759306298930698" datatype="html">
-        <source>Notificações</source>
+      <trans-unit id="3477276292482988120" datatype="html">
+        <source>Escolha uma conversa para abrir o chat.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">4,5</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">51,52</context>
+          <context context-type="linenumber">14,15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4453762769180365148" datatype="html">
         <source><x id="START_BLOCK_IF" equiv-text="@if (tab() === &apos;mensagens&apos;) {"/> Entre na sua conta para ver suas mensagens. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Entre na sua conta para ver suas notificações. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">11,12</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5085506388407069149" datatype="html">
-        <source><x id="START_BLOCK_IF" equiv-text="@if (auth.role() === &apos;professional&apos;) {"/> Você ainda não recebeu mensagens. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Você ainda não tem conversas. Abra o perfil de um profissional para começar uma. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">46,48</context>
+          <context context-type="linenumber">26,27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3842421186557366403" datatype="html">
         <source>Novas</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">56,57</context>
+          <context context-type="linenumber">33,34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1722818537535089807" datatype="html">
         <source>Anteriores</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">65,66</context>
+          <context context-type="linenumber">42,43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5494357043459684223" datatype="html">
         <source>Você não tem notificações.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
-          <context context-type="linenumber">74,75</context>
+          <context context-type="linenumber">51,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5085506388407069149" datatype="html">
+        <source><x id="START_BLOCK_IF" equiv-text="@if (auth.role() === &apos;professional&apos;) {"/> Você ainda não recebeu mensagens. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Você ainda não tem conversas. Abra o perfil de um profissional para começar uma. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
+          <context context-type="linenumber">92,95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3739451129588011091" datatype="html">

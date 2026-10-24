@@ -150,7 +150,10 @@ export class App {
   }
 
   protected isActive(tab: Tab) {
-    return tab.match.includes(this.isAdminScreen ? this.lastTab() : this.url());
+    const url = this.isAdminScreen ? this.lastTab() : this.url();
+    // A screen inside the tab counts too (/mensagens/:id is in Mensagens); the home and the agenda of the professional
+    // are prefixes of other tabs, so they only match themselves
+    return tab.match.some((path) => url === path || (path !== '/' && path !== '/pro' && url.startsWith(path + '/')));
   }
 
   private get isAdminScreen() {

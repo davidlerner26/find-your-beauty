@@ -34,9 +34,9 @@
           <button i18n type="button" class="accept" (click)="answer(booking, 'confirmed')">Aceitar</button>
         </div>
       } @else if (booking.status === 'confirmed') {
+        <!-- It is completed by itself when its time is over (a Cloud Function) -->
         <div class="actions">
           <button i18n type="button" class="decline" (click)="answer(booking, 'cancelledByProfessional')">Cancelar</button>
-          <button i18n type="button" class="accept" (click)="answer(booking, 'completed')">Concluir</button>
         </div>
       }
     </article>

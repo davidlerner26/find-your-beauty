@@ -4,6 +4,7 @@ import { createHash, randomInt } from 'node:crypto';
 import { getAuth } from 'firebase-admin/auth';
 import { setGlobalOptions } from 'firebase-functions/v2';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
+import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { asLang, emailOf, L, Lang, link, money, resendKey, sendEmail, when } from './email';
 import { serviceName } from './catalog';
 import { onDocumentCreated, onDocumentUpdated, onDocumentWritten } from 'firebase-functions/v2/firestore';
@@ -126,6 +127,26 @@ export const onBookingCreated = onDocumentCreated({ document: 'bookings/{booking
     });
   }
 });
+
+// A confirmed booking is completed by itself once its time is over (the professional doesn't have to do it).
+// The update goes through onBookingUpdated, which tells the client the booking is completed.
+export const completeFinishedBookings = onSchedule(
+  { schedule: 'every 15 minutes', timeZone: 'America/Sao_Paulo' },
+  async () => {
+    const now = Date.now();
+    // Only the status is filtered by the query (no composite index); the end of the appointment is checked here
+    const confirmed = await db.collection('bookings').where('status', '==', 'confirmed').get();
+    const finished = confirmed.docs.filter((booking) => {
+      const { startsAt, durationMinutes } = booking.data();
+      return startsAt.toMillis() + (durationMinutes ?? 0) * 60_000 <= now;
+    });
+
+    await Promise.all(
+      finished.map((booking) => booking.ref.update({ status: 'completed', updatedAt: FieldValue.serverTimestamp() })),
+    );
+    console.log(`Completed ${finished.length} booking(s)`);
+  },
+);
 
 // What the e-mails say about a booking
 const bookingDetails = (booking: FirebaseFirestore.DocumentData, lang: Lang) => [

@@ -1,4 +1,6 @@
-<app-toast [text]="toast()" (dismiss)="toast.set('')" />
+@if (toast()) {
+  <app-toast [text]="toast()" (dismiss)="toast.set('')" />
+}
 <div class="agenda">
   <h1 i18n>Meus agendamentos</h1>
 

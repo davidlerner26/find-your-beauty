@@ -82,6 +82,8 @@ export class Explore implements OnInit {
   readonly tag = input<string>();
   // Service chosen on the home page (?service=Maquiagem de noiva): its chip comes selected
   readonly service = input<string>();
+  // Categories that were selected on the home page (?categories=Maquiagem,Cabelo)
+  readonly categories = input<string>();
   // Every chip starts selected, unless a tag came from the home page
   protected readonly activeFilters = signal<string[]>([...this.filters]);
   // The services under the chips of the categories: none chosen means every service
@@ -103,8 +105,11 @@ export class Explore implements OnInit {
     effect(() => {
       const service = this.service();
       if (!service) return;
+      // The categories of the home page stay selected; without them, the one of the service
+      const chosen = (this.categories() ?? '').split(',').filter((name) => this.filters.includes(name));
       const category = (Object.keys(SERVICE_NAMES) as ServiceCategory[]).find((key) => SERVICE_NAMES[key].includes(service));
-      if (category) this.activeFilters.set([category]);
+      if (chosen.length) this.activeFilters.set(chosen);
+      else if (category) this.activeFilters.set([category]);
       this.activeServices.set([service]);
     });
 

@@ -22,7 +22,7 @@
         <map-marker
           [position]="salon.position"
           [icon]="markerIcon(i)"
-          (mapClick)="selectSalon(i)"
+          (mapClick)="onPin(i, salon.id)"
         />
       }
     </google-map>

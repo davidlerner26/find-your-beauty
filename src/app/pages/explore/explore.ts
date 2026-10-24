@@ -297,6 +297,12 @@ export class Explore implements OnInit {
     this.selected.set(-1);
   }
 
+  // The pin on the map: wide screens open the page of the professional (the card); phones select the card in the carousel
+  protected onPin(index: number, id: string) {
+    if (window.matchMedia('(min-width: 1024px)').matches) this.openSalon(index, id);
+    else this.selectSalon(index);
+  }
+
   protected selectSalon(index: number) {
     this.selected.set(index);
     lastSelectedId = this.visibleSalons[index].id;

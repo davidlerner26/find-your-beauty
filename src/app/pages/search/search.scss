@@ -428,6 +428,13 @@ h2 {
     padding: 1rem 0 0;
   }
 
+  // The search field is smaller and centered (the rest stays aligned to the left)
+  .search {
+    max-width: 40rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   // The results in two columns
   .list {
     grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));

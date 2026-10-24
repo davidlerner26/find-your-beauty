@@ -14,7 +14,7 @@
   } @else if (tab() === 'mensagens') {
     <label class="search">
       <mat-icon>search</mat-icon>
-      <input type="search" [placeholder]="t.searchMessages(auth.role() === 'professional')" [(ngModel)]="search" name="search" />
+      <input type="search" [placeholder]="t.searchMessages(auth.role() === 'professional')" [(ngModel)]="search" (ngModelChange)="onSearch()" name="search" />
     </label>
 
     <ul class="list">

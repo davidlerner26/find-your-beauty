@@ -2,6 +2,7 @@ import { computed, effect, Injectable, signal } from '@angular/core';
 import {
   collection,
   doc,
+  getDocs,
   increment,
   onSnapshot,
   orderBy,
@@ -28,6 +29,9 @@ const toDate = (value: unknown) => (value instanceof Timestamp ? value.toDate() 
 @Injectable({ providedIn: 'root' })
 export class Messages {
   readonly conversations = signal<Conversation[]>([]);
+  // The text of every message of each conversation, loaded when the user searches (conversation id -> messages)
+  readonly texts = signal<Record<string, string[]>>({});
+  private readonly textsLoadedAt = new Map<string, number>();
   readonly unreadTotal = computed(() =>
     this.conversations().reduce((sum, conversation) => sum + conversation.unread, 0),
   );
@@ -67,6 +71,29 @@ export class Messages {
       );
       onCleanup(unsubscribe);
     });
+  }
+
+  // Loads the messages of the conversations (again only when a conversation got a new message), so the list can be
+  // searched by anything that was said
+  async loadTexts() {
+    const stale = this.conversations().filter(
+      (conversation) => this.textsLoadedAt.get(conversation.id) !== (conversation.lastMessageAt?.getTime() ?? 0),
+    );
+    if (!stale.length) return;
+
+    const loaded = await Promise.all(
+      stale.map(async (conversation) => {
+        const snapshot = await getDocs(collection(db, 'conversations', conversation.id, 'messages')).catch(() => null);
+        if (!snapshot) return null;
+        this.textsLoadedAt.set(conversation.id, conversation.lastMessageAt?.getTime() ?? 0);
+        const texts = snapshot.docs
+          .sort((a, b) => (a.data()['createdAt']?.seconds ?? 0) - (b.data()['createdAt']?.seconds ?? 0))
+          .map((d) => (d.data()['text'] as string | undefined) || (d.data()['file']?.name as string | undefined) || '')
+          .filter(Boolean);
+        return [conversation.id, texts] as const;
+      }),
+    );
+    this.texts.update((current) => ({ ...current, ...Object.fromEntries(loaded.filter((entry) => entry !== null)) }));
   }
 
   clientConversationId(professionalId: string) {

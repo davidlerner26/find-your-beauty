@@ -14,6 +14,9 @@ import { Professionals } from '../../services/professionals';
 import { formatRelative } from '../../utils/format-date';
 import { T } from '../../utils/texts';
 
+// Ignores the case and the accents, so "nao" finds "não"
+const fold = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
 type Row = Conversation & {
   title: string;
   image: string | null;
@@ -88,8 +91,20 @@ export class Inbox {
     this.router.navigateByUrl(this.auth.role() === 'professional' ? '/pro' : '/agenda');
   }
 
+  // Looks in the name and in everything that was said; a match in a message shows that message instead of the last one
   protected get filteredConversations() {
-    const term = this.search.trim().toLowerCase();
-    return this.conversations().filter(({ title }) => !term || title.toLowerCase().includes(term));
+    const term = fold(this.search.trim());
+    if (!term) return this.conversations();
+
+    const texts = this.messages.texts();
+    return this.conversations().flatMap((conversation) => {
+      if (fold(conversation.title).includes(term)) return [conversation];
+      const found = (texts[conversation.id] ?? []).find((text) => fold(text).includes(term));
+      return found ? [{ ...conversation, lastMessage: found }] : [];
+    });
+  }
+
+  protected onSearch() {
+    if (this.search.trim()) void this.messages.loadTexts();
   }
 }

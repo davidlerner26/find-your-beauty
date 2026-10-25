@@ -148,6 +148,18 @@ h2 {
   }
 }
 
+.place-home {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  mat-icon {
+    width: 1.1rem;
+    height: 1.1rem;
+    font-size: 1.1rem;
+  }
+}
+
 .address {
   margin-top: 0.25rem;
   font-size: 0.9rem;

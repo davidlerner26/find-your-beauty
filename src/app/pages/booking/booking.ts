@@ -75,6 +75,16 @@ export class Booking {
   protected readonly selectedTime = signal<string | null>(null);
   protected notes = '';
 
+  // Where the professional attends: only a client of a professional that accepts both can choose
+  protected readonly canChoosePlace = computed(() => this.artist()?.serviceMode === 'both');
+  // At home is the default whenever it is possible
+  protected readonly place = signal<'home' | 'studio'>('home');
+  protected readonly effectivePlace = computed<'home' | 'studio'>(() => {
+    const mode = this.artist()?.serviceMode;
+    if (mode === 'both') return this.place();
+    return mode === 'home' ? 'home' : 'studio';
+  });
+
   protected readonly monthLabel = computed(() =>
     new Intl.DateTimeFormat(INTL_LOCALE, { month: 'long', year: 'numeric' }).format(this.month()),
   );
@@ -178,9 +188,12 @@ export class Booking {
     }
 
     // All the data of the profile is required: checked again here, in case it changed
+    let clientAddress = '';
     this.saving.set(true);
     try {
-      const missing = missingProfileData(await this.users.get(this.auth.user()!.uid));
+      const profile = await this.users.get(this.auth.user()!.uid);
+      clientAddress = profile?.address?.trim() ?? '';
+      const missing = missingProfileData(profile);
       if (missing.length) {
         this.error.set(`Complete seus dados no perfil para agendar. Falta: ${missing.join(', ')}.`);
         return;
@@ -195,6 +208,7 @@ export class Booking {
 
     const date = toDateKey(day);
     const [hour, minute] = time.split(':').map(Number);
+    const place = this.effectivePlace();
     const durationMinutes = services.reduce((sum, service) => sum + service.durationMinutes, 0);
 
     this.error.set('');
@@ -215,6 +229,8 @@ export class Booking {
         total: this.total(),
         notes: this.notes.trim(),
         busyIds: busyIdsFor(date, time, durationMinutes, this.availability().slotMinutes),
+        place,
+        ...(place === 'home' ? { clientAddress } : {}),
         paymentStatus: 'pending',
       });
       this.router.navigate(['/agenda']);

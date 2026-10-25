@@ -13,6 +13,13 @@
         <div>
           <h3>{{ booking.clientName }}</h3>
           <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
+          <p class="muted place">
+            @if (booking.place === 'home') {
+              <mat-icon>home</mat-icon> <ng-container i18n>A domicílio</ng-container>@if (booking.clientAddress) { : {{ booking.clientAddress }} }
+            } @else if (booking.place === 'studio') {
+              <mat-icon>location_on</mat-icon> <ng-container i18n>No seu endereço</ng-container>
+            }
+          </p>
         </div>
         <span class="status" [class]="booking.status">{{ label(booking) }}</span>
       </div>

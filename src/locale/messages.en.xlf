@@ -4606,6 +4606,30 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="287766751251867323" datatype="html">
+        <source>No endereço do profissional</source>
+        <target>At the professional's address</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="378437625323319894" datatype="html">
+        <source>Onde</source>
+        <target>Where</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7245263017859923420" datatype="html">
+        <source>No seu endereço</source>
+        <target>At your address</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

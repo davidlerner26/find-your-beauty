@@ -58,7 +58,14 @@ export class MyBookings {
   // Where the appointment is: the address of the professional (nothing for home visits)
   protected addressOf(booking: Booking) {
     const professional = this.professionals.byId(booking.professionalId);
-    return professional && professional.serviceMode !== 'home' ? professional.address : '';
+    if (!professional || this.atHome(booking)) return '';
+    return professional.address;
+  }
+
+  // The service is at the client's home (older bookings: the professional only attends at home)
+  protected atHome(booking: Booking) {
+    if (booking.place) return booking.place === 'home';
+    return this.professionals.byId(booking.professionalId)?.serviceMode === 'home';
   }
 
   protected async copyAddress(booking: Booking, address: string) {

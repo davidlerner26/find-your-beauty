@@ -9,6 +9,29 @@
   <div class="content">
     <p i18n class="artist muted">com <strong>{{ artist.name }}</strong></p>
 
+    <!-- Where: the client chooses when the professional attends in both ways (at home is the default) -->
+    @if (canChoosePlace()) {
+      <section>
+        <h2 i18n>Onde</h2>
+        <div class="times places">
+          <button type="button" class="time" [class.selected]="place() === 'home'" (click)="place.set('home')">
+            <mat-icon>home</mat-icon> <ng-container i18n>A domicílio</ng-container>
+          </button>
+          <button type="button" class="time" [class.selected]="place() === 'studio'" (click)="place.set('studio')">
+            <mat-icon>location_on</mat-icon> <ng-container i18n>No endereço do profissional</ng-container>
+          </button>
+        </div>
+        @if (place() === 'studio') {
+          <p class="muted place-address">{{ artist.address }}</p>
+        }
+      </section>
+    } @else {
+      <p class="muted place-info">
+        <mat-icon>{{ effectivePlace() === 'home' ? 'home' : 'location_on' }}</mat-icon>
+        @if (effectivePlace() === 'home') { <ng-container i18n>Atendimento a domicílio</ng-container> } @else { {{ artist.address }} }
+      </p>
+    }
+
     <section>
       <h2 i18n>Data</h2>
       <div class="month">

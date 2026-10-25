@@ -155,6 +155,17 @@ const bookingDetails = (booking: FirebaseFirestore.DocumentData, lang: Lang) => 
     label: L(lang, { pt: 'Serviços', en: 'Services', es: 'Servicios' }),
     value: (booking.services as { name: string }[]).map((service) => serviceName(service.name, lang)).join(', '),
   },
+  ...(booking.place
+    ? [
+        {
+          label: L(lang, { pt: 'Onde', en: 'Where', es: 'Dónde' }),
+          value:
+            booking.place === 'home'
+              ? L(lang, { pt: 'A domicílio', en: 'At home', es: 'A domicilio' }) + (booking.clientAddress ? `: ${booking.clientAddress}` : '')
+              : L(lang, { pt: 'No endereço do profissional', en: "At the professional's address", es: 'En la dirección del profesional' }),
+        },
+      ]
+    : []),
   { label: 'Total', value: money(booking.total, lang) },
 ];
 

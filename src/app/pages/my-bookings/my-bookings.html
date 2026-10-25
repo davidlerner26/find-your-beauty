@@ -19,7 +19,9 @@
           <div>
             <h3><a [routerLink]="['/profissionais', booking.professionalId]">{{ booking.professionalName }}</a></h3>
             <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
-            @if (addressOf(booking); as address) {
+            @if (atHome(booking)) {
+              <p class="muted address place-home"><mat-icon>home</mat-icon> <ng-container i18n>Atendimento a domicílio</ng-container></p>
+            } @else if (addressOf(booking); as address) {
               <p class="muted address">
                 {{ address }}
                 <!-- Right after the last word of the address, even when it breaks into lines -->

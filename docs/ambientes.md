@@ -22,7 +22,7 @@ Os dois ambientes são totalmente isolados: contas, agendamentos, fotos, regras 
 1. No [Console do Firebase](https://console.firebase.google.com), criar o projeto (sugestão de ID: `find-your-beauty-dev`) e ativar o plano Blaze (as Functions exigem).
 2. **Authentication**: ativar E-mail/senha e Google. Em *Configurações > Domínios autorizados*, adicionar `dev.findyourbeauty.com.br` e `localhost`.
 3. **Firestore** e **Storage**: criar os dois em `southamerica-east1`.
-4. *Configurações do projeto > Seus apps*: registrar um app web e copiar o config para `src/environments/environment.dev.ts` (os campos `TODO-...`). Se o ID do projeto não for `find-your-beauty-dev`, ajustar também `.firebaserc` e o nome `functions/.env.<alias>` não muda (usa o alias `dev`).
+4. *Configurações do projeto > Seus apps*: registrar um app web e copiar o config para `src/environments/environment.dev.ts` (já preenchido para `find-your-beauty-dev`). Se o ID do projeto for outro, ajustar também `.firebaserc`; o arquivo `functions/.env.dev` não muda (usa o alias `dev`).
 5. **Google Cloud > Credenciais**, na chave do Maps: adicionar os referenciadores `https://findyourbeauty.com.br/*`, `https://dev.findyourbeauty.com.br/*` e `http://localhost:4200/*` (ou criar uma chave só para teste e colocá-la em `environment.dev.ts`).
 6. Segredo do Resend no projeto de teste: `firebase functions:secrets:set RESEND_API_KEY --project dev`.
 7. Publicar tudo: `npm run deploy:dev`.

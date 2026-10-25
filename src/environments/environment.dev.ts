@@ -8,11 +8,11 @@ export const environment = {
   // Instagram API with Instagram Login. Empty = the connect button is disabled (there is no test app on Meta yet).
   instagramAppId: '',
   firebase: {
-    apiKey: 'TODO-dev-api-key',
+    apiKey: 'AIzaSyBwamplQdQ7d2BYMuD56DfVigkO1fuSpEw',
     authDomain: 'find-your-beauty-dev.firebaseapp.com',
     projectId: 'find-your-beauty-dev',
     storageBucket: 'find-your-beauty-dev.firebasestorage.app',
-    messagingSenderId: 'TODO',
-    appId: 'TODO',
+    messagingSenderId: '508397329043',
+    appId: '1:508397329043:web:83e4a0ac4f69c17d8a8b66',
   },
 };

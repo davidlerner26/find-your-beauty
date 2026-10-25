@@ -211,8 +211,21 @@ $tabs-height: 5rem;
   pointer-events: none;
 }
 
+// Wide screens: the banner is in the header (env-tag), not on the corner
 @media (min-width: 1024px) {
   .env-banner {
-    bottom: 0;
+    display: none;
+  }
+
+  .env-tag {
+    flex: none;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: #fff1e0;
+    color: #b45f06;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 }

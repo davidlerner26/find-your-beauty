@@ -50,6 +50,14 @@ npm run deploy:dev     # Functions, regras e índices no projeto de teste
 npm run deploy:prod    # o mesmo no projeto de produção
 ```
 
+## Dados de teste
+`scripts/seed/seed.cjs` cria 20 maquiadoras fictícias no ambiente de **teste** (contas, perfis, avaliações e fotos). Ele recusa rodar na produção. Precisa da chave de conta de serviço do projeto de teste e de uma pasta com as fotos (`pool/` e `profile/`, fora do git):
+```
+GOOGLE_APPLICATION_CREDENTIALS=<chave do find-your-beauty-dev.json> SEED_IMAGES=<pasta> node scripts/seed/seed.cjs
+# apagar tudo o que ele criou: acrescente --delete
+```
+As contas usam a senha `Seed@2026!` e e-mails `nome.sobrenome@seed.findyourbeauty.test`.
+
 ## Parâmetros das Functions
 Ficam em arquivos `.env` carregados pelo Firebase:
 - `functions/.env` (não vai para o git): valores de produção, como `RESEND_FROM` e `APP_URL=https://findyourbeauty.com.br`.

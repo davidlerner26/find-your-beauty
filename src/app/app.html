@@ -4,6 +4,10 @@
     <a i18n-aria-label class="brand" routerLink="/" aria-label="Find Your Beauty">
       <img i18n-alt src="logo-full.svg" alt="Find Your Beauty" />
     </a>
+    @if (testEnvironment) {
+      <!-- Test environment: between the logo and the menu -->
+      <span i18n class="env-tag">Ambiente de teste</span>
+    }
     <nav i18n-aria-label aria-label="Principal">
       @for (tab of topTabs; track tab.path) {
         <a [routerLink]="tab.path" [class.active]="isActive(tab)">

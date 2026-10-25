@@ -15,6 +15,7 @@ import { distanceKm, formatDistance } from '../../utils/geo';
 import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { isWorkingDay } from '../../utils/slots';
 import { INTL_LOCALE } from '../../utils/locale';
+import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { T } from '../../utils/texts';
 import { CatalogPipe, catalogLabel } from '../../utils/catalog.pipe';
 
@@ -58,7 +59,7 @@ const readRecents = (): string[] => {
 
 @Component({
   selector: 'app-search',
-  imports: [CatalogPipe, ReviewsLabelPipe, PricePipe, FocusPipe, FormsModule, RouterLink, NgTemplateOutlet, MatIconModule],
+  imports: [CarouselArrows, CatalogPipe, ReviewsLabelPipe, PricePipe, FocusPipe, FormsModule, RouterLink, NgTemplateOutlet, MatIconModule],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
@@ -83,6 +84,15 @@ export class Search {
   protected readonly userPosition = computed(() => this.userLocation.position());
 
   // Filter sheet: edits a draft that only becomes the applied filters on "Mostrar resultados"
+  // Photo being shown in the card of each result (for the dots)
+  protected readonly photoIndex = signal<Record<string, number | undefined>>({});
+
+  protected onPhotosScroll(event: Event, id: string) {
+    const strip = event.target as HTMLElement;
+    const index = Math.round(strip.scrollLeft / strip.clientWidth);
+    if (this.photoIndex()[id] !== index) this.photoIndex.update((current) => ({ ...current, [id]: index }));
+  }
+
   protected readonly sheetOpen = signal(false);
   protected draft: Filters = { ...NO_FILTERS };
   protected readonly month = signal(this.startOfMonth(new Date()));
@@ -111,6 +121,22 @@ export class Search {
 
   protected readonly searching = computed(() => !!this.term().trim() || this.activeFilterCount() > 0);
 
+  // What a card of the list shows (the same for the results and for the suggestions)
+  private card(professional: Professional, user: { lat: number; lng: number } | null) {
+    return {
+      ...professional,
+      cardImage: professional.image,
+      cardPosition: professional.imagePosition,
+      // The photos of the work (the profile photo when there is no gallery), like the cards of the home
+      photos: professional.gallery.length ? professional.gallery : [professional.image],
+      address: locationLabel(professional),
+      distance: user && hasLocation(professional) ? formatDistance(distanceKm(user, professional.position)) : null,
+      km: user && hasLocation(professional) ? distanceKm(user, professional.position) : null,
+      // The cheapest service: "a partir de"
+      minPrice: professional.services.length ? Math.min(...professional.services.map(lowestPrice)) : null,
+    };
+  }
+
   protected readonly results = computed(() => {
     const term = normalize(this.term().trim());
     const { date, tags, minRating, maxKm, sort, neighborhood } = this.applied();
@@ -127,16 +153,7 @@ export class Search {
         if (user && maxKm < MAX_KM && (!hasLocation(professional) || distanceKm(user, professional.position) > maxKm)) return false;
         return true;
       })
-      .map((professional) => ({
-        ...professional,
-        cardImage: professional.image,
-        cardPosition: professional.imagePosition,
-        address: locationLabel(professional),
-        distance: user && hasLocation(professional) ? formatDistance(distanceKm(user, professional.position)) : null,
-        km: user && hasLocation(professional) ? distanceKm(user, professional.position) : null,
-        // The cheapest service: "a partir de"
-        minPrice: professional.services.length ? Math.min(...professional.services.map(lowestPrice)) : null,
-      }));
+      .map((professional) => this.card(professional, user));
 
     // No chosen order keeps the order of the catalog. Without a price or a distance, a professional goes last.
     if (!sort) return found;
@@ -157,7 +174,10 @@ export class Search {
 
   // What is shown before searching: the best rated
   protected readonly suggestions = computed(() =>
-    [...this.professionals.published()].sort((a, b) => b.rating - a.rating).slice(0, 5),
+    [...this.professionals.published()]
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 5)
+      .map((professional) => this.card(professional, this.userPosition())),
   );
 
   protected readonly monthLabel = computed(() =>

@@ -85,11 +85,29 @@
 
 <ng-template #card let-item>
   <a class="result" [routerLink]="['/profissionais', item.id]">
-    <div
-      class="result-image"
-      [style.background-image]="'url(' + item.cardImage + ')'"
-      [style.background-position]="item.cardPosition | focus"
-    ></div>
+    <div class="result-image">
+      <!-- The photos of the professional: swipe sideways (arrows on wide screens) -->
+      <div #photosEl class="photos" (scroll)="onPhotosScroll($event, item.id)">
+        @for (photo of item.photos; track photo) {
+          <div class="slide">
+            <img
+              [src]="photo"
+              [alt]="item.name"
+              loading="lazy"
+              [style.object-position]="(photo === item.cardImage ? item.cardPosition : undefined) | focus"
+            />
+          </div>
+        }
+      </div>
+      @if (item.photos.length > 1) {
+        <app-carousel-arrows [target]="photosEl" />
+        <div class="dots" aria-hidden="true">
+          @for (photo of item.photos; track photo; let n = $index) {
+            <span [class.on]="n === (photoIndex()[item.id] ?? 0)"></span>
+          }
+        </div>
+      }
+    </div>
     <div class="result-info">
       <p class="tags">{{ item.tags | catalog }}</p>
       <h3>{{ item.name }}</h3>

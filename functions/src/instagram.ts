@@ -2,6 +2,7 @@ import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 import { defineSecret, defineString } from 'firebase-functions/params';
 import { createHmac, timingSafeEqual } from 'node:crypto';
+import { appUrl } from './email';
 import { HttpsError, onCall, onRequest } from 'firebase-functions/v2/https';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 
@@ -143,6 +144,9 @@ export const disconnectInstagram = onCall(async (request) => {
 
 // Every night: keeps the tokens alive (60 days) and the photos up to date
 export const syncInstagramDaily = onSchedule({ schedule: 'every day 04:00', timeZone: 'America/Sao_Paulo' }, async () => {
+  // Environments without an Instagram app (the test one) have nothing to sync
+  if (!appId.value()) return;
+
   const connected = await db().collection('professionals').where('instagramConnected', '==', true).get();
 
   for (const professional of connected.docs) {
@@ -199,6 +203,6 @@ export const instagramDataDeletion = onRequest({ secrets: [appSecret], cors: fal
     }
   }
 
-  const base = process.env['APP_URL'] || 'https://findyourbeauty.com.br';
+  const base = appUrl.value();
   response.json({ url: `${base}/privacidade`, confirmation_code: String(igUserId ?? 'none') });
 });

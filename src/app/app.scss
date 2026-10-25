@@ -192,3 +192,27 @@ $tabs-height: 5rem;
     }
   }
 }
+
+// Only in the test environment
+.env-banner {
+  position: fixed;
+  z-index: 40;
+  left: 0;
+  // Above the tab bar of the phone
+  bottom: 5rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 0 8px 0 0;
+  background: #ee8b2e;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .env-banner {
+    bottom: 0;
+  }
+}

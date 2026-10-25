@@ -1,4 +1,7 @@
+// Production (findyourbeauty.com.br). The test environment (dev.findyourbeauty.com.br) is in environment.dev.ts and
+// takes the place of this file in the `dev` build.
 export const environment = {
+  name: 'prod',
   googleMapsApiKey: 'AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I',
   // Instagram API with Instagram Login (public). Empty = the connect button is disabled.
   instagramAppId: '1138530759119798',

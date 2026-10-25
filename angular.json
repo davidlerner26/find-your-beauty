@@ -55,6 +55,29 @@
               "outputHashing": "all",
               "localize": true
             },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ],
+              "serviceWorker": "ngsw-config.json",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "1MB",
+                  "maximumError": "1.5MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "10kB",
+                  "maximumError": "14kB"
+                }
+              ],
+              "outputHashing": "all",
+              "localize": true
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -84,6 +107,9 @@
           "configurations": {
             "production": {
               "buildTarget": "find-your-beauty:build:production"
+            },
+            "dev": {
+              "buildTarget": "find-your-beauty:build:dev"
             },
             "development": {
               "buildTarget": "find-your-beauty:build:development"

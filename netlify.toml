@@ -2,6 +2,18 @@
   command = "npm run build"
   publish = "dist/find-your-beauty/browser"
 
+# Two environments, one site: the branch `main` is production (findyourbeauty.com.br) and uses the Firebase project of
+# production. Every other branch (develop = dev.findyourbeauty.com.br) and the deploy previews are builds of the test
+# environment: another Firebase project, a banner and a robots.txt that blocks search engines (see docs/ambientes.md).
+[context.production]
+  command = "npm run build"
+
+[context.branch-deploy]
+  command = "npm run build:dev"
+
+[context.deploy-preview]
+  command = "npm run build:dev"
+
 [build.environment]
   NODE_VERSION = "22"
   # Browser keys (Firebase web apiKey and Google Maps key) are public by design: they have to be in

@@ -9,6 +9,8 @@ export const resendKey = defineSecret('RESEND_API_KEY');
 const from = defineString('RESEND_FROM', { default: 'Find Your Beauty <onboarding@resend.dev>' });
 // Where the links of the e-mails open
 export const appUrl = defineString('APP_URL', { default: 'https://findyourbeauty.com.br' });
+// "dev" in the test environment: its e-mails say so in the subject. Empty in production.
+const envName = defineString('ENV_NAME', { default: '' });
 
 // The look of the app: white, a big bold title, gray text, round teal buttons and light gray boxes
 // The languages of the site: the e-mail goes in the language of the page where the action was made
@@ -93,7 +95,7 @@ export async function sendEmail(email: Email) {
       body: JSON.stringify({
         from: from.value(),
         to: [email.to],
-        subject: email.subject,
+        subject: envName.value() === 'dev' ? `[DEV] ${email.subject}` : email.subject,
         html: render(email),
         text: [email.heading, ...email.paragraphs, email.button?.url ?? '']
           .filter(Boolean)

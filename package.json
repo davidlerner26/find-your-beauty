@@ -9,7 +9,11 @@
     "test": "ng test",
     "start:en": "ng serve --configuration en",
     "start:es": "ng serve --configuration es",
-    "i18n": "ng extract-i18n"
+    "i18n": "ng extract-i18n",
+    "start:dev": "ng serve --configuration dev",
+    "build:dev": "ng build --configuration dev && node scripts/robots-dev.cjs",
+    "deploy:dev": "firebase deploy --project dev",
+    "deploy:prod": "firebase deploy --project default"
   },
   "private": true,
   "packageManager": "npm@11.9.0",

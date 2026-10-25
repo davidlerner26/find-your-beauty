@@ -7,6 +7,7 @@ import { Messages } from './services/messages';
 import { Notifications } from './services/notifications';
 import { Feedback } from './services/feedback';
 import { Toast } from './components/toast/toast';
+import { environment } from '../environments/environment';
 
 // `badge`: the dot for new messages; `news`: the tab is the one of the notifications (the dot is for the new ones)
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean; news?: boolean };
@@ -102,6 +103,9 @@ export class App {
       icon: 'person',
     },
   ];
+
+  // The test environment shows a small banner, so nobody mistakes it for the real site
+  protected readonly testEnvironment = environment.name === 'dev';
 
   protected readonly url = signal('/');
   // Last tab screen visited: it stays highlighted on /admin, which has no tab of its own

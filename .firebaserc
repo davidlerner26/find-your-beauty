@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "find-your-beauty-5c993"
+    "default": "find-your-beauty-5c993",
+    "dev": "find-your-beauty-dev"
   }
 }

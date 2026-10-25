@@ -44,3 +44,7 @@
 @if (feedback.text()) {
   <app-toast [text]="feedback.text()" (dismiss)="feedback.dismiss()" />
 }
+
+@if (testEnvironment) {
+  <span i18n class="env-banner">Ambiente de teste</span>
+}

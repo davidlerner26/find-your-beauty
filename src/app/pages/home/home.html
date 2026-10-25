@@ -32,64 +32,67 @@
     </section>
   }
 
-  <section>
-    <div class="section-head">
-      <h2 i18n>Profissionais em destaque</h2>
-      <!-- <a href="#">Ver todos</a> -->
-    </div>
-    <div class="cards">
-      @for (salon of featuredSalons(); track salon.id) {
-        <article class="card" [routerLink]="['/profissionais', salon.id]">
-          <div class="card-image">
-            <div #photosEl class="photos" (scroll)="onPhotosScroll($event, salon.id)">
-              @for (photo of salon.photos; track photo) {
-                <div class="slide">
-                  @if (!loadedPhotos().includes(photo)) {
-                    <app-spinner class="loading" [small]="true" />
+  <!-- Featured professionals: only in the test environment for now (environment.features) -->
+  @if (showFeatured) {
+    <section>
+      <div class="section-head">
+        <h2 i18n>Profissionais em destaque</h2>
+        <!-- <a href="#">Ver todos</a> -->
+      </div>
+      <div class="cards">
+        @for (salon of featuredSalons(); track salon.id) {
+          <article class="card" [routerLink]="['/profissionais', salon.id]">
+            <div class="card-image">
+              <div #photosEl class="photos" (scroll)="onPhotosScroll($event, salon.id)">
+                @for (photo of salon.photos; track photo) {
+                  <div class="slide">
+                    @if (!loadedPhotos().includes(photo)) {
+                      <app-spinner class="loading" [small]="true" />
+                    }
+                    <img
+                      [src]="photo"
+                      [alt]="salon.name"
+                      [style.object-position]="
+                        (photo === salon.image ? salon.imagePosition : undefined) | focus
+                      "
+                      (load)="photoLoaded(photo)"
+                      (error)="photoLoaded(photo)"
+                    />
+                  </div>
+                }
+              </div>
+              @if (favorites.available()) {
+                <button
+                  type="button"
+                  class="heart"
+                  [attr.aria-label]="t.favorite(favorites.has(salon.id))"
+                  (click)="toggleFavorite($event, salon.id)"
+                >
+                  <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
+                </button>
+              }
+              @if (salon.photos.length > 1) {
+                <app-carousel-arrows [target]="photosEl" />
+  <div class="dots" aria-hidden="true">
+                  @for (photo of salon.photos; track photo; let n = $index) {
+                    <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
                   }
-                  <img
-                    [src]="photo"
-                    [alt]="salon.name"
-                    [style.object-position]="
-                      (photo === salon.image ? salon.imagePosition : undefined) | focus
-                    "
-                    (load)="photoLoaded(photo)"
-                    (error)="photoLoaded(photo)"
-                  />
                 </div>
               }
             </div>
-            @if (favorites.available()) {
-              <button
-                type="button"
-                class="heart"
-                [attr.aria-label]="t.favorite(favorites.has(salon.id))"
-                (click)="toggleFavorite($event, salon.id)"
-              >
-                <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
-              </button>
-            }
-            @if (salon.photos.length > 1) {
-              <app-carousel-arrows [target]="photosEl" />
-<div class="dots" aria-hidden="true">
-                @for (photo of salon.photos; track photo; let n = $index) {
-                  <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
-                }
-              </div>
-            }
-          </div>
-          <p class="tags">{{ salon.tagList | catalog }}</p>
-          <h3>{{ salon.name }}</h3>
-          <p class="muted">{{ salon.address }}</p>
-          <p class="rating">
-            <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{
-              salon.reviews
-            }})
-          </p>
-        </article>
-      }
-    </div>
-  </section>
+            <p class="tags">{{ salon.tagList | catalog }}</p>
+            <h3>{{ salon.name }}</h3>
+            <p class="muted">{{ salon.address }}</p>
+            <p class="rating">
+              <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{
+                salon.reviews
+              }})
+            </p>
+          </article>
+        }
+      </div>
+    </section>
+  }
 
   <section>
     <h2 i18n>Categorias</h2>

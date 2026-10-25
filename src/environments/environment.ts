@@ -2,6 +2,10 @@
 // takes the place of this file in the `dev` build.
 export const environment = {
   name: 'prod',
+  // Features that are only turned on in the test environment for now
+  features: {
+    featuredProfessionals: false,
+  },
   googleMapsApiKey: 'AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I',
   // Instagram API with Instagram Login (public). Empty = the connect button is disabled.
   instagramAppId: '1138530759119798',

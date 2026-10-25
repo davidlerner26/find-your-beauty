@@ -21,6 +21,7 @@ import {
 import { Professionals } from '../../services/professionals';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { T } from '../../utils/texts';
+import { environment } from '../../../environments/environment';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 
 const CATEGORY_ICONS: Record<string, string> = { Maquiagem: 'brush', Cabelo: 'content_cut' };
@@ -49,6 +50,8 @@ type Salon = {
 })
 export class Home {
   protected readonly t = T;
+  // The section of featured professionals is only shown in the test environment for now
+  protected readonly showFeatured = environment.features.featuredProfessionals;
   protected readonly firstName = computed(
     () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || $localize`visitante`,
   );

@@ -3,6 +3,10 @@
 // The values below come from the web app of the dev project (Firebase Console > Project settings > Your apps).
 export const environment = {
   name: 'dev',
+  // Features that are only turned on in the test environment for now (production has them off)
+  features: {
+    featuredProfessionals: true,
+  },
   // The same key of production works when the referrers of the key include dev.findyourbeauty.com.br
   googleMapsApiKey: 'AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I',
   // Instagram API with Instagram Login. Empty = the connect button is disabled (there is no test app on Meta yet).

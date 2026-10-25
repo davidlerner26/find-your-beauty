@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
 import { ChatMessage, MessageContent } from '../../models/message';
 import { Auth } from '../../services/auth';
 import { Messages } from '../../services/messages';
+import { Feedback } from '../../services/feedback';
 import { Professionals } from '../../services/professionals';
 import { formatClock } from '../../utils/format-date';
 
@@ -66,6 +67,7 @@ export class Chat {
     private readonly messagesService: Messages,
     protected readonly auth: Auth,
     protected readonly professionals: Professionals,
+    private readonly feedback: Feedback,
   ) {
     // Live messages of this conversation
     effect((onCleanup) => {
@@ -92,7 +94,12 @@ export class Chat {
     if (!text) return;
 
     this.draft = '';
-    this.deliver({ text })?.catch((error) => console.error('Failed to send message', error));
+    this.deliver({ text })?.catch((error) => {
+      console.error('Failed to send message', error);
+      // The text goes back to the field, so nothing is lost
+      if (!this.draft) this.draft = text;
+      this.feedback.show($localize`Não foi possível enviar a mensagem. Tente novamente.`);
+    });
   }
 
   // The clip button: sends each chosen file of the device as a message

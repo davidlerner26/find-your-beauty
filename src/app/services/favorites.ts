@@ -2,6 +2,7 @@ import { computed, effect, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { collection, deleteDoc, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
 import { Auth } from './auth';
+import { Feedback } from './feedback';
 import { db } from './firebase';
 
 // users/{uid}/favorites/{professionalId}: the professionals a client hearted
@@ -15,6 +16,7 @@ export class Favorites {
   constructor(
     private readonly auth: Auth,
     private readonly router: Router,
+    private readonly feedback: Feedback,
   ) {
     effect((onCleanup) => {
       const uid = this.auth.user()?.uid;
@@ -54,7 +56,14 @@ export class Favorites {
     if (this.auth.role() !== 'client') return;
 
     const favorite = doc(db, 'users', uid, 'favorites', professionalId);
-    if (this.has(professionalId)) await deleteDoc(favorite);
-    else await setDoc(favorite, { createdAt: serverTimestamp() });
+    const removing = this.has(professionalId);
+    try {
+      if (removing) await deleteDoc(favorite);
+      else await setDoc(favorite, { createdAt: serverTimestamp() });
+      this.feedback.show(removing ? $localize`Removido dos favoritos` : $localize`Adicionado aos favoritos`, 2500);
+    } catch (error) {
+      this.feedback.show($localize`Não foi possível atualizar os favoritos. Tente novamente.`);
+      throw error;
+    }
   }
 }

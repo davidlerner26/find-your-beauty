@@ -5,6 +5,8 @@ import { filter } from 'rxjs';
 import { Auth } from './services/auth';
 import { Messages } from './services/messages';
 import { Notifications } from './services/notifications';
+import { Feedback } from './services/feedback';
+import { Toast } from './components/toast/toast';
 
 // `badge`: the dot for new messages; `news`: the tab is the one of the notifications (the dot is for the new ones)
 type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean; news?: boolean };
@@ -40,7 +42,7 @@ const AUTH_SCREENS = [
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, MatIconModule],
+  imports: [Toast, RouterOutlet, RouterLink, MatIconModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -109,6 +111,7 @@ export class App {
     router: Router,
     protected readonly messages: Messages,
     private readonly notifications: Notifications,
+    protected readonly feedback: Feedback,
     protected readonly auth: Auth,
     icons: MatIconRegistry,
   ) {

@@ -1146,14 +1146,6 @@
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5670228698089658342" datatype="html">
-        <source>Avaliação enviada. Obrigada!</source>
-        <target>Reseña enviada. ¡Gracias!</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">210</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7648336701214027698" datatype="html">
         <source>Não foi possível enviar a avaliação. Tente novamente.</source>
         <target>No se pudo enviar la reseña. Inténtalo de nuevo.</target>
@@ -4628,6 +4620,146 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
           <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6015118329364673408" datatype="html">
+        <source>Removido dos favoritos</source>
+        <target>Quitado de favoritos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/favorites.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4644351109168408804" datatype="html">
+        <source>Não foi possível enviar a mensagem. Tente novamente.</source>
+        <target>No se pudo enviar el mensaje. Inténtalo de nuevo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/chat/chat.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3009023434354240124" datatype="html">
+        <source>Agendamento cancelado</source>
+        <target>Reserva cancelada</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7307900788578834611" datatype="html">
+        <source>Não foi possível atualizar o agendamento. Tente novamente.</source>
+        <target>No se pudo actualizar la reserva. Inténtalo de nuevo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1045167249783342721" datatype="html">
+        <source>Não foi possível atualizar os favoritos. Tente novamente.</source>
+        <target>No se pudieron actualizar los favoritos. Inténtalo de nuevo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/favorites.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2665052875888150258" datatype="html">
+        <source>Solicitação recusada. O cliente foi avisado.</source>
+        <target>Solicitud rechazada. Se avisó al cliente.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7933509796161574872" datatype="html">
+        <source>Avaliação excluída</source>
+        <target>Reseña eliminada</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
+          <context context-type="linenumber">210</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5226426069032765648" datatype="html">
+        <source>Adicionado aos favoritos</source>
+        <target>Añadido a favoritos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/services/favorites.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4327574126477042153" datatype="html">
+        <source>Agendamento solicitado! Você será avisado quando o profissional responder.</source>
+        <target>¡Reserva solicitada! Te avisaremos cuando el profesional responda.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
+          <context context-type="linenumber">238</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7484335748166230354" datatype="html">
+        <source>Avaliação enviada</source>
+        <target>Reseña enviada</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
+          <context context-type="linenumber">231</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8438869972820024355" datatype="html">
+        <source>Avaliação enviada. Obrigado!</source>
+        <target>Reseña enviada. ¡Gracias!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
+          <context context-type="linenumber">230</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="478690124257759936" datatype="html">
+        <source>Agendamento concluído</source>
+        <target>Reserva completada</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5465125690652827487" datatype="html">
+        <source>Não foi possível cancelar. Tente novamente.</source>
+        <target>No se pudo cancelar. Inténtalo de nuevo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1462470778272758703" datatype="html">
+        <source>Perfil atualizado</source>
+        <target>Perfil actualizado</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/profile/profile.ts</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8395298363027105287" datatype="html">
+        <source>Agendamento confirmado. O cliente foi avisado.</source>
+        <target>Reserva confirmada. Se avisó al cliente.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3171862891282818287" datatype="html">
+        <source>Agendamento cancelado. O cliente foi avisado.</source>
+        <target>Reserva cancelada. Se avisó al cliente.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7153108233437462001" datatype="html">
+        <source>Você saiu da conta</source>
+        <target>Cerraste la sesión</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
+          <context context-type="linenumber">780</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/profile/profile.ts</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
     </body>

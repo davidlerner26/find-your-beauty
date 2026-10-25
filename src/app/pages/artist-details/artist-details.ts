@@ -19,6 +19,7 @@ import { Professionals } from '../../services/professionals';
 import { Favorites } from '../../services/favorites';
 import { Reviews } from '../../services/reviews';
 import { Users } from '../../services/users';
+import { Feedback } from '../../services/feedback';
 import { missingProfileData } from '../../models/user';
 import { Clamped } from '../../utils/clamped.directive';
 import { ruleLabel } from '../../utils/pricing';
@@ -159,6 +160,7 @@ export class ArtistDetails {
     private readonly reviewsService: Reviews,
     private readonly users: Users,
     protected readonly favorites: Favorites,
+    private readonly feedback: Feedback,
   ) {
     effect(() => {
       const id = this.id();
@@ -205,6 +207,7 @@ export class ArtistDetails {
       this.myText = '';
       this.editingReview.set(false);
       this.reviewMessage.set('');
+      this.feedback.show($localize`Avaliação excluída`);
     } catch (error) {
       console.error('Failed to delete review', error);
       this.reviewMessage.set($localize`Não foi possível excluir a avaliação. Tente novamente.`);
@@ -224,7 +227,8 @@ export class ArtistDetails {
       await this.reviewsService.save(this.id(), bookingId, this.myStars(), this.myText);
       this.reviews.set(await this.reviewsService.list(this.id()));
       this.editingReview.set(false);
-      this.reviewMessage.set($localize`Avaliação enviada. Obrigada!`);
+      this.reviewMessage.set($localize`Avaliação enviada. Obrigado!`);
+      this.feedback.show($localize`Avaliação enviada`);
     } catch (error) {
       console.error('Failed to save review', error);
       this.reviewMessage.set($localize`Não foi possível enviar a avaliação. Tente novamente.`);

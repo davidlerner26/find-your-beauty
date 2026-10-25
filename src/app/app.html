@@ -40,3 +40,7 @@
     }
   </nav>
 }
+
+@if (feedback.text()) {
+  <app-toast [text]="feedback.text()" (dismiss)="feedback.dismiss()" />
+}

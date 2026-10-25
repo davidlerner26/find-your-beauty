@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { UserProfile } from '../../models/user';
 import { Users } from '../../services/users';
+import { Feedback } from '../../services/feedback';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { PlaceSuggestions } from '../../components/place-suggestions/place-suggestions';
 import { PlaceSearch } from '../../utils/place-search';
@@ -62,6 +63,7 @@ export class Profile {
   constructor(
     protected readonly auth: Auth,
     private readonly users: Users,
+    private readonly feedback: Feedback,
   ) {}
 
   protected edit(data: UserProfile | null | undefined) {
@@ -116,6 +118,7 @@ export class Profile {
         addressPosition: this.place.position,
       });
       this.editing.set(false);
+      this.feedback.show($localize`Perfil atualizado`);
     } catch (error) {
       console.error('Failed to save profile', error);
       this.saveError.set($localize`Não foi possível salvar. Tente novamente.`);
@@ -131,6 +134,9 @@ export class Profile {
   // Stays on this screen: it turns into the "you are not signed in" view
   protected signOut() {
     this.editing.set(false);
-    this.auth.signOut().catch((error) => console.error('Sign out failed', error));
+    this.auth
+      .signOut()
+      .then(() => this.feedback.show($localize`Você saiu da conta`))
+      .catch((error) => console.error('Sign out failed', error));
   }
 }

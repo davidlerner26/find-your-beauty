@@ -26,6 +26,7 @@ import { Auth } from '../../services/auth';
 import { db } from '../../services/firebase';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Photos } from '../../services/photos';
+import { Feedback } from '../../services/feedback';
 import { PhotoPositioner } from '../../components/photo-positioner/photo-positioner';
 import { DateRangePicker, PendingRange } from '../../components/date-range-picker/date-range-picker';
 import { Instagram } from '../../services/instagram';
@@ -130,6 +131,7 @@ export class ProProfile {
     private readonly photos: Photos,
     private readonly maps: GoogleMapsLoader,
     protected readonly instagramService: Instagram,
+    private readonly feedback: Feedback,
   ) {
     // The profile document may have been created after the list of professionals was loaded (first step of the
     // sign up, with e-mail or Google): the list is read again, once, when the profile is not in it
@@ -773,6 +775,9 @@ export class ProProfile {
 
   protected signOut() {
     this.router.navigateByUrl('/pro/entrar');
-    this.auth.signOut().catch((error) => console.error('Sign out failed', error));
+    this.auth
+      .signOut()
+      .then(() => this.feedback.show($localize`Você saiu da conta`))
+      .catch((error) => console.error('Sign out failed', error));
   }
 }

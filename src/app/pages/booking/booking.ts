@@ -9,6 +9,7 @@ import { Router, RouterLink } from '@angular/router';
 import { DEFAULT_AVAILABILITY } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
+import { Feedback } from '../../services/feedback';
 import { Users } from '../../services/users';
 import { missingProfileData } from '../../models/user';
 import { Professionals } from '../../services/professionals';
@@ -124,6 +125,7 @@ export class Booking {
     private readonly bookings: Bookings,
     private readonly users: Users,
     private readonly host: ElementRef<HTMLElement>,
+    private readonly feedback: Feedback,
   ) {
     effect(() => {
       if (!this.artist() || this.firstDayPicked) return;
@@ -233,6 +235,7 @@ export class Booking {
         ...(place === 'home' ? { clientAddress } : {}),
         paymentStatus: 'pending',
       });
+      this.feedback.show($localize`Agendamento solicitado! Você será avisado quando o profissional responder.`, 5000);
       this.router.navigate(['/agenda']);
     } catch (error) {
       console.error('Failed to create booking', error);

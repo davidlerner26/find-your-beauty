@@ -8,6 +8,7 @@ import { Booking, BookingStatus } from '../../models/booking';
 import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
 import { Professionals } from '../../services/professionals';
+import { Feedback } from '../../services/feedback';
 import { copyText } from '../../utils/clipboard';
 import { T } from '../../utils/texts';
 import { formatClock } from '../../utils/format-date';
@@ -53,6 +54,7 @@ export class MyBookings {
     protected readonly auth: Auth,
     protected readonly bookings: Bookings,
     private readonly professionals: Professionals,
+    private readonly feedback: Feedback,
   ) {}
 
   // Where the appointment is: the address of the professional (nothing for home visits)
@@ -92,6 +94,12 @@ export class MyBookings {
 
   protected cancel(booking: Booking) {
     if (!confirm($localize`Cancelar o agendamento com ${booking.professionalName}:professionalName:?`)) return;
-    this.bookings.cancel(booking).catch((error) => console.error('Failed to cancel booking', error));
+    this.bookings
+      .cancel(booking)
+      .then(() => this.feedback.show($localize`Agendamento cancelado`))
+      .catch((error) => {
+        console.error('Failed to cancel booking', error);
+        this.feedback.show($localize`Não foi possível cancelar. Tente novamente.`);
+      });
   }
 }

@@ -7,6 +7,7 @@ import { Booking, BookingStatus } from '../../models/booking';
 import { Auth } from '../../services/auth';
 import { Bookings } from '../../services/bookings';
 import { Professionals } from '../../services/professionals';
+import { Feedback } from '../../services/feedback';
 import { formatClock } from '../../utils/format-date';
 import { INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
@@ -48,6 +49,7 @@ export class ProAgenda {
     private readonly auth: Auth,
     private readonly bookings: Bookings,
     private readonly professionals: Professionals,
+    private readonly feedback: Feedback,
   ) {}
 
   protected label(booking: Booking) {
@@ -66,8 +68,18 @@ export class ProAgenda {
     // Cancelling a confirmed booking can't be undone: the client is told and the time is released
     if (status === 'cancelledByProfessional' && !confirm($localize`Tem certeza que deseja cancelar este agendamento? O cliente será avisado e o horário será liberado.`)) return;
 
+    const done = {
+      confirmed: $localize`Agendamento confirmado. O cliente foi avisado.`,
+      declined: $localize`Solicitação recusada. O cliente foi avisado.`,
+      cancelledByProfessional: $localize`Agendamento cancelado. O cliente foi avisado.`,
+      completed: $localize`Agendamento concluído`,
+    }[status];
     this.bookings
       .setStatus(booking, status)
-      .catch((error) => console.error('Failed to update booking', error));
+      .then(() => this.feedback.show(done))
+      .catch((error) => {
+        console.error('Failed to update booking', error);
+        this.feedback.show($localize`Não foi possível atualizar o agendamento. Tente novamente.`);
+      });
   }
 }

@@ -1,18 +1,12 @@
 [build]
-  command = "npm run build"
+  command = "node scripts/netlify-build.cjs"
   publish = "dist/find-your-beauty/browser"
 
-# Two environments, one site: the branch `main` is production (findyourbeauty.com.br) and uses the Firebase project of
-# production. Every other branch (develop = dev.findyourbeauty.com.br) and the deploy previews are builds of the test
-# environment: another Firebase project, a banner and a robots.txt that blocks search engines (see docs/ambientes.md).
-[context.production]
-  command = "npm run build"
-
-[context.branch-deploy]
-  command = "npm run build:dev"
-
-[context.deploy-preview]
-  command = "npm run build:dev"
+# Two environments with the same code. The build picks one by the branch (scripts/netlify-build.cjs): `main` is
+# production (findyourbeauty.com.br, Firebase project of production) and any other branch (develop =
+# dev.findyourbeauty.com.br), or deploy preview, is the test environment: another Firebase project, a banner and a
+# robots.txt that blocks search engines (see docs/ambientes.md). It works on one site with branch deploys or on two
+# sites of the same repository (the second one with `develop` as its production branch).
 
 [build.environment]
   NODE_VERSION = "22"

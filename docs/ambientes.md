@@ -4,6 +4,7 @@
 |---|---|---|
 | Endereço | https://findyourbeauty.com.br | https://dev.findyourbeauty.com.br |
 | Branch | `main` | `develop` (e previews de PR) |
+| Site no Netlify | o principal | um segundo site, com `develop` como branch de produção |
 | Projeto Firebase | `find-your-beauty-5c993` (alias `default`) | `find-your-beauty-dev` (alias `dev`) |
 | Config do app | `src/environments/environment.ts` | `src/environments/environment.dev.ts` |
 | Build | `npm run build` | `npm run build:dev` |
@@ -29,9 +30,17 @@ Os dois ambientes são totalmente isolados: contas, agendamentos, fotos, regras 
 8. Criar uma conta no site de teste e, no Console de **teste**, colocar `admin: true` no documento dela em `users` (assim ela aprova profissionais em `/admin`).
 
 ## Netlify (uma vez)
-- Um site só. O `netlify.toml` já escolhe o build: `main` = `npm run build`; demais branches e previews = `npm run build:dev`.
-- Em *Domain management > Branch subdomains*, ligar `dev.findyourbeauty.com.br` à branch `develop`, e no DNS criar o CNAME de `dev` para o endereço que o Netlify indicar.
-- Se criar uma chave nova (Maps ou Firebase) para teste, incluí-la em `SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES` no `netlify.toml`.
+O build escolhe o ambiente pela branch (`scripts/netlify-build.cjs`): `main` = produção, qualquer outra branch ou preview = teste.
+
+**Segundo site para o teste (funciona com qualquer DNS):**
+1. No Netlify, criar um segundo site a partir do mesmo repositório do GitHub.
+2. Em *Site configuration > Build & deploy > Branches*, definir a **branch de produção = `develop`**.
+3. Em *Domain management*, adicionar o domínio `dev.findyourbeauty.com.br`.
+4. No DNS do domínio, criar um CNAME `dev` apontando para o endereço `NOME-DO-SITE-DEV.netlify.app` que o Netlify mostrar. O HTTPS é emitido sozinho.
+
+(Branch subdomains do Netlify só funcionam com o DNS do domínio no Netlify DNS, e o prefixo é o nome da branch, por isso não usamos.)
+
+Se criar uma chave nova (Maps ou Firebase) para teste, incluí-la em `SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES` no `netlify.toml`.
 
 ## Comandos
 ```

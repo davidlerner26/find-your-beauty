@@ -4762,6 +4762,22 @@
           <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="706058144211796504" datatype="html">
+        <source>Você já tem um agendamento neste horário. Escolha outro horário.</source>
+        <target>Ya tienes una reserva en este horario. Elige otro horario.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
+          <context context-type="linenumber">212</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9215825974582528354" datatype="html">
+        <source>Os horários apagados coincidem com um agendamento que você já tem.</source>
+        <target>Los horarios atenuados coinciden con una reserva que ya tienes.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
+          <context context-type="linenumber">91,93</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

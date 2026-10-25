@@ -147,6 +147,18 @@ h2 {
   }
 }
 
+// A time that overlaps another booking of the client
+.time:disabled {
+  opacity: 0.4;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.conflict-note {
+  margin: -0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+}
+
 textarea {
   width: 100%;
   padding: 1rem 1.25rem;

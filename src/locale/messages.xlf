@@ -169,7 +169,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">169,170</context>
+          <context context-type="linenumber">179,180</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1646330128594532876" datatype="html">
@@ -184,7 +184,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7488045712704196095" datatype="html">
@@ -284,6 +284,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/service-sheet/service-sheet.html</context>
           <context context-type="linenumber">45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/toast/toast.ts</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4450594804566442438" datatype="html">
@@ -630,7 +634,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">118,120</context>
+          <context context-type="linenumber">123,125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6270278858592007485" datatype="html">
@@ -1025,7 +1029,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">116,117</context>
+          <context context-type="linenumber">121,122</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/chat/chat.html</context>
@@ -1142,39 +1146,46 @@
         <source><x id="START_BLOCK_IF" equiv-text="@if (!selectedDay()) {"/> Escolha um dia para ver os horários. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Não há horários livres neste dia. Escolha outro. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">82,84</context>
+          <context context-type="linenumber">83,85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9215825974582528354" datatype="html">
+        <source>Os horários apagados coincidem com um agendamento que você já tem.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
+          <context context-type="linenumber">91,93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3980283821070310969" datatype="html">
         <source>Observações</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">90,91</context>
+          <context context-type="linenumber">95,96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5145715813202381123" datatype="html">
         <source>Digite suas observações aqui</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9123341664273923916" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Total<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ selectedServices().length }}"/> <x id="START_BLOCK_IF" equiv-text="@if (selectedServices().length === 1) {"/> serviço <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> serviços <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/>)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">101,102</context>
+          <context context-type="linenumber">106,107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8346791740783408128" datatype="html">
         <source>Conversar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">110</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">105,106</context>
+          <context context-type="linenumber">110,111</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.html</context>
@@ -1185,39 +1196,46 @@
         <source>Finalizar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">113</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="706058144211796504" datatype="html">
+        <source>Você já tem um agendamento neste horário. Escolha outro horário.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52534276559961202" datatype="html">
         <source>Não foi possível verificar seus dados. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4327574126477042153" datatype="html">
         <source>Agendamento solicitado! Você será avisado quando o profissional responder.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3664968154113291246" datatype="html">
         <source>Este horário acabou de ser ocupado. Escolha outro.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3385582092400085537" datatype="html">
         <source>Não foi possível enviar a solicitação. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8325619538680802677" datatype="html">
@@ -2049,7 +2067,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">133,134</context>
+          <context context-type="linenumber">143,144</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2994342140292353357" datatype="html">
@@ -3378,11 +3396,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">130,131</context>
+          <context context-type="linenumber">140,141</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">134,135</context>
+          <context context-type="linenumber">144,145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1340119584951495206" datatype="html">
@@ -3452,123 +3470,123 @@
         <source>A partir de <x id="INTERPOLATION" equiv-text="{{ item.minPrice | price }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">116,118</context>
+          <context context-type="linenumber">126,128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8172034361025965750" datatype="html">
         <source>Redefinir</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">135,136</context>
+          <context context-type="linenumber">145,146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7372785278073454552" datatype="html">
         <source>Ordenar por</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">139,140</context>
+          <context context-type="linenumber">149,150</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1312934554000261100" datatype="html">
         <source>Permita a localização para ordenar por distância.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">154,155</context>
+          <context context-type="linenumber">164,165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6965714060054082080" datatype="html">
         <source>Bairro</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">157,158</context>
+          <context context-type="linenumber">167,168</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">158</context>
+          <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4001364699388512733" datatype="html">
         <source>Todos os bairros do Rio de Janeiro</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">159,160</context>
+          <context context-type="linenumber">169,170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7627691716853329276" datatype="html">
         <source>Disponível em</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">165,166</context>
+          <context context-type="linenumber">175,176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7389321923537059236" datatype="html">
         <source>Serviço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">196,197</context>
+          <context context-type="linenumber">206,207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8010033439324555430" datatype="html">
         <source>Avaliação</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">210,211</context>
+          <context context-type="linenumber">220,221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3389231234165401661" datatype="html">
         <source><x id="START_BLOCK_IF" equiv-text="@if (draft.minRating) {"/> <x id="INTERPOLATION" equiv-text="{{ draft.minRating }}"/> estrelas ou mais <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Qualquer nota <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">224,225</context>
+          <context context-type="linenumber">234,235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5544336891669808432" datatype="html">
         <source>Distância</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">227,228</context>
+          <context context-type="linenumber">237,238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7047867908750513008" datatype="html">
         <source><x id="START_BLOCK_IF" equiv-text="@if (!userPosition()) {"/> Permita a localização para filtrar por distância. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_BLOCK_IF_1" equiv-text="@if (draft.maxKm &gt;= maxKm) {"/> Sem limite <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Até <x id="INTERPOLATION" equiv-text="{{ draft.maxKm }}"/> km <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">238,244</context>
+          <context context-type="linenumber">248,254</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3806605441606824616" datatype="html">
         <source>Mostrar resultados</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">246,247</context>
+          <context context-type="linenumber">256,257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3003942307958583176" datatype="html">
         <source>Menor preço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.ts</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6322321840987457740" datatype="html">
         <source>Melhor avaliação</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3086873208636534118" datatype="html">
         <source>Mais próximo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="846180615754773275" datatype="html">
         <source>Maior preço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1746956770907132446" datatype="html">

@@ -110,6 +110,25 @@ export class Booking {
     });
   });
 
+  // A client can't have two bookings at the same time, even with different professionals:
+  // the times that overlap a booking that is waiting or confirmed are not offered
+  protected hasConflict(time: string, day = this.selectedDay()) {
+    if (!day) return false;
+    const [hour, minute] = time.split(':').map(Number);
+    const start = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, minute).getTime();
+    const end = start + this.duration() * 60000;
+    return this.bookings
+      .mine()
+      .some(
+        (booking) =>
+          ['pending', 'confirmed'].includes(booking.status) &&
+          booking.startsAt.getTime() < end &&
+          booking.startsAt.getTime() + booking.durationMinutes * 60000 > start,
+      );
+  }
+
+  protected readonly someConflict = computed(() => this.times().some((time) => this.hasConflict(time)));
+
   protected readonly canCheckout = computed(() => !!this.selectedDay() && !!this.selectedTime() && !this.saving());
   protected readonly saving = signal(false);
   protected readonly error = signal('');
@@ -186,6 +205,11 @@ export class Booking {
 
     if (!this.auth.user()) {
       this.router.navigate(['/entrar']);
+      return;
+    }
+
+    if (this.hasConflict(time, day)) {
+      this.error.set($localize`Você já tem um agendamento neste horário. Escolha outro horário.`);
       return;
     }
 

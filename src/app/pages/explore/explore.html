@@ -193,6 +193,6 @@
 @if (floatingId(); as id) {
   <!-- Wide screens: the page of the professional as a card on top of the map (the map stays usable) -->
   <div class="floating-card" role="dialog">
-    <app-artist-details [id]="id" [floating]="true" (closed)="closeFloating()" />
+    <app-artist-details [id]="id" [floating]="true" (closed)="closeFloating()" (locate)="centerOn(id)" />
   </div>
 }

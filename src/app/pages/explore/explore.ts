@@ -125,6 +125,18 @@ export class Explore implements OnInit {
       if (tag && this.filters.includes(tag)) this.activeFilters.set([tag]);
     });
 
+    // The map button of a professional page: selects her pin and goes there
+    effect(() => {
+      const id = this.focus();
+      if (!id) return;
+      const index = this.visibleSalons.findIndex((salon) => salon.id === id);
+      if (index < 0) return;
+      lastSelectedId = id;
+      this.restored = true;
+      this.selected.set(index);
+      this.center.set({ ...this.visibleSalons[index].position });
+    });
+
     // The card of a professional is open: their pin is selected and the map goes there
     effect(() => {
       const id = this.openId();
@@ -312,9 +324,17 @@ export class Explore implements OnInit {
 
   // The professional whose page is a card over the map (wide screens: the route /profissionais/:id)
   readonly openId = input<string>();
+  // Coming from the map button of a professional page (?focus=id): the map goes to her pin
+  readonly focus = input<string>();
   protected readonly floatingId = computed(() => this.openId() ?? null);
 
   // Closing the card goes back to the map
+  // Takes the map to the pin of the professional (a new object, so it moves even if the map was dragged away)
+  protected centerOn(id: string) {
+    const salon = this.visibleSalons.find((item) => item.id === id);
+    if (salon) this.center.set({ ...salon.position });
+  }
+
   protected closeFloating(event?: Event) {
     event?.stopPropagation();
     // Nothing stays selected (the map screen is rebuilt, so the memory of the last card is cleared too)

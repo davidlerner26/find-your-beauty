@@ -39,7 +39,7 @@
           <mat-icon [class.filled]="favorites.has(artist.id)">favorite</mat-icon>
         </button>
       }
-      <a i18n-aria-label class="round" routerLink="/explore" aria-label="Ver no mapa">
+      <a i18n-aria-label class="round" [routerLink]="floating() ? null : '/explore'" [queryParams]="{ focus: artist.id }" aria-label="Ver no mapa" (click)="onMapButton($event)">
         <mat-icon class="filled">map</mat-icon>
       </a>
     </div>

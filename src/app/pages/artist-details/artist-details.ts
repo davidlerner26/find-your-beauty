@@ -40,6 +40,8 @@ export class ArtistDetails {
   // Shown floating over another screen (the map): going back closes it instead of leaving the screen
   readonly floating = input(false);
   readonly closed = output<void>();
+  // The map button, when this page is a card over the map: asks the map to go to this professional
+  readonly locate = output<void>();
 
   protected readonly artist = computed(() => this.professionals.byId(this.id()));
   protected readonly aboutExpanded = signal(false);
@@ -241,6 +243,11 @@ export class ArtistDetails {
   protected onHeroScroll(event: Event) {
     const strip = event.target as HTMLElement;
     this.heroIndex.set(Math.round(strip.scrollLeft / strip.clientWidth));
+  }
+
+  protected onMapButton(event: Event) {
+    if (!this.floating()) return;
+    this.locate.emit();
   }
 
   protected goBack() {

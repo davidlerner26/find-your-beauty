@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { RJ_NEIGHBORHOODS } from '../../models/neighborhoods';
 import { hasLocation, locationLabel, Professional } from '../../models/professional';
+import { Favorites } from '../../services/favorites';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
 import { lowestPrice } from '../../utils/pricing';
@@ -208,6 +209,7 @@ export class Search {
     protected readonly professionals: Professionals,
     private readonly userLocation: UserLocation,
     private readonly host: ElementRef<HTMLElement>,
+    protected readonly favorites: Favorites,
   ) {
     effect(() => {
       const q = this.q();
@@ -215,6 +217,13 @@ export class Search {
       this.query = q;
       this.term.set(q);
     });
+  }
+
+  // The heart sits inside a card that is a link: it must not open the page
+  protected toggleFavorite(event: Event, id: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.favorites.toggle(id).catch((error) => console.error('Failed to update favorite', error));
   }
 
   protected goBack() {

@@ -160,6 +160,16 @@
                 }
               </div>
             }
+            @if (favorites.available()) {
+              <button
+                type="button"
+                class="heart"
+                [attr.aria-label]="t.favorite(favorites.has(offer.id))"
+                (click)="toggleFavorite($event, offer.id)"
+              >
+                <mat-icon [class.filled]="favorites.has(offer.id)">favorite</mat-icon>
+              </button>
+            }
             @if (offer.distance) {
               <span class="distance">{{ offer.distance }}</span>
             }

@@ -176,6 +176,21 @@ h2 {
   background-color: var(--primary-light);
 }
 
+// The heart on the corner of the photo
+.heart {
+  z-index: 1;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #e5484d;
+  cursor: pointer;
+}
+
 // Swipe sideways with the finger to go through the photos
 .photos {
   position: absolute;

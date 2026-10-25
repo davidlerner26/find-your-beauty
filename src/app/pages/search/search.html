@@ -99,6 +99,16 @@
           </div>
         }
       </div>
+      @if (favorites.available()) {
+        <button
+          type="button"
+          class="heart"
+          [attr.aria-label]="t.favorite(favorites.has(item.id))"
+          (click)="toggleFavorite($event, item.id)"
+        >
+          <mat-icon [class.filled]="favorites.has(item.id)">favorite</mat-icon>
+        </button>
+      }
       @if (item.photos.length > 1) {
         <app-carousel-arrows [target]="photosEl" />
         <div class="dots" aria-hidden="true">

@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --configuration dev",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start:en": "ng serve --configuration en",
     "start:es": "ng serve --configuration es",
     "i18n": "ng extract-i18n",
-    "start:dev": "ng serve --configuration dev",
+    "start:prod": "ng serve --configuration production",
     "build:dev": "ng build --configuration dev && node scripts/robots-dev.cjs",
     "deploy:dev": "firebase deploy --project dev",
     "deploy:prod": "firebase deploy --project default"

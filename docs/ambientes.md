@@ -44,7 +44,8 @@ Se criar uma chave nova (Maps ou Firebase) para teste, incluí-la em `SECRETS_SC
 
 ## Comandos
 ```
-npm run start:dev      # app local falando com o Firebase de teste
+npm start              # app local falando com o Firebase de teste (ambiente dev)
+npm run start:prod     # app local falando com o Firebase de produção
 npm run build:dev      # build de teste (gera também o robots.txt)
 npm run deploy:dev     # Functions, regras e índices no projeto de teste
 npm run deploy:prod    # o mesmo no projeto de produção

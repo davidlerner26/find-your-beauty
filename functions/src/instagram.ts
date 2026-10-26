@@ -90,56 +90,59 @@ const requireProfessional = async (uid: string | undefined) => {
 };
 
 // Step 2 of the OAuth flow: the page got a `code` back from Instagram and sends it here
-export const connectInstagram = onCall({ secrets: [appSecret] }, async (request) => {
-  const uid = await requireProfessional(request.auth?.uid);
-  const { code, redirectUri } = request.data as { code?: string; redirectUri?: string };
-  if (!code || !redirectUri) throw new HttpsError('invalid-argument', 'Código ausente.');
-  if (!appId.value())
-    throw new HttpsError('failed-precondition', 'INSTAGRAM_APP_ID não configurado.');
+export const connectInstagram = onCall(
+  { invoker: 'public', secrets: [appSecret] },
+  async (request) => {
+    const uid = await requireProfessional(request.auth?.uid);
+    const { code, redirectUri } = request.data as { code?: string; redirectUri?: string };
+    if (!code || !redirectUri) throw new HttpsError('invalid-argument', 'Código ausente.');
+    if (!appId.value())
+      throw new HttpsError('failed-precondition', 'INSTAGRAM_APP_ID não configurado.');
 
-  const short = await getJson('https://api.instagram.com/oauth/access_token', {
-    method: 'POST',
-    body: new URLSearchParams({
-      client_id: appId.value(),
-      client_secret: appSecret.value(),
-      grant_type: 'authorization_code',
-      redirect_uri: redirectUri,
-      code,
-    }),
-  });
-  const long = await getJson(
-    `${GRAPH}/access_token?grant_type=ig_exchange_token&client_secret=${appSecret.value()}&access_token=${short['access_token']}`,
-  );
-  const token = long['access_token'] as string;
-  const me = await getJson(`${GRAPH}/me?fields=user_id,username&access_token=${token}`);
-
-  // The token is only readable by Cloud Functions: no rule opens the `private` documents
-  await tokenRef(uid).set({
-    token,
-    expiresAt: Date.now() + (long['expires_in'] as number) * 1000,
-    igUserId: me['user_id'],
-  } satisfies Token & { igUserId: string });
-  await db()
-    .doc(`professionals/${uid}`)
-    .update({
-      instagram: me['username'],
-      instagramConnected: true,
-      instagramUserId: String(me['user_id']),
+    const short = await getJson('https://api.instagram.com/oauth/access_token', {
+      method: 'POST',
+      body: new URLSearchParams({
+        client_id: appId.value(),
+        client_secret: appSecret.value(),
+        grant_type: 'authorization_code',
+        redirect_uri: redirectUri,
+        code,
+      }),
     });
+    const long = await getJson(
+      `${GRAPH}/access_token?grant_type=ig_exchange_token&client_secret=${appSecret.value()}&access_token=${short['access_token']}`,
+    );
+    const token = long['access_token'] as string;
+    const me = await getJson(`${GRAPH}/me?fields=user_id,username&access_token=${token}`);
 
-  const photos = await syncPhotos(uid, token);
-  return { username: me['username'] as string, photos };
-});
+    // The token is only readable by Cloud Functions: no rule opens the `private` documents
+    await tokenRef(uid).set({
+      token,
+      expiresAt: Date.now() + (long['expires_in'] as number) * 1000,
+      igUserId: me['user_id'],
+    } satisfies Token & { igUserId: string });
+    await db()
+      .doc(`professionals/${uid}`)
+      .update({
+        instagram: me['username'],
+        instagramConnected: true,
+        instagramUserId: String(me['user_id']),
+      });
+
+    const photos = await syncPhotos(uid, token);
+    return { username: me['username'] as string, photos };
+  },
+);
 
 // The professional asks for the latest photos
-export const refreshInstagram = onCall(async (request) => {
+export const refreshInstagram = onCall({ invoker: 'public' }, async (request) => {
   const uid = await requireProfessional(request.auth?.uid);
   const saved = (await tokenRef(uid).get()).data() as Token | undefined;
   if (!saved) throw new HttpsError('failed-precondition', 'Instagram não conectado.');
   return { photos: await syncPhotos(uid, saved.token) };
 });
 
-export const disconnectInstagram = onCall(async (request) => {
+export const disconnectInstagram = onCall({ invoker: 'public' }, async (request) => {
   const uid = await requireProfessional(request.auth?.uid);
   await tokenRef(uid).delete();
   const [files] = await getStorage()

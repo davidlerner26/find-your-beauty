@@ -610,9 +610,14 @@ const enforce = async (limits: { limit: RateLimit; message: string }[]) => {
   }
 };
 
+// Callables are called by the browser, signed in or not (what a call may do is checked inside it), so Cloud Run has
+// to let anyone invoke them. It is said here so that every deploy sets it: a function that was created by a deploy
+// that failed halfway kept refusing the browser (403) until it was.
+const PUBLIC = { invoker: 'public' } as const;
+
 // Password reset, sent by Resend instead of by Firebase. It always answers ok, so nobody can find out
 // which e-mails have an account. Calls over the limit of one e-mail are dropped quietly for the same reason.
-export const sendPasswordReset = onCall({ secrets: [resendKey] }, async (request) => {
+export const sendPasswordReset = onCall({ ...PUBLIC, secrets: [resendKey] }, async (request) => {
   const lang = asLang(request.data?.lang);
   const email = String(request.data?.email ?? '')
     .trim()
@@ -732,7 +737,7 @@ const userByEmail = async (email: string) => {
 };
 
 // Sends a new code. It says ok for an unknown or already verified e-mail, so nobody can find out which have an account.
-export const sendVerificationCode = onCall({ secrets: [resendKey] }, async (request) => {
+export const sendVerificationCode = onCall({ ...PUBLIC, secrets: [resendKey] }, async (request) => {
   const lang = asLang(request.data?.lang);
   const email = cleanEmail(request.data?.email, lang);
 
@@ -798,7 +803,7 @@ export const sendVerificationCode = onCall({ secrets: [resendKey] }, async (requ
 });
 
 // Checks the code and marks the e-mail as verified
-export const verifyEmailCode = onCall({ secrets: [resendKey] }, async (request) => {
+export const verifyEmailCode = onCall({ ...PUBLIC, secrets: [resendKey] }, async (request) => {
   const lang = asLang(request.data?.lang);
   const email = cleanEmail(request.data?.email, lang);
   const code = String(request.data?.code ?? '').trim();

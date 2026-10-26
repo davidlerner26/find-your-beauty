@@ -8,5 +8,8 @@ const production = branch === 'main';
 const script = production ? 'build' : 'build:dev';
 console.log(`Netlify branch "${branch}" -> npm run ${script}`);
 
-const result = spawnSync('npm', ['run', script], { stdio: 'inherit', shell: process.platform === 'win32' });
+const result = spawnSync('npm', ['run', script], {
+  stdio: 'inherit',
+  shell: process.platform === 'win32',
+});
 process.exit(result.status ?? 1);

@@ -28,7 +28,8 @@ const getJson = async (url: string, init?: RequestInit) => {
   const response = await fetch(url, init);
   const json = (await response.json()) as Record<string, any>;
   if (!response.ok || json['error'] || json['error_message']) {
-    const message = json['error']?.['message'] ?? json['error_message'] ?? `HTTP ${response.status}`;
+    const message =
+      json['error']?.['message'] ?? json['error_message'] ?? `HTTP ${response.status}`;
     throw new HttpsError('failed-precondition', `Instagram: ${message}`);
   }
   return json;
@@ -73,7 +74,9 @@ async function syncPhotos(uid: string, token: string) {
   const [files] = await bucket.getFiles({ prefix: `professionals/${uid}/instagram/` });
   await Promise.all(files.filter((file) => !keep.has(file.name)).map((file) => file.delete()));
 
-  await db().doc(`professionals/${uid}`).update({ instagramPhotos: photos, instagramSyncedAt: FieldValue.serverTimestamp() });
+  await db()
+    .doc(`professionals/${uid}`)
+    .update({ instagramPhotos: photos, instagramSyncedAt: FieldValue.serverTimestamp() });
   return photos.length;
 }
 
@@ -90,7 +93,8 @@ export const connectInstagram = onCall({ secrets: [appSecret] }, async (request)
   const uid = await requireProfessional(request.auth?.uid);
   const { code, redirectUri } = request.data as { code?: string; redirectUri?: string };
   if (!code || !redirectUri) throw new HttpsError('invalid-argument', 'Código ausente.');
-  if (!appId.value()) throw new HttpsError('failed-precondition', 'INSTAGRAM_APP_ID não configurado.');
+  if (!appId.value())
+    throw new HttpsError('failed-precondition', 'INSTAGRAM_APP_ID não configurado.');
 
   const short = await getJson('https://api.instagram.com/oauth/access_token', {
     method: 'POST',
@@ -116,7 +120,11 @@ export const connectInstagram = onCall({ secrets: [appSecret] }, async (request)
   } satisfies Token & { igUserId: string });
   await db()
     .doc(`professionals/${uid}`)
-    .update({ instagram: me['username'], instagramConnected: true, instagramUserId: String(me['user_id']) });
+    .update({
+      instagram: me['username'],
+      instagramConnected: true,
+      instagramUserId: String(me['user_id']),
+    });
 
   const photos = await syncPhotos(uid, token);
   return { username: me['username'] as string, photos };
@@ -133,7 +141,9 @@ export const refreshInstagram = onCall(async (request) => {
 export const disconnectInstagram = onCall(async (request) => {
   const uid = await requireProfessional(request.auth?.uid);
   await tokenRef(uid).delete();
-  const [files] = await getStorage().bucket().getFiles({ prefix: `professionals/${uid}/instagram/` });
+  const [files] = await getStorage()
+    .bucket()
+    .getFiles({ prefix: `professionals/${uid}/instagram/` });
   await Promise.all(files.map((file) => file.delete()));
   await db().doc(`professionals/${uid}`).update({
     instagramConnected: false,
@@ -143,66 +153,87 @@ export const disconnectInstagram = onCall(async (request) => {
 });
 
 // Every night: keeps the tokens alive (60 days) and the photos up to date
-export const syncInstagramDaily = onSchedule({ schedule: 'every day 04:00', timeZone: 'America/Sao_Paulo' }, async () => {
-  // Environments without an Instagram app (the test one) have nothing to sync
-  if (!appId.value()) return;
+export const syncInstagramDaily = onSchedule(
+  { schedule: 'every day 04:00', timeZone: 'America/Sao_Paulo' },
+  async () => {
+    // Environments without an Instagram app (the test one) have nothing to sync
+    if (!appId.value()) return;
 
-  const connected = await db().collection('professionals').where('instagramConnected', '==', true).get();
+    const connected = await db()
+      .collection('professionals')
+      .where('instagramConnected', '==', true)
+      .get();
 
-  for (const professional of connected.docs) {
-    const uid = professional.id;
-    try {
-      const saved = (await tokenRef(uid).get()).data() as Token | undefined;
-      if (!saved) continue;
+    for (const professional of connected.docs) {
+      const uid = professional.id;
+      try {
+        const saved = (await tokenRef(uid).get()).data() as Token | undefined;
+        if (!saved) continue;
 
-      let { token } = saved;
-      if (saved.expiresAt - Date.now() < REFRESH_WITHIN_DAYS * 86_400_000) {
-        const refreshed = await getJson(`${GRAPH}/refresh_access_token?grant_type=ig_refresh_token&access_token=${token}`);
-        token = refreshed['access_token'];
-        await tokenRef(uid).update({ token, expiresAt: Date.now() + (refreshed['expires_in'] as number) * 1000 });
+        let { token } = saved;
+        if (saved.expiresAt - Date.now() < REFRESH_WITHIN_DAYS * 86_400_000) {
+          const refreshed = await getJson(
+            `${GRAPH}/refresh_access_token?grant_type=ig_refresh_token&access_token=${token}`,
+          );
+          token = refreshed['access_token'];
+          await tokenRef(uid).update({
+            token,
+            expiresAt: Date.now() + (refreshed['expires_in'] as number) * 1000,
+          });
+        }
+        await syncPhotos(uid, token);
+      } catch (error) {
+        console.error(`Instagram sync failed for ${uid}`, error);
       }
-      await syncPhotos(uid, token);
-    } catch (error) {
-      console.error(`Instagram sync failed for ${uid}`, error);
     }
-  }
-});
+  },
+);
 
 // Meta calls this when a professional removes the app in Instagram (deauthorize) or asks to delete her data.
 // The request is a form with `signed_request`, signed with the app secret. Her token and the photos we copied
 // are deleted. The answer for a data deletion request is a JSON with a page about it and a confirmation code.
-export const instagramDataDeletion = onRequest({ secrets: [appSecret], cors: false }, async (request, response) => {
-  const signed = String(request.body?.signed_request ?? '');
-  const [signature, payload] = signed.split('.');
-  if (!signature || !payload) {
-    response.status(400).json({ error: 'signed_request ausente' });
-    return;
-  }
-
-  const expected = createHmac('sha256', appSecret.value()).update(payload).digest();
-  const received = Buffer.from(signature, 'base64url');
-  if (received.length !== expected.length || !timingSafeEqual(received, expected)) {
-    response.status(403).json({ error: 'assinatura inválida' });
-    return;
-  }
-
-  const { user_id: igUserId } = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as { user_id?: string };
-  if (igUserId) {
-    const found = await db().collection('professionals').where('instagramUserId', '==', String(igUserId)).get();
-    for (const professional of found.docs) {
-      const uid = professional.id;
-      await tokenRef(uid).delete();
-      const [files] = await getStorage().bucket().getFiles({ prefix: `professionals/${uid}/instagram/` });
-      await Promise.all(files.map((file) => file.delete()));
-      await professional.ref.update({
-        instagramConnected: false,
-        instagramPhotos: [],
-        instagramSyncedAt: FieldValue.delete(),
-        instagramUserId: FieldValue.delete(),
-      });
+export const instagramDataDeletion = onRequest(
+  { secrets: [appSecret], cors: false },
+  async (request, response) => {
+    const signed = String(request.body?.signed_request ?? '');
+    const [signature, payload] = signed.split('.');
+    if (!signature || !payload) {
+      response.status(400).json({ error: 'signed_request ausente' });
+      return;
     }
-  }
 
-  const base = appUrl.value();
-  response.json({ url: `${base}/privacidade`, confirmation_code: String(igUserId ?? 'none') });
-});
+    const expected = createHmac('sha256', appSecret.value()).update(payload).digest();
+    const received = Buffer.from(signature, 'base64url');
+    if (received.length !== expected.length || !timingSafeEqual(received, expected)) {
+      response.status(403).json({ error: 'assinatura inválida' });
+      return;
+    }
+
+    const { user_id: igUserId } = JSON.parse(
+      Buffer.from(payload, 'base64url').toString('utf8'),
+    ) as { user_id?: string };
+    if (igUserId) {
+      const found = await db()
+        .collection('professionals')
+        .where('instagramUserId', '==', String(igUserId))
+        .get();
+      for (const professional of found.docs) {
+        const uid = professional.id;
+        await tokenRef(uid).delete();
+        const [files] = await getStorage()
+          .bucket()
+          .getFiles({ prefix: `professionals/${uid}/instagram/` });
+        await Promise.all(files.map((file) => file.delete()));
+        await professional.ref.update({
+          instagramConnected: false,
+          instagramPhotos: [],
+          instagramSyncedAt: FieldValue.delete(),
+          instagramUserId: FieldValue.delete(),
+        });
+      }
+    }
+
+    const base = appUrl.value();
+    response.json({ url: `${base}/privacidade`, confirmation_code: String(igUserId ?? 'none') });
+  },
+);

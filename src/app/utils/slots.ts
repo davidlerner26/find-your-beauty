@@ -14,8 +14,9 @@ export const toDateKey = (date: Date) =>
 
 export const isBlocked = (dateKey: string, availability: Availability) =>
   // "yyyy-mm-dd" strings compare in date order
-  (availability.blockedRanges ?? []).some((range) => dateKey >= range.start && dateKey <= range.end) ||
-  (availability.blockedDates ?? []).includes(dateKey);
+  (availability.blockedRanges ?? []).some(
+    (range) => dateKey >= range.start && dateKey <= range.end,
+  ) || (availability.blockedDates ?? []).includes(dateKey);
 
 export const isWorkingDay = (date: Date, availability: Availability) =>
   !!availability.weekly[date.getDay()]?.enabled && !isBlocked(toDateKey(date), availability);
@@ -57,5 +58,8 @@ export const busyIdsFor = (
   slotMinutes: number,
 ) => {
   const count = slotCount(durationMinutes, slotMinutes);
-  return Array.from({ length: count }, (_, i) => `${dateKey}_${toTime(toMinutes(startTime) + i * slotMinutes)}`);
+  return Array.from(
+    { length: count },
+    (_, i) => `${dateKey}_${toTime(toMinutes(startTime) + i * slotMinutes)}`,
+  );
 };

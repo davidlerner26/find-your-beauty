@@ -1,6 +1,11 @@
 @if (artist(); as artist) {
   @if (viewer(); as open) {
-    <app-photo-viewer [photos]="open.photos" [start]="open.index" [alt]="artist.name" (closed)="viewer.set(null)" />
+    <app-photo-viewer
+      [photos]="open.photos"
+      [start]="open.index"
+      [alt]="artist.name"
+      (closed)="viewer.set(null)"
+    />
   }
   @if (toast()) {
     <app-toast [text]="toast()" (dismiss)="toast.set('')" />
@@ -13,7 +18,9 @@
           (click)="openViewer($event, heroPhotos(artist), i)"
           [src]="photo"
           [alt]="t.photoOf(artist.name)"
-          [style.object-position]="(photo === artist.image ? artist.imagePosition : undefined) | focus"
+          [style.object-position]="
+            (photo === artist.image ? artist.imagePosition : undefined) | focus
+          "
         />
       }
     </div>
@@ -39,7 +46,14 @@
           <mat-icon [class.filled]="favorites.has(artist.id)">favorite</mat-icon>
         </button>
       }
-      <a i18n-aria-label class="round" [routerLink]="floating() ? null : '/explore'" [queryParams]="{ focus: artist.id }" aria-label="Ver no mapa" (click)="onMapButton()">
+      <a
+        i18n-aria-label
+        class="round"
+        [routerLink]="floating() ? null : '/explore'"
+        [queryParams]="{ focus: artist.id }"
+        aria-label="Ver no mapa"
+        (click)="onMapButton()"
+      >
         <mat-icon class="filled">map</mat-icon>
       </a>
     </div>
@@ -49,7 +63,8 @@
     <header class="intro">
       <div class="name-row">
         <h1>{{ artist.name }}</h1>
-        <a i18n-aria-label
+        <a
+          i18n-aria-label
           class="chat-icon"
           [routerLink]="['/mensagens', artist.id]"
           aria-label="Conversar com {{ artist.name }}"
@@ -58,7 +73,11 @@
         </a>
       </div>
       <p i18n class="muted address">
-        @if (artist.serviceMode === 'home') { Atendimento a domicílio } @else { {{ artist.address | address }} }
+        @if (artist.serviceMode === 'home') {
+          Atendimento a domicílio
+        } @else {
+          {{ artist.address | address }}
+        }
         @if (artist.serviceMode !== 'home' && artist.address) {
           <!-- Right after the last word of the address, even when the address breaks into lines -->
           <button
@@ -75,7 +94,7 @@
       @if (artist.serviceMode === 'both') {
         <p i18n class="muted">Também atende a domicílio</p>
       }
-<!-- Instagram desligado por enquanto (a integração ainda não foi configurada na Meta). Para voltar, é só tirar este comentário.
+      <!-- Instagram desligado por enquanto (a integração ainda não foi configurada na Meta). Para voltar, é só tirar este comentário.
       @if (artist.instagram) {
         <a class="instagram" [href]="instagramUrl(artist.instagram)" target="_blank" rel="noopener">
           <svg
@@ -94,7 +113,8 @@
         </a>
       }
 
--->      <div class="facts">
+-->
+      <div class="facts">
         <p i18n>
           <mat-icon>schedule</mat-icon>
           Aberto hoje
@@ -104,7 +124,10 @@
           {{ artist.views }} visualizações
         </p>
         <p>
-          <mat-icon class="star filled">star</mat-icon> <strong>{{ artist.rating }}</strong> ({{ artist.reviewsCount }} {{ artist.reviewsCount | reviewsLabel }})
+          <mat-icon class="star filled">star</mat-icon> <strong>{{ artist.rating }}</strong> ({{
+            artist.reviewsCount
+          }}
+          {{ artist.reviewsCount | reviewsLabel }})
         </p>
       </div>
     </header>
@@ -117,7 +140,11 @@
         }
       </div>
       <button i18n type="button" class="link" (click)="aboutExpanded.set(!aboutExpanded())">
-        @if (aboutExpanded()) { Ler menos } @else { Ler mais }
+        @if (aboutExpanded()) {
+          Ler menos
+        } @else {
+          Ler mais
+        }
       </button>
     </section>
 
@@ -157,10 +184,20 @@
             <!-- The photos of the service (swipe sideways). Without photos, the card has no picture. -->
             @if (service.photos?.length) {
               <div class="service-image">
-                <div #servicePhotosEl class="service-photos" (scroll)="onServicePhotos($event, service.id)">
+                <div
+                  #servicePhotosEl
+                  class="service-photos"
+                  (scroll)="onServicePhotos($event, service.id)"
+                >
                   @for (photo of service.photos; track photo; let n = $index) {
                     <div class="service-slide">
-                      <img (click)="openViewer($event, service.photos!, n)" [src]="photo" [alt]="service.name" loading="lazy" draggable="false" />
+                      <img
+                        (click)="openViewer($event, service.photos!, n)"
+                        [src]="photo"
+                        [alt]="service.name"
+                        loading="lazy"
+                        draggable="false"
+                      />
                     </div>
                   }
                 </div>
@@ -183,7 +220,9 @@
               @if (service.priceRules?.length) {
                 <ul class="price-rules muted">
                   @for (rule of service.priceRules; track $index) {
-                    <li>{{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong></li>
+                    <li>
+                      {{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong>
+                    </li>
                   }
                 </ul>
               }
@@ -204,14 +243,18 @@
               [attr.aria-label]="t.addService(isSelected(service), service.name)"
               (click)="$event.stopPropagation(); toggleService(service)"
             >
-              @if (isSelected(service)) { − } @else { + }
+              @if (isSelected(service)) {
+                −
+              } @else {
+                +
+              }
             </button>
           </article>
         }
       </div>
     </section>
 
-<!-- Instagram desligado por enquanto (a integração ainda não foi configurada na Meta). Para voltar, é só tirar este comentário.
+    <!-- Instagram desligado por enquanto (a integração ainda não foi configurada na Meta). Para voltar, é só tirar este comentário.
     @if (artist.instagramPhotos?.length) {
       <section>
         <div class="section-head">
@@ -243,7 +286,13 @@
       @if (auth.role() === 'client') {
         @if (reviewBookingId() && (!myReview || editingReview())) {
           <form class="review-form" (ngSubmit)="sendReview()">
-            <p i18n class="review-title">@if (myReview) { Sua avaliação } @else { Avalie este profissional }</p>
+            <p i18n class="review-title">
+              @if (myReview) {
+                Sua avaliação
+              } @else {
+                Avalie este profissional
+              }
+            </p>
             <p class="stars pick">
               @for (star of stars; track star) {
                 <button
@@ -256,7 +305,8 @@
                 </button>
               }
             </p>
-            <textarea i18n-placeholder
+            <textarea
+              i18n-placeholder
               name="text"
               rows="3"
               maxlength="500"
@@ -264,7 +314,13 @@
               [(ngModel)]="myText"
             ></textarea>
             <button i18n type="submit" class="send" [disabled]="savingReview()">
-              @if (savingReview()) { Enviando... } @else if (myReview) { Atualizar avaliação } @else { Enviar avaliação }
+              @if (savingReview()) {
+                Enviando...
+              } @else if (myReview) {
+                Atualizar avaliação
+              } @else {
+                Enviar avaliação
+              }
             </button>
             @if (editingReview()) {
               <button i18n type="button" class="cancel-edit" (click)="editingReview.set(false)">
@@ -306,7 +362,9 @@
                 </div>
                 @if (review.id === auth.user()?.uid) {
                   <div class="review-actions">
-                    <button i18n-title i18n-aria-label
+                    <button
+                      i18n-title
+                      i18n-aria-label
                       type="button"
                       aria-label="Editar avaliação"
                       title="Editar"
@@ -314,7 +372,9 @@
                     >
                       <mat-icon>edit</mat-icon>
                     </button>
-                    <button i18n-title i18n-aria-label
+                    <button
+                      i18n-title
+                      i18n-aria-label
                       type="button"
                       class="danger"
                       aria-label="Excluir avaliação"
@@ -344,7 +404,12 @@
     <div>
       <p i18n>
         <strong>Total</strong> ({{ selectedServices().length }}
-        @if (selectedServices().length === 1) { serviço } @else { serviços })
+        @if (selectedServices().length === 1) {
+          serviço
+        } @else {
+          serviços
+        }
+        )
       </p>
       <p class="price">{{ total() | price }}</p>
     </div>
@@ -352,7 +417,9 @@
       <a class="chat" [routerLink]="['/mensagens', artist.id]">
         <mat-icon>chat_bubble</mat-icon>
       </a>
-      <button i18n-title i18n-aria-label
+      <button
+        i18n-title
+        i18n-aria-label
         type="button"
         class="book"
         [disabled]="!selectedServices().length || missingData().length > 0"

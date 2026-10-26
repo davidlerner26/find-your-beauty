@@ -113,7 +113,9 @@ $tabs-height: 5rem;
       border-radius: 999px;
       color: #6b7280;
       font-weight: 600;
-      transition: background 0.15s, color 0.15s;
+      transition:
+        background 0.15s,
+        color 0.15s;
 
       &:hover {
         background: var(--primary-light);
@@ -165,7 +167,6 @@ $tabs-height: 5rem;
   .with-tabs {
     padding-bottom: 0;
   }
-
 
   // The professional area is teal: the bar follows
   :host-context(.pro-theme) .topbar {

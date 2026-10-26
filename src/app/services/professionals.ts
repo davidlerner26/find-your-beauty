@@ -7,7 +7,11 @@ import { db } from './firebase';
 export class Professionals {
   readonly list = signal<Professional[]>([]);
   // What clients can see: professionals that haven't hidden their profile
-  readonly published = computed(() => this.list().filter((professional) => professional.published !== false && professional.approved !== false));
+  readonly published = computed(() =>
+    this.list().filter(
+      (professional) => professional.published !== false && professional.approved !== false,
+    ),
+  );
   readonly status = signal<'loading' | 'ready' | 'error'>('loading');
 
   constructor() {
@@ -27,9 +31,7 @@ export class Professionals {
     this.status.set('loading');
     try {
       const snapshot = await getDocs(collection(db, 'professionals'));
-      this.list.set(
-        snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Professional),
-      );
+      this.list.set(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Professional));
       this.status.set('ready');
     } catch (error) {
       console.error('Failed to load professionals', error);

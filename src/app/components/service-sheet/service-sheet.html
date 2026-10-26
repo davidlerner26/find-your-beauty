@@ -22,27 +22,33 @@
       (pointerup)="onUp()"
       (pointercancel)="onUp()"
     >
-    @if (service().photos?.length) {
-      <div class="screen-photo">
-        <div #sheetPhotosEl class="screen-photos" (scroll)="onScroll($event)">
-          @for (photo of service().photos; track photo) {
-            <div class="screen-slide">
-              <img [src]="photo" [alt]="service().name" draggable="false" />
+      @if (service().photos?.length) {
+        <div class="screen-photo">
+          <div #sheetPhotosEl class="screen-photos" (scroll)="onScroll($event)">
+            @for (photo of service().photos; track photo) {
+              <div class="screen-slide">
+                <img [src]="photo" [alt]="service().name" draggable="false" />
+              </div>
+            }
+          </div>
+          @if (service().photos!.length > 1) {
+            <app-carousel-arrows [target]="sheetPhotosEl" />
+            <div class="screen-dots" aria-hidden="true">
+              @for (photo of service().photos; track photo; let n = $index) {
+                <span [class.on]="n === slide()"></span>
+              }
             </div>
           }
         </div>
-        @if (service().photos!.length > 1) {
-          <app-carousel-arrows [target]="sheetPhotosEl" />
-          <div class="screen-dots" aria-hidden="true">
-            @for (photo of service().photos; track photo; let n = $index) {
-              <span [class.on]="n === slide()"></span>
-            }
-          </div>
-        }
-      </div>
-    }
-    <!-- Tap the bar to close -->
-    <button i18n-aria-label type="button" class="screen-handle" aria-label="Fechar" (click)="onHandleClick()"></button>
+      }
+      <!-- Tap the bar to close -->
+      <button
+        i18n-aria-label
+        type="button"
+        class="screen-handle"
+        aria-label="Fechar"
+        (click)="onHandleClick()"
+      ></button>
     </div>
 
     <div class="screen-info">
@@ -55,7 +61,9 @@
       @if (service().priceRules?.length) {
         <ul class="price-rules muted">
           @for (rule of service().priceRules; track $index) {
-            <li>{{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong></li>
+            <li>
+              {{ ruleLabel(rule) }}: <strong>{{ rule.price | price }}</strong>
+            </li>
           }
         </ul>
       }
@@ -70,7 +78,11 @@
 
   <div class="screen-bar">
     <button i18n type="button" class="screen-add" [class.on]="selected()" (click)="toggled.emit()">
-      @if (selected()) { Remover do agendamento } @else { Adicionar ao agendamento }
+      @if (selected()) {
+        Remover do agendamento
+      } @else {
+        Adicionar ao agendamento
+      }
     </button>
   </div>
 </div>

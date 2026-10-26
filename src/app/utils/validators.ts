@@ -4,7 +4,10 @@ export const isValidEmail = (email: string) => EMAIL.test(email.trim());
 
 // At least 6 characters, with a letter, a number and a special character
 export const isValidPassword = (password: string) =>
-  password.length >= 6 && /\p{L}/u.test(password) && /\d/.test(password) && /[^\p{L}\d\s]/u.test(password);
+  password.length >= 6 &&
+  /\p{L}/u.test(password) &&
+  /\d/.test(password) &&
+  /[^\p{L}\d\s]/u.test(password);
 
 export const PASSWORD_RULE = $localize`A senha precisa ter pelo menos 6 caracteres, com letras, 1 número e 1 caractere especial.`;
 

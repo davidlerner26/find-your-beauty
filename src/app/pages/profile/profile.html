@@ -8,12 +8,23 @@
   } @else if (auth.user(); as user) {
     <section class="card">
       @if (user.photoURL) {
-        <img class="avatar" [src]="user.photoURL" [alt]="user.displayName || t.profilePhoto()" referrerpolicy="no-referrer" />
+        <img
+          class="avatar"
+          [src]="user.photoURL"
+          [alt]="user.displayName || t.profilePhoto()"
+          referrerpolicy="no-referrer"
+        />
       } @else {
         <span class="avatar initial">{{ initial(user.displayName, user.email) }}</span>
       }
       <div>
-        <h2 i18n>@if (user.displayName) { {{ user.displayName }} } @else { Sem nome }</h2>
+        <h2 i18n>
+          @if (user.displayName) {
+            {{ user.displayName }}
+          } @else {
+            Sem nome
+          }
+        </h2>
         <p class="muted">{{ user.email }}</p>
       </div>
     </section>
@@ -22,7 +33,15 @@
       <div class="details-head">
         <h3 i18n>Meus dados</h3>
         @if (!editing() && !profile.isLoading() && !profile.error()) {
-          <button i18n-title i18n-aria-label type="button" class="edit" aria-label="Editar meus dados" title="Editar" (click)="edit(profile.value())">
+          <button
+            i18n-title
+            i18n-aria-label
+            type="button"
+            class="edit"
+            aria-label="Editar meus dados"
+            title="Editar"
+            (click)="edit(profile.value())"
+          >
             <mat-icon>edit</mat-icon>
           </button>
         }
@@ -35,28 +54,54 @@
         <form class="edit-form" (submit)="$event.preventDefault(); save()" novalidate>
           <label i18n>
             Nome
-            <input name="firstName" autocomplete="given-name" [value]="firstName" (input)="onTextInput($event, 'firstName')" />
+            <input
+              name="firstName"
+              autocomplete="given-name"
+              [value]="firstName"
+              (input)="onTextInput($event, 'firstName')"
+            />
           </label>
           @if (submitted() && !nameValid) {
             <p i18n class="error">O nome precisa ter pelo menos 3 caracteres.</p>
           }
           <label i18n>
             Sobrenome
-            <input name="lastName" autocomplete="family-name" [value]="lastName" (input)="onTextInput($event, 'lastName')" />
+            <input
+              name="lastName"
+              autocomplete="family-name"
+              [value]="lastName"
+              (input)="onTextInput($event, 'lastName')"
+            />
           </label>
           @if (submitted() && !lastNameValid) {
             <p i18n class="error">O sobrenome precisa ter pelo menos 2 caracteres.</p>
           }
           <label i18n>
             Celular
-            <input type="tel" name="phone" inputmode="numeric" maxlength="20" autocomplete="tel-national" [value]="phone" (input)="onPhoneInput($event)" />
+            <input
+              type="tel"
+              name="phone"
+              inputmode="numeric"
+              maxlength="20"
+              autocomplete="tel-national"
+              [value]="phone"
+              (input)="onPhoneInput($event)"
+            />
           </label>
           @if (submitted() && !phoneValid) {
             <p i18n class="error">Digite o celular completo, com DDD e 9 dígitos.</p>
           }
           <label i18n>
             CPF
-            <input name="cpf" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="000.000.000-00" [value]="cpf" (input)="onCpfInput($event)" />
+            <input
+              name="cpf"
+              inputmode="numeric"
+              maxlength="14"
+              autocomplete="off"
+              placeholder="000.000.000-00"
+              [value]="cpf"
+              (input)="onCpfInput($event)"
+            />
           </label>
           @if (submitted() && !cpfValid) {
             <p i18n class="error">Digite um CPF válido.</p>
@@ -64,7 +109,8 @@
           <div class="autocomplete">
             <label i18n>
               Endereço
-              <input i18n-placeholder
+              <input
+                i18n-placeholder
                 name="place-search"
                 autocomplete="nope"
                 placeholder="Comece a digitar o endereço"
@@ -78,7 +124,10 @@
               />
             </label>
             @if (place.open()) {
-              <app-place-suggestions [suggestions]="place.suggestions()" (pick)="place.choose($event)" />
+              <app-place-suggestions
+                [suggestions]="place.suggestions()"
+                (pick)="place.choose($event)"
+              />
             }
           </div>
           @if (place.error()) {
@@ -92,18 +141,50 @@
             <p class="error">{{ saveError() }}</p>
           }
           <div class="form-actions">
-            <button i18n type="button" class="cancel" [disabled]="saving()" (click)="editing.set(false)">Cancelar</button>
-            <button i18n type="submit" class="save" [disabled]="saving()">@if (saving()) { Salvando... } @else { Salvar }</button>
+            <button
+              i18n
+              type="button"
+              class="cancel"
+              [disabled]="saving()"
+              (click)="editing.set(false)"
+            >
+              Cancelar
+            </button>
+            <button i18n type="submit" class="save" [disabled]="saving()">
+              @if (saving()) {
+                Salvando...
+              } @else {
+                Salvar
+              }
+            </button>
           </div>
         </form>
       } @else if (profile.value(); as data) {
         <dl>
-          <div><dt i18n>Nome</dt><dd>{{ data.firstName || '-' }}</dd></div>
-          <div><dt i18n>Sobrenome</dt><dd>{{ data.lastName || '-' }}</dd></div>
-          <div><dt i18n>E-mail</dt><dd>{{ data.email || user.email }}</dd></div>
-          <div><dt i18n>Celular</dt><dd>{{ data.phone || '-' }}</dd></div>
-          <div><dt i18n>CPF</dt><dd>{{ data.cpf || '-' }}</dd></div>
-          <div><dt i18n>Endereço</dt><dd>{{ (data.address | address) || '-' }}</dd></div>
+          <div>
+            <dt i18n>Nome</dt>
+            <dd>{{ data.firstName || '-' }}</dd>
+          </div>
+          <div>
+            <dt i18n>Sobrenome</dt>
+            <dd>{{ data.lastName || '-' }}</dd>
+          </div>
+          <div>
+            <dt i18n>E-mail</dt>
+            <dd>{{ data.email || user.email }}</dd>
+          </div>
+          <div>
+            <dt i18n>Celular</dt>
+            <dd>{{ data.phone || '-' }}</dd>
+          </div>
+          <div>
+            <dt i18n>CPF</dt>
+            <dd>{{ data.cpf || '-' }}</dd>
+          </div>
+          <div>
+            <dt i18n>Endereço</dt>
+            <dd>{{ (data.address | address) || '-' }}</dd>
+          </div>
         </dl>
       } @else {
         <p i18n class="muted">Seus dados ainda não foram salvos.</p>
@@ -111,9 +192,7 @@
       }
     </section>
 
-    <p i18n class="status">
-      <span class="dot"></span> Você está logado
-    </p>
+    <p i18n class="status"><span class="dot"></span> Você está logado</p>
 
     @if (auth.isAdmin()) {
       <a i18n class="admin-link" routerLink="/admin">Administração</a>

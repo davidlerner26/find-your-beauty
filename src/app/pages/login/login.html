@@ -1,22 +1,41 @@
 <form class="auth" (ngSubmit)="submit()" novalidate>
   <!-- Which area this is: the other one is one tap away -->
   <nav i18n-aria-label class="role-tabs" aria-label="Tipo de conta">
-    <a i18n [class.active]="!pro()" [attr.aria-current]="!pro() ? 'page' : null" routerLink="/entrar"
+    <a
+      i18n
+      [class.active]="!pro()"
+      [attr.aria-current]="!pro() ? 'page' : null"
+      routerLink="/entrar"
       >Sou cliente</a
     >
-    <a i18n [class.active]="pro()" [attr.aria-current]="pro() ? 'page' : null" routerLink="/pro/entrar"
+    <a
+      i18n
+      [class.active]="pro()"
+      [attr.aria-current]="pro() ? 'page' : null"
+      routerLink="/pro/entrar"
       >Sou profissional</a
     >
   </nav>
 
-  <h1 i18n>@if (pro()) { Área do profissional } @else { Bem-vindo de volta }</h1>
+  <h1 i18n>
+    @if (pro()) {
+      Área do profissional
+    } @else {
+      Bem-vindo de volta
+    }
+  </h1>
   <p i18n class="subtitle">
-    @if (pro()) { Entre para gerenciar sua agenda e seus clientes. } @else { Que bom te ver de novo! Entre para usar o app. }
+    @if (pro()) {
+      Entre para gerenciar sua agenda e seus clientes.
+    } @else {
+      Que bom te ver de novo! Entre para usar o app.
+    }
   </p>
 
   <label class="field" [class.invalid]="showError('email') && !emailValid">
     <mat-icon class="filled">mail</mat-icon>
-    <input i18n-placeholder
+    <input
+      i18n-placeholder
       type="email"
       name="email"
       (blur)="touch('email')"
@@ -31,7 +50,8 @@
 
   <label class="field" [class.invalid]="showError('password') && !password">
     <mat-icon class="filled">lock</mat-icon>
-    <input i18n-placeholder
+    <input
+      i18n-placeholder
       name="password"
       (blur)="touch('password')"
       placeholder="Senha"
@@ -39,7 +59,8 @@
       [type]="showPassword() ? 'text' : 'password'"
       [(ngModel)]="password"
     />
-    <button i18n-aria-label
+    <button
+      i18n-aria-label
       type="button"
       class="toggle"
       aria-label="Mostrar senha"
@@ -65,7 +86,11 @@
   }
 
   <button i18n type="submit" class="primary" [disabled]="submitting()">
-    @if (submitting()) { Aguarde... } @else { Entrar }
+    @if (submitting()) {
+      Aguarde...
+    } @else {
+      Entrar
+    }
   </button>
 
   <p i18n class="divider">ou</p>

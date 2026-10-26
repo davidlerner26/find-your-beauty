@@ -14,7 +14,8 @@ export const routes: Routes = [
   },
   {
     path: 'profissionais/:id',
-    loadComponent: () => import('./pages/professional/professional').then((m) => m.ProfessionalPage),
+    loadComponent: () =>
+      import('./pages/professional/professional').then((m) => m.ProfessionalPage),
   },
   {
     path: 'profissionais/:id/agendar',

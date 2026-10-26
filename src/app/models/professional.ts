@@ -56,14 +56,14 @@ export const SERVICE_ICONS: Record<string, string> = {
   'Aplicação de cílios': 'auto_awesome',
   'Corte feminino': 'content_cut',
   'Corte masculino': 'man',
-  'Escova': 'air',
+  Escova: 'air',
   'Penteado para festa': 'nightlife',
   'Penteado de noiva': 'favorite',
-  'Coloração': 'colorize',
+  Coloração: 'colorize',
   'Mechas e luzes': 'light_mode',
-  'Hidratação': 'water_drop',
-  'Cauterização': 'local_fire_department',
-  'Progressiva': 'straighten',
+  Hidratação: 'water_drop',
+  Cauterização: 'local_fire_department',
+  Progressiva: 'straighten',
   'Cronograma capilar': 'calendar_month',
 };
 
@@ -111,7 +111,13 @@ export const DEFAULT_AVAILABILITY: Availability = {
 };
 
 // A photo copied from the professional's connected Instagram
-export type InstagramPhoto = { id: string; url: string; permalink: string; caption: string; video: boolean };
+export type InstagramPhoto = {
+  id: string;
+  url: string;
+  permalink: string;
+  caption: string;
+  video: boolean;
+};
 
 // Where the professional works: at an address, at the client's home, or both
 export type ServiceMode = 'studio' | 'home' | 'both';
@@ -162,7 +168,8 @@ export type Professional = {
 
 // Home-only professionals have no address on the map
 export const hasLocation = (professional: Pick<Professional, 'serviceMode' | 'position'>) =>
-  professional.serviceMode !== 'home' && (professional.position.lat !== 0 || professional.position.lng !== 0);
+  professional.serviceMode !== 'home' &&
+  (professional.position.lat !== 0 || professional.position.lng !== 0);
 
 // "Av. Afrânio de Melo Franco, 141 - Leblon, Rio de Janeiro - RJ, 22430-060" -> "Av. Afrânio de Melo Franco, 141 - Leblon, RJ":
 // street and number (when there is one), neighborhood and state, without the city and the postal code
@@ -178,11 +185,15 @@ export const shortAddress = (address: string) => {
 
 // What the cards of the map and of the home show where the address goes: the short address
 export const shortLocationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
-  professional.serviceMode === 'home' ? $localize`Atendimento a domicílio` : localizeAddress(shortAddress(professional.address));
+  professional.serviceMode === 'home'
+    ? $localize`Atendimento a domicílio`
+    : localizeAddress(shortAddress(professional.address));
 
 // What cards show where the address goes
 export const locationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
-  professional.serviceMode === 'home' ? $localize`Atendimento a domicílio` : localizeAddress(professional.address);
+  professional.serviceMode === 'home'
+    ? $localize`Atendimento a domicílio`
+    : localizeAddress(professional.address);
 
 // 30 -> "30 minutos", 60 -> "1 hora", 90 -> "1 hora e 30 minutos", 120 -> "2 horas"
 export const formatDuration = (totalMinutes: number) => {

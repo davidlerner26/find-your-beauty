@@ -1,12 +1,31 @@
-<div class="backdrop" role="dialog" aria-modal="true" (click)="closed.emit()" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+<div
+  class="backdrop"
+  role="dialog"
+  aria-modal="true"
+  (click)="closed.emit()"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd($event)"
+>
   <button i18n-aria-label type="button" class="close" aria-label="Fechar" (click)="closed.emit()">
     <mat-icon>close</mat-icon>
   </button>
   @if (photos().length > 1) {
-    <button i18n-aria-label type="button" class="nav prev" aria-label="Foto anterior" (click)="$event.stopPropagation(); go(-1)">
+    <button
+      i18n-aria-label
+      type="button"
+      class="nav prev"
+      aria-label="Foto anterior"
+      (click)="$event.stopPropagation(); go(-1)"
+    >
       <mat-icon>chevron_left</mat-icon>
     </button>
-    <button i18n-aria-label type="button" class="nav next" aria-label="Próxima foto" (click)="$event.stopPropagation(); go(1)">
+    <button
+      i18n-aria-label
+      type="button"
+      class="nav next"
+      aria-label="Próxima foto"
+      (click)="$event.stopPropagation(); go(1)"
+    >
       <mat-icon>chevron_right</mat-icon>
     </button>
     <span class="count">{{ current + 1 }} / {{ photos().length }}</span>

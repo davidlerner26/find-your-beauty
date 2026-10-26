@@ -1,7 +1,13 @@
 @if (message()) {
   <!-- Feedback of an action: floats on top, goes away by itself or when tapped -->
   @for (id of [messageId]; track id) {
-    <button type="button" class="missing" role="status" aria-live="polite" (click)="message.set('')">
+    <button
+      type="button"
+      class="missing"
+      role="status"
+      aria-live="polite"
+      (click)="message.set('')"
+    >
       {{ message() }}
     </button>
   }
@@ -9,13 +15,21 @@
   <!-- Floats at the top, so it is in view without scrolling. A new text makes a new element, which shows again and fades out by itself. -->
   @for (text of [missingText]; track text) {
     @if (dismissedText() !== text) {
-      <button type="button" class="missing" role="status" (click)="dismissedText.set(text)">{{ text }}</button>
+      <button type="button" class="missing" role="status" (click)="dismissedText.set(text)">
+        {{ text }}
+      </button>
     }
   }
 }
 
 <div class="profile">
-  <h1 i18n>@if (signup()) { Complete seu cadastro } @else { Meu perfil }</h1>
+  <h1 i18n>
+    @if (signup()) {
+      Complete seu cadastro
+    } @else {
+      Meu perfil
+    }
+  </h1>
   @if (signup() && profile()?.rejected) {
     <p i18n class="message" role="status">
       Seu cadastro anterior não foi aprovado. Revise os dados abaixo e envie novamente.
@@ -27,7 +41,6 @@
       nossa equipe.
     </p>
   }
-
 
   @if (!profile()) {
     <app-spinner />
@@ -55,17 +68,33 @@
           Celular
           <span class="with-icon">
             <mat-icon class="filled">call</mat-icon>
-            <input name="phone" type="tel" inputmode="numeric" maxlength="20" autocomplete="tel-national" [value]="phone" (input)="onPhoneInput($event)" />
+            <input
+              name="phone"
+              type="tel"
+              inputmode="numeric"
+              maxlength="20"
+              autocomplete="tel-national"
+              [value]="phone"
+              (input)="onPhoneInput($event)"
+            />
           </span>
         </label>
         <h3 i18n>Foto</h3>
-        <p i18n class="hint muted">Aparece nos cards, no topo da sua página e redonda nas mensagens.</p>
+        <p i18n class="hint muted">
+          Aparece nos cards, no topo da sua página e redonda nas mensagens.
+        </p>
         <div class="photo">
           @if (!image) {
             <span i18n class="preview empty">Sem foto</span>
           }
           <label i18n class="upload">
-            @if (uploading()) { Enviando... } @else if (image) { Trocar foto } @else { Escolher foto }
+            @if (uploading()) {
+              Enviando...
+            } @else if (image) {
+              Trocar foto
+            } @else {
+              Escolher foto
+            }
             <input
               type="file"
               accept="image/*"
@@ -82,7 +111,8 @@
 
         <label i18n>
           Sobre você
-          <textarea i18n-placeholder
+          <textarea
+            i18n-placeholder
             name="about"
             rows="5"
             placeholder="Conte sobre o seu trabalho"
@@ -91,7 +121,7 @@
         </label>
       </section>
 
-<!-- Instagram desligado por enquanto (a integração ainda não foi configurada na Meta). Para voltar, é só tirar este comentário.
+      <!-- Instagram desligado por enquanto (a integração ainda não foi configurada na Meta). Para voltar, é só tirar este comentário.
       @if (!signup()) {
         <section>
           <h2>Instagram</h2>
@@ -166,7 +196,12 @@
           @for (photo of gallery; track photo) {
             <div class="thumb">
               <img i18n-alt [src]="photo" alt="Foto da galeria" />
-              <button i18n-aria-label type="button" aria-label="Remover foto" (click)="removeGalleryPhoto(photo)">
+              <button
+                i18n-aria-label
+                type="button"
+                aria-label="Remover foto"
+                (click)="removeGalleryPhoto(photo)"
+              >
                 ✕
               </button>
             </div>
@@ -199,7 +234,8 @@
           <div class="autocomplete">
             <label i18n>
               Endereço
-              <input i18n-placeholder
+              <input
+                i18n-placeholder
                 name="place-search"
                 autocomplete="nope"
                 placeholder="Comece a digitar o endereço"
@@ -427,7 +463,14 @@
                   @for (photo of service.photos; track photo) {
                     <div class="thumb">
                       <img i18n-alt [src]="photo" alt="Foto do serviço" />
-                      <button i18n-aria-label type="button" aria-label="Remover foto" (click)="removeServicePhoto(service, photo)">✕</button>
+                      <button
+                        i18n-aria-label
+                        type="button"
+                        aria-label="Remover foto"
+                        (click)="removeServicePhoto(service, photo)"
+                      >
+                        ✕
+                      </button>
                     </div>
                   }
                 </div>
@@ -442,7 +485,9 @@
                 [(ngModel)]="service.description"
               ></textarea>
             </label>
-            <button i18n type="button" class="remove" (click)="removeService(service)">Remover</button>
+            <button i18n type="button" class="remove" (click)="removeService(service)">
+              Remover
+            </button>
           </div>
         } @empty {
           <p i18n class="muted">Nenhum serviço ainda.</p>
@@ -502,7 +547,8 @@
             Selecionado: <strong>{{ rangeLabel(start, pending().end) }}</strong>
           </p>
         }
-        <button i18n
+        <button
+          i18n
           type="button"
           class="secondary"
           [disabled]="!pending().start"
@@ -515,7 +561,12 @@
           @for (range of availability.blockedRanges; track range.start + range.end) {
             <span class="chip">
               {{ rangeLabel(range.start, range.end) }}
-              <button i18n-aria-label type="button" aria-label="Desbloquear período" (click)="unblock(range)">
+              <button
+                i18n-aria-label
+                type="button"
+                aria-label="Desbloquear período"
+                (click)="unblock(range)"
+              >
                 ✕
               </button>
             </span>
@@ -543,7 +594,15 @@
       </section>
 
       <button i18n type="submit" class="primary" [disabled]="saving()">
-        @if (saving() && signup()) { Enviando... } @else if (saving()) { Salvando... } @else if (signup()) { Enviar cadastro } @else { Salvar perfil }
+        @if (saving() && signup()) {
+          Enviando...
+        } @else if (saving()) {
+          Salvando...
+        } @else if (signup()) {
+          Enviar cadastro
+        } @else {
+          Salvar perfil
+        }
       </button>
     </form>
 

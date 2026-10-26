@@ -21,7 +21,8 @@ export const asLang = (value: unknown): Lang => (value === 'en' || value === 'es
 export const L = (lang: Lang, text: Record<Lang, string>) => text[lang];
 
 // The page of the site, in the language (Portuguese is at the root, the others under /en and /es)
-export const link = (lang: Lang, path: string) => `${appUrl.value()}${lang === 'pt' ? '' : '/' + lang}${path}`;
+export const link = (lang: Lang, path: string) =>
+  `${appUrl.value()}${lang === 'pt' ? '' : '/' + lang}${path}`;
 
 const LOCALE: Record<Lang, string> = { pt: 'pt-BR', en: 'en-US', es: 'es' };
 const FOOTER: Record<Lang, string> = {
@@ -64,7 +65,10 @@ const render = ({ heading, paragraphs, details, button, lang = 'pt' }: Email) =>
       <p style="margin:0 0 36px;"><img src="${appUrl.value()}/logo-full.png" alt="Find Your Beauty" width="190" style="display:block;border:0;height:auto;max-width:190px;font-size:16px;font-weight:800;color:${TEAL};"></p>
       <h1 style="margin:0 0 12px;font-size:30px;line-height:1.2;font-weight:800;color:${TEXT};">${escape(heading)}</h1>
       ${paragraphs
-        .map((p) => `<p style="margin:0 0 16px;font-size:16px;line-height:1.55;color:${MUTED};">${escape(p)}</p>`)
+        .map(
+          (p) =>
+            `<p style="margin:0 0 16px;font-size:16px;line-height:1.55;color:${MUTED};">${escape(p)}</p>`,
+        )
         .join('')}
       ${
         details?.length

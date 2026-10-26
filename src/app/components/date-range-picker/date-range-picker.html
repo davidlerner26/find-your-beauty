@@ -1,6 +1,12 @@
 <div class="picker">
   <div class="month">
-    <button i18n-aria-label type="button" aria-label="Mês anterior" [disabled]="!canGoBack()" (click)="changeMonth(-1)">
+    <button
+      i18n-aria-label
+      type="button"
+      aria-label="Mês anterior"
+      [disabled]="!canGoBack()"
+      (click)="changeMonth(-1)"
+    >
       <mat-icon>chevron_left</mat-icon>
     </button>
     <strong>{{ monthLabel() }}</strong>

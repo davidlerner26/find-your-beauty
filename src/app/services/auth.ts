@@ -63,7 +63,9 @@ export class Auth {
   readonly pendingApproval = signal(false);
   // The e-mail waiting for its code (kept for a reload of the page). The password stays only in memory,
   // to sign in right after the code is accepted.
-  readonly verification = signal<{ email: string; password: string | null } | null>(this.restoreVerification());
+  readonly verification = signal<{ email: string; password: string | null } | null>(
+    this.restoreVerification(),
+  );
   // false until Firebase tells us whether there is a session (and its role)
   readonly ready = signal(false);
   readonly whenReady = new Promise<void>((resolve) => (this.markReady = resolve));
@@ -124,7 +126,16 @@ export class Auth {
     await this.requireArea(area);
   }
 
-  async signUpWithEmail({ firstName, lastName, email, phone, cpf, address, addressPosition, password }: SignUpData) {
+  async signUpWithEmail({
+    firstName,
+    lastName,
+    email,
+    phone,
+    cpf,
+    address,
+    addressPosition,
+    password,
+  }: SignUpData) {
     const { user } = await createUserWithEmailAndPassword(this.auth, email.trim(), password);
     const name = `${firstName.trim()} ${lastName.trim()}`;
     await updateProfile(user, { displayName: name });
@@ -172,11 +183,16 @@ export class Auth {
     } catch {
       // Without storage a reload forgets the e-mail
     }
-    await this.sendVerificationCode(email).catch((error) => console.error('Failed to send the code', error));
+    await this.sendVerificationCode(email).catch((error) =>
+      console.error('Failed to send the code', error),
+    );
   }
 
   async sendVerificationCode(email: string) {
-    await call<{ email: string; lang: string }, { ok: boolean }>('sendVerificationCode')({ email, lang: APP_LANGUAGE });
+    await call<{ email: string; lang: string }, { ok: boolean }>('sendVerificationCode')({
+      email,
+      lang: APP_LANGUAGE,
+    });
   }
 
   // Checks the code, then signs in with the password the sign up used (or asks for the login when it was lost)
@@ -211,8 +227,8 @@ export class Auth {
 
     await this.createProfessionalDoc(user, name, email.trim(), phone);
     // The CPF is private: it is not in the public profile
-    await setDoc(doc(db, 'professionals', user.uid, 'private', 'identity'), { cpf }).catch((error) =>
-      console.error('Failed to save the CPF', error),
+    await setDoc(doc(db, 'professionals', user.uid, 'private', 'identity'), { cpf }).catch(
+      (error) => console.error('Failed to save the CPF', error),
     );
     // Stays signed in: the second step of the sign up completes the profile
     await this.resolveRole(user);
@@ -235,7 +251,12 @@ export class Auth {
         await signOut(this.auth);
         throw { code: 'auth/account-is-client' };
       }
-      await this.createProfessionalDoc(user, user.displayName ?? '', user.email ?? '', user.phoneNumber ?? '');
+      await this.createProfessionalDoc(
+        user,
+        user.displayName ?? '',
+        user.email ?? '',
+        user.phoneNumber ?? '',
+      );
     }
 
     if (await this.resolveRole(user)) {
@@ -288,7 +309,12 @@ export class Auth {
     // A new account that never confirmed the e-mail goes to the code screen
     const user = this.auth.currentUser;
     const createdAt = Date.parse(user?.metadata.creationTime ?? '');
-    if (user && !user.emailVerified && createdAt >= VERIFICATION_FROM && user.providerData.some((p) => p.providerId === 'password')) {
+    if (
+      user &&
+      !user.emailVerified &&
+      createdAt >= VERIFICATION_FROM &&
+      user.providerData.some((p) => p.providerId === 'password')
+    ) {
       await signOut(this.auth);
       await this.startVerification(email.trim(), password);
       throw { code: 'auth/email-not-verified' };
@@ -304,7 +330,10 @@ export class Auth {
 
   // The e-mail with the link is sent by a Cloud Function (through Resend)
   async sendPasswordReset(email: string) {
-    await httpsCallable(getFunctions(firebaseApp, 'southamerica-east1'), 'sendPasswordReset')({
+    await httpsCallable(
+      getFunctions(firebaseApp, 'southamerica-east1'),
+      'sendPasswordReset',
+    )({
       email: email.trim(),
       lang: APP_LANGUAGE,
     });
@@ -360,7 +389,10 @@ export class Auth {
           // Not approved yet: no access to the app (the callers close the session).
           // A sign up that wasn't finished, or that an admin denied, goes back to the second step to be (re)sent.
           const data = profile.data();
-          if (data['approved'] === false && (data['submitted'] !== true || data['rejected'] === true)) {
+          if (
+            data['approved'] === false &&
+            (data['submitted'] !== true || data['rejected'] === true)
+          ) {
             role = null;
             incomplete = true;
           } else if (profile.data()['approved'] === false) {

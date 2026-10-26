@@ -10,7 +10,11 @@ import { PlaceSuggestion } from '../../utils/place-search';
         @for (suggestion of suggestions(); track suggestion.text) {
           <!-- mousedown is prevented so the input keeps focus and the click still lands -->
           <li role="option">
-            <button type="button" (mousedown)="$event.preventDefault()" (click)="pick.emit(suggestion)">
+            <button
+              type="button"
+              (mousedown)="$event.preventDefault()"
+              (click)="pick.emit(suggestion)"
+            >
               {{ suggestion.text }}
             </button>
           </li>

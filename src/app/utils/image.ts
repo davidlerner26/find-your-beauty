@@ -10,6 +10,10 @@ export const resizeImage = async (file: File, maxSize = 1280, quality = 0.85) =>
   bitmap.close();
 
   return new Promise<Blob>((resolve, reject) =>
-    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('resize-failed'))), 'image/jpeg', quality),
+    canvas.toBlob(
+      (blob) => (blob ? resolve(blob) : reject(new Error('resize-failed'))),
+      'image/jpeg',
+      quality,
+    ),
   );
 };

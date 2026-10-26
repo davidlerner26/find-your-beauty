@@ -6,14 +6,21 @@
       <a class="info" [routerLink]="['/admin/profissionais', professional.id]">
         <h3>{{ professional.name }}</h3>
         <p class="muted">{{ professional.email }}</p>
-        <p i18n class="muted">@if (professional.phone) { {{ professional.phone }} } @else { Sem celular }</p>
+        <p i18n class="muted">
+          @if (professional.phone) {
+            {{ professional.phone }}
+          } @else {
+            Sem celular
+          }
+        </p>
         @if (professional.createdAt) {
           <p i18n class="muted">Cadastro: {{ relative(professional.createdAt) }}</p>
         }
         <span i18n class="view">Ver perfil completo</span>
       </a>
       <div class="actions">
-        <button i18n
+        <button
+          i18n
           type="button"
           class="approve"
           [disabled]="working() === professional.id"
@@ -22,7 +29,8 @@
           <mat-icon>check</mat-icon>
           Aprovar
         </button>
-        <button i18n
+        <button
+          i18n
           type="button"
           class="deny"
           [disabled]="working() === professional.id"

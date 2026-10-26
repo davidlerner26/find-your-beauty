@@ -1,4 +1,11 @@
-import { afterNextRender, Component, ElementRef, OnDestroy, signal, viewChild } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  ElementRef,
+  OnDestroy,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 // A row of chips that scrolls sideways. On wide screens the arrows show next to the row (not over it) and only

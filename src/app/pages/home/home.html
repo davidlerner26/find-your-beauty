@@ -73,7 +73,7 @@
               }
               @if (salon.photos.length > 1) {
                 <app-carousel-arrows [target]="photosEl" />
-  <div class="dots" aria-hidden="true">
+                <div class="dots" aria-hidden="true">
                   @for (photo of salon.photos; track photo; let n = $index) {
                     <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
                   }
@@ -117,7 +117,11 @@
     @for (row of serviceRows(); track row.category) {
       <div class="services">
         @for (service of row.services; track service.name) {
-          <a class="service" routerLink="/explore" [queryParams]="{ service: service.name, categories: activeInterests().join(',') }">
+          <a
+            class="service"
+            routerLink="/explore"
+            [queryParams]="{ service: service.name, categories: activeInterests().join(',') }"
+          >
             <span class="service-icon">
               <mat-icon>{{ service.icon }}</mat-icon>
             </span>
@@ -158,7 +162,7 @@
             </div>
             @if (offer.photos.length > 1) {
               <app-carousel-arrows [target]="photosEl" />
-<div class="dots" aria-hidden="true">
+              <div class="dots" aria-hidden="true">
                 @for (photo of offer.photos; track photo; let n = $index) {
                   <span [class.on]="n === (photoIndex()['near-' + offer.id] ?? 0)"></span>
                 }

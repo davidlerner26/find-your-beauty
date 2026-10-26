@@ -66,7 +66,11 @@ export class Admin {
   async approve(id: string) {
     const snapshot = await getDoc(doc(db, 'professionals', id));
     const visible = snapshot.data()?.['visible'] !== false;
-    await updateDoc(doc(db, 'professionals', id), { approved: true, rejected: false, published: visible });
+    await updateDoc(doc(db, 'professionals', id), {
+      approved: true,
+      rejected: false,
+      published: visible,
+    });
   }
 
   reject(id: string) {

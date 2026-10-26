@@ -46,9 +46,10 @@ export class Instagram {
     if (!expected || expected !== state) throw new Error('invalid-state');
 
     // Instagram appends "#_" to the code
-    const result = await call<{ code: string; redirectUri: string }, { username: string; photos: number }>(
-      'connectInstagram',
-    )({ code: code.replace(/#_$/, ''), redirectUri: redirectUri() });
+    const result = await call<
+      { code: string; redirectUri: string },
+      { username: string; photos: number }
+    >('connectInstagram')({ code: code.replace(/#_$/, ''), redirectUri: redirectUri() });
     return result.data;
   }
 

@@ -9,7 +9,13 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
     <div class="toast" role="status" aria-live="polite">
       <span class="text">{{ text() }}</span>
-      <button i18n-aria-label type="button" class="close" aria-label="Fechar" (click)="dismiss.emit()">
+      <button
+        i18n-aria-label
+        type="button"
+        class="close"
+        aria-label="Fechar"
+        (click)="dismiss.emit()"
+      >
         <mat-icon>close</mat-icon>
       </button>
     </div>

@@ -79,7 +79,13 @@
         <div>
           <dt i18n>Atendimento</dt>
           <dd i18n>
-            @if (p.serviceMode === 'home') { A domicílio } @else if (p.serviceMode === 'both') { No endereço e a domicílio } @else { No endereço }
+            @if (p.serviceMode === 'home') {
+              A domicílio
+            } @else if (p.serviceMode === 'both') {
+              No endereço e a domicílio
+            } @else {
+              No endereço
+            }
           </dd>
         </div>
         @if (p.serviceMode !== 'home') {
@@ -135,7 +141,13 @@
         @for (item of hours(); track item.name) {
           <div>
             <dt>{{ item.name }}</dt>
-            <dd i18n>@if (item.day.enabled) { {{ item.day.start }} - {{ item.day.end }} } @else { Fechado }</dd>
+            <dd i18n>
+              @if (item.day.enabled) {
+                {{ item.day.start }} - {{ item.day.end }}
+              } @else {
+                Fechado
+              }
+            </dd>
           </div>
         }
       </dl>
@@ -145,7 +157,12 @@
       <h3 i18n>Galeria</h3>
       <div class="gallery">
         @for (photo of p.gallery; track photo; let i = $index) {
-          <button type="button" class="photo-btn" [attr.aria-label]="t.workOf(p.name)" (click)="openPhoto.set(i)">
+          <button
+            type="button"
+            class="photo-btn"
+            [attr.aria-label]="t.workOf(p.name)"
+            (click)="openPhoto.set(i)"
+          >
             <img [src]="photo" [alt]="t.workOf(p.name)" />
           </button>
         } @empty {
@@ -153,7 +170,12 @@
         }
       </div>
       @if (openPhoto() !== null) {
-        <app-photo-viewer [photos]="p.gallery" [start]="openPhoto()!" [alt]="t.workOf(p.name)" (closed)="openPhoto.set(null)" />
+        <app-photo-viewer
+          [photos]="p.gallery"
+          [start]="openPhoto()!"
+          [alt]="t.workOf(p.name)"
+          (closed)="openPhoto.set(null)"
+        />
       }
     </section>
   } @else {

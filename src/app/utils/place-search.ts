@@ -71,7 +71,12 @@ export class PlaceSearch {
       this.suggestions.set(
         suggestions.flatMap((suggestion) =>
           suggestion.placePrediction
-            ? [{ text: suggestion.placePrediction.text.text, prediction: suggestion.placePrediction }]
+            ? [
+                {
+                  text: suggestion.placePrediction.text.text,
+                  prediction: suggestion.placePrediction,
+                },
+              ]
             : [],
         ),
       );
@@ -79,7 +84,9 @@ export class PlaceSearch {
     } catch (error) {
       console.error('Address search failed', error);
       this.suggestions.set([]);
-      this.error.set($localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`);
+      this.error.set(
+        $localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`,
+      );
     }
   }
 

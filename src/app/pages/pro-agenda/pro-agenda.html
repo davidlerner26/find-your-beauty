@@ -3,7 +3,8 @@
 
   @if (profile() && !profile()!.published) {
     <a i18n class="notice" routerLink="/pro/perfil">
-      Seu perfil não está publicado, então os clientes não encontram você. Abra o perfil, complete os dados e marque para mostrar.
+      Seu perfil não está publicado, então os clientes não encontram você. Abra o perfil, complete
+      os dados e marque para mostrar.
     </a>
   }
 
@@ -15,7 +16,10 @@
           <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
           <p class="muted place">
             @if (booking.place === 'home') {
-              <mat-icon>home</mat-icon> <ng-container i18n>A domicílio</ng-container>@if (booking.clientAddress) { : {{ booking.clientAddress }} }
+              <mat-icon>home</mat-icon> <ng-container i18n>A domicílio</ng-container>
+              @if (booking.clientAddress) {
+                : {{ booking.clientAddress }}
+              }
             } @else if (booking.place === 'studio') {
               <mat-icon>location_on</mat-icon> <ng-container i18n>No seu endereço</ng-container>
             }
@@ -26,10 +30,15 @@
 
       <ul class="services">
         @for (service of booking.services; track service.id) {
-          <li><span>{{ service.name | catalog }}</span><span>{{ service.price | price }}</span></li>
+          <li>
+            <span>{{ service.name | catalog }}</span
+            ><span>{{ service.price | price }}</span>
+          </li>
         }
       </ul>
-      <p class="total"><strong i18n>Total</strong> <strong>{{ booking.total | price }}</strong></p>
+      <p class="total">
+        <strong i18n>Total</strong> <strong>{{ booking.total | price }}</strong>
+      </p>
 
       @if (booking.notes) {
         <p class="notes muted">“{{ booking.notes }}”</p>
@@ -37,13 +46,25 @@
 
       @if (booking.status === 'pending') {
         <div class="actions">
-          <button i18n type="button" class="decline" (click)="answer(booking, 'declined')">Recusar</button>
-          <button i18n type="button" class="accept" (click)="answer(booking, 'confirmed')">Aceitar</button>
+          <button i18n type="button" class="decline" (click)="answer(booking, 'declined')">
+            Recusar
+          </button>
+          <button i18n type="button" class="accept" (click)="answer(booking, 'confirmed')">
+            Aceitar
+          </button>
         </div>
       } @else if (booking.status === 'confirmed') {
         <!-- It is completed by itself when its time is over (a Cloud Function) -->
         <div class="actions">
-          <button i18n-title i18n-aria-label type="button" class="decline cancel" aria-label="Cancelar" title="Cancelar" (click)="answer(booking, 'cancelledByProfessional')">
+          <button
+            i18n-title
+            i18n-aria-label
+            type="button"
+            class="decline cancel"
+            aria-label="Cancelar"
+            title="Cancelar"
+            (click)="answer(booking, 'cancelledByProfessional')"
+          >
             <mat-icon>close</mat-icon>
           </button>
         </div>

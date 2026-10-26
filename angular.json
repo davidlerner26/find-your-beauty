@@ -29,12 +29,8 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "polyfills": [
-              "@angular/localize/init"
-            ],
+            "styles": ["src/styles.scss"],
+            "polyfills": ["@angular/localize/init"],
             "i18nMissingTranslation": "warning"
           },
           "configurations": {
@@ -90,9 +86,7 @@
                   "with": "src/environments/environment.dev.ts"
                 }
               ],
-              "localize": [
-                "en"
-              ],
+              "localize": ["en"],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -104,9 +98,7 @@
                   "with": "src/environments/environment.dev.ts"
                 }
               ],
-              "localize": [
-                "es"
-              ],
+              "localize": ["es"],
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true

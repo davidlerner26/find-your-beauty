@@ -1,6 +1,9 @@
 <main class="verify">
   <h1 i18n>Verifique o seu e-mail</h1>
-  <p i18n class="subtitle">Digite o código de 4 números que enviamos para <strong>{{ email() }}</strong>.</p>
+  <p i18n class="subtitle">
+    Digite o código de 4 números que enviamos para <strong>{{ email() }}</strong
+    >.
+  </p>
 
   <div class="boxes">
     @for (index of boxes; track index) {
@@ -35,8 +38,18 @@
     }
   </p>
 
-  <button i18n type="button" class="primary" [disabled]="!complete() || submitting()" (click)="submit()">
-    @if (submitting()) { Verificando... } @else { Verificar e-mail }
+  <button
+    i18n
+    type="button"
+    class="primary"
+    [disabled]="!complete() || submitting()"
+    (click)="submit()"
+  >
+    @if (submitting()) {
+      Verificando...
+    } @else {
+      Verificar e-mail
+    }
   </button>
 
   <p class="back"><a i18n routerLink="/entrar">Voltar ao login</a></p>

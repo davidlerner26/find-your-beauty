@@ -7,18 +7,31 @@
   </header>
 
   <div class="content">
-    <p i18n class="artist muted">com <strong>{{ artist.name }}</strong></p>
+    <p i18n class="artist muted">
+      com <strong>{{ artist.name }}</strong>
+    </p>
 
     <!-- Where: the client chooses when the professional attends in both ways (at home is the default) -->
     @if (canChoosePlace()) {
       <section>
         <h2 i18n>Onde</h2>
         <div class="times places">
-          <button type="button" class="time" [class.selected]="place() === 'home'" (click)="place.set('home')">
+          <button
+            type="button"
+            class="time"
+            [class.selected]="place() === 'home'"
+            (click)="place.set('home')"
+          >
             <mat-icon>home</mat-icon> <ng-container i18n>A domicílio</ng-container>
           </button>
-          <button type="button" class="time" [class.selected]="place() === 'studio'" (click)="place.set('studio')">
-            <mat-icon>location_on</mat-icon> <ng-container i18n>No endereço do profissional</ng-container>
+          <button
+            type="button"
+            class="time"
+            [class.selected]="place() === 'studio'"
+            (click)="place.set('studio')"
+          >
+            <mat-icon>location_on</mat-icon>
+            <ng-container i18n>No endereço do profissional</ng-container>
           </button>
         </div>
         @if (place() === 'studio') {
@@ -28,14 +41,24 @@
     } @else {
       <p class="muted place-info">
         <mat-icon>{{ effectivePlace() === 'home' ? 'home' : 'location_on' }}</mat-icon>
-        @if (effectivePlace() === 'home') { <ng-container i18n>Atendimento a domicílio</ng-container> } @else { {{ artist.address | address }} }
+        @if (effectivePlace() === 'home') {
+          <ng-container i18n>Atendimento a domicílio</ng-container>
+        } @else {
+          {{ artist.address | address }}
+        }
       </p>
     }
 
     <section>
       <h2 i18n>Data</h2>
       <div class="month">
-        <button i18n-aria-label type="button" aria-label="Mês anterior" [disabled]="isCurrentMonth()" (click)="changeMonth(-1)">
+        <button
+          i18n-aria-label
+          type="button"
+          aria-label="Mês anterior"
+          [disabled]="isCurrentMonth()"
+          (click)="changeMonth(-1)"
+        >
           <mat-icon>chevron_left</mat-icon>
         </button>
         <strong>{{ monthLabel() }}</strong>
@@ -80,7 +103,11 @@
             <app-spinner [small]="true" />
           } @else {
             <p i18n class="muted">
-              @if (!selectedDay()) { Escolha um dia para ver os horários. } @else { Não há horários livres neste dia. Escolha outro. }
+              @if (!selectedDay()) {
+                Escolha um dia para ver os horários.
+              } @else {
+                Não há horários livres neste dia. Escolha outro.
+              }
             </p>
           }
         }
@@ -88,12 +115,19 @@
     </section>
 
     @if (someConflict()) {
-      <p i18n class="muted conflict-note">Os horários apagados coincidem com um agendamento que você já tem.</p>
+      <p i18n class="muted conflict-note">
+        Os horários apagados coincidem com um agendamento que você já tem.
+      </p>
     }
 
     <section>
       <h2 i18n>Observações</h2>
-      <textarea i18n-placeholder rows="5" placeholder="Digite suas observações aqui" [(ngModel)]="notes"></textarea>
+      <textarea
+        i18n-placeholder
+        rows="5"
+        placeholder="Digite suas observações aqui"
+        [(ngModel)]="notes"
+      ></textarea>
     </section>
   </div>
 
@@ -103,14 +137,38 @@
 
   <footer class="book-bar">
     <div>
-      <p i18n><strong>Total</strong> ({{ selectedServices().length }} @if (selectedServices().length === 1) { serviço } @else { serviços })</p>
+      <p i18n>
+        <strong>Total</strong> ({{ selectedServices().length }}
+        @if (selectedServices().length === 1) {
+          serviço
+        } @else {
+          serviços
+        }
+        )
+      </p>
       <p class="price">{{ total() | price }}</p>
     </div>
     <div class="book-actions">
-      <a i18n-title i18n-aria-label class="chat" [routerLink]="['/mensagens', artist.id]" aria-label="Conversar" title="Conversar">
+      <a
+        i18n-title
+        i18n-aria-label
+        class="chat"
+        [routerLink]="['/mensagens', artist.id]"
+        aria-label="Conversar"
+        title="Conversar"
+      >
         <mat-icon>chat_bubble</mat-icon>
       </a>
-      <button i18n-title i18n-aria-label type="button" class="checkout" [disabled]="!canCheckout()" aria-label="Finalizar" title="Finalizar" (click)="checkout()">
+      <button
+        i18n-title
+        i18n-aria-label
+        type="button"
+        class="checkout"
+        [disabled]="!canCheckout()"
+        aria-label="Finalizar"
+        title="Finalizar"
+        (click)="checkout()"
+      >
         <mat-icon>check</mat-icon>
       </button>
     </div>

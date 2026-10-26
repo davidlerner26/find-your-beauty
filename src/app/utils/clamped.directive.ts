@@ -1,4 +1,12 @@
-import { afterNextRender, Directive, ElementRef, inject, input, OnDestroy, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Directive,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  signal,
+} from '@angular/core';
 
 // Tells if a text with a line clamp is really cut (so a "Ler mais" button is only shown when it is needed).
 // While the text is expanded the clamp is off, so the answer is not updated: the page keeps the button.

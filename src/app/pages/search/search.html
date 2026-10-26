@@ -3,7 +3,13 @@
     <mat-icon>chevron_left</mat-icon>
   </button>
   <h1 i18n>Buscar</h1>
-  <button i18n-aria-label type="button" class="icon-btn filter-btn" aria-label="Filtros" (click)="openSheet()">
+  <button
+    i18n-aria-label
+    type="button"
+    class="icon-btn filter-btn"
+    aria-label="Filtros"
+    (click)="openSheet()"
+  >
     <mat-icon>filter_list</mat-icon>
     @if (activeFilterCount() > 0) {
       <span class="count">{{ activeFilterCount() }}</span>
@@ -14,7 +20,8 @@
 <div class="content">
   <form class="search" (ngSubmit)="submit()">
     <mat-icon>search</mat-icon>
-    <input i18n-placeholder
+    <input
+      i18n-placeholder
       name="query"
       type="search"
       placeholder="Busque profissional ou serviço.."
@@ -23,13 +30,26 @@
       (ngModelChange)="onType()"
     />
     @if (query) {
-      <button i18n-aria-label type="button" class="clear" aria-label="Limpar" (click)="clearQuery()">✕</button>
+      <button
+        i18n-aria-label
+        type="button"
+        class="clear"
+        aria-label="Limpar"
+        (click)="clearQuery()"
+      >
+        ✕
+      </button>
     }
   </form>
 
   @if (searching()) {
     <p i18n class="count-label muted">
-      {{ results().length }} @if (results().length === 1) { resultado } @else { resultados }
+      {{ results().length }}
+      @if (results().length === 1) {
+        resultado
+      } @else {
+        resultados
+      }
     </p>
     <div class="list">
       @for (item of results(); track item.id) {
@@ -94,7 +114,9 @@
               [src]="photo"
               [alt]="item.name"
               loading="lazy"
-              [style.object-position]="(photo === item.cardImage ? item.cardPosition : undefined) | focus"
+              [style.object-position]="
+                (photo === item.cardImage ? item.cardPosition : undefined) | focus
+              "
             />
           </div>
         }
@@ -126,7 +148,10 @@
         <p i18n class="from-price">A partir de {{ item.minPrice | price }}</p>
       }
       <p class="rating">
-        <mat-icon class="star filled">star</mat-icon> <strong>{{ item.rating }}</strong> ({{ item.reviewsCount }} {{ item.reviewsCount | reviewsLabel }})
+        <mat-icon class="star filled">star</mat-icon> <strong>{{ item.rating }}</strong> ({{
+          item.reviewsCount
+        }}
+        {{ item.reviewsCount | reviewsLabel }})
         @if (item.distance) {
           <span class="muted"> · {{ item.distance }}</span>
         }
@@ -165,7 +190,13 @@
       }
 
       <h2 i18n>Bairro</h2>
-      <select i18n-aria-label class="neighborhood" name="neighborhood" aria-label="Bairro" [(ngModel)]="draft.neighborhood">
+      <select
+        i18n-aria-label
+        class="neighborhood"
+        name="neighborhood"
+        aria-label="Bairro"
+        [(ngModel)]="draft.neighborhood"
+      >
         <option i18n [ngValue]="null">Todos os bairros do Rio de Janeiro</option>
         @for (name of neighborhoods(); track name) {
           <option [ngValue]="name">{{ name }}</option>
@@ -174,7 +205,8 @@
 
       <h2 i18n>Disponível em</h2>
       <div class="month">
-        <button i18n-aria-label
+        <button
+          i18n-aria-label
           type="button"
           aria-label="Mês anterior"
           [disabled]="isCurrentMonth()"
@@ -231,7 +263,13 @@
             </button>
           }
         </div>
-        <span i18n class="rating-label">@if (draft.minRating) { {{ draft.minRating }} estrelas ou mais } @else { Qualquer nota }</span>
+        <span i18n class="rating-label">
+          @if (draft.minRating) {
+            {{ draft.minRating }} estrelas ou mais
+          } @else {
+            Qualquer nota
+          }
+        </span>
       </div>
 
       <h2 i18n>Distância</h2>
@@ -248,7 +286,11 @@
         @if (!userPosition()) {
           Permita a localização para filtrar por distância.
         } @else {
-          @if (draft.maxKm >= maxKm) { Sem limite } @else { Até {{ draft.maxKm }} km }
+          @if (draft.maxKm >= maxKm) {
+            Sem limite
+          } @else {
+            Até {{ draft.maxKm }} km
+          }
         }
       </p>
     </div>

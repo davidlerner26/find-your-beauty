@@ -62,10 +62,22 @@
   <!-- Above the cards: the round buttons of the map and the carousel -->
   <div class="bottom">
     <div class="map-buttons">
-      <button i18n-aria-label type="button" class="round" aria-label="Lista" (click)="listOpen.set(true)">
+      <button
+        i18n-aria-label
+        type="button"
+        class="round"
+        aria-label="Lista"
+        (click)="listOpen.set(true)"
+      >
         <mat-icon>format_list_bulleted</mat-icon>
       </button>
-      <button i18n-aria-label type="button" class="round" aria-label="Minha localização" (click)="locateMe()">
+      <button
+        i18n-aria-label
+        type="button"
+        class="round"
+        aria-label="Minha localização"
+        (click)="locateMe()"
+      >
         <mat-icon>my_location</mat-icon>
       </button>
     </div>
@@ -85,7 +97,8 @@
   </div>
   @if (listOpen()) {
     <div class="backdrop" [class.closing]="closing()" (click)="closeList()"></div>
-    <div i18n-aria-label
+    <div
+      i18n-aria-label
       class="sheet"
       role="dialog"
       aria-label="Profissionais próximos"
@@ -93,7 +106,8 @@
       [style.transform]="'translateY(' + sheetOffset() + 'px)'"
     >
       <!-- Pull the bar down to close the list (a tap closes it too) -->
-      <div i18n-aria-label
+      <div
+        i18n-aria-label
         class="grip"
         role="button"
         tabindex="0"
@@ -133,66 +147,76 @@
 
 <!-- A professional card: on the map carousel and in the list -->
 <ng-template #offerCard let-salon let-index="index">
-    <article
-      class="offer"
-      [class.selected]="index === selected()"
-      (click)="openSalon(index, salon.id)"
-    >
-      <div class="offer-image">
-        <!-- The photos of the professional: swipe sideways to see them -->
-        <div #photosEl class="photos" (scroll)="onPhotosScroll($event, salon.id)">
-          @for (photo of salon.photos; track photo) {
-            <div class="slide">
-              @if (!loadedPhotos().includes(photo)) {
-                <app-spinner class="loading" [small]="true" />
-              }
-              <img
-                [src]="photo"
-                [alt]="salon.name"
-                loading="lazy"
-                [style.object-position]="(photo === salon.image ? salon.imagePosition : undefined) | focus"
-                (load)="photoLoaded(photo)"
-                (error)="photoLoaded(photo)"
-              />
-            </div>
-          }
-        </div>
-        @if (salon.photos.length > 1) {
-          <app-carousel-arrows [target]="photosEl" />
-<div class="dots" aria-hidden="true">
-            @for (photo of salon.photos; track photo; let n = $index) {
-              <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
+  <article
+    class="offer"
+    [class.selected]="index === selected()"
+    (click)="openSalon(index, salon.id)"
+  >
+    <div class="offer-image">
+      <!-- The photos of the professional: swipe sideways to see them -->
+      <div #photosEl class="photos" (scroll)="onPhotosScroll($event, salon.id)">
+        @for (photo of salon.photos; track photo) {
+          <div class="slide">
+            @if (!loadedPhotos().includes(photo)) {
+              <app-spinner class="loading" [small]="true" />
             }
+            <img
+              [src]="photo"
+              [alt]="salon.name"
+              loading="lazy"
+              [style.object-position]="
+                (photo === salon.image ? salon.imagePosition : undefined) | focus
+              "
+              (load)="photoLoaded(photo)"
+              (error)="photoLoaded(photo)"
+            />
           </div>
         }
-        @if (favorites.available()) {
-          <button
-            type="button"
-            class="heart"
-            [attr.aria-label]="t.favorite(favorites.has(salon.id))"
-            (click)="toggleFavorite($event, salon.id)"
-          >
-            <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
-          </button>
-        }
-        @if (salon.distance) {
-          <span class="distance">{{ salon.distance }}</span>
-        }
       </div>
-      <div class="offer-info">
-        <p class="tags">{{ salon.tags | catalog }}</p>
-        <h3>{{ salon.name }}</h3>
-        <p class="muted">{{ salon.address }}</p>
-        <p class="rating">
-          <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{ salon.reviewsCount }} {{ salon.reviewsCount | reviewsLabel }})
-        </p>
-      </div>
-    </article>
+      @if (salon.photos.length > 1) {
+        <app-carousel-arrows [target]="photosEl" />
+        <div class="dots" aria-hidden="true">
+          @for (photo of salon.photos; track photo; let n = $index) {
+            <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
+          }
+        </div>
+      }
+      @if (favorites.available()) {
+        <button
+          type="button"
+          class="heart"
+          [attr.aria-label]="t.favorite(favorites.has(salon.id))"
+          (click)="toggleFavorite($event, salon.id)"
+        >
+          <mat-icon [class.filled]="favorites.has(salon.id)">favorite</mat-icon>
+        </button>
+      }
+      @if (salon.distance) {
+        <span class="distance">{{ salon.distance }}</span>
+      }
+    </div>
+    <div class="offer-info">
+      <p class="tags">{{ salon.tags | catalog }}</p>
+      <h3>{{ salon.name }}</h3>
+      <p class="muted">{{ salon.address }}</p>
+      <p class="rating">
+        <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{
+          salon.reviewsCount
+        }}
+        {{ salon.reviewsCount | reviewsLabel }})
+      </p>
+    </div>
+  </article>
 </ng-template>
 
 @if (floatingId(); as id) {
   <!-- Wide screens: the page of the professional as a card on top of the map (the map stays usable) -->
   <div class="floating-card" role="dialog">
-    <app-artist-details [id]="id" [floating]="true" (closed)="closeFloating()" (locate)="centerOn(id)" />
+    <app-artist-details
+      [id]="id"
+      [floating]="true"
+      (closed)="closeFloating()"
+      (locate)="centerOn(id)"
+    />
   </div>
 }

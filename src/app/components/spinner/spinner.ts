@@ -2,7 +2,13 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-spinner',
-  template: `<span class="ring" [class.small]="small()" role="status" i18n-aria-label aria-label="Carregando"></span>`,
+  template: `<span
+    class="ring"
+    [class.small]="small()"
+    role="status"
+    i18n-aria-label
+    aria-label="Carregando"
+  ></span>`,
   styleUrl: './spinner.scss',
   host: { '[class.small]': 'small()' },
 })

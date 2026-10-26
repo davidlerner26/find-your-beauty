@@ -8,7 +8,9 @@ export const formatClock = (date: Date | null) =>
 export const formatRelative = (date: Date | null) => {
   if (!date) return '';
 
-  const days = Math.round((startOfDay(new Date()).getTime() - startOfDay(date).getTime()) / 86_400_000);
+  const days = Math.round(
+    (startOfDay(new Date()).getTime() - startOfDay(date).getTime()) / 86_400_000,
+  );
   if (days <= 0) return formatClock(date);
   if (days === 1) return $localize`Ontem`;
   if (days < 7) return $localize`Há ${days}:days: dias`;

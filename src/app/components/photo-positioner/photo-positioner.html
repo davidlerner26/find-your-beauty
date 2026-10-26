@@ -1,4 +1,5 @@
-<div i18n-aria-label
+<div
+  i18n-aria-label
   class="frame"
   [class.dragging]="dragging()"
   tabindex="0"
@@ -10,10 +11,19 @@
   (pointercancel)="onUp()"
   (keydown)="onKey($event)"
 >
-  <img i18n-alt #photo [src]="src()" alt="Foto" draggable="false" [style.object-position]="position() | focus" />
+  <img
+    i18n-alt
+    #photo
+    [src]="src()"
+    alt="Foto"
+    draggable="false"
+    [style.object-position]="position() | focus"
+  />
   <span i18n class="hint">Arraste para ajustar</span>
   <!-- stopPropagation: pressing the button must not start a drag of the photo -->
-  <button i18n-title i18n-aria-label
+  <button
+    i18n-title
+    i18n-aria-label
     type="button"
     class="center"
     aria-label="Centralizar foto"

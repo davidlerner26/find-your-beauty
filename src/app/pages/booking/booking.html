@@ -22,13 +22,13 @@
           </button>
         </div>
         @if (place() === 'studio') {
-          <p class="muted place-address">{{ artist.address }}</p>
+          <p class="muted place-address">{{ artist.address | address }}</p>
         }
       </section>
     } @else {
       <p class="muted place-info">
         <mat-icon>{{ effectivePlace() === 'home' ? 'home' : 'location_on' }}</mat-icon>
-        @if (effectivePlace() === 'home') { <ng-container i18n>Atendimento a domicílio</ng-container> } @else { {{ artist.address }} }
+        @if (effectivePlace() === 'home') { <ng-container i18n>Atendimento a domicílio</ng-container> } @else { {{ artist.address | address }} }
       </p>
     }
 

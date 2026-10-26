@@ -103,7 +103,7 @@
           <div><dt i18n>E-mail</dt><dd>{{ data.email || user.email }}</dd></div>
           <div><dt i18n>Celular</dt><dd>{{ data.phone || '-' }}</dd></div>
           <div><dt i18n>CPF</dt><dd>{{ data.cpf || '-' }}</dd></div>
-          <div><dt i18n>Endereço</dt><dd>{{ data.address || '-' }}</dd></div>
+          <div><dt i18n>Endereço</dt><dd>{{ (data.address | address) || '-' }}</dd></div>
         </dl>
       } @else {
         <p i18n class="muted">Seus dados ainda não foram salvos.</p>

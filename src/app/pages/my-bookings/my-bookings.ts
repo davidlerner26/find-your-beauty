@@ -1,3 +1,4 @@
+import { AddressPipe } from '../../utils/address';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
@@ -27,7 +28,7 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [CatalogPipe, PricePipe, RouterLink, Spinner, Toast, NgTemplateOutlet, MatIconModule],
+  imports: [AddressPipe, CatalogPipe, PricePipe, RouterLink, Spinner, Toast, NgTemplateOutlet, MatIconModule],
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.scss',
 })

@@ -326,14 +326,14 @@
         <source>No meu endereço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/professional.ts</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3340923143333302378" datatype="html">
         <source>A domicílio</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/professional.ts</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">122</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
@@ -348,11 +348,11 @@
         <source>Atendimento a domicílio</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/professional.ts</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">181</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/professional.ts</context>
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">185</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
@@ -652,7 +652,7 @@
         <source>Domingo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -663,7 +663,7 @@
         <source>Segunda</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -674,7 +674,7 @@
         <source>Terça</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -685,7 +685,7 @@
         <source>Quarta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -696,7 +696,7 @@
         <source>Quinta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -707,7 +707,7 @@
         <source>Sexta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -718,7 +718,7 @@
         <source>Sábado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
@@ -729,14 +729,14 @@
         <source>Negado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2767412899656600903" datatype="html">
         <source>Aguardando aprovação</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
@@ -747,14 +747,14 @@
         <source>Aprovado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8940801839372169284" datatype="html">
         <source>Negar o cadastro de <x id="name" equiv-text="professional.name"/>?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">70</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
@@ -765,7 +765,7 @@
         <source>Não foi possível concluir. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">81</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
@@ -851,7 +851,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="5235425694737955656" datatype="html">
-        <source><x id="START_BLOCK_IF" equiv-text="@if (artist.serviceMode === &apos;home&apos;) {"/> Atendimento a domicílio <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> <x id="INTERPOLATION" equiv-text="{{ artist.address }}"/> <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="START_BLOCK_IF_1" equiv-text="@if (artist.serviceMode !== &apos;home&apos; &amp;&amp; artist.address) {"/><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button
+        <source><x id="START_BLOCK_IF" equiv-text="@if (artist.serviceMode === &apos;home&apos;) {"/> Atendimento a domicílio <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> <x id="INTERPOLATION" equiv-text="{{ artist.address | address }}"/> <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="START_BLOCK_IF_1" equiv-text="@if (artist.serviceMode !== &apos;home&apos; &amp;&amp; artist.address) {"/><x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button
             type=&quot;button&quot;
             class=&quot;copy&quot;
             [attr.aria-label]=&quot;t.copyAddress(copied())&quot;
@@ -1051,11 +1051,11 @@
         <source>Endereço copiado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">125</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/texts.ts</context>
@@ -1066,49 +1066,49 @@
         <source>Excluir a sua avaliação?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7933509796161574872" datatype="html">
         <source>Avaliação excluída</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6949691596638608366" datatype="html">
         <source>Não foi possível excluir a avaliação. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5995886839204390740" datatype="html">
         <source>Escolha de 1 a 5 estrelas.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">220</context>
+          <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8438869972820024355" datatype="html">
         <source>Avaliação enviada. Obrigado!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7484335748166230354" datatype="html">
         <source>Avaliação enviada</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">231</context>
+          <context context-type="linenumber">232</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7648336701214027698" datatype="html">
         <source>Não foi possível enviar a avaliação. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.ts</context>
-          <context context-type="linenumber">234</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4852578905389235999" datatype="html">
@@ -1218,35 +1218,35 @@
         <source>Você já tem um agendamento neste horário. Escolha outro horário.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52534276559961202" datatype="html">
         <source>Não foi possível verificar seus dados. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">229</context>
+          <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4327574126477042153" datatype="html">
         <source>Agendamento solicitado! Você será avisado quando o profissional responder.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">263</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3664968154113291246" datatype="html">
         <source>Este horário acabou de ser ocupado. Escolha outro.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">269</context>
+          <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3385582092400085537" datatype="html">
         <source>Não foi possível enviar a solicitação. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.ts</context>
-          <context context-type="linenumber">270</context>
+          <context context-type="linenumber">271</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8325619538680802677" datatype="html">
@@ -1359,7 +1359,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/home/home.html</context>
-          <context context-type="linenumber">132,133</context>
+          <context context-type="linenumber">133,134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3522533998833471718" datatype="html">
@@ -1380,7 +1380,7 @@
         <source>Não foi possível obter a sua localização. Permita o acesso no navegador.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.ts</context>
-          <context context-type="linenumber">391</context>
+          <context context-type="linenumber">396</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7895406230410226456" datatype="html">
@@ -1487,14 +1487,14 @@
         <source>Categorias</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/home/home.html</context>
-          <context context-type="linenumber">98,99</context>
+          <context context-type="linenumber">99,100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="507966127234232666" datatype="html">
         <source>O que você quer fazer?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/home/home.html</context>
-          <context context-type="linenumber">115,116</context>
+          <context context-type="linenumber">116,117</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2085060596889438089" datatype="html">
@@ -2128,7 +2128,7 @@
         <source>Aguardando</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">21</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
@@ -2139,7 +2139,7 @@
         <source>Confirmado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
@@ -2150,7 +2150,7 @@
         <source>Recusado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
@@ -2161,7 +2161,7 @@
         <source>Concluído</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
@@ -2172,7 +2172,7 @@
         <source>Cancelado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
@@ -2183,7 +2183,7 @@
         <source>Cancelado pelo profissional</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.ts</context>
@@ -2194,21 +2194,21 @@
         <source>Cancelar o agendamento com <x id="professionalName" equiv-text="booking.professionalName"/>?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3009023434354240124" datatype="html">
         <source>Agendamento cancelado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5465125690652827487" datatype="html">
         <source>Não foi possível cancelar. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7533265206755257061" datatype="html">
@@ -3123,7 +3123,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="874164559473987643" datatype="html">
@@ -3169,7 +3169,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.ts</context>
-          <context context-type="linenumber">139</context>
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1016389177530675692" datatype="html">
@@ -3326,7 +3326,7 @@
         <source>Perfil atualizado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.ts</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4036290205759125095" datatype="html">

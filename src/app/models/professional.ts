@@ -1,3 +1,4 @@
+import { localizeAddress } from '../utils/address';
 // professionals/{professionalId}/reviews/{clientUid}: one review per client
 export type Review = {
   id: string;
@@ -177,11 +178,11 @@ export const shortAddress = (address: string) => {
 
 // What the cards of the map and of the home show where the address goes: the short address
 export const shortLocationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
-  professional.serviceMode === 'home' ? $localize`Atendimento a domicílio` : shortAddress(professional.address);
+  professional.serviceMode === 'home' ? $localize`Atendimento a domicílio` : localizeAddress(shortAddress(professional.address));
 
 // What cards show where the address goes
 export const locationLabel = (professional: Pick<Professional, 'serviceMode' | 'address'>) =>
-  professional.serviceMode === 'home' ? $localize`Atendimento a domicílio` : professional.address;
+  professional.serviceMode === 'home' ? $localize`Atendimento a domicílio` : localizeAddress(professional.address);
 
 // 30 -> "30 minutos", 60 -> "1 hora", 90 -> "1 hora e 30 minutos", 120 -> "2 horas"
 export const formatDuration = (totalMinutes: number) => {

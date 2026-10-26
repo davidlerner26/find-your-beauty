@@ -85,7 +85,7 @@
         @if (p.serviceMode !== 'home') {
           <div>
             <dt i18n>Endereço</dt>
-            <dd>{{ p.address || '-' }}</dd>
+            <dd>{{ (p.address | address) || '-' }}</dd>
           </div>
         }
       </dl>

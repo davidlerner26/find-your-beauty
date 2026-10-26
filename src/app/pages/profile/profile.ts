@@ -1,3 +1,4 @@
+import { AddressPipe } from '../../utils/address';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, inject, resource, signal } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
@@ -15,7 +16,7 @@ import { T } from '../../utils/texts';
 
 @Component({
   selector: 'app-profile',
-  imports: [Spinner, RouterLink, MatIconModule, PlaceSuggestions],
+  imports: [AddressPipe, Spinner, RouterLink, MatIconModule, PlaceSuggestions],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

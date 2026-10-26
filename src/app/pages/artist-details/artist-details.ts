@@ -1,3 +1,4 @@
+import { AddressPipe } from '../../utils/address';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, input, output, resource, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +31,7 @@ import { CatalogPipe } from '../../utils/catalog.pipe';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [CarouselArrows, PhotoViewer, CatalogPipe, Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
+  imports: [AddressPipe, CarouselArrows, PhotoViewer, CatalogPipe, Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
   host: { '[class.floating]': 'floating()' },

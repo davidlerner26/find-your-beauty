@@ -58,7 +58,7 @@
         </a>
       </div>
       <p i18n class="muted address">
-        @if (artist.serviceMode === 'home') { Atendimento a domicílio } @else { {{ artist.address }} }
+        @if (artist.serviceMode === 'home') { Atendimento a domicílio } @else { {{ artist.address | address }} }
         @if (artist.serviceMode !== 'home' && artist.address) {
           <!-- Right after the last word of the address, even when the address breaks into lines -->
           <button

@@ -1,3 +1,4 @@
+import { AddressPipe } from '../../utils/address';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, input, resource, signal } from '@angular/core';
 import { Location } from '@angular/common';
@@ -18,7 +19,7 @@ const WEEKDAYS = [$localize`Domingo`, $localize`Segunda`, $localize`Terça`, $lo
 // The whole profile of a professional for an admin to review, even when it is not published
 @Component({
   selector: 'app-admin-professional',
-  imports: [CatalogPipe, PhotoViewer, FocusPipe, PricePipe, Spinner, MatIconModule],
+  imports: [AddressPipe, CatalogPipe, PhotoViewer, FocusPipe, PricePipe, Spinner, MatIconModule],
   templateUrl: './admin-professional.html',
   styleUrl: './admin-professional.scss',
 })

@@ -141,15 +141,24 @@ export class Home {
     };
   }
 
-  // The services a professional can register, of the categories selected in "Mais buscados"
+  // The names of the services that at least one published professional offers
+  private readonly offeredServices = computed(
+    () => new Set(this.professionals.published().flatMap((professional) => professional.services.map((service) => service.name))),
+  );
+
+  // The services of the categories selected in "Categorias", only the ones some professional offers
   // One row per category: Maquiagem on the first line, Cabelo on the second
   protected readonly serviceRows = computed(() =>
     this.interests
       .filter((category) => this.activeInterests().includes(category))
       .map((category) => ({
         category,
-        services: SERVICE_NAMES[category as ServiceCategory].map((name) => ({ name, icon: SERVICE_ICONS[name] ?? CATEGORY_ICONS[category] })),
-      })),
+        services: SERVICE_NAMES[category as ServiceCategory]
+          .filter((name) => this.offeredServices().has(name))
+          .map((name) => ({ name, icon: SERVICE_ICONS[name] ?? CATEGORY_ICONS[category] })),
+      }))
+      // A category without any service on offer leaves no empty line
+      .filter((row) => row.services.length),
   );
 
 }

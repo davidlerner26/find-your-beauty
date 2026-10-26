@@ -26,3 +26,9 @@ export const mobileValidator = unlessEmpty(
 // At least `length` characters, not counting the spaces around
 export const minTrimmedLength = (length: number): ValidatorFn =>
   unlessEmpty('minlength', (value) => value.trim().length >= length);
+
+// For a group: the two fields have to hold the same text (a password and its confirmation)
+export const fieldsMatch =
+  (first: string, second: string): ValidatorFn =>
+  (group: AbstractControl): ValidationErrors | null =>
+    group.get(first)?.value === group.get(second)?.value ? null : { mismatch: true };

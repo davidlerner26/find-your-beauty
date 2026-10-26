@@ -1,29 +1,40 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component, input, OnInit, signal, inject } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
-import { FormsModule } from '@angular/forms';
+import {
+  AbstractControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
-import { authErrorMessage, isValidPassword, PASSWORD_RULE } from '../../utils/validators';
+import { fieldsMatch, passwordValidator } from '../../utils/form-validators';
+import { authErrorMessage, PASSWORD_RULE } from '../../utils/validators';
 
 // Firebase opens this page from the e-mail link with ?mode=resetPassword&oobCode=...
 @Component({
   selector: 'app-reset-password',
-  imports: [Spinner, FormsModule, RouterLink, MatIconModule],
+  imports: [Spinner, ReactiveFormsModule, RouterLink, MatIconModule],
   templateUrl: './reset-password.html',
   styleUrl: '../auth/auth.scss',
 })
 export class ResetPassword implements OnInit {
   private readonly auth = inject(Auth);
+  private readonly fb = inject(NonNullableFormBuilder);
 
   readonly mode = input<string>('');
   readonly oobCode = input<string>('');
 
-  protected password = '';
-  protected confirmation = '';
+  protected readonly form = this.fb.group(
+    {
+      password: ['', [Validators.required, passwordValidator]],
+      confirmation: ['', Validators.required],
+    },
+    { validators: fieldsMatch('password', 'confirmation') },
+  );
   protected readonly showPassword = signal(false);
   protected readonly submitted = signal(false);
-  private readonly touched = signal<Record<string, boolean>>({});
 
   // loading while the code is checked, invalid when the link is wrong or expired
   protected readonly state = signal<'loading' | 'ready' | 'invalid' | 'done'>('loading');
@@ -49,30 +60,24 @@ export class ResetPassword implements OnInit {
 
   protected readonly passwordRule = PASSWORD_RULE;
 
-  protected get passwordValid() {
-    return isValidPassword(this.password);
+  // The confirmation is wrong when it is empty or when it differs from the password
+  protected get confirmationInvalid() {
+    return this.form.controls.confirmation.invalid || this.form.hasError('mismatch');
   }
 
-  protected get confirmationValid() {
-    return !!this.confirmation && this.confirmation === this.password;
-  }
-
-  protected touch(field: string) {
-    this.touched.update((touched) => ({ ...touched, [field]: true }));
-  }
-
-  protected showError(field: string) {
-    return this.submitted() || !!this.touched()[field];
+  // Errors show once a field was left (blur) or after the first submit
+  protected showError(control: AbstractControl, invalid = control.invalid) {
+    return invalid && (this.submitted() || control.touched);
   }
 
   protected async submit() {
     this.submitted.set(true);
-    if (!this.passwordValid || !this.confirmationValid) return;
+    if (this.form.invalid) return;
 
     this.formError.set('');
     this.submitting.set(true);
     try {
-      await this.auth.confirmPasswordReset(this.oobCode(), this.password);
+      await this.auth.confirmPasswordReset(this.oobCode(), this.form.controls.password.value);
       this.state.set('done');
     } catch (error) {
       this.formError.set(authErrorMessage(error));

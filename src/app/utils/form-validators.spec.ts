@@ -1,7 +1,8 @@
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   cpfValidator,
   emailValidator,
+  fieldsMatch,
   minTrimmedLength,
   mobileValidator,
   passwordValidator,
@@ -38,5 +39,23 @@ describe('form validators', () => {
     expect(control.errors).toEqual({ email: true });
     control.setValue('maria@example.com');
     expect(control.valid).toBe(true);
+  });
+});
+
+describe('fieldsMatch', () => {
+  const group = (a: string, b: string) =>
+    new FormGroup({ a: new FormControl(a), b: new FormControl(b) }, fieldsMatch('a', 'b'));
+
+  it('is valid when both fields are the same', () => {
+    expect(group('abc12!', 'abc12!').errors).toBeNull();
+  });
+
+  it('flags a difference, and follows either field changing', () => {
+    const g = group('abc12!', 'abc12');
+    expect(g.errors).toEqual({ mismatch: true });
+    g.controls['b'].setValue('abc12!');
+    expect(g.errors).toBeNull();
+    g.controls['a'].setValue('other');
+    expect(g.errors).toEqual({ mismatch: true });
   });
 });

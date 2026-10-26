@@ -14,13 +14,12 @@ import {
   DEFAULT_AVAILABILITY,
   Service,
   ServiceCategory,
-  SERVICE_NAMES,
   SERVICE_PLACES,
   ServiceMode,
 } from '../../models/professional';
-import { durationToText, maskDuration, parseDuration } from '../../utils/duration';
-import { maskMoney, moneyToText, parseMoney } from '../../utils/money';
-import { toDateKey, toMinutes } from '../../utils/slots';
+import { maskDuration, parseDuration } from '../../utils/duration';
+import { maskMoney, parseMoney } from '../../utils/money';
+import { toDateKey } from '../../utils/slots';
 import { Auth } from '../../services/auth';
 import { ProfessionalAccounts } from '../../services/professional-accounts';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
@@ -36,24 +35,28 @@ import { Professionals } from '../../services/professionals';
 import { APP_LANGUAGE, INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
-
-// A service being edited: nothing is pre-filled, so the fields can be empty
-type PriceRuleDraft = { id: string; days: number[]; start: string; end: string; price: string };
-
-type ServiceDraft = Omit<
-  Service,
-  'category' | 'price' | 'durationMinutes' | 'priceRules' | 'photos'
-> & {
-  // Photos of this service (the card shows them as a gallery)
-  photos: string[];
-  // Other prices, by day and time (each price typed like the main one)
-  priceRules: PriceRuleDraft[];
-  category: ServiceCategory | '';
-  // Typed like a money field, e.g. "15,50"
-  price: string;
-  // Typed as H:MM, e.g. "1:30"
-  duration: string;
-};
+import {
+  addBlockedRange,
+  aboutToParagraphs,
+  invalidDayKeys,
+  missingFields,
+  paragraphsToAbout,
+  rangeLabel,
+  toAvailabilityDraft,
+} from './profile-form';
+import {
+  isRuleComplete,
+  isServiceComplete,
+  newRuleDraft,
+  newServiceDraft,
+  PriceRuleDraft,
+  ServiceDraft,
+  serviceNamesOf,
+  setCategory,
+  toggleRuleDay,
+  toService,
+  toServiceDraft,
+} from './service-draft';
 
 type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePrediction };
 
@@ -176,39 +179,11 @@ export class ProProfile {
       this.address = profile.address;
       // Profiles from before this choice existed work at their address
       this.serviceMode.set(profile.serviceMode ?? (profile.address ? 'studio' : null));
-      this.about = profile.about.join('\n\n');
-      this.services = profile.services.map(
-        ({
-          durationMinutes,
-          price,
-          priceRules,
-          photos,
-          image,
-          ...service
-        }: Service & { image?: string }) => ({
-          ...service,
-          photos: [...(photos ?? [])],
-          priceRules: (priceRules ?? []).map((rule) => ({
-            id: Math.random().toString(36).slice(2, 10),
-            days: [...rule.days],
-            start: rule.start,
-            end: rule.end,
-            price: moneyToText(rule.price),
-          })),
-          price: moneyToText(price),
-          duration: durationToText(durationMinutes),
-        }),
-      );
+      this.about = paragraphsToAbout(profile.about);
+      this.services = profile.services.map(toServiceDraft);
       this.position = { ...profile.position };
       this.addressConfirmed.set(this.hasPosition);
-      const availability = structuredClone(profile.availability ?? DEFAULT_AVAILABILITY);
-      // Single days saved before periods existed become one-day periods
-      availability.blockedRanges = [
-        ...(availability.blockedRanges ?? []),
-        ...(availability.blockedDates ?? []).map((date) => ({ start: date, end: date })),
-      ];
-      delete availability.blockedDates;
-      this.availability = availability;
+      this.availability = toAvailabilityDraft(profile.availability);
       this.visible.set(profile.visible !== false);
       void this.loadCpf();
     });
@@ -237,20 +212,16 @@ export class ProProfile {
 
   // What is missing before the profile can be shown to clients
   protected get missing() {
-    const missing: string[] = [];
-    if (this.name.trim().length < 3) missing.push('nome');
-    if (!isValidCpf(this.cpf)) missing.push('CPF');
-    if (!this.image.trim()) missing.push('foto');
-    if (!this.serviceMode()) missing.push($localize`onde você atende`);
-    else if (this.needsAddress) {
-      if (this.address.trim().length < 5) missing.push($localize`endereço`);
-      else if (!this.addressConfirmed())
-        missing.push($localize`escolher o endereço na lista de sugestões`);
-    }
-    if (!this.services.some((service) => this.serviceComplete(service))) {
-      missing.push($localize`pelo menos 1 serviço completo`);
-    }
-    return missing;
+    return missingFields({
+      name: this.name,
+      cpf: this.cpf,
+      image: this.image,
+      hasServiceMode: !!this.serviceMode(),
+      needsAddress: this.needsAddress,
+      address: this.address,
+      addressConfirmed: this.addressConfirmed(),
+      services: this.services,
+    });
   }
 
   // The floating message that was tapped away (it shows again when its text changes)
@@ -262,25 +233,20 @@ export class ProProfile {
 
   // Days where the closing time isn't after the opening time
   protected get invalidDays() {
-    return this.weekdays.filter(({ key }) => {
-      const day = this.availability.weekly[key];
-      return day.enabled && toMinutes(day.end) <= toMinutes(day.start);
-    });
+    const invalid = invalidDayKeys(
+      this.availability,
+      this.weekdays.map(({ key }) => key),
+    );
+    return this.weekdays.filter(({ key }) => invalid.includes(key));
   }
 
   protected blockPending() {
-    const { start, end } = this.pending();
-    if (!start) return;
+    if (!this.pending().start) return;
 
-    const range: DateRange = { start, end: end ?? start };
-    const exists = this.availability.blockedRanges.some(
-      (r) => r.start === range.start && r.end === range.end,
+    this.availability.blockedRanges = addBlockedRange(
+      this.availability.blockedRanges,
+      this.pending(),
     );
-    if (!exists) {
-      this.availability.blockedRanges = [...this.availability.blockedRanges, range].sort((a, b) =>
-        a.start.localeCompare(b.start),
-      );
-    }
     this.pending.set({ start: null, end: null });
     // Blocking a period saves right away
     this.autoSave();
@@ -291,14 +257,7 @@ export class ProProfile {
     this.autoSave();
   }
 
-  // "10/03/2026" for a single day, "10/03/2026 a 15/03/2026" for a period
-  protected rangeLabel(start: string, end: string | null) {
-    const format = (key: string) => {
-      const [year, month, day] = key.split('-').map(Number);
-      return new Date(year, month - 1, day).toLocaleDateString(INTL_LOCALE);
-    };
-    return !end || end === start ? format(start) : `${format(start)} a ${format(end)}`;
-  }
+  protected readonly rangeLabel = rangeLabel;
 
   // Shows the feedback at the top of the page and brings it into view
   private show(text: string, milliseconds = 5500) {
@@ -387,45 +346,16 @@ export class ProProfile {
     this.show($localize`Não foi possível enviar a foto. Use uma imagem e tente novamente.`);
   }
 
-  // The names of the chosen category (a name saved before this list existed is kept as an option)
-  protected serviceNames(service: ServiceDraft) {
-    if (!service.category) return [];
-    const names = SERVICE_NAMES[service.category];
-    return service.name && !names.includes(service.name) ? [service.name, ...names] : names;
-  }
-
-  // Changing the category clears a name that doesn't belong to it
-  protected setCategory(service: ServiceDraft, category: ServiceCategory) {
-    service.category = category;
-    if (!SERVICE_NAMES[category].includes(service.name)) service.name = '';
-  }
+  protected readonly serviceNames = serviceNamesOf;
+  protected readonly setCategory = setCategory;
 
   protected addService() {
-    this.services = [
-      ...this.services,
-      {
-        id: Math.random().toString(36).slice(2, 10),
-        name: '',
-        category: '',
-        price: '0,00',
-        priceRules: [],
-        photos: [],
-        duration: '0:00',
-        description: '',
-      },
-    ];
+    this.services = [...this.services, newServiceDraft()];
   }
 
-  // Description is optional, everything else is required
-  protected serviceComplete(service: ServiceDraft) {
-    return (
-      !!service.name.trim() &&
-      !!service.category &&
-      parseMoney(service.price) > 0 &&
-      !!parseDuration(service.duration) &&
-      service.priceRules.every((rule) => this.ruleComplete(rule))
-    );
-  }
+  protected readonly serviceComplete = isServiceComplete;
+  protected readonly ruleComplete = isRuleComplete;
+  protected readonly toggleRuleDay = toggleRuleDay;
 
   protected readonly parseDuration = parseDuration;
   protected readonly parseMoney = parseMoney;
@@ -446,29 +376,12 @@ export class ProProfile {
   protected readonly dayEnd = '24:00';
 
   protected addRule(service: ServiceDraft) {
-    service.priceRules = [
-      ...service.priceRules,
-      { id: Math.random().toString(36).slice(2, 10), days: [], start: '', end: '', price: '0,00' },
-    ];
+    service.priceRules = [...service.priceRules, newRuleDraft()];
   }
 
   protected removeRule(service: ServiceDraft, rule: PriceRuleDraft) {
     service.priceRules = service.priceRules.filter((r) => r !== rule);
     this.autoSave();
-  }
-
-  protected toggleRuleDay(rule: PriceRuleDraft, day: number) {
-    rule.days = rule.days.includes(day) ? rule.days.filter((d) => d !== day) : [...rule.days, day];
-  }
-
-  protected ruleComplete(rule: PriceRuleDraft) {
-    return (
-      rule.days.length > 0 &&
-      !!rule.start &&
-      !!rule.end &&
-      rule.start < rule.end &&
-      parseMoney(rule.price) > 0
-    );
   }
 
   protected onRulePriceInput(rule: PriceRuleDraft, event: Event) {
@@ -615,26 +528,7 @@ export class ProProfile {
 
   // The services that are filled in, ready to be saved
   private completeServices(): Service[] {
-    return this.services
-      .filter((service) => this.serviceComplete(service))
-      .map(({ duration, price, priceRules, photos, ...service }) => ({
-        ...service,
-        ...(photos.length ? { photos } : {}),
-        price: parseMoney(price),
-        ...(priceRules.length
-          ? {
-              priceRules: priceRules.map(({ id, price: rulePrice, ...rule }) => ({
-                ...rule,
-                days: [...rule.days].sort(),
-                price: parseMoney(rulePrice),
-              })),
-            }
-          : {}),
-        durationMinutes: parseDuration(duration)!,
-        category: service.category as ServiceCategory,
-        name: service.name.trim(),
-        description: service.description.trim(),
-      }));
+    return this.services.filter(isServiceComplete).map(toService);
   }
 
   // What the form writes to the profile. `instagram` and `place` are left out when they can't be saved yet.
@@ -657,10 +551,7 @@ export class ProProfile {
             address: this.needsAddress ? this.address.trim() : '',
             position: this.needsAddress ? this.position : { lat: 0, lng: 0 },
           }),
-      about: this.about
-        .split(/\n\s*\n/)
-        .map((p) => p.trim())
-        .filter(Boolean),
+      about: aboutToParagraphs(this.about),
       services,
       tags: [...new Set(services.map((service) => service.category))],
       gallery: this.gallery,

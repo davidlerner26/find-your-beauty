@@ -89,7 +89,9 @@ When you refactor a screen without changing how it looks, compare screenshots be
 ## Things that live outside the repository
 
 - Firestore: a **TTL policy on `rateLimits.expiresAt`** (Firebase console), or the counters are never deleted.
-- An error tracker (Sentry or similar) for the browser is not connected: `setLogSink` in `utils/log.ts` is where it
-  plugs in. It needs an account and a DSN, and the errors would leave the app, so it is a decision for the owner.
-- Firebase **App Check** is not set up (needs a reCAPTCHA provider in the console and an initialization call).
+- **Decided not to do, for now** (2026-10-26): an error tracker for the browser (`setLogSink` in `utils/log.ts` is
+  where it would plug in; it needs an account and a DSN, and the errors would leave the app) and Firebase **App
+  Check** (needs a reCAPTCHA provider in the console, a rollout in monitor mode first, and `enforceAppCheck` on the
+  callables). The rate limits and the security rules cover the main risks. Reconsider the tracker when usage grows and
+  App Check if there are signs of abuse.
 - Google Maps key referrers and the Resend secret are configured per project: see [ambientes.md](ambientes.md).

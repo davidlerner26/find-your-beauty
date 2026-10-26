@@ -89,9 +89,13 @@ const requireProfessional = async (uid: string | undefined) => {
   return uid;
 };
 
+// The region of the app (see src/app/services/firebase.ts). It is said here too: this file can be loaded before
+// index.ts sets the global options.
+const REGION = 'southamerica-east1';
+
 // Step 2 of the OAuth flow: the page got a `code` back from Instagram and sends it here
 export const connectInstagram = onCall(
-  { invoker: 'public', secrets: [appSecret] },
+  { region: REGION, invoker: 'public', secrets: [appSecret] },
   async (request) => {
     const uid = await requireProfessional(request.auth?.uid);
     const { code, redirectUri } = request.data as { code?: string; redirectUri?: string };
@@ -135,26 +139,29 @@ export const connectInstagram = onCall(
 );
 
 // The professional asks for the latest photos
-export const refreshInstagram = onCall({ invoker: 'public' }, async (request) => {
+export const refreshInstagram = onCall({ region: REGION, invoker: 'public' }, async (request) => {
   const uid = await requireProfessional(request.auth?.uid);
   const saved = (await tokenRef(uid).get()).data() as Token | undefined;
   if (!saved) throw new HttpsError('failed-precondition', 'Instagram não conectado.');
   return { photos: await syncPhotos(uid, saved.token) };
 });
 
-export const disconnectInstagram = onCall({ invoker: 'public' }, async (request) => {
-  const uid = await requireProfessional(request.auth?.uid);
-  await tokenRef(uid).delete();
-  const [files] = await getStorage()
-    .bucket()
-    .getFiles({ prefix: `professionals/${uid}/instagram/` });
-  await Promise.all(files.map((file) => file.delete()));
-  await db().doc(`professionals/${uid}`).update({
-    instagramConnected: false,
-    instagramPhotos: [],
-    instagramSyncedAt: FieldValue.delete(),
-  });
-});
+export const disconnectInstagram = onCall(
+  { region: REGION, invoker: 'public' },
+  async (request) => {
+    const uid = await requireProfessional(request.auth?.uid);
+    await tokenRef(uid).delete();
+    const [files] = await getStorage()
+      .bucket()
+      .getFiles({ prefix: `professionals/${uid}/instagram/` });
+    await Promise.all(files.map((file) => file.delete()));
+    await db().doc(`professionals/${uid}`).update({
+      instagramConnected: false,
+      instagramPhotos: [],
+      instagramSyncedAt: FieldValue.delete(),
+    });
+  },
+);
 
 // Every night: keeps the tokens alive (60 days) and the photos up to date
 export const syncInstagramDaily = onSchedule(
@@ -197,7 +204,7 @@ export const syncInstagramDaily = onSchedule(
 // The request is a form with `signed_request`, signed with the app secret. Her token and the photos we copied
 // are deleted. The answer for a data deletion request is a JSON with a page about it and a confirmation code.
 export const instagramDataDeletion = onRequest(
-  { secrets: [appSecret], cors: false },
+  { region: REGION, secrets: [appSecret], cors: false },
   async (request, response) => {
     const signed = String(request.body?.signed_request ?? '');
     const [signature, payload] = signed.split('.');

@@ -18,7 +18,13 @@ export const paymentsOn = () => mode.value() === 'on';
 const db = () => getFirestore();
 
 // The browser calls these signed in (checked inside) or not (then refused): Cloud Run lets anyone invoke them
-const options: CallableOptions = { invoker: 'public', secrets: [stripeKey] };
+// The region is said here, not left to setGlobalOptions of index.ts: that call runs after this file is loaded, so
+// these functions were created in the default region (us-central1), where the app does not look for them.
+const options: CallableOptions = {
+  region: 'southamerica-east1',
+  invoker: 'public',
+  secrets: [stripeKey],
+};
 
 let cached: Payments | null = null;
 export const payments = () =>

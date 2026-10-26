@@ -10,8 +10,12 @@ const meta: Meta<ChipsRow> = {
 export default meta;
 type Story = StoryObj<ChipsRow>;
 
+// The chips are the page's own (the row only scrolls them): a pill like the ones of the map screen
+const PILL =
+  'flex: none; padding: 0.45rem 1rem; border: 1.5px solid currentColor; border-radius: 999px; background: transparent; color: inherit; font: inherit; white-space: nowrap; cursor: pointer';
+
 const chips = (names: string[]) =>
-  names.map((name) => `<button type="button" class="chip">${name}</button>`).join('');
+  names.map((name) => `<button type="button" style="${PILL}">${name}</button>`).join('');
 
 // Few chips: they fit and there are no arrows
 export const Fits: Story = {

@@ -1,9 +1,9 @@
 import { defineConfig } from 'vitest/config';
 
-// Security rules tests: they run against the Firebase emulators (npm run test:rules)
+// Tests that need the Firebase emulators: security rules (npm run test:rules) and functions (npm run test:functions)
 export default defineConfig({
   test: {
-    include: ['rules-tests/**/*.test.ts'],
+    include: ['rules-tests/**/*.test.ts', 'functions/tests/**/*.test.ts'],
     environment: 'node',
     // The emulators are shared, so the files run one after the other
     fileParallelism: false,

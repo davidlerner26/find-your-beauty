@@ -7,6 +7,8 @@ import { HttpsError, onCall } from 'firebase-functions/v2/https';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { asLang, emailOf, L, Lang, link, money, resendKey, sendEmail, when } from './email';
 import { serviceName } from './catalog';
+import { checkEmailCode } from './email-code';
+import { clientIp, hit, RateLimit } from './rate-limit';
 import {
   onDocumentCreated,
   onDocumentUpdated,
@@ -56,6 +58,43 @@ const priceAt = (service: Service, startsAt: Date) => {
   );
 };
 
+// A booking that doesn't match the professional's services: it is cancelled, its slots are freed and
+// the client is told. `rejectedByServer` keeps onBookingUpdated from saying the client cancelled.
+const rejectBooking = async (
+  ref: FirebaseFirestore.DocumentReference,
+  booking: FirebaseFirestore.DocumentData,
+) => {
+  const batch = db.batch();
+  batch.update(ref, {
+    status: 'cancelled',
+    rejectedByServer: true,
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+  for (const busyId of (booking.busyIds as string[]) ?? []) {
+    batch.delete(db.doc(`professionals/${booking.professionalId}/busy/${busyId}`));
+  }
+  await batch.commit();
+
+  const lang = asLang(booking.lang);
+  await notify(booking.clientUid, `${ref.id}-rejected`, [
+    {
+      text: L(lang, {
+        pt: 'Não foi possível solicitar o horário com ',
+        en: 'We could not request the time with ',
+        es: 'No fue posible solicitar el horario con ',
+      }),
+    },
+    { text: booking.professionalName, bold: true },
+    {
+      text: L(lang, {
+        pt: ': os serviços mudaram. Tente agendar de novo.',
+        en: ': the services changed. Try booking again.',
+        es: ': los servicios cambiaron. Intenta reservar de nuevo.',
+      }),
+    },
+  ]);
+};
+
 // A new booking: the server is the source of truth for prices, then both sides are notified
 export const onBookingCreated = onDocumentCreated(
   { document: 'bookings/{bookingId}', secrets: [resendKey] },
@@ -66,18 +105,34 @@ export const onBookingCreated = onDocumentCreated(
     const { bookingId } = event.params;
     const professional = await db.doc(`professionals/${booking.professionalId}`).get();
 
-    // Recomputes the total and duration from the professional's real services
+    // Recomputes prices and duration from the professional's real services. A booking with a service
+    // that doesn't exist (or for a professional that doesn't) can't be trusted: it is rejected.
     const catalog: Service[] = professional.data()?.['services'] ?? [];
-    const chosen = (booking.services as Service[]).map((s) => catalog.find((c) => c.id === s.id));
-    if (professional.exists && chosen.every(Boolean)) {
-      const services = chosen as Service[];
-      const startsAt: Date = booking.startsAt.toDate();
-      const total =
-        Math.round(services.reduce((sum, s) => sum + priceAt(s, startsAt), 0) * 100) / 100;
-      const durationMinutes = services.reduce((sum, s) => sum + s.durationMinutes, 0);
-      if (total !== booking.total || durationMinutes !== booking.durationMinutes) {
-        await event.data!.ref.update({ total, durationMinutes, correctedByServer: true });
-      }
+    const requested = booking.services as (Service & { name?: string })[];
+    const chosen = requested.map((s) => catalog.find((c) => c.id === s.id));
+    if (!professional.exists || !chosen.every(Boolean)) {
+      await rejectBooking(event.data!.ref, booking);
+      return;
+    }
+    const services = chosen as Service[];
+    const startsAt: Date = booking.startsAt.toDate();
+    const prices = services.map((s) => priceAt(s, startsAt));
+    const total = Math.round(prices.reduce((sum, price) => sum + price, 0) * 100) / 100;
+    const durationMinutes = services.reduce((sum, s) => sum + s.durationMinutes, 0);
+    const pricesChanged = requested.some(
+      (s, i) => s.price !== prices[i] || s.durationMinutes !== services[i].durationMinutes,
+    );
+    if (pricesChanged || total !== booking.total || durationMinutes !== booking.durationMinutes) {
+      await event.data!.ref.update({
+        services: requested.map((s, i) => ({
+          ...s,
+          price: prices[i],
+          durationMinutes: services[i].durationMinutes,
+        })),
+        total,
+        durationMinutes,
+        correctedByServer: true,
+      });
     }
 
     // The client's language is the one of the page where the booking was made; the professional's, the one of her profile
@@ -262,7 +317,7 @@ export const onBookingUpdated = onDocumentUpdated(
   async (event) => {
     const before = event.data?.before.data();
     const after = event.data?.after.data();
-    if (!before || !after || before.status === after.status) return;
+    if (!before || !after || before.status === after.status || after.rejectedByServer) return;
 
     // The client cancelled: tells the professional
     if (after.status === 'cancelled') {
@@ -535,8 +590,23 @@ export const onProfessionalReviewed = onDocumentUpdated(
   },
 );
 
+const tooMany = (lang: Lang) =>
+  L(lang, {
+    pt: 'Muitas tentativas. Tente novamente mais tarde.',
+    en: 'Too many attempts. Try again later.',
+    es: 'Demasiados intentos. Inténtalo de nuevo más tarde.',
+  });
+
+// Counts a call against the limits and refuses it when one is exceeded. The message is the same
+// whether or not the e-mail has an account, so the answer doesn't give that away.
+const enforce = async (limits: { limit: RateLimit; message: string }[]) => {
+  for (const { limit, message } of limits) {
+    if (!(await hit(db, limit))) throw new HttpsError('resource-exhausted', message);
+  }
+};
+
 // Password reset, sent by Resend instead of by Firebase. It always answers ok, so nobody can find out
-// which e-mails have an account.
+// which e-mails have an account. Calls over the limit of one e-mail are dropped quietly for the same reason.
 export const sendPasswordReset = onCall({ secrets: [resendKey] }, async (request) => {
   const lang = asLang(request.data?.lang);
   const email = String(request.data?.email ?? '')
@@ -551,6 +621,16 @@ export const sendPasswordReset = onCall({ secrets: [resendKey] }, async (request
         es: 'Escribe un correo electrónico válido.',
       }),
     );
+  }
+
+  await enforce([
+    {
+      limit: { scope: 'reset-ip', key: clientIp(request), max: 10, windowSeconds: 3600 },
+      message: tooMany(lang),
+    },
+  ]);
+  if (!(await hit(db, { scope: 'reset-email', key: email, max: 3, windowSeconds: 3600 }))) {
+    return { ok: true };
   }
 
   try {
@@ -619,7 +699,6 @@ export {
 // The code is kept hashed in emailCodes/{uid}, which no rule opens: only these functions use it.
 const CODE_MINUTES = 10;
 const RESEND_SECONDS = 60;
-const MAX_ATTEMPTS = 5;
 
 const hashCode = (uid: string, code: string) =>
   createHash('sha256').update(`${uid}:${code}`).digest('hex');
@@ -651,22 +730,31 @@ const userByEmail = async (email: string) => {
 export const sendVerificationCode = onCall({ secrets: [resendKey] }, async (request) => {
   const lang = asLang(request.data?.lang);
   const email = cleanEmail(request.data?.email, lang);
-  const user = await userByEmail(email);
-  if (!user || user.emailVerified) return { ok: true };
 
-  const ref = db.doc(`emailCodes/${user.uid}`);
-  const saved = (await ref.get()).data();
-  if (saved && Date.now() - (saved['sentAt'] as number) < RESEND_SECONDS * 1000) {
-    throw new HttpsError(
-      'resource-exhausted',
-      L(lang, {
+  // Checked before looking the e-mail up: unknown e-mails are limited the same way as known ones
+  await enforce([
+    {
+      limit: { scope: 'code-ip', key: clientIp(request), max: 30, windowSeconds: 3600 },
+      message: tooMany(lang),
+    },
+    {
+      limit: { scope: 'code-wait', key: email, max: 1, windowSeconds: RESEND_SECONDS },
+      message: L(lang, {
         pt: 'Aguarde um instante para pedir outro código.',
         en: 'Wait a moment to ask for another code.',
         es: 'Espera un momento para pedir otro código.',
       }),
-    );
-  }
+    },
+    {
+      limit: { scope: 'code-email', key: email, max: 5, windowSeconds: 3600 },
+      message: tooMany(lang),
+    },
+  ]);
 
+  const user = await userByEmail(email);
+  if (!user || user.emailVerified) return { ok: true };
+
+  const ref = db.doc(`emailCodes/${user.uid}`);
   const code = String(randomInt(0, 10000)).padStart(4, '0');
   await ref.set({
     hash: hashCode(user.uid, code),
@@ -720,26 +808,29 @@ export const verifyEmailCode = onCall({ secrets: [resendKey] }, async (request) 
     );
   }
 
+  // Few guesses per e-mail overall: the code only has 4 digits, so asking for new codes must not renew them
+  await enforce([
+    {
+      limit: { scope: 'verify-ip', key: clientIp(request), max: 60, windowSeconds: 3600 },
+      message: tooMany(lang),
+    },
+    {
+      limit: { scope: 'verify-email', key: email, max: 10, windowSeconds: 3600 },
+      message: tooMany(lang),
+    },
+  ]);
+
+  const wrong = new HttpsError(
+    'invalid-argument',
+    L(lang, { pt: 'Código incorreto.', en: 'Wrong code.', es: 'Código incorrecto.' }),
+  );
   const user = await userByEmail(email);
-  if (!user) {
-    throw new HttpsError(
-      'failed-precondition',
-      L(lang, {
-        pt: 'Código inválido ou expirado.',
-        en: 'Invalid or expired code.',
-        es: 'Código inválido o vencido.',
-      }),
-    );
-  }
+  // An unknown e-mail gets the same answer as a wrong code
+  if (!user) throw wrong;
   if (user.emailVerified) return { ok: true };
 
-  const ref = db.doc(`emailCodes/${user.uid}`);
-  const saved = (await ref.get()).data();
-  if (
-    !saved ||
-    Date.now() > (saved['expiresAt'] as number) ||
-    (saved['attempts'] as number) >= MAX_ATTEMPTS
-  ) {
+  const result = await checkEmailCode(db, user.uid, hashCode(user.uid, code));
+  if (result === 'expired') {
     throw new HttpsError(
       'failed-precondition',
       L(lang, {
@@ -749,16 +840,9 @@ export const verifyEmailCode = onCall({ secrets: [resendKey] }, async (request) 
       }),
     );
   }
-  if (saved['hash'] !== hashCode(user.uid, code)) {
-    await ref.update({ attempts: FieldValue.increment(1) });
-    throw new HttpsError(
-      'invalid-argument',
-      L(lang, { pt: 'Código incorreto.', en: 'Wrong code.', es: 'Código incorrecto.' }),
-    );
-  }
+  if (result === 'wrong') throw wrong;
 
   await getAuth().updateUser(user.uid, { emailVerified: true });
-  await ref.delete();
   // The welcome e-mail goes out now that the address is confirmed
   await welcomeClient(user.uid, request.data?.lang);
   return { ok: true };

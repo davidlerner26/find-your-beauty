@@ -18,7 +18,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:rules": "firebase emulators:exec --only firestore,storage --project demo-find-your-beauty \"vitest run --config vitest.rules.config.ts\""
+    "test:rules": "firebase emulators:exec --only firestore,storage --project demo-find-your-beauty \"vitest run --config vitest.rules.config.ts rules-tests\"",
+    "test:functions": "firebase emulators:exec --only firestore --project demo-find-your-beauty \"vitest run --config vitest.rules.config.ts functions/tests\""
   },
   "private": true,
   "packageManager": "npm@11.9.0",

@@ -36,6 +36,7 @@ import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
 import { APP_LANGUAGE, INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { log } from '../../utils/log';
 
 // A service being edited: nothing is pre-filled, so the fields can be empty
 type PriceRuleDraft = { id: string; days: number[]; start: string; end: string; price: string };
@@ -382,7 +383,7 @@ export class ProProfile {
   }
 
   private showUploadError(error: unknown) {
-    console.error('Upload failed', error);
+    log.error('Upload failed', error);
     this.show($localize`Não foi possível enviar a foto. Use uma imagem e tente novamente.`);
   }
 
@@ -547,7 +548,7 @@ export class ProProfile {
       );
       this.addressOpen.set(true);
     } catch (error) {
-      console.error('Address search failed', error);
+      log.error('Address search failed', error);
       this.suggestions.set([]);
       this.addressError.set(
         $localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`,
@@ -570,7 +571,7 @@ export class ProProfile {
       // Choosing a place closes the billing session of the search
       this.sessionToken = undefined;
     } catch (error) {
-      console.error('Failed to load the place', error);
+      log.error('Failed to load the place', error);
       this.addressError.set($localize`Não foi possível carregar este endereço. Escolha outro.`);
     }
   }
@@ -586,7 +587,7 @@ export class ProProfile {
       // What was typed before the answer came is kept
       if (!this.cpf) this.cpf = formatCpf(this.savedCpf);
     } catch (error) {
-      console.error('Failed to load the CPF', error);
+      log.error('Failed to load the CPF', error);
     }
   }
 
@@ -720,7 +721,7 @@ export class ProProfile {
       // A short toast, like the other messages of the screen
       this.show($localize`Alterações salvas`, 2500);
     } catch (error) {
-      console.error('Failed to auto save the profile', error);
+      log.error('Failed to auto save the profile', error);
     }
   }
 
@@ -788,7 +789,7 @@ export class ProProfile {
             : $localize`Perfil salvo, mas ainda não publicado. Falta: ${this.missing.join(', ')}:missing:.`,
       );
     } catch (error) {
-      console.error('Failed to save profile', error);
+      log.error('Failed to save profile', error);
       this.show($localize`Não foi possível salvar. Tente novamente.`);
     } finally {
       this.saving.set(false);
@@ -808,7 +809,7 @@ export class ProProfile {
       await this.professionals.load();
       this.show($localize`Fotos do Instagram atualizadas (${photos}:photos:).`);
     } catch (error) {
-      console.error('Failed to refresh Instagram', error);
+      log.error('Failed to refresh Instagram', error);
       this.show($localize`Não foi possível atualizar as fotos do Instagram. Tente novamente.`);
     } finally {
       this.instagramBusy.set(false);
@@ -829,7 +830,7 @@ export class ProProfile {
       await this.professionals.load();
       this.show($localize`Instagram desconectado.`);
     } catch (error) {
-      console.error('Failed to disconnect Instagram', error);
+      log.error('Failed to disconnect Instagram', error);
       this.show($localize`Não foi possível desconectar. Tente novamente.`);
     } finally {
       this.instagramBusy.set(false);
@@ -841,6 +842,6 @@ export class ProProfile {
     this.auth
       .signOut()
       .then(() => this.feedback.show($localize`Você saiu da conta`))
-      .catch((error) => console.error('Sign out failed', error));
+      .catch((error) => log.error('Sign out failed', error));
   }
 }

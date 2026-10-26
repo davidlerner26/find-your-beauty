@@ -11,6 +11,7 @@ import {
 import { Auth } from './auth';
 import { Feedback } from './feedback';
 import { db } from './firebase';
+import { log } from '../utils/log';
 
 // users/{uid}/favorites/{professionalId}: the professionals a client hearted
 @Injectable({ providedIn: 'root' })
@@ -41,7 +42,7 @@ export class Favorites {
           this.loading.set(false);
         },
         (error) => {
-          console.error('Failed to load favorites', error);
+          log.error('Failed to load favorites', error);
           this.loading.set(false);
         },
       );

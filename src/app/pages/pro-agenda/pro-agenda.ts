@@ -11,6 +11,7 @@ import { Feedback } from '../../services/feedback';
 import { formatClock } from '../../utils/format-date';
 import { INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { log } from '../../utils/log';
 
 const STATUS_LABEL: Record<BookingStatus, string> = {
   pending: $localize`Aguardando`,
@@ -87,7 +88,7 @@ export class ProAgenda {
       .setStatus(booking, status)
       .then(() => this.feedback.show(done))
       .catch((error) => {
-        console.error('Failed to update booking', error);
+        log.error('Failed to update booking', error);
         this.feedback.show($localize`Não foi possível atualizar o agendamento. Tente novamente.`);
       });
   }

@@ -14,6 +14,7 @@ import { Notifications } from '../../services/notifications';
 import { Professionals } from '../../services/professionals';
 import { formatRelative } from '../../utils/format-date';
 import { T } from '../../utils/texts';
+import { log } from '../../utils/log';
 
 // Ignores the case and the accents, so "nao" finds "não"
 const fold = (text: string) =>
@@ -100,7 +101,7 @@ export class Inbox {
     if (notification.unread) {
       this.notifications
         .markAsRead(notification.id)
-        .catch((error) => console.error('Failed to mark as read', error));
+        .catch((error) => log.error('Failed to mark as read', error));
     }
     this.router.navigateByUrl(this.auth.role() === 'professional' ? '/pro' : '/agenda');
   }

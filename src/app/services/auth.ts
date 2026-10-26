@@ -21,6 +21,7 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 import { DEFAULT_AVAILABILITY } from '../models/professional';
 import { APP_LANGUAGE } from '../utils/locale';
 import { db, firebaseApp } from './firebase';
+import { log } from '../utils/log';
 
 export type SignUpData = {
   firstName: string;
@@ -116,10 +117,16 @@ export class Auth {
     if (area === 'client' && this.role() === 'client') await this.createUserDocIfMissing(user);
     if (area === 'professional' && this.role() !== 'professional' && !this.signupIncomplete()) {
       // A Google account with no account here (not even a client) has to sign up first
-      const client = await getDoc(doc(db, 'users', user.uid)).catch(() => null);
+      const client = await getDoc(doc(db, 'users', user.uid)).catch((error) => {
+        log.error('Failed to check the client account', error);
+        return null;
+      });
       if (client && !client.exists()) {
         // Signing in with Google created the account in Firebase: it is removed, since the sign up wasn't done
-        await deleteUser(user).catch(() => signOut(this.auth));
+        await deleteUser(user).catch((error) => {
+          log.warn('Failed to remove the unfinished account, signing out instead', error);
+          return signOut(this.auth);
+        });
         throw { code: 'auth/professional-not-registered' };
       }
     }
@@ -158,7 +165,7 @@ export class Auth {
         createdAt: serverTimestamp(),
       });
     } catch (error) {
-      console.error('Failed to save user', error);
+      log.error('Failed to save user', error);
     }
 
     // Not signed in until the e-mail is confirmed with the code
@@ -184,7 +191,7 @@ export class Auth {
       // Without storage a reload forgets the e-mail
     }
     await this.sendVerificationCode(email).catch((error) =>
-      console.error('Failed to send the code', error),
+      log.error('Failed to send the code', error),
     );
   }
 
@@ -228,7 +235,7 @@ export class Auth {
     await this.createProfessionalDoc(user, name, email.trim(), phone);
     // The CPF is private: it is not in the public profile
     await setDoc(doc(db, 'professionals', user.uid, 'private', 'identity'), { cpf }).catch(
-      (error) => console.error('Failed to save the CPF', error),
+      (error) => log.error('Failed to save the CPF', error),
     );
     // Stays signed in: the second step of the sign up completes the profile
     await this.resolveRole(user);
@@ -404,7 +411,7 @@ export class Auth {
           }
         }
       } catch (error) {
-        console.error('Failed to resolve role', error);
+        log.error('Failed to resolve role', error);
       }
     }
 
@@ -433,7 +440,7 @@ export class Auth {
         createdAt: serverTimestamp(),
       });
     } catch (error) {
-      console.error('Failed to save user', error);
+      log.error('Failed to save user', error);
     }
   }
 }

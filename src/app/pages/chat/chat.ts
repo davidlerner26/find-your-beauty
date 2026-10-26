@@ -11,6 +11,7 @@ import { Messages } from '../../services/messages';
 import { Feedback } from '../../services/feedback';
 import { Professionals } from '../../services/professionals';
 import { formatClock } from '../../utils/format-date';
+import { log } from '../../utils/log';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -104,7 +105,7 @@ export class Chat {
 
     this.draft = '';
     this.deliver({ text })?.catch((error) => {
-      console.error('Failed to send message', error);
+      log.error('Failed to send message', error);
       // The text goes back to the field, so nothing is lost
       if (!this.draft) this.draft = text;
       this.feedback.show($localize`Não foi possível enviar a mensagem. Tente novamente.`);
@@ -128,7 +129,7 @@ export class Chat {
         await this.deliver(await this.messagesService.upload(this.conversationId(), file));
       }
     } catch (error) {
-      console.error('Failed to send file', error);
+      log.error('Failed to send file', error);
       this.attachError.set($localize`Não foi possível enviar o arquivo. Tente novamente.`);
     } finally {
       this.uploading.set(false);

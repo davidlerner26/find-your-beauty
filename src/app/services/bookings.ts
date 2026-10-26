@@ -13,6 +13,7 @@ import { Booking, BookingStatus } from '../models/booking';
 import { Auth } from './auth';
 import { APP_LANGUAGE } from '../utils/locale';
 import { db } from './firebase';
+import { log } from '../utils/log';
 
 @Injectable({ providedIn: 'root' })
 export class Bookings {
@@ -62,7 +63,7 @@ export class Bookings {
           loading?.set(false);
         },
         (error) => {
-          console.error('Failed to load bookings', error);
+          log.error('Failed to load bookings', error);
           loading?.set(false);
         },
       );

@@ -13,6 +13,7 @@ import { PricePipe } from '../../utils/price.pipe';
 import { ruleLabel } from '../../utils/pricing';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { log } from '../../utils/log';
 
 const WEEKDAYS = [
   $localize`Domingo`,
@@ -84,7 +85,7 @@ export class AdminProfessional {
       // Answered: it is no longer in the waiting list
       this.router.navigateByUrl('/admin');
     } catch (error) {
-      console.error('Failed to answer', error);
+      log.error('Failed to answer', error);
       this.error.set($localize`Não foi possível concluir. Tente novamente.`);
     } finally {
       this.working.set(false);

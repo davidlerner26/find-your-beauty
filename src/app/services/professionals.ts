@@ -2,6 +2,7 @@ import { computed, Injectable, signal } from '@angular/core';
 import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { Professional } from '../models/professional';
 import { db } from './firebase';
+import { log } from '../utils/log';
 
 @Injectable({ providedIn: 'root' })
 export class Professionals {
@@ -23,7 +24,7 @@ export class Professionals {
         this.list.set(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Professional));
         this.status.set('ready');
       },
-      (error) => console.error('Failed to follow the professionals', error),
+      (error) => log.error('Failed to follow the professionals', error),
     );
   }
 
@@ -34,7 +35,7 @@ export class Professionals {
       this.list.set(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Professional));
       this.status.set('ready');
     } catch (error) {
-      console.error('Failed to load professionals', error);
+      log.error('Failed to load professionals', error);
       this.status.set('error');
     }
   }

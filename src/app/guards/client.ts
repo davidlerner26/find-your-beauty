@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { missingProfileData } from '../models/user';
 import { Auth } from '../services/auth';
 import { Users } from '../services/users';
+import { log } from '../utils/log';
 
 // Booking is for signed-in clients with all the profile data filled in:
 // visitors go to the login, professionals back to the start, and a client with missing data to the
@@ -22,7 +23,7 @@ export const clientGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) 
       return router.parseUrl(`/profissionais/${route.paramMap.get('id')}`);
     }
   } catch (error) {
-    console.error('Failed to check the profile data', error);
+    log.error('Failed to check the profile data', error);
   }
   return true;
 };

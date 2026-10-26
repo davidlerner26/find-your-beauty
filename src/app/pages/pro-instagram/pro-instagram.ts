@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
 import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
+import { log } from '../../utils/log';
 
 // Where Instagram sends the professional back (?code=... or ?error=...)
 @Component({
@@ -59,7 +60,7 @@ export class ProInstagram {
       await this.professionals.load();
       this.router.navigateByUrl('/pro/perfil');
     } catch (error) {
-      console.error('Failed to connect Instagram', error);
+      log.error('Failed to connect Instagram', error);
       const message = (error as { message?: string }).message ?? '';
       this.error.set(
         message === 'invalid-state'

@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
 import { Admin as AdminService, PendingProfessional } from '../../services/admin';
 import { formatRelative } from '../../utils/format-date';
+import { log } from '../../utils/log';
 
 @Component({
   selector: 'app-admin',
@@ -33,7 +34,7 @@ export class Admin {
     try {
       this.all.set(await this.admin.pending());
     } catch (error) {
-      console.error('Failed to load pending professionals', error);
+      log.error('Failed to load pending professionals', error);
       this.error.set($localize`Não foi possível carregar os cadastros.`);
     } finally {
       this.loading.set(false);
@@ -54,7 +55,7 @@ export class Admin {
         this.all.update((list) => list.filter((item) => item.id !== professional.id));
       }
     } catch (error) {
-      console.error('Failed to answer', error);
+      log.error('Failed to answer', error);
       this.error.set($localize`Não foi possível concluir. Tente novamente.`);
     } finally {
       this.working.set(null);

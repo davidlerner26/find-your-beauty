@@ -13,6 +13,7 @@ import { PlaceSearch } from '../../utils/place-search';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import { T } from '../../utils/texts';
+import { log } from '../../utils/log';
 
 @Component({
   selector: 'app-profile',
@@ -134,7 +135,7 @@ export class Profile {
       this.editing.set(false);
       this.feedback.show($localize`Perfil atualizado`);
     } catch (error) {
-      console.error('Failed to save profile', error);
+      log.error('Failed to save profile', error);
       this.saveError.set($localize`Não foi possível salvar. Tente novamente.`);
     } finally {
       this.saving.set(false);
@@ -151,6 +152,6 @@ export class Profile {
     this.auth
       .signOut()
       .then(() => this.feedback.show($localize`Você saiu da conta`))
-      .catch((error) => console.error('Sign out failed', error));
+      .catch((error) => log.error('Sign out failed', error));
   }
 }

@@ -16,6 +16,7 @@ import { formatClock } from '../../utils/format-date';
 import { PricePipe } from '../../utils/price.pipe';
 import { INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { log } from '../../utils/log';
 
 const STATUS_LABEL: Record<BookingStatus, string> = {
   pending: $localize`Aguardando`,
@@ -111,7 +112,7 @@ export class MyBookings {
       .cancel(booking)
       .then(() => this.feedback.show($localize`Agendamento cancelado`))
       .catch((error) => {
-        console.error('Failed to cancel booking', error);
+        log.error('Failed to cancel booking', error);
         this.feedback.show($localize`Não foi possível cancelar. Tente novamente.`);
       });
   }

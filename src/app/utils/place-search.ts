@@ -1,6 +1,7 @@
 import { signal } from '@angular/core';
 import { GoogleMapsLoader } from '../services/google-maps-loader';
 import { INTL_LOCALE } from './locale';
+import { log } from './log';
 
 export type PlaceSuggestion = { text: string; prediction: google.maps.places.PlacePrediction };
 
@@ -82,7 +83,7 @@ export class PlaceSearch {
       );
       this.open.set(true);
     } catch (error) {
-      console.error('Address search failed', error);
+      log.error('Address search failed', error);
       this.suggestions.set([]);
       this.error.set(
         $localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`,
@@ -105,7 +106,7 @@ export class PlaceSearch {
       // Choosing a place closes the billing session of the search
       this.sessionToken = undefined;
     } catch (error) {
-      console.error('Failed to load the place', error);
+      log.error('Failed to load the place', error);
       this.error.set($localize`Não foi possível carregar este endereço. Escolha outro.`);
     }
   }

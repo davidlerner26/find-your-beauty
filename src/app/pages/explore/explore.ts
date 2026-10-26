@@ -34,6 +34,7 @@ import { environment } from '../../../environments/environment';
 import { INTL_LOCALE } from '../../utils/locale';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { log } from '../../utils/log';
 
 const pin = (color: string) =>
   'data:image/svg+xml;utf8,' +
@@ -356,7 +357,7 @@ export class Explore implements OnInit {
   // The heart sits inside a card that is a link: it must not open the page
   protected toggleFavorite(event: Event, id: string) {
     event.stopPropagation();
-    this.favorites.toggle(id).catch((error) => console.error('Failed to update favorite', error));
+    this.favorites.toggle(id).catch((error) => log.error('Failed to update favorite', error));
   }
 
   protected photoLoaded(url: string) {

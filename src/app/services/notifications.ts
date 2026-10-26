@@ -11,6 +11,7 @@ import {
 import { Notification } from '../models/message';
 import { Auth } from './auth';
 import { db } from './firebase';
+import { log } from '../utils/log';
 
 @Injectable({ providedIn: 'root' })
 export class Notifications {
@@ -52,7 +53,7 @@ export class Notifications {
           this.loading.set(false);
         },
         (error) => {
-          console.error('Failed to load notifications', error);
+          log.error('Failed to load notifications', error);
           this.loading.set(false);
         },
       );

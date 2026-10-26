@@ -2,6 +2,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, signal, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
+import { Feedback } from '../../services/feedback';
+import { log } from '../../utils/log';
 import { T } from '../../utils/texts';
 
 type Step = { title: string; description: string; image: string };
@@ -15,6 +17,7 @@ type Step = { title: string; description: string; image: string };
 export class Onboarding {
   private readonly auth = inject(Auth);
   private readonly router = inject(Router);
+  private readonly feedback = inject(Feedback);
 
   protected readonly t = T;
   protected readonly steps: Step[] = [
@@ -51,8 +54,12 @@ export class Onboarding {
     try {
       await this.auth.signInWithGoogle();
       this.router.navigateByUrl('/');
-    } catch {
-      // popup closed or failed: stay on the page
+    } catch (error) {
+      // Closing the popup is not an error: stay on the page
+      const code = (error as { code?: string }).code;
+      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
+      log.error('Failed to sign in with Google', error);
+      this.feedback.show($localize`Não foi possível entrar com o Google. Tente novamente.`);
     }
   }
 

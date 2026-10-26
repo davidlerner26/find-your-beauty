@@ -17,6 +17,7 @@ import { Professionals } from '../../services/professionals';
 import { priceAt } from '../../utils/pricing';
 import { busyIdsFor, freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
 import { INTL_LOCALE } from '../../utils/locale';
+import { log } from '../../utils/log';
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
@@ -182,7 +183,7 @@ export class Booking {
         .busyTimes(id, toDateKey(day))
         .then((taken) => !cancelled && this.taken.set(taken))
         .catch((error) => {
-          console.error('Failed to load times', error);
+          log.error('Failed to load times', error);
           if (!cancelled) this.taken.set(new Set());
         });
     });
@@ -195,7 +196,7 @@ export class Booking {
     try {
       busy = await this.professionals.busyFrom(id, toDateKey(this.today));
     } catch (error) {
-      console.error('Failed to load busy days', error);
+      log.error('Failed to load busy days', error);
     }
 
     for (let offset = 0; offset < 120; offset++) {
@@ -256,7 +257,7 @@ export class Booking {
         return;
       }
     } catch (error) {
-      console.error('Failed to check the profile data', error);
+      log.error('Failed to check the profile data', error);
       this.error.set($localize`Não foi possível verificar seus dados. Tente novamente.`);
       return;
     } finally {
@@ -296,7 +297,7 @@ export class Booking {
       );
       this.router.navigate(['/agenda']);
     } catch (error) {
-      console.error('Failed to create booking', error);
+      log.error('Failed to create booking', error);
       // Slots can only be created once, so a denied write means someone took this time first
       this.error.set(
         (error as { code?: string }).code === 'permission-denied'

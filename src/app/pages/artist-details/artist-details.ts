@@ -43,6 +43,7 @@ import { instagramUrl } from '../../utils/instagram';
 import { formatRelative } from '../../utils/format-date';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { log } from '../../utils/log';
 
 @Component({
   selector: 'app-artist-details',
@@ -218,7 +219,7 @@ export class ArtistDetails {
         uid && role === 'client' ? await this.reviewsService.completedBookingId(id) : null,
       );
     } catch (error) {
-      console.error('Failed to load reviews', error);
+      log.error('Failed to load reviews', error);
     }
   }
 
@@ -247,7 +248,7 @@ export class ArtistDetails {
       this.reviewMessage.set('');
       this.feedback.show($localize`Avaliação excluída`);
     } catch (error) {
-      console.error('Failed to delete review', error);
+      log.error('Failed to delete review', error);
       this.reviewMessage.set($localize`Não foi possível excluir a avaliação. Tente novamente.`);
     }
   }
@@ -268,7 +269,7 @@ export class ArtistDetails {
       this.reviewMessage.set($localize`Avaliação enviada. Obrigado!`);
       this.feedback.show($localize`Avaliação enviada`);
     } catch (error) {
-      console.error('Failed to save review', error);
+      log.error('Failed to save review', error);
       this.reviewMessage.set($localize`Não foi possível enviar a avaliação. Tente novamente.`);
     } finally {
       this.savingReview.set(false);
@@ -300,7 +301,7 @@ export class ArtistDetails {
   protected toggleFavorite() {
     this.favorites
       .toggle(this.id())
-      .catch((error) => console.error('Failed to update favorite', error));
+      .catch((error) => log.error('Failed to update favorite', error));
   }
 
   protected isSelected(service: Service) {

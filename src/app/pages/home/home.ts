@@ -23,6 +23,7 @@ import { distanceKm, formatDistance } from '../../utils/geo';
 import { T } from '../../utils/texts';
 import { environment } from '../../../environments/environment';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { log } from '../../utils/log';
 
 const CATEGORY_ICONS: Record<string, string> = { Maquiagem: 'brush', Cabelo: 'content_cut' };
 
@@ -118,7 +119,7 @@ export class Home {
   // The heart sits inside a card that is a link: it must not open the page
   protected toggleFavorite(event: Event, id: string) {
     event.stopPropagation();
-    this.favorites.toggle(id).catch((error) => console.error('Failed to update favorite', error));
+    this.favorites.toggle(id).catch((error) => log.error('Failed to update favorite', error));
   }
 
   protected photoLoaded(url: string) {

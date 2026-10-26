@@ -19,6 +19,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { resizeImage } from '../utils/image';
 import { Auth } from './auth';
 import { db, storage } from './firebase';
+import { log } from '../utils/log';
 
 // What the conversation list shows for the last message
 const preview = (content: MessageContent) =>
@@ -74,7 +75,7 @@ export class Messages {
           );
           this.conversations.set(list);
         },
-        (error) => console.error('Failed to load conversations', error),
+        (error) => log.error('Failed to load conversations', error),
       );
       onCleanup(unsubscribe);
     });
@@ -93,7 +94,10 @@ export class Messages {
       stale.map(async (conversation) => {
         const snapshot = await getDocs(
           collection(db, 'conversations', conversation.id, 'messages'),
-        ).catch(() => null);
+        ).catch((error) => {
+          log.error('Failed to load the messages of a conversation', error);
+          return null;
+        });
         if (!snapshot) return null;
         this.textsLoadedAt.set(conversation.id, conversation.lastMessageAt?.getTime() ?? 0);
         const texts = snapshot.docs
@@ -147,7 +151,7 @@ export class Messages {
             };
           }),
         ),
-      (error) => console.error('Failed to load messages', error),
+      (error) => log.error('Failed to load messages', error),
     );
   }
 

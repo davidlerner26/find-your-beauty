@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { resizeImage } from '../utils/image';
 import { storage } from './firebase';
+import { log } from '../utils/log';
 
 @Injectable({ providedIn: 'root' })
 export class Photos {
@@ -20,7 +21,7 @@ export class Photos {
     try {
       await deleteObject(ref(storage, url));
     } catch (error) {
-      console.warn('Could not delete photo', error);
+      log.warn('Could not delete photo', error);
     }
   }
 }

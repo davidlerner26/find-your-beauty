@@ -19,6 +19,7 @@ import { INTL_LOCALE } from '../../utils/locale';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { T } from '../../utils/texts';
 import { CatalogPipe, catalogLabel } from '../../utils/catalog.pipe';
+import { log } from '../../utils/log';
 
 type SortKey = 'price-asc' | 'rating' | 'distance' | 'price-desc';
 
@@ -262,7 +263,7 @@ export class Search {
   protected toggleFavorite(event: Event, id: string) {
     event.preventDefault();
     event.stopPropagation();
-    this.favorites.toggle(id).catch((error) => console.error('Failed to update favorite', error));
+    this.favorites.toggle(id).catch((error) => log.error('Failed to update favorite', error));
   }
 
   protected goBack() {

@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';
+import * as logger from 'firebase-functions/logger';
 import type { Lang } from './shared/domain';
 import { defineSecret, defineString } from 'firebase-functions/params';
 
@@ -106,9 +107,15 @@ export async function sendEmail(email: Email) {
           .join('\n\n'),
       }),
     });
-    if (!response.ok) console.error('Resend failed', response.status, await response.text());
+    if (!response.ok) {
+      logger.error('Resend refused the e-mail', {
+        status: response.status,
+        body: await response.text(),
+        subject: email.subject,
+      });
+    }
   } catch (error) {
-    console.error('Resend failed', error);
+    logger.error('Resend failed', { error, subject: email.subject });
   }
 }
 
@@ -118,7 +125,7 @@ export async function emailOf(uid: string | null | undefined) {
   try {
     return (await getAuth().getUser(uid)).email ?? null;
   } catch (error) {
-    console.error('No e-mail for', uid, error);
+    logger.error('No e-mail for the account', { uid, error });
     return null;
   }
 }

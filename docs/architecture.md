@@ -60,6 +60,9 @@ message that has none, and the placeholder names in the translation must match t
 nobody caught and tells the user once every 10 seconds. A sink can be plugged in with `setLogSink` for an error
 tracker.
 
+**Logs in the Cloud Functions.** They use `firebase-functions/logger` with fields (`logger.error('Resend failed',
+{ error, subject })`), so Cloud Logging can filter and alert on them, instead of `console.*` with text.
+
 **Forms.** Reactive forms with validators from `utils/form-validators.ts` for forms that validate (login, signup,
 password). Plain `ngModel` is fine for loose fields (search box, chat).
 
@@ -86,5 +89,7 @@ When you refactor a screen without changing how it looks, compare screenshots be
 ## Things that live outside the repository
 
 - Firestore: a **TTL policy on `rateLimits.expiresAt`** (Firebase console), or the counters are never deleted.
+- An error tracker (Sentry or similar) for the browser is not connected: `setLogSink` in `utils/log.ts` is where it
+  plugs in. It needs an account and a DSN, and the errors would leave the app, so it is a decision for the owner.
 - Firebase **App Check** is not set up (needs a reCAPTCHA provider in the console and an initialization call).
 - Google Maps key referrers and the Resend secret are configured per project: see [ambientes.md](ambientes.md).

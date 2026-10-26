@@ -7,6 +7,7 @@ import { HttpsError, onCall } from 'firebase-functions/v2/https';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { asLang, emailOf, L, Lang, link, money, resendKey, sendEmail, when } from './email';
 import { serviceName } from './catalog';
+import * as logger from 'firebase-functions/logger';
 import { checkEmailCode } from './email-code';
 import { COLLECTIONS } from './shared/domain';
 import { clientIp, hit, RateLimit } from './rate-limit';
@@ -256,7 +257,7 @@ export const completeFinishedBookings = onSchedule(
         booking.ref.update({ status: 'completed', updatedAt: FieldValue.serverTimestamp() }),
       ),
     );
-    console.log(`Completed ${finished.length} booking(s)`);
+    logger.info('Bookings completed', { count: finished.length });
   },
 );
 
@@ -673,7 +674,7 @@ export const sendPasswordReset = onCall({ secrets: [resendKey] }, async (request
     }
   } catch (error) {
     // No account with this e-mail, or any other failure: nothing is said to the caller
-    console.error('Password reset not sent', (error as { code?: string }).code ?? error);
+    logger.warn('Password reset not sent', { code: (error as { code?: string }).code, error });
   }
   return { ok: true };
 });

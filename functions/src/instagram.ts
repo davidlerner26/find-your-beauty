@@ -1,4 +1,5 @@
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import * as logger from 'firebase-functions/logger';
 import { getStorage } from 'firebase-admin/storage';
 import { defineSecret, defineString } from 'firebase-functions/params';
 import { createHmac, timingSafeEqual } from 'node:crypto';
@@ -183,7 +184,7 @@ export const syncInstagramDaily = onSchedule(
         }
         await syncPhotos(uid, token);
       } catch (error) {
-        console.error(`Instagram sync failed for ${uid}`, error);
+        logger.error('Instagram sync failed', { uid, error });
       }
     }
   },

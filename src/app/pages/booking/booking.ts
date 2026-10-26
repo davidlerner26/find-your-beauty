@@ -15,18 +15,18 @@ import { Users } from '../../services/users';
 import { missingProfileData } from '../../models/user';
 import { Professionals } from '../../services/professionals';
 import { priceAt } from '../../utils/pricing';
-import { busyIdsFor, freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
-import { INTL_LOCALE } from '../../utils/locale';
+import { busyIdsFor, toDateKey } from '../../utils/slots';
+import { CalendarDay as Day } from '../../utils/calendar';
+import { BookingFlowStore } from './booking-flow.store';
 import { log } from '../../utils/log';
 import { errorCode } from '../../utils/error-code';
-
-type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
 @Component({
   selector: 'app-booking',
   imports: [AddressPipe, PricePipe, Spinner, FormsModule, RouterLink, MatIconModule],
   templateUrl: './booking.html',
   styleUrl: './booking.scss',
+  providers: [BookingFlowStore],
 })
 export class Booking {
   private readonly location = inject(Location);
@@ -37,6 +37,7 @@ export class Booking {
   private readonly users = inject(Users);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly feedback = inject(Feedback);
+  private readonly flow = inject(BookingFlowStore);
 
   readonly id = input.required<string>();
   readonly servicos = input<string>('');
@@ -73,22 +74,15 @@ export class Booking {
     () => this.selectedServices().reduce((sum, service) => sum + service.durationMinutes, 0) || 60,
   );
 
-  // Slots already taken on the selected day (null while loading)
-  private readonly taken = signal<Set<string> | null>(null);
-
-  protected readonly loadingTimes = computed(() => !!this.selectedDay() && this.taken() === null);
-
-  protected readonly times = computed(() => {
-    const day = this.selectedDay();
-    const taken = this.taken();
-    if (!day || !taken) return [];
-    return freeStartTimes(day, this.availability(), this.duration(), taken);
-  });
-
-  private readonly today = this.startOfDay(new Date());
-  protected readonly month = signal(new Date(this.today.getFullYear(), this.today.getMonth(), 1));
-  protected readonly selectedDay = signal<Date | null>(null);
-  protected readonly selectedTime = signal<string | null>(null);
+  // The choice of day and time lives in the store
+  protected readonly month = this.flow.month;
+  protected readonly selectedDay = this.flow.selectedDay;
+  protected readonly selectedTime = this.flow.selectedTime;
+  protected readonly days = this.flow.days;
+  protected readonly times = this.flow.times;
+  protected readonly loadingTimes = this.flow.loadingTimes;
+  protected readonly monthLabel = this.flow.monthLabel;
+  protected readonly isCurrentMonth = this.flow.isCurrentMonth;
   protected notes = '';
 
   // Where the professional attends: only a client of a professional that accepts both can choose
@@ -99,32 +93,6 @@ export class Booking {
     const mode = this.artist()?.serviceMode;
     if (mode === 'both') return this.place();
     return mode === 'home' ? 'home' : 'studio';
-  });
-
-  protected readonly monthLabel = computed(() =>
-    new Intl.DateTimeFormat(INTL_LOCALE, { month: 'long', year: 'numeric' }).format(this.month()),
-  );
-
-  protected readonly isCurrentMonth = computed(
-    () =>
-      this.month().getTime() ===
-      new Date(this.today.getFullYear(), this.today.getMonth(), 1).getTime(),
-  );
-
-  protected readonly days = computed<Day[]>(() => {
-    const month = this.month();
-    const total = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
-    const weekday = new Intl.DateTimeFormat(INTL_LOCALE, { weekday: 'short' });
-
-    return Array.from({ length: total }, (_, i) => {
-      const date = new Date(month.getFullYear(), month.getMonth(), i + 1);
-      return {
-        date,
-        weekday: weekday.format(date).replace('.', ''),
-        number: i + 1,
-        disabled: date < this.today || !isWorkingDay(date, this.availability()),
-      };
-    });
   });
 
   // A client can't have two bookings at the same time, even with different professionals:
@@ -162,73 +130,34 @@ export class Booking {
 
   // The first thing the page does is to show the next day the professional can attend
   private firstDayPicked = false;
-  // Once the user picks a day or changes the month, the day found for them must not take over
-  private userPickedDay = false;
 
   constructor() {
+    // The store needs to know the professional and the services to offer days and times
+    effect(() => {
+      if (!this.artist()) return;
+      this.flow.setContext({
+        professionalId: this.id(),
+        availability: this.availability(),
+        durationMinutes: this.duration(),
+      });
+    });
+
     effect(() => {
       if (!this.artist() || this.firstDayPicked) return;
       this.firstDayPicked = true;
-      void this.pickNextAvailableDay();
-    });
-
-    // Loads the taken slots whenever the day changes
-    effect((onCleanup) => {
-      const day = this.selectedDay();
-      const id = this.id();
-      this.selectedTime.set(null);
-      this.taken.set(null);
-      if (!day) return;
-
-      let cancelled = false;
-      onCleanup(() => (cancelled = true));
-      this.professionals
-        .busyTimes(id, toDateKey(day))
-        .then((taken) => !cancelled && this.taken.set(taken))
-        .catch((error) => {
-          log.error('Failed to load times', error);
-          if (!cancelled) this.taken.set(new Set());
-        });
+      void this.flow.pickNextAvailableDay().then((day) => day && this.showSelectedDay());
     });
   }
 
-  // Selects the next day with a free time (looks up to 120 days ahead) and brings it into view
-  private async pickNextAvailableDay() {
-    const id = this.id();
-    let busy = new Map<string, Set<string>>();
-    try {
-      busy = await this.professionals.busyFrom(id, toDateKey(this.today));
-    } catch (error) {
-      log.error('Failed to load busy days', error);
-    }
-    if (this.userPickedDay) return;
-
-    for (let offset = 0; offset < 120; offset++) {
-      const date = new Date(
-        this.today.getFullYear(),
-        this.today.getMonth(),
-        this.today.getDate() + offset,
-      );
-      const free = freeStartTimes(
-        date,
-        this.availability(),
-        this.duration(),
-        busy.get(toDateKey(date)) ?? new Set(),
-      );
-      if (!free.length) continue;
-
-      this.month.set(new Date(date.getFullYear(), date.getMonth(), 1));
-      this.selectedDay.set(date);
-      // Waits for the day list to render, then scrolls the strip to the chosen day
-      setTimeout(
-        () =>
-          this.host.nativeElement
-            .querySelector('.day.selected')
-            ?.scrollIntoView({ inline: 'center', block: 'nearest' }),
-        100,
-      );
-      return;
-    }
+  // Waits for the day list to render, then scrolls the strip to the chosen day
+  private showSelectedDay() {
+    setTimeout(
+      () =>
+        this.host.nativeElement
+          .querySelector('.day.selected')
+          ?.scrollIntoView({ inline: 'center', block: 'nearest' }),
+      100,
+    );
   }
 
   // Finalizar: requests the booking. The professional confirms it afterwards.
@@ -318,22 +247,18 @@ export class Booking {
   }
 
   protected pickDay(date: Date) {
-    this.userPickedDay = true;
-    this.selectedDay.set(date);
+    this.flow.pickDay(date);
+  }
+
+  protected pickTime(time: string) {
+    this.flow.pickTime(time);
   }
 
   protected changeMonth(delta: number) {
-    this.userPickedDay = true;
-    const month = this.month();
-    this.month.set(new Date(month.getFullYear(), month.getMonth() + delta, 1));
-    this.selectedDay.set(null);
+    this.flow.changeMonth(delta);
   }
 
   protected isSelected(day: Day) {
     return this.selectedDay()?.getTime() === day.date.getTime();
-  }
-
-  private startOfDay(date: Date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
   }
 }

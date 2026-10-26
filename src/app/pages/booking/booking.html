@@ -91,7 +91,7 @@
             class="time"
             [class.selected]="selectedTime() === time"
             [disabled]="hasConflict(time)"
-            (click)="selectedTime.set(time)"
+            (click)="pickTime(time)"
           >
             {{ time }}
             @if (timePrice(time); as price) {

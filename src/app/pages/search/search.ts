@@ -6,64 +6,16 @@ import { PricePipe } from '../../utils/price.pipe';
 import { Location, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { RJ_NEIGHBORHOODS } from '../../models/neighborhoods';
-import { hasLocation, locationLabel, Professional } from '../../models/professional';
 import { Favorites } from '../../services/favorites';
 import { Professionals } from '../../services/professionals';
-import { UserLocation } from '../../services/user-location';
-import { lowestPrice } from '../../utils/pricing';
-import { distanceKm, formatDistance } from '../../utils/geo';
-import { DEFAULT_AVAILABILITY } from '../../models/professional';
-import { isWorkingDay } from '../../utils/slots';
+import { CalendarDay as Day, monthDays, startOfDay, startOfMonth } from '../../utils/calendar';
 import { INTL_LOCALE } from '../../utils/locale';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { T } from '../../utils/texts';
-import { CatalogPipe, catalogLabel } from '../../utils/catalog.pipe';
+import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
-
-type SortKey = 'price-asc' | 'rating' | 'distance' | 'price-desc';
-
-type Filters = {
-  date: Date | null;
-  tags: string[];
-  minRating: number;
-  maxKm: number;
-  sort: SortKey | null;
-  // A neighborhood of the city of Rio de Janeiro
-  neighborhood: string | null;
-};
-
-type Day = { date: Date; weekday: string; number: number; disabled: boolean };
-
-const MAX_KM = 50;
-const NO_FILTERS: Filters = {
-  date: null,
-  tags: [],
-  minRating: 0,
-  maxKm: MAX_KM,
-  sort: null,
-  neighborhood: null,
-};
-const RECENTS_KEY = 'recent-searches';
-
-// Compares text ignoring case and accents
-const normalize = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-
-// Is the address in this neighborhood of Rio? The addresses come from Google: "Rua X, 12 - Leblon, Rio de Janeiro - RJ"
-const inNeighborhood = (address: string, neighborhood: string) => {
-  const text = normalize(address);
-  // "Freguesia (Jacarepaguá)": the name that is written in the address is the one before the parentheses
-  const name = normalize(neighborhood.split(' (')[0]).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return text.includes('rio de janeiro') && new RegExp(`(^|[\\s,-])${name}\\s*,`).test(text);
-};
-
-const readRecents = (): string[] => {
-  try {
-    return JSON.parse(localStorage.getItem(RECENTS_KEY) ?? '[]');
-  } catch {
-    return [];
-  }
-};
+import { Filters, MAX_KM, noFilters, SortKey } from './search-filter';
+import { SearchStore } from './search.store';
 
 @Component({
   selector: 'app-search',
@@ -80,11 +32,12 @@ const readRecents = (): string[] => {
   ],
   templateUrl: './search.html',
   styleUrl: './search.scss',
+  providers: [SearchStore],
 })
 export class Search {
   private readonly location = inject(Location);
   protected readonly professionals = inject(Professionals);
-  private readonly userLocation = inject(UserLocation);
+  private readonly store = inject(SearchStore);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly favorites = inject(Favorites);
 
@@ -101,13 +54,20 @@ export class Search {
     { key: 'price-desc', label: $localize`Maior preço` },
   ];
 
-  protected query = '';
-  protected readonly term = signal('');
-  protected readonly recents = signal<string[]>(readRecents());
-  protected readonly applied = signal<Filters>({ ...NO_FILTERS });
-  protected readonly userPosition = computed(() => this.userLocation.position());
+  // What the store knows about the search
+  protected readonly recents = this.store.recents;
+  protected readonly userPosition = this.store.userPosition;
+  protected readonly allTags = this.store.allTags;
+  protected readonly popular = this.store.popular;
+  protected readonly neighborhoods = this.store.neighborhoods;
+  protected readonly activeFilterCount = this.store.activeFilterCount;
+  protected readonly searching = this.store.searching;
+  protected readonly results = this.store.results;
+  protected readonly suggestions = this.store.suggestions;
 
-  // Filter sheet: edits a draft that only becomes the applied filters on "Mostrar resultados"
+  // The text of the search box (the store gets it as the user types)
+  protected query = '';
+
   // Photo being shown in the card of each result (for the dots)
   protected readonly photoIndex = signal<Record<string, number | undefined>>({});
 
@@ -118,144 +78,30 @@ export class Search {
       this.photoIndex.update((current) => ({ ...current, [id]: index }));
   }
 
+  // Filter sheet: edits a draft that only becomes the applied filters on "Mostrar resultados"
   protected readonly sheetOpen = signal(false);
-  protected draft: Filters = { ...NO_FILTERS };
-  protected readonly month = signal(this.startOfMonth(new Date()));
+  protected draft: Filters = noFilters();
+  protected readonly month = signal(startOfMonth(new Date()));
 
-  private readonly today = this.startOfDay(new Date());
-
-  // Tags that exist in the catalog, for the chips
-  protected readonly allTags = computed(() => [
-    ...new Set(this.professionals.published().flatMap((professional) => professional.tags)),
-  ]);
-
-  // Only the neighborhoods where there is a professional
-  protected readonly neighborhoods = computed(() => {
-    const addresses = this.professionals.published().map((professional) => professional.address);
-    // "Freguesia (Jacarepaguá)" and "Freguesia (Ilha do Governador)" are searched as "Freguesia"
-    const names = RJ_NEIGHBORHOODS.map((name) => name.split(' (')[0]);
-    return [...new Set(names)].filter((name) =>
-      addresses.some((address) => inNeighborhood(address, name)),
-    );
-  });
-
-  protected readonly popular = computed(() => this.allTags().slice(0, 6));
-
-  protected readonly activeFilterCount = computed(() => {
-    const { date, tags, minRating, maxKm, sort, neighborhood } = this.applied();
-    return (
-      (neighborhood ? 1 : 0) +
-      (date ? 1 : 0) +
-      (tags.length ? 1 : 0) +
-      (minRating ? 1 : 0) +
-      (maxKm < MAX_KM ? 1 : 0) +
-      (sort ? 1 : 0)
-    );
-  });
-
-  protected readonly searching = computed(
-    () => !!this.term().trim() || this.activeFilterCount() > 0,
-  );
-
-  // What a card of the list shows (the same for the results and for the suggestions)
-  private card(professional: Professional, user: { lat: number; lng: number } | null) {
-    return {
-      ...professional,
-      cardImage: professional.image,
-      cardPosition: professional.imagePosition,
-      // The photos of the work (the profile photo when there is no gallery), like the cards of the home
-      photos: professional.gallery.length ? professional.gallery : [professional.image],
-      address: locationLabel(professional),
-      distance:
-        user && hasLocation(professional)
-          ? formatDistance(distanceKm(user, professional.position))
-          : null,
-      km: user && hasLocation(professional) ? distanceKm(user, professional.position) : null,
-      // The cheapest service: "a partir de"
-      minPrice: professional.services.length
-        ? Math.min(...professional.services.map(lowestPrice))
-        : null,
-    };
-  }
-
-  protected readonly results = computed(() => {
-    const term = normalize(this.term().trim());
-    const { date, tags, minRating, maxKm, sort, neighborhood } = this.applied();
-    const user = this.userPosition();
-
-    const found = this.professionals
-      .published()
-      .filter((professional) => {
-        if (term && !this.matchesText(professional, term)) return false;
-        if (neighborhood && !inNeighborhood(professional.address, neighborhood)) return false;
-        if (tags.length && !professional.tags.some((tag) => tags.includes(tag))) return false;
-        if (professional.rating < minRating) return false;
-        if (date && !isWorkingDay(date, professional.availability ?? DEFAULT_AVAILABILITY))
-          return false;
-        if (
-          user &&
-          maxKm < MAX_KM &&
-          (!hasLocation(professional) || distanceKm(user, professional.position) > maxKm)
-        )
-          return false;
-        return true;
-      })
-      .map((professional) => this.card(professional, user));
-
-    // No chosen order keeps the order of the catalog. Without a price or a distance, a professional goes last.
-    if (!sort) return found;
-    const last = (value: number | null, fallback: number) => value ?? fallback;
-    return found.sort((a, b) => {
-      switch (sort) {
-        case 'price-asc':
-          return last(a.minPrice, Infinity) - last(b.minPrice, Infinity) || 0;
-        case 'price-desc':
-          return last(b.minPrice, -Infinity) - last(a.minPrice, -Infinity) || 0;
-        case 'rating':
-          return b.rating - a.rating;
-        case 'distance':
-          return last(a.km, Infinity) - last(b.km, Infinity) || 0;
-      }
-    });
-  });
-
-  // What is shown before searching: the best rated
-  protected readonly suggestions = computed(() =>
-    [...this.professionals.published()]
-      .sort((a, b) => b.rating - a.rating)
-      .slice(0, 5)
-      .map((professional) => this.card(professional, this.userPosition())),
-  );
+  private readonly today = startOfDay(new Date());
 
   protected readonly monthLabel = computed(() =>
     new Intl.DateTimeFormat(INTL_LOCALE, { month: 'long', year: 'numeric' }).format(this.month()),
   );
   protected readonly isCurrentMonth = computed(
-    () => this.month().getTime() === this.startOfMonth(this.today).getTime(),
+    () => this.month().getTime() === startOfMonth(this.today).getTime(),
   );
 
-  protected readonly days = computed<Day[]>(() => {
-    const month = this.month();
-    const total = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
-    const weekday = new Intl.DateTimeFormat(INTL_LOCALE, { weekday: 'short' });
-
-    return Array.from({ length: total }, (_, i) => {
-      const date = new Date(month.getFullYear(), month.getMonth(), i + 1);
-      return {
-        date,
-        weekday: weekday.format(date).replace('.', ''),
-        number: i + 1,
-        disabled: date < this.today,
-      };
-    });
-  });
+  protected readonly days = computed<Day[]>(() =>
+    monthDays(this.month(), (date) => date < this.today),
+  );
 
   constructor() {
     effect(() => {
       const q = this.q();
       if (!q) return;
       this.query = q;
-      this.term.set(q);
+      this.store.setTerm(q);
     });
   }
 
@@ -272,17 +118,11 @@ export class Search {
 
   // ----- text search and recents
   protected onType() {
-    this.term.set(this.query);
+    this.store.setTerm(this.query);
   }
 
   protected submit() {
-    const value = this.query.trim();
-    this.term.set(value);
-    if (!value) return;
-
-    this.saveRecents(
-      [value, ...this.recents().filter((r) => normalize(r) !== normalize(value))].slice(0, 5),
-    );
+    this.store.submitTerm(this.query);
   }
 
   protected searchFor(value: string) {
@@ -291,22 +131,23 @@ export class Search {
   }
 
   protected removeRecent(value: string) {
-    this.saveRecents(this.recents().filter((recent) => recent !== value));
+    this.store.removeRecent(value);
   }
 
   protected clearRecents() {
-    this.saveRecents([]);
+    this.store.clearRecents();
   }
 
   protected clearQuery() {
     this.query = '';
-    this.term.set('');
+    this.store.setTerm('');
   }
 
   // ----- filter sheet
   protected openSheet() {
-    this.draft = { ...this.applied(), tags: [...this.applied().tags] };
-    this.month.set(this.startOfMonth(this.draft.date ?? this.today));
+    const applied = this.store.applied();
+    this.draft = { ...applied, tags: [...applied.tags] };
+    this.month.set(startOfMonth(this.draft.date ?? this.today));
     this.sheetOpen.set(true);
     this.showDay();
   }
@@ -316,11 +157,11 @@ export class Search {
   }
 
   protected resetDraft() {
-    this.draft = { ...NO_FILTERS, tags: [] };
+    this.draft = noFilters();
   }
 
   protected showResults() {
-    this.applied.set({ ...this.draft, tags: [...this.draft.tags] });
+    this.store.applyFilters(this.draft);
     this.sheetOpen.set(false);
   }
 
@@ -364,34 +205,5 @@ export class Search {
 
   protected setRating(stars: number) {
     this.draft.minRating = this.draft.minRating === stars ? 0 : stars;
-  }
-
-  private matchesText(professional: Professional, term: string) {
-    const haystack = [
-      professional.name,
-      professional.address,
-      ...professional.tags,
-      ...professional.services.flatMap((service) => [service.name, catalogLabel(service.name)]),
-    ]
-      .map(normalize)
-      .join(' ');
-    return haystack.includes(term);
-  }
-
-  private saveRecents(list: string[]) {
-    this.recents.set(list);
-    try {
-      localStorage.setItem(RECENTS_KEY, JSON.stringify(list));
-    } catch {
-      // Storage can be blocked: recents just won't survive a reload
-    }
-  }
-
-  private startOfDay(date: Date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  }
-
-  private startOfMonth(date: Date) {
-    return new Date(date.getFullYear(), date.getMonth(), 1);
   }
 }

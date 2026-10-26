@@ -611,8 +611,8 @@ const enforce = async (limits: { limit: RateLimit; message: string }[]) => {
 };
 
 // Callables are called by the browser, signed in or not (what a call may do is checked inside it), so Cloud Run has
-// to let anyone invoke them. It is said here so that every deploy sets it: a function that was created by a deploy
-// that failed halfway kept refusing the browser (403) until it was.
+// to let anyone invoke them. The CLI applies this when it CREATES the function, not when it updates one: a callable
+// created by a deploy that failed halfway kept answering 403 until it was deleted and deployed again.
 const PUBLIC = { invoker: 'public' } as const;
 
 // Password reset, sent by Resend instead of by Firebase. It always answers ok, so nobody can find out

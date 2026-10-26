@@ -27,6 +27,10 @@ Read [README.md](README.md) for the commands and [docs/architecture.md](docs/arc
 
 ## Gotchas
 
+- A callable that answers 403 to the browser ("request was not authenticated" in its log) was not made public
+  when it was created. `invoker: 'public'` in the code does not fix an existing one: delete it
+  (`firebase functions:delete NAME --region southamerica-east1`) and deploy again. Check with an empty POST to
+  `https://southamerica-east1-PROJECT.cloudfunctions.net/NAME`: 400 means it is reachable.
 - The emulator tests need Java 21+. Brew may lack permissions: a JDK in a temporary folder on the PATH works.
 - `ng test` cannot `vi.mock` relative imports; mock `firebase/*` modules or use TestBed providers.
 - In e2e, `getByPlaceholder('Nome')` also matches "Sobrenome": use `{ exact: true }`.

@@ -9,7 +9,12 @@ import { PlaceSuggestions } from '../../components/place-suggestions/place-sugge
 import { PlaceSearch } from '../../utils/place-search';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
-import { authErrorMessage, isValidEmail, isValidPassword, PASSWORD_RULE } from '../../utils/validators';
+import {
+  authErrorMessage,
+  isValidEmail,
+  isValidPassword,
+  PASSWORD_RULE,
+} from '../../utils/validators';
 
 @Component({
   selector: 'app-signup',
@@ -18,6 +23,9 @@ import { authErrorMessage, isValidEmail, isValidPassword, PASSWORD_RULE } from '
   styleUrl: '../auth/auth.scss',
 })
 export class Signup {
+  protected readonly auth = inject(Auth);
+  private readonly router = inject(Router);
+
   // Set by the route: professionals sign up in their own area
   readonly pro = input(false);
 
@@ -93,7 +101,16 @@ export class Signup {
 
   protected async submit() {
     this.submitted.set(true);
-    if (!this.nameValid || !this.lastNameValid || !this.emailValid || !this.phoneValid || !this.cpfValid || !this.addressValid || !this.passwordValid) return;
+    if (
+      !this.nameValid ||
+      !this.lastNameValid ||
+      !this.emailValid ||
+      !this.phoneValid ||
+      !this.cpfValid ||
+      !this.addressValid ||
+      !this.passwordValid
+    )
+      return;
 
     this.formError.set('');
     this.submitting.set(true);
@@ -121,11 +138,6 @@ export class Signup {
       this.submitting.set(false);
     }
   }
-
-  constructor(
-    protected readonly auth: Auth,
-    private readonly router: Router,
-  ) {}
 
   protected async signInWithGoogle() {
     this.googleError.set('');

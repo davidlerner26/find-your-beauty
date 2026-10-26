@@ -1,6 +1,6 @@
 import { AddressPipe } from '../../utils/address';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Toast } from '../../components/toast/toast';
@@ -28,11 +28,25 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
 
 @Component({
   selector: 'app-my-bookings',
-  imports: [AddressPipe, CatalogPipe, PricePipe, RouterLink, Spinner, Toast, NgTemplateOutlet, MatIconModule],
+  imports: [
+    AddressPipe,
+    CatalogPipe,
+    PricePipe,
+    RouterLink,
+    Spinner,
+    Toast,
+    NgTemplateOutlet,
+    MatIconModule,
+  ],
   templateUrl: './my-bookings.html',
   styleUrl: './my-bookings.scss',
 })
 export class MyBookings {
+  protected readonly auth = inject(Auth);
+  protected readonly bookings = inject(Bookings);
+  private readonly professionals = inject(Professionals);
+  private readonly feedback = inject(Feedback);
+
   protected readonly clock = formatClock;
   protected readonly t = T;
 
@@ -47,16 +61,11 @@ export class MyBookings {
   protected readonly history = computed(() =>
     this.bookings
       .mine()
-      .filter((booking) => ['completed', 'declined', 'cancelled', 'cancelledByProfessional'].includes(booking.status))
+      .filter((booking) =>
+        ['completed', 'declined', 'cancelled', 'cancelledByProfessional'].includes(booking.status),
+      )
       .reverse(),
   );
-
-  constructor(
-    protected readonly auth: Auth,
-    protected readonly bookings: Bookings,
-    private readonly professionals: Professionals,
-    private readonly feedback: Feedback,
-  ) {}
 
   // Where the appointment is: the address of the professional (nothing for home visits)
   protected addressOf(booking: Booking) {
@@ -94,7 +103,10 @@ export class MyBookings {
   }
 
   protected cancel(booking: Booking) {
-    if (!confirm($localize`Cancelar o agendamento com ${booking.professionalName}:professionalName:?`)) return;
+    if (
+      !confirm($localize`Cancelar o agendamento com ${booking.professionalName}:professionalName:?`)
+    )
+      return;
     this.bookings
       .cancel(booking)
       .then(() => this.feedback.show($localize`Agendamento cancelado`))

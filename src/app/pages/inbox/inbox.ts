@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, inject } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Chat } from '../chat/chat';
 import { Spinner } from '../../components/spinner/spinner';
@@ -16,7 +16,11 @@ import { formatRelative } from '../../utils/format-date';
 import { T } from '../../utils/texts';
 
 // Ignores the case and the accents, so "nao" finds "não"
-const fold = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const fold = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
 
 type Row = Conversation & {
   title: string;
@@ -32,6 +36,12 @@ type Row = Conversation & {
   styleUrl: './inbox.scss',
 })
 export class Inbox {
+  protected readonly auth = inject(Auth);
+  protected readonly notifications = inject(Notifications);
+  private readonly messages = inject(Messages);
+  private readonly professionals = inject(Professionals);
+  private readonly router = inject(Router);
+
   protected readonly t = T;
   readonly tab = input<'mensagens' | 'notificacoes'>('mensagens');
   // The conversation that is open (the professional id for clients, the conversation id for professionals)
@@ -69,32 +79,28 @@ export class Inbox {
 
       const artist = this.professionals.byId(conversation.professionalId);
       return artist
-        ? [{
-            ...conversation,
-            title: artist.name,
-            image: artist.image,
-            imagePosition: artist.imagePosition,
-            link: ['/mensagens', artist.id],
-          }]
+        ? [
+            {
+              ...conversation,
+              title: artist.name,
+              image: artist.image,
+              imagePosition: artist.imagePosition,
+              link: ['/mensagens', artist.id],
+            },
+          ]
         : [];
     }),
   );
 
   protected search = '';
 
-  constructor(
-    protected readonly auth: Auth,
-    protected readonly notifications: Notifications,
-    private readonly messages: Messages,
-    private readonly professionals: Professionals,
-    private readonly router: Router,
-  ) {}
-
   // Every notification is about a booking: the professional goes to the agenda (new requests are there)
   // and the client to their bookings
   protected openNotification(notification: Notification) {
     if (notification.unread) {
-      this.notifications.markAsRead(notification.id).catch((error) => console.error('Failed to mark as read', error));
+      this.notifications
+        .markAsRead(notification.id)
+        .catch((error) => console.error('Failed to mark as read', error));
     }
     this.router.navigateByUrl(this.auth.role() === 'professional' ? '/pro' : '/agenda');
   }

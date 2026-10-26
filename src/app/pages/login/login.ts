@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, input, signal } from '@angular/core';
+import { Component, input, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
@@ -12,6 +12,9 @@ import { authErrorMessage, isValidEmail } from '../../utils/validators';
   styleUrl: '../auth/auth.scss',
 })
 export class Login {
+  private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
+
   // Set by the route: the professional area has its own login
   readonly pro = input(false);
 
@@ -62,11 +65,6 @@ export class Login {
     }
   }
 
-  constructor(
-    private readonly auth: Auth,
-    private readonly router: Router,
-  ) {}
-
   protected async signInWithGoogle() {
     this.googleError.set('');
     try {
@@ -75,7 +73,12 @@ export class Login {
     } catch (error) {
       const code = (error as { code?: string }).code;
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
-      if (code === 'auth/not-professional' || code === 'auth/not-client' || code === 'auth/professional-not-registered' || code === 'auth/pending-approval') {
+      if (
+        code === 'auth/not-professional' ||
+        code === 'auth/not-client' ||
+        code === 'auth/professional-not-registered' ||
+        code === 'auth/pending-approval'
+      ) {
         this.googleError.set(authErrorMessage(error));
         return;
       }

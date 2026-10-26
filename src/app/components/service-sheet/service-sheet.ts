@@ -19,7 +19,7 @@ export class ServiceSheet {
   // The service is already in the booking
   readonly selected = input(false);
 
-  readonly toggle = output<void>();
+  readonly toggled = output<void>();
   readonly closed = output<void>();
 
   protected readonly slide = signal(0);

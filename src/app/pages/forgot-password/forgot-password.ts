@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
@@ -12,14 +12,14 @@ import { authErrorMessage, isValidEmail } from '../../utils/validators';
   styleUrl: '../auth/auth.scss',
 })
 export class ForgotPassword {
+  private readonly auth = inject(Auth);
+
   protected email = '';
   protected readonly submitted = signal(false);
   protected readonly touched = signal(false);
   protected readonly submitting = signal(false);
   protected readonly sent = signal(false);
   protected readonly formError = signal('');
-
-  constructor(private readonly auth: Auth) {}
 
   protected get emailValid() {
     return isValidEmail(this.email);

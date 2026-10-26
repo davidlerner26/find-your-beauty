@@ -1,4 +1,4 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input, signal, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
 import { Instagram } from '../../services/instagram';
@@ -32,17 +32,17 @@ import { Professionals } from '../../services/professionals';
   `,
 })
 export class ProInstagram {
+  private readonly instagram = inject(Instagram);
+  private readonly professionals = inject(Professionals);
+  private readonly router = inject(Router);
+
   readonly code = input<string>();
   readonly state = input<string>();
   readonly error_description = input<string>();
 
   protected readonly error = signal('');
 
-  constructor(
-    private readonly instagram: Instagram,
-    private readonly professionals: Professionals,
-    private readonly router: Router,
-  ) {
+  constructor() {
     // Inputs are set after the constructor
     queueMicrotask(() => this.finish());
   }
@@ -64,7 +64,8 @@ export class ProInstagram {
       this.error.set(
         message === 'invalid-state'
           ? $localize`A conexão expirou. Tente conectar de novo.`
-          : message.replace(/^.*?Instagram:/, 'Instagram:') || $localize`Tente novamente em instantes.`,
+          : message.replace(/^.*?Instagram:/, 'Instagram:') ||
+              $localize`Tente novamente em instantes.`,
       );
     }
   }

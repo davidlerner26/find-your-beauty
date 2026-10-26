@@ -1,4 +1,4 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal, inject } from '@angular/core';
 import {
   collection,
   doc,
@@ -28,6 +28,8 @@ const toDate = (value: unknown) => (value instanceof Timestamp ? value.toDate() 
 
 @Injectable({ providedIn: 'root' })
 export class Messages {
+  private readonly auth = inject(Auth);
+
   readonly conversations = signal<Conversation[]>([]);
   // The text of every message of each conversation, loaded when the user searches (conversation id -> messages)
   readonly texts = signal<Record<string, string[]>>({});
@@ -36,7 +38,7 @@ export class Messages {
     this.conversations().reduce((sum, conversation) => sum + conversation.unread, 0),
   );
 
-  constructor(private readonly auth: Auth) {
+  constructor() {
     // Keeps the conversation list in sync with the logged in user (client or professional)
     effect((onCleanup) => {
       const uid = this.auth.user()?.uid;
@@ -45,7 +47,10 @@ export class Messages {
         return;
       }
 
-      const q = query(collection(db, 'conversations'), where('participants', 'array-contains', uid));
+      const q = query(
+        collection(db, 'conversations'),
+        where('participants', 'array-contains', uid),
+      );
       const unsubscribe = onSnapshot(
         q,
         (snapshot) => {
@@ -64,7 +69,9 @@ export class Messages {
             };
           });
           // Sorted here to avoid a composite index
-          list.sort((a, b) => (b.lastMessageAt?.getTime() ?? 0) - (a.lastMessageAt?.getTime() ?? 0));
+          list.sort(
+            (a, b) => (b.lastMessageAt?.getTime() ?? 0) - (a.lastMessageAt?.getTime() ?? 0),
+          );
           this.conversations.set(list);
         },
         (error) => console.error('Failed to load conversations', error),
@@ -77,23 +84,36 @@ export class Messages {
   // searched by anything that was said
   async loadTexts() {
     const stale = this.conversations().filter(
-      (conversation) => this.textsLoadedAt.get(conversation.id) !== (conversation.lastMessageAt?.getTime() ?? 0),
+      (conversation) =>
+        this.textsLoadedAt.get(conversation.id) !== (conversation.lastMessageAt?.getTime() ?? 0),
     );
     if (!stale.length) return;
 
     const loaded = await Promise.all(
       stale.map(async (conversation) => {
-        const snapshot = await getDocs(collection(db, 'conversations', conversation.id, 'messages')).catch(() => null);
+        const snapshot = await getDocs(
+          collection(db, 'conversations', conversation.id, 'messages'),
+        ).catch(() => null);
         if (!snapshot) return null;
         this.textsLoadedAt.set(conversation.id, conversation.lastMessageAt?.getTime() ?? 0);
         const texts = snapshot.docs
-          .sort((a, b) => (a.data()['createdAt']?.seconds ?? 0) - (b.data()['createdAt']?.seconds ?? 0))
-          .map((d) => (d.data()['text'] as string | undefined) || (d.data()['file']?.name as string | undefined) || '')
+          .sort(
+            (a, b) => (a.data()['createdAt']?.seconds ?? 0) - (b.data()['createdAt']?.seconds ?? 0),
+          )
+          .map(
+            (d) =>
+              (d.data()['text'] as string | undefined) ||
+              (d.data()['file']?.name as string | undefined) ||
+              '',
+          )
           .filter(Boolean);
         return [conversation.id, texts] as const;
       }),
     );
-    this.texts.update((current) => ({ ...current, ...Object.fromEntries(loaded.filter((entry) => entry !== null)) }));
+    this.texts.update((current) => ({
+      ...current,
+      ...Object.fromEntries(loaded.filter((entry) => entry !== null)),
+    }));
   }
 
   clientConversationId(professionalId: string) {
@@ -104,10 +124,13 @@ export class Messages {
   watch(conversationId: string, onChange: (messages: ChatMessage[]) => void) {
     if (!this.auth.user()) {
       onChange([]);
-      return () => {};
+      return () => undefined;
     }
 
-    const q = query(collection(db, 'conversations', conversationId, 'messages'), orderBy('createdAt', 'asc'));
+    const q = query(
+      collection(db, 'conversations', conversationId, 'messages'),
+      orderBy('createdAt', 'asc'),
+    );
     return onSnapshot(
       q,
       (snapshot) =>
@@ -177,7 +200,10 @@ export class Messages {
   async upload(conversationId: string, file: File): Promise<MessageContent> {
     const isImage = file.type.startsWith('image/');
     const name = `${Date.now()}_${file.name.replace(/[^\w.-]/g, '_')}`;
-    const target = ref(storage, `chats/${conversationId}/${isImage ? name.replace(/\.[^.]*$/, '') + '.jpg' : name}`);
+    const target = ref(
+      storage,
+      `chats/${conversationId}/${isImage ? name.replace(/\.[^.]*$/, '') + '.jpg' : name}`,
+    );
 
     if (isImage) {
       await uploadBytes(target, await resizeImage(file), { contentType: 'image/jpeg' });

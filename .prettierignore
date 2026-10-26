@@ -1,0 +1,8 @@
+dist/
+.angular/
+.netlify/
+.vite/
+node_modules/
+functions/lib/
+package-lock.json
+src/locale/

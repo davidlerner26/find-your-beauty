@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, ElementRef, input, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, signal, inject } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { PricePipe } from '../../utils/price.pipe';
@@ -35,12 +35,18 @@ type Filters = {
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
 const MAX_KM = 50;
-const NO_FILTERS: Filters = { date: null, tags: [], minRating: 0, maxKm: MAX_KM, sort: null, neighborhood: null };
+const NO_FILTERS: Filters = {
+  date: null,
+  tags: [],
+  minRating: 0,
+  maxKm: MAX_KM,
+  sort: null,
+  neighborhood: null,
+};
 const RECENTS_KEY = 'recent-searches';
 
 // Compares text ignoring case and accents
-const normalize = (text: string) =>
-  text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const normalize = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 // Is the address in this neighborhood of Rio? The addresses come from Google: "Rua X, 12 - Leblon, Rio de Janeiro - RJ"
 const inNeighborhood = (address: string, neighborhood: string) => {
@@ -60,11 +66,27 @@ const readRecents = (): string[] => {
 
 @Component({
   selector: 'app-search',
-  imports: [CarouselArrows, CatalogPipe, ReviewsLabelPipe, PricePipe, FocusPipe, FormsModule, RouterLink, NgTemplateOutlet, MatIconModule],
+  imports: [
+    CarouselArrows,
+    CatalogPipe,
+    ReviewsLabelPipe,
+    PricePipe,
+    FocusPipe,
+    FormsModule,
+    RouterLink,
+    NgTemplateOutlet,
+    MatIconModule,
+  ],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })
 export class Search {
+  private readonly location = inject(Location);
+  protected readonly professionals = inject(Professionals);
+  private readonly userLocation = inject(UserLocation);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  protected readonly favorites = inject(Favorites);
+
   protected readonly t = T;
   // A text to search for, from the link of a service on the home (?q=Escova)
   readonly q = input<string>();
@@ -91,7 +113,8 @@ export class Search {
   protected onPhotosScroll(event: Event, id: string) {
     const strip = event.target as HTMLElement;
     const index = Math.round(strip.scrollLeft / strip.clientWidth);
-    if (this.photoIndex()[id] !== index) this.photoIndex.update((current) => ({ ...current, [id]: index }));
+    if (this.photoIndex()[id] !== index)
+      this.photoIndex.update((current) => ({ ...current, [id]: index }));
   }
 
   protected readonly sheetOpen = signal(false);
@@ -110,17 +133,28 @@ export class Search {
     const addresses = this.professionals.published().map((professional) => professional.address);
     // "Freguesia (Jacarepaguá)" and "Freguesia (Ilha do Governador)" are searched as "Freguesia"
     const names = RJ_NEIGHBORHOODS.map((name) => name.split(' (')[0]);
-    return [...new Set(names)].filter((name) => addresses.some((address) => inNeighborhood(address, name)));
+    return [...new Set(names)].filter((name) =>
+      addresses.some((address) => inNeighborhood(address, name)),
+    );
   });
 
   protected readonly popular = computed(() => this.allTags().slice(0, 6));
 
   protected readonly activeFilterCount = computed(() => {
     const { date, tags, minRating, maxKm, sort, neighborhood } = this.applied();
-    return (neighborhood ? 1 : 0) + (date ? 1 : 0) + (tags.length ? 1 : 0) + (minRating ? 1 : 0) + (maxKm < MAX_KM ? 1 : 0) + (sort ? 1 : 0);
+    return (
+      (neighborhood ? 1 : 0) +
+      (date ? 1 : 0) +
+      (tags.length ? 1 : 0) +
+      (minRating ? 1 : 0) +
+      (maxKm < MAX_KM ? 1 : 0) +
+      (sort ? 1 : 0)
+    );
   });
 
-  protected readonly searching = computed(() => !!this.term().trim() || this.activeFilterCount() > 0);
+  protected readonly searching = computed(
+    () => !!this.term().trim() || this.activeFilterCount() > 0,
+  );
 
   // What a card of the list shows (the same for the results and for the suggestions)
   private card(professional: Professional, user: { lat: number; lng: number } | null) {
@@ -131,10 +165,15 @@ export class Search {
       // The photos of the work (the profile photo when there is no gallery), like the cards of the home
       photos: professional.gallery.length ? professional.gallery : [professional.image],
       address: locationLabel(professional),
-      distance: user && hasLocation(professional) ? formatDistance(distanceKm(user, professional.position)) : null,
+      distance:
+        user && hasLocation(professional)
+          ? formatDistance(distanceKm(user, professional.position))
+          : null,
       km: user && hasLocation(professional) ? distanceKm(user, professional.position) : null,
       // The cheapest service: "a partir de"
-      minPrice: professional.services.length ? Math.min(...professional.services.map(lowestPrice)) : null,
+      minPrice: professional.services.length
+        ? Math.min(...professional.services.map(lowestPrice))
+        : null,
     };
   }
 
@@ -150,8 +189,14 @@ export class Search {
         if (neighborhood && !inNeighborhood(professional.address, neighborhood)) return false;
         if (tags.length && !professional.tags.some((tag) => tags.includes(tag))) return false;
         if (professional.rating < minRating) return false;
-        if (date && !isWorkingDay(date, professional.availability ?? DEFAULT_AVAILABILITY)) return false;
-        if (user && maxKm < MAX_KM && (!hasLocation(professional) || distanceKm(user, professional.position) > maxKm)) return false;
+        if (date && !isWorkingDay(date, professional.availability ?? DEFAULT_AVAILABILITY))
+          return false;
+        if (
+          user &&
+          maxKm < MAX_KM &&
+          (!hasLocation(professional) || distanceKm(user, professional.position) > maxKm)
+        )
+          return false;
         return true;
       })
       .map((professional) => this.card(professional, user));
@@ -204,13 +249,7 @@ export class Search {
     });
   });
 
-  constructor(
-    private readonly location: Location,
-    protected readonly professionals: Professionals,
-    private readonly userLocation: UserLocation,
-    private readonly host: ElementRef<HTMLElement>,
-    protected readonly favorites: Favorites,
-  ) {
+  constructor() {
     effect(() => {
       const q = this.q();
       if (!q) return;
@@ -240,7 +279,9 @@ export class Search {
     this.term.set(value);
     if (!value) return;
 
-    this.saveRecents([value, ...this.recents().filter((r) => normalize(r) !== normalize(value))].slice(0, 5));
+    this.saveRecents(
+      [value, ...this.recents().filter((r) => normalize(r) !== normalize(value))].slice(0, 5),
+    );
   }
 
   protected searchFor(value: string) {
@@ -300,7 +341,9 @@ export class Search {
   private showDay() {
     setTimeout(() => {
       const strip = this.host.nativeElement.querySelector('.days');
-      strip?.querySelector('.day.selected, .day.today')?.scrollIntoView({ inline: 'center', block: 'nearest' });
+      strip
+        ?.querySelector('.day.selected, .day.today')
+        ?.scrollIntoView({ inline: 'center', block: 'nearest' });
     }, 50);
   }
 

@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, input, OnInit, signal } from '@angular/core';
+import { Component, input, OnInit, signal, inject } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -14,6 +14,8 @@ import { authErrorMessage, isValidPassword, PASSWORD_RULE } from '../../utils/va
   styleUrl: '../auth/auth.scss',
 })
 export class ResetPassword implements OnInit {
+  private readonly auth = inject(Auth);
+
   readonly mode = input<string>('');
   readonly oobCode = input<string>('');
 
@@ -28,8 +30,6 @@ export class ResetPassword implements OnInit {
   protected readonly email = signal('');
   protected readonly formError = signal('');
   protected readonly submitting = signal(false);
-
-  constructor(private readonly auth: Auth) {}
 
   async ngOnInit() {
     if (this.mode() !== 'resetPassword' || !this.oobCode()) {

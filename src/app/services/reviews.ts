@@ -1,16 +1,30 @@
-import { Injectable } from '@angular/core';
-import { collection, deleteDoc, doc, getDocs, orderBy, query, serverTimestamp, setDoc, Timestamp, where } from 'firebase/firestore';
+import { Injectable, inject } from '@angular/core';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+  Timestamp,
+  where,
+} from 'firebase/firestore';
 import { Review } from '../models/professional';
 import { Auth } from './auth';
 import { db } from './firebase';
 
 @Injectable({ providedIn: 'root' })
 export class Reviews {
-  constructor(private readonly auth: Auth) {}
+  private readonly auth = inject(Auth);
 
   async list(professionalId: string) {
     const snapshot = await getDocs(
-      query(collection(db, 'professionals', professionalId, 'reviews'), orderBy('createdAt', 'desc')),
+      query(
+        collection(db, 'professionals', professionalId, 'reviews'),
+        orderBy('createdAt', 'desc'),
+      ),
     );
     return snapshot.docs.map((d): Review => {
       const data = d.data();
@@ -30,7 +44,11 @@ export class Reviews {
     if (!uid) return null;
 
     const snapshot = await getDocs(
-      query(collection(db, 'bookings'), where('clientUid', '==', uid), where('professionalId', '==', professionalId)),
+      query(
+        collection(db, 'bookings'),
+        where('clientUid', '==', uid),
+        where('professionalId', '==', professionalId),
+      ),
     );
     return snapshot.docs.find((d) => d.data()['status'] === 'completed')?.id ?? null;
   }

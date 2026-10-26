@@ -1,6 +1,6 @@
 import { AddressPipe } from '../../utils/address';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, input, resource, signal } from '@angular/core';
+import { Component, computed, input, resource, signal, inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { PhotoViewer } from '../../components/photo-viewer/photo-viewer';
@@ -14,7 +14,15 @@ import { ruleLabel } from '../../utils/pricing';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 
-const WEEKDAYS = [$localize`Domingo`, $localize`Segunda`, $localize`Terça`, $localize`Quarta`, $localize`Quinta`, $localize`Sexta`, $localize`Sábado`];
+const WEEKDAYS = [
+  $localize`Domingo`,
+  $localize`Segunda`,
+  $localize`Terça`,
+  $localize`Quarta`,
+  $localize`Quinta`,
+  $localize`Sexta`,
+  $localize`Sábado`,
+];
 
 // The whole profile of a professional for an admin to review, even when it is not published
 @Component({
@@ -24,6 +32,10 @@ const WEEKDAYS = [$localize`Domingo`, $localize`Segunda`, $localize`Terça`, $lo
   styleUrl: './admin-professional.scss',
 })
 export class AdminProfessional {
+  private readonly admin = inject(Admin);
+  private readonly location = inject(Location);
+  private readonly router = inject(Router);
+
   protected readonly t = T;
   readonly id = input.required<string>();
 
@@ -52,15 +64,10 @@ export class AdminProfessional {
 
   protected readonly status = computed(() => {
     const professional = this.professional.value();
-    if (professional?.approved === false) return professional.rejected ? $localize`Negado` : $localize`Aguardando aprovação`;
+    if (professional?.approved === false)
+      return professional.rejected ? $localize`Negado` : $localize`Aguardando aprovação`;
     return $localize`Aprovado`;
   });
-
-  constructor(
-    private readonly admin: Admin,
-    private readonly location: Location,
-    private readonly router: Router,
-  ) {}
 
   protected goBack() {
     this.location.back();

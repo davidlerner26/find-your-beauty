@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { UserLocation } from '../../services/user-location';
 
 @Component({
@@ -7,7 +7,7 @@ import { UserLocation } from '../../services/user-location';
   styleUrl: './location-prompt.scss',
 })
 export class LocationPrompt {
-  constructor(protected readonly location: UserLocation) {}
+  protected readonly location = inject(UserLocation);
 
   protected enable() {
     this.location.request();

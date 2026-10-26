@@ -39,7 +39,7 @@
           <mat-icon [class.filled]="favorites.has(artist.id)">favorite</mat-icon>
         </button>
       }
-      <a i18n-aria-label class="round" [routerLink]="floating() ? null : '/explore'" [queryParams]="{ focus: artist.id }" aria-label="Ver no mapa" (click)="onMapButton($event)">
+      <a i18n-aria-label class="round" [routerLink]="floating() ? null : '/explore'" [queryParams]="{ focus: artist.id }" aria-label="Ver no mapa" (click)="onMapButton()">
         <mat-icon class="filled">map</mat-icon>
       </a>
     </div>
@@ -370,7 +370,7 @@
     <app-service-sheet
       [service]="service"
       [selected]="isSelected(service)"
-      (toggle)="toggleService(service)"
+      (toggled)="toggleService(service)"
       (closed)="detailId.set(null)"
     />
   }

@@ -1,6 +1,13 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { collection, deleteDoc, doc, onSnapshot, serverTimestamp, setDoc } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore';
 import { Auth } from './auth';
 import { Feedback } from './feedback';
 import { db } from './firebase';
@@ -8,16 +15,16 @@ import { db } from './firebase';
 // users/{uid}/favorites/{professionalId}: the professionals a client hearted
 @Injectable({ providedIn: 'root' })
 export class Favorites {
+  private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
+  private readonly feedback = inject(Feedback);
+
   readonly ids = signal<string[]>([]);
   // Visitors don't see the heart: favorites belong to an account
   readonly available = computed(() => !!this.auth.user());
   readonly loading = signal(true);
 
-  constructor(
-    private readonly auth: Auth,
-    private readonly router: Router,
-    private readonly feedback: Feedback,
-  ) {
+  constructor() {
     effect((onCleanup) => {
       const uid = this.auth.user()?.uid;
       if (!uid || this.auth.role() !== 'client') {
@@ -60,7 +67,10 @@ export class Favorites {
     try {
       if (removing) await deleteDoc(favorite);
       else await setDoc(favorite, { createdAt: serverTimestamp() });
-      this.feedback.show(removing ? $localize`Removido dos favoritos` : $localize`Adicionado aos favoritos`, 2500);
+      this.feedback.show(
+        removing ? $localize`Removido dos favoritos` : $localize`Adicionado aos favoritos`,
+        2500,
+      );
     } catch (error) {
       this.feedback.show($localize`Não foi possível atualizar os favoritos. Tente novamente.`);
       throw error;

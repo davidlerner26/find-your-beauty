@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, effect, input, signal, inject } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
@@ -22,6 +22,12 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
   styleUrl: './chat.scss',
 })
 export class Chat {
+  private readonly location = inject(Location);
+  private readonly messagesService = inject(Messages);
+  protected readonly auth = inject(Auth);
+  protected readonly professionals = inject(Professionals);
+  private readonly feedback = inject(Feedback);
+
   readonly id = input.required<string>();
   readonly pro = input(false);
 
@@ -48,7 +54,12 @@ export class Chat {
     if (this.pro()) {
       const conversation = this.conversation();
       return conversation
-        ? { name: conversation.clientName, image: conversation.clientImage ?? null, position: undefined, link: null }
+        ? {
+            name: conversation.clientName,
+            image: conversation.clientImage ?? null,
+            position: undefined,
+            link: null,
+          }
         : null;
     }
     const professional = this.professional();
@@ -62,16 +73,14 @@ export class Chat {
       : null;
   });
 
-  constructor(
-    private readonly location: Location,
-    private readonly messagesService: Messages,
-    protected readonly auth: Auth,
-    protected readonly professionals: Professionals,
-    private readonly feedback: Feedback,
-  ) {
+  constructor() {
     // Live messages of this conversation
     effect((onCleanup) => {
-      onCleanup(this.messagesService.watch(this.conversationId(), (messages) => this.messages.set(messages)));
+      onCleanup(
+        this.messagesService.watch(this.conversationId(), (messages) =>
+          this.messages.set(messages),
+        ),
+      );
     });
 
     // Opening the conversation clears its unread counter

@@ -13,7 +13,11 @@
     "start:prod": "ng serve --configuration production",
     "build:dev": "ng build --configuration dev && node scripts/robots-dev.cjs",
     "deploy:dev": "firebase deploy --project dev",
-    "deploy:prod": "firebase deploy --project default"
+    "deploy:prod": "firebase deploy --project default",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "private": true,
   "packageManager": "npm@11.9.0",
@@ -37,9 +41,14 @@
     "@angular/cli": "^21.2.27",
     "@angular/compiler-cli": "^21.2.0",
     "@angular/localize": "^21.2.25",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "^22.6.0",
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
+    "typescript-eslint": "^8.72.0",
     "vitest": "^4.0.8"
   }
 }

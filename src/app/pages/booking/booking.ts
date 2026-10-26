@@ -1,6 +1,6 @@
 import { AddressPipe } from '../../utils/address';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, ElementRef, input, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, signal, inject } from '@angular/core';
 import { roundMoney } from '../../utils/money';
 import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
@@ -27,12 +27,19 @@ type Day = { date: Date; weekday: string; number: number; disabled: boolean };
   styleUrl: './booking.scss',
 })
 export class Booking {
+  private readonly location = inject(Location);
+  private readonly router = inject(Router);
+  protected readonly professionals = inject(Professionals);
+  private readonly auth = inject(Auth);
+  private readonly bookings = inject(Bookings);
+  private readonly users = inject(Users);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly feedback = inject(Feedback);
+
   readonly id = input.required<string>();
   readonly servicos = input<string>('');
 
-  protected readonly artist = computed(() =>
-    this.professionals.byId(this.id()),
-  );
+  protected readonly artist = computed(() => this.professionals.byId(this.id()));
 
   protected readonly selectedServices = computed(() => {
     const ids = (this.servicos() ?? '').split(',');
@@ -41,7 +48,10 @@ export class Booking {
   // The price follows the start time: before a day and time are chosen, the normal prices
   private totalAt(day: Date | null, time: string | null) {
     return roundMoney(
-      this.selectedServices().reduce((sum, service) => sum + (day && time ? priceAt(service, day, time) : service.price), 0),
+      this.selectedServices().reduce(
+        (sum, service) => sum + (day && time ? priceAt(service, day, time) : service.price),
+        0,
+      ),
     );
   }
 
@@ -54,7 +64,9 @@ export class Booking {
     return price !== this.totalAt(null, null) ? price : null;
   }
 
-  private readonly availability = computed(() => this.artist()?.availability ?? DEFAULT_AVAILABILITY);
+  private readonly availability = computed(
+    () => this.artist()?.availability ?? DEFAULT_AVAILABILITY,
+  );
   private readonly duration = computed(
     () => this.selectedServices().reduce((sum, service) => sum + service.durationMinutes, 0) || 60,
   );
@@ -92,7 +104,9 @@ export class Booking {
   );
 
   protected readonly isCurrentMonth = computed(
-    () => this.month().getTime() === new Date(this.today.getFullYear(), this.today.getMonth(), 1).getTime(),
+    () =>
+      this.month().getTime() ===
+      new Date(this.today.getFullYear(), this.today.getMonth(), 1).getTime(),
   );
 
   protected readonly days = computed<Day[]>(() => {
@@ -116,7 +130,13 @@ export class Booking {
   protected hasConflict(time: string, day = this.selectedDay()) {
     if (!day) return false;
     const [hour, minute] = time.split(':').map(Number);
-    const start = new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, minute).getTime();
+    const start = new Date(
+      day.getFullYear(),
+      day.getMonth(),
+      day.getDate(),
+      hour,
+      minute,
+    ).getTime();
     const end = start + this.duration() * 60000;
     return this.bookings
       .mine()
@@ -128,25 +148,20 @@ export class Booking {
       );
   }
 
-  protected readonly someConflict = computed(() => this.times().some((time) => this.hasConflict(time)));
+  protected readonly someConflict = computed(() =>
+    this.times().some((time) => this.hasConflict(time)),
+  );
 
-  protected readonly canCheckout = computed(() => !!this.selectedDay() && !!this.selectedTime() && !this.saving());
+  protected readonly canCheckout = computed(
+    () => !!this.selectedDay() && !!this.selectedTime() && !this.saving(),
+  );
   protected readonly saving = signal(false);
   protected readonly error = signal('');
 
   // The first thing the page does is to show the next day the professional can attend
   private firstDayPicked = false;
 
-  constructor(
-    private readonly location: Location,
-    private readonly router: Router,
-    protected readonly professionals: Professionals,
-    private readonly auth: Auth,
-    private readonly bookings: Bookings,
-    private readonly users: Users,
-    private readonly host: ElementRef<HTMLElement>,
-    private readonly feedback: Feedback,
-  ) {
+  constructor() {
     effect(() => {
       if (!this.artist() || this.firstDayPicked) return;
       this.firstDayPicked = true;
@@ -184,14 +199,29 @@ export class Booking {
     }
 
     for (let offset = 0; offset < 120; offset++) {
-      const date = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate() + offset);
-      const free = freeStartTimes(date, this.availability(), this.duration(), busy.get(toDateKey(date)) ?? new Set());
+      const date = new Date(
+        this.today.getFullYear(),
+        this.today.getMonth(),
+        this.today.getDate() + offset,
+      );
+      const free = freeStartTimes(
+        date,
+        this.availability(),
+        this.duration(),
+        busy.get(toDateKey(date)) ?? new Set(),
+      );
       if (!free.length) continue;
 
       this.month.set(new Date(date.getFullYear(), date.getMonth(), 1));
       this.selectedDay.set(date);
       // Waits for the day list to render, then scrolls the strip to the chosen day
-      setTimeout(() => this.host.nativeElement.querySelector('.day.selected')?.scrollIntoView({ inline: 'center', block: 'nearest' }), 100);
+      setTimeout(
+        () =>
+          this.host.nativeElement
+            .querySelector('.day.selected')
+            ?.scrollIntoView({ inline: 'center', block: 'nearest' }),
+        100,
+      );
       return;
     }
   }
@@ -215,7 +245,7 @@ export class Booking {
     }
 
     // All the data of the profile is required: checked again here, in case it changed
-    let clientAddress = '';
+    let clientAddress: string;
     this.saving.set(true);
     try {
       const profile = await this.users.get(this.auth.user()!.uid);
@@ -260,7 +290,10 @@ export class Booking {
         ...(place === 'home' ? { clientAddress } : {}),
         paymentStatus: 'pending',
       });
-      this.feedback.show($localize`Agendamento solicitado! Você será avisado quando o profissional responder.`, 5000);
+      this.feedback.show(
+        $localize`Agendamento solicitado! Você será avisado quando o profissional responder.`,
+        5000,
+      );
       this.router.navigate(['/agenda']);
     } catch (error) {
       console.error('Failed to create booking', error);

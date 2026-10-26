@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { T } from '../../utils/texts';
@@ -13,6 +13,9 @@ type Step = { title: string; description: string; image: string };
   styleUrl: './onboarding.scss',
 })
 export class Onboarding {
+  private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
+
   protected readonly t = T;
   protected readonly steps: Step[] = [
     {
@@ -43,11 +46,6 @@ export class Onboarding {
   protected readonly step = computed(() => this.steps[this.current()]);
   protected readonly isLast = computed(() => this.current() === this.steps.length - 1);
   protected readonly isBeforeLast = computed(() => this.current() === this.steps.length - 2);
-
-  constructor(
-    private readonly auth: Auth,
-    private readonly router: Router,
-  ) {}
 
   protected async signInWithGoogle() {
     try {

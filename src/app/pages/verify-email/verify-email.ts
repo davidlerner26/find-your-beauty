@@ -1,4 +1,13 @@
-import { Component, computed, ElementRef, OnDestroy, OnInit, signal, viewChildren } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  signal,
+  viewChildren,
+  inject,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { T } from '../../utils/texts';
@@ -14,6 +23,9 @@ const RESEND_SECONDS = 60;
   styleUrl: './verify-email.scss',
 })
 export class VerifyEmail implements OnInit, OnDestroy {
+  protected readonly auth = inject(Auth);
+  private readonly router = inject(Router);
+
   protected readonly t = T;
   protected readonly boxes = Array.from({ length: LENGTH }, (_, i) => i);
   protected readonly digits = signal<string[]>(Array(LENGTH).fill(''));
@@ -34,11 +46,6 @@ export class VerifyEmail implements OnInit, OnDestroy {
     return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
   });
   private timer?: ReturnType<typeof setInterval>;
-
-  constructor(
-    protected readonly auth: Auth,
-    private readonly router: Router,
-  ) {}
 
   ngOnInit() {
     if (!this.auth.verification()) {
@@ -108,7 +115,9 @@ export class VerifyEmail implements OnInit, OnDestroy {
       // Without the password (the page was reloaded), the client signs in by hand
       this.router.navigateByUrl(signedIn ? this.auth.homePath() : '/entrar');
     } catch (error) {
-      this.error.set((error as { message?: string }).message || $localize`Não foi possível verificar o código.`);
+      this.error.set(
+        (error as { message?: string }).message || $localize`Não foi possível verificar o código.`,
+      );
       this.digits.set(Array(LENGTH).fill(''));
       this.fields().forEach((field) => (field.nativeElement.value = ''));
       this.fields()[0]?.nativeElement.focus();
@@ -126,7 +135,9 @@ export class VerifyEmail implements OnInit, OnDestroy {
       this.notice.set($localize`Enviamos um novo código.`);
       this.startTimer();
     } catch (error) {
-      this.error.set((error as { message?: string }).message || $localize`Não foi possível enviar o código.`);
+      this.error.set(
+        (error as { message?: string }).message || $localize`Não foi possível enviar o código.`,
+      );
     }
   }
 }

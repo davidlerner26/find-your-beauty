@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
@@ -13,6 +13,8 @@ import { formatRelative } from '../../utils/format-date';
   styleUrl: './admin.scss',
 })
 export class Admin {
+  private readonly admin = inject(AdminService);
+
   private readonly all = signal<PendingProfessional[]>([]);
   protected readonly waiting = this.all.asReadonly();
   protected readonly loading = signal(true);
@@ -21,7 +23,7 @@ export class Admin {
   protected readonly working = signal<string | null>(null);
   protected readonly relative = formatRelative;
 
-  constructor(private readonly admin: AdminService) {
+  constructor() {
     this.load();
   }
 

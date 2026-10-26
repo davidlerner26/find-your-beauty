@@ -6,7 +6,16 @@ import { Router } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, computed, effect, ElementRef, input, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  input,
+  OnInit,
+  signal,
+  inject,
+} from '@angular/core';
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { Spinner } from '../../components/spinner/spinner';
 import { Favorites } from '../../services/favorites';
@@ -14,7 +23,12 @@ import { Feedback } from '../../services/feedback';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
-import { hasLocation, SERVICE_NAMES, ServiceCategory, shortLocationLabel } from '../../models/professional';
+import {
+  hasLocation,
+  SERVICE_NAMES,
+  ServiceCategory,
+  shortLocationLabel,
+} from '../../models/professional';
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
 import { INTL_LOCALE } from '../../utils/locale';
@@ -32,11 +46,32 @@ let lastSelectedId: string | null = null;
 
 @Component({
   selector: 'app-explore',
-  imports: [ArtistDetails, CarouselArrows, ChipsRow, CatalogPipe, ReviewsLabelPipe, NgTemplateOutlet, FocusPipe, GoogleMap, MapMarker, MapCircle, Spinner, MatIconModule],
+  imports: [
+    ArtistDetails,
+    CarouselArrows,
+    ChipsRow,
+    CatalogPipe,
+    ReviewsLabelPipe,
+    NgTemplateOutlet,
+    FocusPipe,
+    GoogleMap,
+    MapMarker,
+    MapCircle,
+    Spinner,
+    MatIconModule,
+  ],
   templateUrl: './explore.html',
   styleUrl: './explore.scss',
 })
 export class Explore implements OnInit {
+  private readonly loader = inject(GoogleMapsLoader);
+  protected readonly professionals = inject(Professionals);
+  private readonly userLocation = inject(UserLocation);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  protected readonly favorites = inject(Favorites);
+  private readonly router = inject(Router);
+  private readonly feedback = inject(Feedback);
+
   protected readonly t = T;
   protected readonly hasKey = !!environment.googleMapsApiKey;
   protected readonly loaded = signal(false);
@@ -98,21 +133,17 @@ export class Explore implements OnInit {
   // Card photos that finished loading (or failed), so the spinner stops
   protected readonly loadedPhotos = signal<string[]>([]);
 
-  constructor(
-    private readonly loader: GoogleMapsLoader,
-    protected readonly professionals: Professionals,
-    private readonly userLocation: UserLocation,
-    private readonly host: ElementRef<HTMLElement>,
-    protected readonly favorites: Favorites,
-    private readonly router: Router,
-    private readonly feedback: Feedback,
-  ) {
+  constructor() {
     effect(() => {
       const service = this.service();
       if (!service) return;
       // The categories of the home page stay selected; without them, the one of the service
-      const chosen = (this.categories() ?? '').split(',').filter((name) => this.filters.includes(name));
-      const category = (Object.keys(SERVICE_NAMES) as ServiceCategory[]).find((key) => SERVICE_NAMES[key].includes(service));
+      const chosen = (this.categories() ?? '')
+        .split(',')
+        .filter((name) => this.filters.includes(name));
+      const category = (Object.keys(SERVICE_NAMES) as ServiceCategory[]).find((key) =>
+        SERVICE_NAMES[key].includes(service),
+      );
       if (chosen.length) this.activeFilters.set(chosen);
       else if (category) this.activeFilters.set([category]);
       this.activeServices.set([service]);
@@ -122,7 +153,13 @@ export class Explore implements OnInit {
     effect(() => {
       if (!this.service() || !this.serviceTags().length || this.chipShown) return;
       this.chipShown = true;
-      setTimeout(() => this.host.nativeElement.querySelector('.filter.small.active')?.scrollIntoView({ inline: 'center', block: 'nearest' }), 0);
+      setTimeout(
+        () =>
+          this.host.nativeElement
+            .querySelector('.filter.small.active')
+            ?.scrollIntoView({ inline: 'center', block: 'nearest' }),
+        0,
+      );
     });
 
     effect(() => {
@@ -195,13 +232,16 @@ export class Explore implements OnInit {
     const names = new Set<string>();
     for (const salon of this.professionals.published()) {
       if (!hasLocation(salon)) continue;
-      for (const service of salon.services) if (categories.includes(service.category)) names.add(service.name);
+      for (const service of salon.services)
+        if (categories.includes(service.category)) names.add(service.name);
     }
     return [...names].sort((a, b) => a.localeCompare(b, INTL_LOCALE));
   });
 
   protected toggleService(name: string) {
-    this.activeServices.update((all) => (all.includes(name) ? all.filter((n) => n !== name) : [...all, name]));
+    this.activeServices.update((all) =>
+      all.includes(name) ? all.filter((n) => n !== name) : [...all, name],
+    );
     this.selected.set(-1);
   }
 
@@ -210,27 +250,32 @@ export class Explore implements OnInit {
     const services = this.activeServices().filter((name) => this.serviceTags().includes(name));
     const user = this.userPosition();
 
-    return this.professionals
-      .published()
-      // With every chip selected nothing is filtered out, even professionals with other tags
-      .filter(
-        (salon) =>
-          active.length === this.filters.length || salon.tags.some((tag) => active.includes(tag)),
-      )
-      // A service chosen under the chips: only who offers one of them
-      .filter((salon) => !services.length || salon.services.some((service) => services.includes(service.name)))
-      // Home-only professionals have no place on the map
-      .filter((salon) => hasLocation(salon))
-      .map((salon) => ({
-        ...salon,
-        address: shortLocationLabel(salon),
-        // Work photos (the profile photo when there is no gallery)
-        photos: salon.gallery.length ? salon.gallery : [salon.image],
-        distance: user ? formatDistance(distanceKm(user, salon.position)) : null,
-        km: user ? distanceKm(user, salon.position) : null,
-      }))
-      // Closest first, in the carousel, on the map markers and in the list (the same order everywhere)
-      .sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity));
+    return (
+      this.professionals
+        .published()
+        // With every chip selected nothing is filtered out, even professionals with other tags
+        .filter(
+          (salon) =>
+            active.length === this.filters.length || salon.tags.some((tag) => active.includes(tag)),
+        )
+        // A service chosen under the chips: only who offers one of them
+        .filter(
+          (salon) =>
+            !services.length || salon.services.some((service) => services.includes(service.name)),
+        )
+        // Home-only professionals have no place on the map
+        .filter((salon) => hasLocation(salon))
+        .map((salon) => ({
+          ...salon,
+          address: shortLocationLabel(salon),
+          // Work photos (the profile photo when there is no gallery)
+          photos: salon.gallery.length ? salon.gallery : [salon.image],
+          distance: user ? formatDistance(distanceKm(user, salon.position)) : null,
+          km: user ? distanceKm(user, salon.position) : null,
+        }))
+        // Closest first, in the carousel, on the map markers and in the list (the same order everywhere)
+        .sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity))
+    );
   }
 
   // The list of the round button shows the same professionals, in the same order, as the carousel
@@ -246,7 +291,8 @@ export class Explore implements OnInit {
   protected onPhotosScroll(event: Event, id: string) {
     const strip = event.target as HTMLElement;
     const index = Math.round(strip.scrollLeft / strip.clientWidth);
-    if ((this.photoIndex()[id] ?? 0) !== index) this.photoIndex.update((all) => ({ ...all, [id]: index }));
+    if ((this.photoIndex()[id] ?? 0) !== index)
+      this.photoIndex.update((all) => ({ ...all, [id]: index }));
   }
   protected readonly closing = signal(false);
 
@@ -393,7 +439,9 @@ export class Explore implements OnInit {
       // A new object every time, so the map goes there even after it was dragged away
       this.center.set({ ...this.userLocation.position()! });
     } else {
-      this.feedback.show($localize`Não foi possível obter a sua localização. Permita o acesso no navegador.`);
+      this.feedback.show(
+        $localize`Não foi possível obter a sua localização. Permita o acesso no navegador.`,
+      );
     }
   }
 }

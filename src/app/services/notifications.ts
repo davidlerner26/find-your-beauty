@@ -1,16 +1,28 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
-import { collection, doc, onSnapshot, orderBy, query, Timestamp, updateDoc } from 'firebase/firestore';
+import { computed, effect, Injectable, signal, inject } from '@angular/core';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  Timestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { Notification } from '../models/message';
 import { Auth } from './auth';
 import { db } from './firebase';
 
 @Injectable({ providedIn: 'root' })
 export class Notifications {
+  private readonly auth = inject(Auth);
+
   readonly list = signal<Notification[]>([]);
   readonly loading = signal(true);
-  readonly unreadTotal = computed(() => this.list().filter((notification) => notification.unread).length);
+  readonly unreadTotal = computed(
+    () => this.list().filter((notification) => notification.unread).length,
+  );
 
-  constructor(private readonly auth: Auth) {
+  constructor() {
     effect((onCleanup) => {
       const uid = this.auth.user()?.uid;
       if (!uid) {
@@ -32,7 +44,8 @@ export class Notifications {
                 icon: data['icon'],
                 text: data['text'] ?? [],
                 unread: !!data['unread'],
-                createdAt: data['createdAt'] instanceof Timestamp ? data['createdAt'].toDate() : null,
+                createdAt:
+                  data['createdAt'] instanceof Timestamp ? data['createdAt'].toDate() : null,
               };
             }),
           );

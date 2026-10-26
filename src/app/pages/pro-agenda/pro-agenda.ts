@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { PricePipe } from '../../utils/price.pipe';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -28,6 +28,11 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
   styleUrl: './pro-agenda.scss',
 })
 export class ProAgenda {
+  private readonly auth = inject(Auth);
+  private readonly bookings = inject(Bookings);
+  private readonly professionals = inject(Professionals);
+  private readonly feedback = inject(Feedback);
+
   protected readonly clock = formatClock;
 
   protected readonly profile = computed(() => this.professionals.byId(this.auth.user()?.uid ?? ''));
@@ -41,16 +46,11 @@ export class ProAgenda {
   protected readonly history = computed(() =>
     this.bookings
       .received()
-      .filter((booking) => ['completed', 'declined', 'cancelled', 'cancelledByProfessional'].includes(booking.status))
+      .filter((booking) =>
+        ['completed', 'declined', 'cancelled', 'cancelledByProfessional'].includes(booking.status),
+      )
       .reverse(),
   );
-
-  constructor(
-    private readonly auth: Auth,
-    private readonly bookings: Bookings,
-    private readonly professionals: Professionals,
-    private readonly feedback: Feedback,
-  ) {}
 
   protected label(booking: Booking) {
     return STATUS_LABEL[booking.status];
@@ -64,9 +64,18 @@ export class ProAgenda {
     });
   }
 
-  protected answer(booking: Booking, status: 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional') {
+  protected answer(
+    booking: Booking,
+    status: 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional',
+  ) {
     // Cancelling a confirmed booking can't be undone: the client is told and the time is released
-    if (status === 'cancelledByProfessional' && !confirm($localize`Tem certeza que deseja cancelar este agendamento? O cliente será avisado e o horário será liberado.`)) return;
+    if (
+      status === 'cancelledByProfessional' &&
+      !confirm(
+        $localize`Tem certeza que deseja cancelar este agendamento? O cliente será avisado e o horário será liberado.`,
+      )
+    )
+      return;
 
     const done = {
       confirmed: $localize`Agendamento confirmado. O cliente foi avisado.`,

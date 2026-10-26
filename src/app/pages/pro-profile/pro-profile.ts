@@ -1,5 +1,5 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, effect, input, signal, inject } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -28,7 +28,10 @@ import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Photos } from '../../services/photos';
 import { Feedback } from '../../services/feedback';
 import { PhotoPositioner } from '../../components/photo-positioner/photo-positioner';
-import { DateRangePicker, PendingRange } from '../../components/date-range-picker/date-range-picker';
+import {
+  DateRangePicker,
+  PendingRange,
+} from '../../components/date-range-picker/date-range-picker';
 import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
 import { APP_LANGUAGE, INTL_LOCALE } from '../../utils/locale';
@@ -37,7 +40,10 @@ import { CatalogPipe } from '../../utils/catalog.pipe';
 // A service being edited: nothing is pre-filled, so the fields can be empty
 type PriceRuleDraft = { id: string; days: number[]; start: string; end: string; price: string };
 
-type ServiceDraft = Omit<Service, 'category' | 'price' | 'durationMinutes' | 'priceRules' | 'photos'> & {
+type ServiceDraft = Omit<
+  Service,
+  'category' | 'price' | 'durationMinutes' | 'priceRules' | 'photos'
+> & {
   // Photos of this service (the card shows them as a gallery)
   photos: string[];
   // Other prices, by day and time (each price typed like the main one)
@@ -58,6 +64,14 @@ type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePre
   styleUrl: './pro-profile.scss',
 })
 export class ProProfile {
+  private readonly auth = inject(Auth);
+  private readonly professionals = inject(Professionals);
+  private readonly router = inject(Router);
+  private readonly photos = inject(Photos);
+  private readonly maps = inject(GoogleMapsLoader);
+  protected readonly instagramService = inject(Instagram);
+  private readonly feedback = inject(Feedback);
+
   // Second step of the sign up: the same form, but the profile has to be complete to be sent
   readonly signup = input(false);
 
@@ -124,19 +138,17 @@ export class ProProfile {
   private readonly uid = computed(() => this.auth.user()?.uid ?? '');
   protected readonly profile = computed(() => this.professionals.byId(this.uid()));
 
-  constructor(
-    private readonly auth: Auth,
-    private readonly professionals: Professionals,
-    private readonly router: Router,
-    private readonly photos: Photos,
-    private readonly maps: GoogleMapsLoader,
-    protected readonly instagramService: Instagram,
-    private readonly feedback: Feedback,
-  ) {
+  constructor() {
     // The profile document may have been created after the list of professionals was loaded (first step of the
     // sign up, with e-mail or Google): the list is read again, once, when the profile is not in it
     effect(() => {
-      if (this.reloadedList || !this.uid() || this.profile() || this.professionals.status() !== 'ready') return;
+      if (
+        this.reloadedList ||
+        !this.uid() ||
+        this.profile() ||
+        this.professionals.status() !== 'ready'
+      )
+        return;
       this.reloadedList = true;
       void this.professionals.load();
     });
@@ -151,27 +163,41 @@ export class ProProfile {
       this.phone = profile.phone ? formatPhone(profile.phone) : '';
       this.instagram = profile.instagram ? '@' + profile.instagram : '';
       // Accounts from when there were two photos: the old cover is used when there is no profile photo
-      const legacy = profile as Professional & { coverImage?: string; coverPosition?: ImagePosition };
+      const legacy = profile as Professional & {
+        coverImage?: string;
+        coverPosition?: ImagePosition;
+      };
       this.image = profile.image || legacy.coverImage || '';
-      this.imagePosition.set((profile.image ? profile.imagePosition : legacy.coverPosition) ?? { x: 50, y: 50 });
+      this.imagePosition.set(
+        (profile.image ? profile.imagePosition : legacy.coverPosition) ?? { x: 50, y: 50 },
+      );
       this.gallery = [...profile.gallery];
       this.address = profile.address;
       // Profiles from before this choice existed work at their address
       this.serviceMode.set(profile.serviceMode ?? (profile.address ? 'studio' : null));
       this.about = profile.about.join('\n\n');
-      this.services = profile.services.map(({ durationMinutes, price, priceRules, photos, image, ...service }: Service & { image?: string }) => ({
-        ...service,
-        photos: [...(photos ?? [])],
-        priceRules: (priceRules ?? []).map((rule) => ({
-          id: Math.random().toString(36).slice(2, 10),
-          days: [...rule.days],
-          start: rule.start,
-          end: rule.end,
-          price: moneyToText(rule.price),
-        })),
-        price: moneyToText(price),
-        duration: durationToText(durationMinutes),
-      }));
+      this.services = profile.services.map(
+        ({
+          durationMinutes,
+          price,
+          priceRules,
+          photos,
+          image,
+          ...service
+        }: Service & { image?: string }) => ({
+          ...service,
+          photos: [...(photos ?? [])],
+          priceRules: (priceRules ?? []).map((rule) => ({
+            id: Math.random().toString(36).slice(2, 10),
+            days: [...rule.days],
+            start: rule.start,
+            end: rule.end,
+            price: moneyToText(rule.price),
+          })),
+          price: moneyToText(price),
+          duration: durationToText(durationMinutes),
+        }),
+      );
       this.position = { ...profile.position };
       this.addressConfirmed.set(this.hasPosition);
       const availability = structuredClone(profile.availability ?? DEFAULT_AVAILABILITY);
@@ -217,7 +243,8 @@ export class ProProfile {
     if (!this.serviceMode()) missing.push($localize`onde você atende`);
     else if (this.needsAddress) {
       if (this.address.trim().length < 5) missing.push($localize`endereço`);
-      else if (!this.addressConfirmed()) missing.push($localize`escolher o endereço na lista de sugestões`);
+      else if (!this.addressConfirmed())
+        missing.push($localize`escolher o endereço na lista de sugestões`);
     }
     if (!this.services.some((service) => this.serviceComplete(service))) {
       missing.push($localize`pelo menos 1 serviço completo`);
@@ -245,7 +272,9 @@ export class ProProfile {
     if (!start) return;
 
     const range: DateRange = { start, end: end ?? start };
-    const exists = this.availability.blockedRanges.some((r) => r.start === range.start && r.end === range.end);
+    const exists = this.availability.blockedRanges.some(
+      (r) => r.start === range.start && r.end === range.end,
+    );
     if (!exists) {
       this.availability.blockedRanges = [...this.availability.blockedRanges, range].sort((a, b) =>
         a.start.localeCompare(b.start),
@@ -306,7 +335,9 @@ export class ProProfile {
     this.uploadingGallery.set(true);
     this.message.set('');
     try {
-      const urls = await Promise.all(files.map((file) => this.photos.upload(this.uid(), 'gallery', file)));
+      const urls = await Promise.all(
+        files.map((file) => this.photos.upload(this.uid(), 'gallery', file)),
+      );
       this.gallery = [...this.gallery, ...urls];
       this.autoSave();
     } catch (error) {
@@ -326,7 +357,9 @@ export class ProProfile {
 
     this.uploadingService.set(service.id);
     try {
-      const urls = await Promise.all(files.map((file) => this.photos.upload(this.uid(), 'services', file)));
+      const urls = await Promise.all(
+        files.map((file) => this.photos.upload(this.uid(), 'services', file)),
+      );
       service.photos = [...service.photos, ...urls];
       this.autoSave();
     } catch (error) {
@@ -428,7 +461,13 @@ export class ProProfile {
   }
 
   protected ruleComplete(rule: PriceRuleDraft) {
-    return rule.days.length > 0 && !!rule.start && !!rule.end && rule.start < rule.end && parseMoney(rule.price) > 0;
+    return (
+      rule.days.length > 0 &&
+      !!rule.start &&
+      !!rule.end &&
+      rule.start < rule.end &&
+      parseMoney(rule.price) > 0
+    );
   }
 
   protected onRulePriceInput(rule: PriceRuleDraft, event: Event) {
@@ -497,7 +536,12 @@ export class ProProfile {
       this.suggestions.set(
         suggestions.flatMap((suggestion) =>
           suggestion.placePrediction
-            ? [{ text: suggestion.placePrediction.text.text, prediction: suggestion.placePrediction }]
+            ? [
+                {
+                  text: suggestion.placePrediction.text.text,
+                  prediction: suggestion.placePrediction,
+                },
+              ]
             : [],
         ),
       );
@@ -505,7 +549,9 @@ export class ProProfile {
     } catch (error) {
       console.error('Address search failed', error);
       this.suggestions.set([]);
-      this.addressError.set($localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`);
+      this.addressError.set(
+        $localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`,
+      );
     }
   }
 
@@ -563,7 +609,11 @@ export class ProProfile {
   // Only a valid CPF is saved, and only when it changed
   private async saveCpf() {
     if (!isValidCpf(this.cpf) || this.cpf === this.savedCpf) return;
-    await setDoc(doc(db, 'professionals', this.uid(), 'private', 'identity'), { cpf: this.cpf }, { merge: true });
+    await setDoc(
+      doc(db, 'professionals', this.uid(), 'private', 'identity'),
+      { cpf: this.cpf },
+      { merge: true },
+    );
     this.savedCpf = this.cpf;
   }
 
@@ -650,10 +700,16 @@ export class ProProfile {
   private async saveDraft() {
     if (!this.filled || this.saving()) return;
     const instagram = parseInstagram(this.instagram);
-    const fields = this.profileFields(this.completeServices(), instagram === null ? undefined : instagram, true);
+    const fields = this.profileFields(
+      this.completeServices(),
+      instagram === null ? undefined : instagram,
+      true,
+    );
     // Once the sign up is sent, `visible` and `published` follow the form; before, the profile isn't shown anyway
     const visible = this.visible();
-    const status = this.signup() ? {} : { visible, published: visible && this.missing.length === 0 };
+    const status = this.signup()
+      ? {}
+      : { visible, published: visible && this.missing.length === 0 };
     const snapshot = this.snapshot({ ...fields, ...status });
     if (snapshot === this.lastSaved) return;
 
@@ -689,7 +745,9 @@ export class ProProfile {
 
     this.serviceTried.set(true);
     if (!this.services.every((service) => this.serviceComplete(service))) {
-      this.show($localize`Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.`);
+      this.show(
+        $localize`Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.`,
+      );
       return;
     }
 
@@ -758,7 +816,12 @@ export class ProProfile {
   }
 
   protected async disconnectInstagram() {
-    if (!confirm($localize`Desconectar o Instagram? As fotos importadas deixam de aparecer no seu perfil.`)) return;
+    if (
+      !confirm(
+        $localize`Desconectar o Instagram? As fotos importadas deixam de aparecer no seu perfil.`,
+      )
+    )
+      return;
 
     this.instagramBusy.set(true);
     try {

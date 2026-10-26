@@ -3,7 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, inject } from '@angular/core';
 import { Favorites } from '../../services/favorites';
 import { Auth } from '../../services/auth';
 import { UserLocation } from '../../services/user-location';
@@ -44,11 +44,25 @@ type Salon = {
 
 @Component({
   selector: 'app-home',
-  imports: [CarouselArrows, CatalogPipe, ReviewsLabelPipe, FocusPipe, RouterLink, LocationPrompt, Spinner, MatIconModule],
+  imports: [
+    CarouselArrows,
+    CatalogPipe,
+    ReviewsLabelPipe,
+    FocusPipe,
+    RouterLink,
+    LocationPrompt,
+    Spinner,
+    MatIconModule,
+  ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
 export class Home {
+  private readonly auth = inject(Auth);
+  protected readonly professionals = inject(Professionals);
+  private readonly userLocation = inject(UserLocation);
+  protected readonly favorites = inject(Favorites);
+
   protected readonly t = T;
   // The section of featured professionals is only shown in the test environment for now
   protected readonly showFeatured = environment.features.featuredProfessionals;
@@ -87,7 +101,10 @@ export class Home {
       // With every chip selected nothing is filtered out, even professionals with other tags
       .filter((salon) => {
         const active = this.activeInterests();
-        return active.length === this.interests.length || salon.tagList.some((tag) => active.includes(tag));
+        return (
+          active.length === this.interests.length ||
+          salon.tagList.some((tag) => active.includes(tag))
+        );
       })
       .sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity))
       .slice(0, 3),
@@ -97,13 +114,6 @@ export class Home {
   // Photos that finished loading (or failed), so the spinner stops
   protected readonly loadedPhotos = signal<string[]>([]);
   protected readonly photoIndex = signal<Record<string, number | undefined>>({});
-
-  constructor(
-    private readonly auth: Auth,
-    protected readonly professionals: Professionals,
-    private readonly userLocation: UserLocation,
-    protected readonly favorites: Favorites,
-  ) {}
 
   // The heart sits inside a card that is a link: it must not open the page
   protected toggleFavorite(event: Event, id: string) {
@@ -118,12 +128,14 @@ export class Home {
   protected onPhotosScroll(event: Event, id: string) {
     const element = event.target as HTMLElement;
     const index = Math.round(element.scrollLeft / element.clientWidth);
-    if (this.photoIndex()[id] !== index) this.photoIndex.update((current) => ({ ...current, [id]: index }));
+    if (this.photoIndex()[id] !== index)
+      this.photoIndex.update((current) => ({ ...current, [id]: index }));
   }
 
   private toSalon(professional: Professional): Salon {
     const position = this.userLocation.position();
-    const km = position && hasLocation(professional) ? distanceKm(position, professional.position) : null;
+    const km =
+      position && hasLocation(professional) ? distanceKm(position, professional.position) : null;
 
     return {
       id: professional.id,
@@ -143,7 +155,12 @@ export class Home {
 
   // The names of the services that at least one published professional offers
   private readonly offeredServices = computed(
-    () => new Set(this.professionals.published().flatMap((professional) => professional.services.map((service) => service.name))),
+    () =>
+      new Set(
+        this.professionals
+          .published()
+          .flatMap((professional) => professional.services.map((service) => service.name)),
+      ),
   );
 
   // The services of the categories selected in "Categorias", only the ones some professional offers
@@ -160,5 +177,4 @@ export class Home {
       // A category without any service on offer leaves no empty line
       .filter((row) => row.services.length),
   );
-
 }

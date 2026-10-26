@@ -1,6 +1,15 @@
 import { AddressPipe } from '../../utils/address';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, input, output, resource, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  resource,
+  signal,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FocusPipe } from '../../utils/focus.pipe';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
@@ -14,7 +23,13 @@ import { PhotoViewer } from '../../components/photo-viewer/photo-viewer';
 import { Toast } from '../../components/toast/toast';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { formatDuration, Professional, Review, Service, ServiceCategory } from '../../models/professional';
+import {
+  formatDuration,
+  Professional,
+  Review,
+  Service,
+  ServiceCategory,
+} from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { Professionals } from '../../services/professionals';
 import { Favorites } from '../../services/favorites';
@@ -31,12 +46,36 @@ import { CatalogPipe } from '../../utils/catalog.pipe';
 
 @Component({
   selector: 'app-artist-details',
-  imports: [AddressPipe, CarouselArrows, PhotoViewer, CatalogPipe, Clamped, ServiceSheet, Toast, ReviewsLabelPipe, FormsModule, FocusPipe, PricePipe, Spinner, RouterLink, MatIconModule],
+  imports: [
+    AddressPipe,
+    CarouselArrows,
+    PhotoViewer,
+    CatalogPipe,
+    Clamped,
+    ServiceSheet,
+    Toast,
+    ReviewsLabelPipe,
+    FormsModule,
+    FocusPipe,
+    PricePipe,
+    Spinner,
+    RouterLink,
+    MatIconModule,
+  ],
   templateUrl: './artist-details.html',
   styleUrl: './artist-details.scss',
   host: { '[class.floating]': 'floating()' },
 })
 export class ArtistDetails {
+  private readonly location = inject(Location);
+  private readonly router = inject(Router);
+  protected readonly professionals = inject(Professionals);
+  protected readonly auth = inject(Auth);
+  private readonly reviewsService = inject(Reviews);
+  private readonly users = inject(Users);
+  protected readonly favorites = inject(Favorites);
+  private readonly feedback = inject(Feedback);
+
   protected readonly t = T;
   readonly id = input.required<string>();
   // Shown floating over another screen (the map): going back closes it instead of leaving the screen
@@ -59,7 +98,9 @@ export class ArtistDetails {
   }
 
   protected readonly detailId = signal<string | null>(null);
-  protected readonly detail = computed(() => this.artist()?.services.find((service) => service.id === this.detailId()) ?? null);
+  protected readonly detail = computed(
+    () => this.artist()?.services.find((service) => service.id === this.detailId()) ?? null,
+  );
   protected readonly stars = [1, 2, 3, 4, 5];
 
   protected readonly categories: { name: ServiceCategory; icon: string }[] = [
@@ -74,7 +115,9 @@ export class ArtistDetails {
   ];
   // Only the categories that the professional has services in
   protected readonly availableCategories = computed(() =>
-    this.categories.filter((category) => this.artist()?.services.some((s) => s.category === category.name)),
+    this.categories.filter((category) =>
+      this.artist()?.services.some((s) => s.category === category.name),
+    ),
   );
 
   // The client's own data: booking needs all of it filled in on the profile
@@ -135,7 +178,8 @@ export class ArtistDetails {
   protected onServicePhotos(event: Event, id: string) {
     const strip = event.target as HTMLElement;
     const index = Math.round(strip.scrollLeft / strip.clientWidth);
-    if ((this.serviceSlide()[id] ?? 0) !== index) this.serviceSlide.update((all) => ({ ...all, [id]: index }));
+    if ((this.serviceSlide()[id] ?? 0) !== index)
+      this.serviceSlide.update((all) => ({ ...all, [id]: index }));
   }
 
   protected readonly formatDuration = formatDuration;
@@ -153,16 +197,7 @@ export class ArtistDetails {
   protected readonly reviewMessage = signal('');
   protected readonly formatRelative = formatRelative;
 
-  constructor(
-    private readonly location: Location,
-    private readonly router: Router,
-    protected readonly professionals: Professionals,
-    protected readonly auth: Auth,
-    private readonly reviewsService: Reviews,
-    private readonly users: Users,
-    protected readonly favorites: Favorites,
-    private readonly feedback: Feedback,
-  ) {
+  constructor() {
     effect(() => {
       const id = this.id();
       const uid = this.auth.user()?.uid;
@@ -179,7 +214,9 @@ export class ArtistDetails {
       const mine = list.find((review) => review.id === uid);
       this.myStars.set(mine?.stars ?? 0);
       this.myText = mine?.text ?? '';
-      this.reviewBookingId.set(uid && role === 'client' ? await this.reviewsService.completedBookingId(id) : null);
+      this.reviewBookingId.set(
+        uid && role === 'client' ? await this.reviewsService.completedBookingId(id) : null,
+      );
     } catch (error) {
       console.error('Failed to load reviews', error);
     }
@@ -250,7 +287,7 @@ export class ArtistDetails {
     this.heroIndex.set(Math.round(strip.scrollLeft / strip.clientWidth));
   }
 
-  protected onMapButton(event: Event) {
+  protected onMapButton() {
     if (!this.floating()) return;
     this.locate.emit();
   }
@@ -261,7 +298,9 @@ export class ArtistDetails {
   }
 
   protected toggleFavorite() {
-    this.favorites.toggle(this.id()).catch((error) => console.error('Failed to update favorite', error));
+    this.favorites
+      .toggle(this.id())
+      .catch((error) => console.error('Failed to update favorite', error));
   }
 
   protected isSelected(service: Service) {

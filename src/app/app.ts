@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
@@ -10,7 +10,14 @@ import { Toast } from './components/toast/toast';
 import { environment } from '../environments/environment';
 
 // `badge`: the dot for new messages; `news`: the tab is the one of the notifications (the dot is for the new ones)
-type Tab = { label: string; path: string; match: string[]; icon: string; badge?: boolean; news?: boolean };
+type Tab = {
+  label: string;
+  path: string;
+  match: string[];
+  icon: string;
+  badge?: boolean;
+  news?: boolean;
+};
 
 // The professional area is /pro and what is under it (not /profissionais, the public page of a professional)
 const isProArea = (url: string) => url === '/pro' || url.startsWith('/pro/');
@@ -48,6 +55,11 @@ const AUTH_SCREENS = [
   styleUrl: './app.scss',
 })
 export class App {
+  protected readonly messages = inject(Messages);
+  private readonly notifications = inject(Notifications);
+  protected readonly feedback = inject(Feedback);
+  protected readonly auth = inject(Auth);
+
   private readonly clientTabs: Tab[] = [
     {
       label: $localize`Início`,
@@ -111,14 +123,10 @@ export class App {
   // Last tab screen visited: it stays highlighted on /admin, which has no tab of its own
   private readonly lastTab = signal('/perfil');
 
-  constructor(
-    router: Router,
-    protected readonly messages: Messages,
-    private readonly notifications: Notifications,
-    protected readonly feedback: Feedback,
-    protected readonly auth: Auth,
-    icons: MatIconRegistry,
-  ) {
+  constructor() {
+    const router = inject(Router);
+    const icons = inject(MatIconRegistry);
+
     // Material Symbols (outlined), loaded in index.html
     icons.setDefaultFontSetClass('material-symbols-outlined');
     this.setUrl(this.pathOf(router.url));
@@ -139,7 +147,13 @@ export class App {
       tab.badge
         ? [
             { ...tab, match: [tab.path] },
-            { label: $localize`Notificações`, path: notifications, match: [notifications], icon: 'notifications', news: true },
+            {
+              label: $localize`Notificações`,
+              path: notifications,
+              match: [notifications],
+              icon: 'notifications',
+              news: true,
+            },
           ]
         : [tab],
     );
@@ -171,7 +185,9 @@ export class App {
     const url = this.isAdminScreen ? this.lastTab() : this.url();
     // A screen inside the tab counts too (/mensagens/:id is in Mensagens); the home and the agenda of the professional
     // are prefixes of other tabs, so they only match themselves
-    return tab.match.some((path) => url === path || (path !== '/' && path !== '/pro' && url.startsWith(path + '/')));
+    return tab.match.some(
+      (path) => url === path || (path !== '/' && path !== '/pro' && url.startsWith(path + '/')),
+    );
   }
 
   private get isAdminScreen() {

@@ -21,6 +21,10 @@ import { T } from '../../utils/texts';
   styleUrl: './profile.scss',
 })
 export class Profile {
+  protected readonly auth = inject(Auth);
+  private readonly users = inject(Users);
+  private readonly feedback = inject(Feedback);
+
   protected readonly t = T;
   // Loads the `users/{uid}` document whenever the logged in user changes
   protected readonly profile = resource({
@@ -61,12 +65,6 @@ export class Profile {
     return isValidCpf(this.cpf);
   }
 
-  constructor(
-    protected readonly auth: Auth,
-    private readonly users: Users,
-    private readonly feedback: Feedback,
-  ) {}
-
   protected edit(data: UserProfile | null | undefined) {
     this.firstName = data?.firstName ?? '';
     this.lastName = data?.lastName ?? '';
@@ -98,14 +96,29 @@ export class Profile {
   protected async save() {
     this.submitted.set(true);
     const uid = this.auth.user()?.uid;
-    if (!uid || !this.nameValid || !this.lastNameValid || !this.phoneValid || !this.cpfValid || !this.addressValid) return;
+    if (
+      !uid ||
+      !this.nameValid ||
+      !this.lastNameValid ||
+      !this.phoneValid ||
+      !this.cpfValid ||
+      !this.addressValid
+    )
+      return;
 
     this.saveError.set('');
     this.saving.set(true);
     try {
       const firstName = this.firstName.trim();
       const lastName = this.lastName.trim();
-      await this.users.update(uid, { firstName, lastName, phone: this.phone, cpf: this.cpf, address: this.place.value.trim(), addressPosition: this.place.position });
+      await this.users.update(uid, {
+        firstName,
+        lastName,
+        phone: this.phone,
+        cpf: this.cpf,
+        address: this.place.value.trim(),
+        addressPosition: this.place.position,
+      });
       await this.auth.updateName(`${firstName} ${lastName}`);
       // Shows what was just saved, without waiting for another read
       this.profile.set({

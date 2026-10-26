@@ -1,4 +1,4 @@
-import { effect, Injectable, signal, WritableSignal } from '@angular/core';
+import { effect, Injectable, signal, WritableSignal, inject } from '@angular/core';
 import {
   collection,
   doc,
@@ -16,13 +16,15 @@ import { db } from './firebase';
 
 @Injectable({ providedIn: 'root' })
 export class Bookings {
+  private readonly auth = inject(Auth);
+
   // Requests received by the logged in professional
   readonly received = signal<Booking[]>([]);
   // Bookings made by the logged in client
   readonly mine = signal<Booking[]>([]);
   readonly mineLoading = signal(true);
 
-  constructor(private readonly auth: Auth) {
+  constructor() {
     this.watch('professional', 'professionalUid', this.received);
     this.watch('client', 'clientUid', this.mine, this.mineLoading);
   }
@@ -101,7 +103,10 @@ export class Bookings {
   // The professional answers a request or concludes a booking. A Cloud Function notifies the client.
   async setStatus(
     booking: Booking,
-    status: Extract<BookingStatus, 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional'>,
+    status: Extract<
+      BookingStatus,
+      'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional'
+    >,
   ) {
     if (!booking.id) return;
 
@@ -121,7 +126,10 @@ export class Bookings {
     if (!booking.id) return;
 
     const batch = writeBatch(db);
-    batch.update(doc(db, 'bookings', booking.id), { status: 'cancelled', updatedAt: serverTimestamp() });
+    batch.update(doc(db, 'bookings', booking.id), {
+      status: 'cancelled',
+      updatedAt: serverTimestamp(),
+    });
     for (const busyId of booking.busyIds ?? []) {
       batch.delete(doc(db, 'professionals', booking.professionalId, 'busy', busyId));
     }

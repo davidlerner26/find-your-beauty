@@ -1,7 +1,7 @@
 import { getApps, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
-import { ADMIN, CLIENT, PASSWORD, PRO, PRO_HOME } from './data';
+import { ADMIN, CLIENT, CLIENT2, PASSWORD, PRO, PRO_HOME } from './data';
 
 export const PROJECT_ID = 'demo-find-your-beauty';
 
@@ -80,6 +80,11 @@ export async function seed() {
     { uid: PRO.uid, email: PRO.email, displayName: PRO.name },
     { uid: PRO_HOME.uid, email: PRO_HOME.email, displayName: PRO_HOME.name },
     { uid: CLIENT.uid, email: CLIENT.email, displayName: `${CLIENT.firstName} ${CLIENT.lastName}` },
+    {
+      uid: CLIENT2.uid,
+      email: CLIENT2.email,
+      displayName: `${CLIENT2.firstName} ${CLIENT2.lastName}`,
+    },
     { uid: ADMIN.uid, email: ADMIN.email, displayName: 'Admin' },
   ];
   for (const account of accounts) {
@@ -93,15 +98,17 @@ export async function seed() {
     .doc(`professionals/${PRO_HOME.uid}`)
     .set(professional(PRO_HOME.uid, PRO_HOME.name, PRO_HOME.email, 'home'));
 
-  await db.doc(`users/${CLIENT.uid}`).set({
-    firstName: CLIENT.firstName,
-    lastName: CLIENT.lastName,
-    email: CLIENT.email,
-    phone: '(21) 99747-2878',
-    cpf: '529.982.247-25',
-    address: 'Rua Teste, 10 - Centro, Rio de Janeiro - RJ',
-    addressPosition: { lat: -22.9068, lng: -43.1729 },
-  });
+  for (const client of [CLIENT, CLIENT2]) {
+    await db.doc(`users/${client.uid}`).set({
+      firstName: client.firstName,
+      lastName: client.lastName,
+      email: client.email,
+      phone: '(21) 99747-2878',
+      cpf: '529.982.247-25',
+      address: 'Rua Teste, 10 - Centro, Rio de Janeiro - RJ',
+      addressPosition: { lat: -22.9068, lng: -43.1729 },
+    });
+  }
   await db.doc(`users/${ADMIN.uid}`).set({
     firstName: 'Admin',
     lastName: 'E2E',

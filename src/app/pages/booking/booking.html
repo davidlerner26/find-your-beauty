@@ -73,7 +73,7 @@
             class="day"
             [class.selected]="isSelected(day)"
             [disabled]="day.disabled"
-            (click)="selectedDay.set(day.date)"
+            (click)="pickDay(day.date)"
           >
             <span>{{ day.weekday }}</span>
             <strong>{{ day.number }}</strong>

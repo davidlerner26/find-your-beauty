@@ -162,6 +162,8 @@ export class Booking {
 
   // The first thing the page does is to show the next day the professional can attend
   private firstDayPicked = false;
+  // Once the user picks a day or changes the month, the day found for them must not take over
+  private userPickedDay = false;
 
   constructor() {
     effect(() => {
@@ -199,6 +201,7 @@ export class Booking {
     } catch (error) {
       log.error('Failed to load busy days', error);
     }
+    if (this.userPickedDay) return;
 
     for (let offset = 0; offset < 120; offset++) {
       const date = new Date(
@@ -314,7 +317,13 @@ export class Booking {
     this.location.back();
   }
 
+  protected pickDay(date: Date) {
+    this.userPickedDay = true;
+    this.selectedDay.set(date);
+  }
+
   protected changeMonth(delta: number) {
+    this.userPickedDay = true;
     const month = this.month();
     this.month.set(new Date(month.getFullYear(), month.getMonth() + delta, 1));
     this.selectedDay.set(null);

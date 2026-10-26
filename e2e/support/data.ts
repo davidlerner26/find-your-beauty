@@ -8,6 +8,14 @@ export const CLIENT = {
   lastName: 'Cliente',
 };
 
+// A second client with a complete profile
+export const CLIENT2 = {
+  uid: 'client-e2e-2',
+  email: 'joao@e2e.test',
+  firstName: 'João',
+  lastName: 'Cliente',
+};
+
 export const PRO = {
   uid: 'pro-e2e-1',
   email: 'ana@e2e.test',

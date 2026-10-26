@@ -9,7 +9,9 @@ import { asLang, emailOf, L, Lang, link, money, resendKey, sendEmail, when } fro
 import { serviceName } from './catalog';
 import * as logger from 'firebase-functions/logger';
 import { checkEmailCode } from './email-code';
-import { COLLECTIONS } from './shared/domain';
+import { paymentsOn, payments, stripeKey } from './payments-api';
+import { priceAt, Service } from './pricing';
+import { CLOSED_BOOKING_STATUSES, COLLECTIONS } from './shared/domain';
 import { clientIp, hit, RateLimit } from './rate-limit';
 import {
   onDocumentCreated,
@@ -34,30 +36,22 @@ const notify = (uid: string, id: string, text: TextPart[]) =>
     createdAt: FieldValue.serverTimestamp(),
   });
 
-type PriceRule = { days: number[]; start: string; end: string; price: number };
-type Service = { id: string; price: number; durationMinutes: number; priceRules?: PriceRule[] };
-
-const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-// The price of a service for an appointment that starts at `startsAt`, counted in Brazil's time
-// (the same rule as the app: the first price rule that matches the day and the start time wins)
-const priceAt = (service: Service, startsAt: Date) => {
-  const parts = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Sao_Paulo',
-    weekday: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(startsAt);
-  const part = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
-  const weekday = WEEKDAYS.indexOf(part('weekday'));
-  const time = `${part('hour')}:${part('minute')}`;
-
-  return (
-    (service.priceRules ?? []).find(
-      (rule) => rule.days.includes(weekday) && time >= rule.start && time < rule.end,
-    )?.price ?? service.price
-  );
+const REJECTION = {
+  services: {
+    pt: ': os serviços mudaram. Tente agendar de novo.',
+    en: ': the services changed. Try booking again.',
+    es: ': los servicios cambiaron. Intenta reservar de nuevo.',
+  },
+  payment: {
+    pt: ': não foi possível confirmar o pagamento. Tente agendar de novo.',
+    en: ': we could not confirm the payment. Try booking again.',
+    es: ': no fue posible confirmar el pago. Intenta reservar de nuevo.',
+  },
+  'card-refused': {
+    pt: ': o cartão não aprovou o pagamento, então o agendamento foi cancelado.',
+    en: ': the card did not approve the payment, so the booking was cancelled.',
+    es: ': la tarjeta no aprobó el pago, por eso la reserva fue cancelada.',
+  },
 };
 
 // A booking that doesn't match the professional's services: it is cancelled, its slots are freed and
@@ -65,6 +59,8 @@ const priceAt = (service: Service, startsAt: Date) => {
 const rejectBooking = async (
   ref: FirebaseFirestore.DocumentReference,
   booking: FirebaseFirestore.DocumentData,
+  // Why: the services changed, no valid payment came with it, or the card refused when it was accepted
+  reason: 'services' | 'payment' | 'card-refused' = 'services',
 ) => {
   const batch = db.batch();
   batch.update(ref, {
@@ -88,18 +84,14 @@ const rejectBooking = async (
     },
     { text: booking.professionalName, bold: true },
     {
-      text: L(lang, {
-        pt: ': os serviços mudaram. Tente agendar de novo.',
-        en: ': the services changed. Try booking again.',
-        es: ': los servicios cambiaron. Intenta reservar de nuevo.',
-      }),
+      text: L(lang, REJECTION[reason]),
     },
   ]);
 };
 
 // A new booking: the server is the source of truth for prices, then both sides are notified
 export const onBookingCreated = onDocumentCreated(
-  { document: 'bookings/{bookingId}', secrets: [resendKey] },
+  { document: 'bookings/{bookingId}', secrets: [resendKey, stripeKey] },
   async (event) => {
     const booking = event.data?.data();
     if (!booking) return;
@@ -135,6 +127,25 @@ export const onBookingCreated = onDocumentCreated(
         durationMinutes,
         correctedByServer: true,
       });
+    }
+
+    // Where there are payments, a booking comes with the hold on the card that the client made for it. It is checked
+    // here, where the browser can't fake it: the client's own, for this amount, still held, used by this booking only.
+    if (paymentsOn()) {
+      const verified = await payments().verifyForBooking(
+        { clientUid: booking.clientUid, total, paymentIntentId: booking.paymentIntentId },
+        bookingId,
+      );
+      if (!verified.ok) {
+        logger.warn('Booking without a valid payment', { bookingId, reason: verified.reason });
+        // A hold for the wrong amount is the client's own: it is lifted. Never one that belongs to someone else.
+        if (booking.paymentIntentId && verified.reason === 'wrong-amount') {
+          await payments().release(booking.paymentIntentId);
+        }
+        await rejectBooking(event.data!.ref, booking, 'payment');
+        return;
+      }
+      await event.data!.ref.update({ paymentStatus: 'authorized' });
     }
 
     // The client's language is the one of the page where the booking was made; the professional's, the one of her profile
@@ -318,11 +329,29 @@ const ANSWER: Record<string, Record<Lang, [string, string]>> = {
 
 // The professional answered the request: tells the client
 export const onBookingUpdated = onDocumentUpdated(
-  { document: 'bookings/{bookingId}', secrets: [resendKey] },
+  { document: 'bookings/{bookingId}', secrets: [resendKey, stripeKey] },
   async (event) => {
     const before = event.data?.before.data();
     const after = event.data?.after.data();
     if (!before || !after || before.status === after.status || after.rejectedByServer) return;
+
+    // The money follows the booking: taken when the professional accepts, given back when it does not happen
+    if (paymentsOn() && after.paymentIntentId) {
+      const ref = event.data!.after.ref;
+      if (after.status === 'confirmed') {
+        const result = await payments().capture(after.paymentIntentId);
+        if (result !== 'paid') {
+          // The card refused at the moment of taking: the booking cannot stand
+          await ref.update({ paymentStatus: 'failed' });
+          await rejectBooking(ref, after, 'card-refused');
+          return;
+        }
+        await ref.update({ paymentStatus: 'paid' });
+      } else if (CLOSED_BOOKING_STATUSES.includes(after.status) && after.status !== 'completed') {
+        const result = await payments().release(after.paymentIntentId);
+        if (result) await ref.update({ paymentStatus: result });
+      }
+    }
 
     // The client cancelled: tells the professional
     if (after.status === 'cancelled') {
@@ -695,6 +724,16 @@ export const onReviewWritten = onDocumentWritten(
     await ref.update({ rating, reviewsCount: String(reviews.size) });
   },
 );
+
+// Payments with Stripe (see payments.ts): saved cards and the hold on the card of a booking
+export {
+  authorizePayment,
+  cancelAuthorization,
+  confirmAuthorization,
+  createCardSetup,
+  listCards,
+  removeCard,
+} from './payments-api';
 
 // Instagram integration (see instagram.ts)
 export {

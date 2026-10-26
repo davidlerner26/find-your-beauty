@@ -90,7 +90,7 @@ service cloud.firestore {
       allow create: if request.auth != null &&
         request.resource.data.keys().hasOnly(['clientUid', 'clientName', 'professionalId', 'professionalUid',
           'professionalName', 'services', 'startsAt', 'durationMinutes', 'total', 'notes', 'busyIds', 'status',
-          'place', 'clientAddress', 'lang', 'paymentStatus', 'createdAt']) &&
+          'place', 'clientAddress', 'lang', 'paymentStatus', 'paymentIntentId', 'createdAt']) &&
         request.resource.data.clientUid == request.auth.uid &&
         request.resource.data.status == 'pending' &&
         request.resource.data.paymentStatus == 'pending' &&
@@ -98,6 +98,8 @@ service cloud.firestore {
         request.resource.data.clientName is string && request.resource.data.clientName.size() <= 200 &&
         request.resource.data.professionalName is string && request.resource.data.professionalName.size() <= 200 &&
         request.resource.data.notes is string && request.resource.data.notes.size() <= 1000 &&
+        request.resource.data.get('paymentIntentId', 'none') is string &&
+        request.resource.data.get('paymentIntentId', 'none').size() <= 100 &&
         request.resource.data.get('clientAddress', '') is string &&
         request.resource.data.get('clientAddress', '').size() <= 500 &&
         request.resource.data.get('place', 'studio') in ['home', 'studio'] &&

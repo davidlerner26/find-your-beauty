@@ -18,9 +18,14 @@ describe('callable functions', () => {
       })),
     );
 
-    expect(callables.length).toBeGreaterThanOrEqual(6);
+    expect(callables.length).toBeGreaterThanOrEqual(12);
     for (const { name, options } of callables) {
-      expect(/invoker:\s*'public'|\.\.\.PUBLIC/.test(options), name).toBe(true);
+      // Either the options say it, or they are the `options` object of the file, which does
+      const file = sources.find((source) => name.startsWith(`${source.name}:`))!.text;
+      const shared =
+        /^\s*options\s*,\s*$/.test(options) &&
+        /options:\s*CallableOptions\s*=\s*\{[^}]*invoker:\s*'public'/.test(file);
+      expect(/invoker:\s*'public'|\.\.\.PUBLIC/.test(options) || shared, name).toBe(true);
     }
   });
 });

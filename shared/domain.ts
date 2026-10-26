@@ -50,6 +50,29 @@ export const isOpen = (status: BookingStatus) => OPEN_BOOKING_STATUSES.includes(
 export const isClosed = (status: BookingStatus) => CLOSED_BOOKING_STATUSES.includes(status);
 export const freesSlots = (status: BookingStatus) => FREES_SLOTS.includes(status);
 
+// The payment of a booking (the money is held on the client's card when the booking is made, and taken when the
+// professional accepts it):
+//   pending -> authorized (held) -> paid (taken) -> refunded (the booking was cancelled after that)
+//   authorized -> released (declined or cancelled before the professional accepted: nothing was taken)
+//   failed: the card refused when the professional accepted
+// Bookings of the production environment, where there is no payment yet, stay `pending`.
+export const PAYMENT_STATUSES = [
+  'pending',
+  'authorized',
+  'paid',
+  'released',
+  'refunded',
+  'failed',
+] as const;
+
+export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
+
+// The currency of every payment, and its smallest unit: 100 centavos in a real
+export const CURRENCY = 'brl';
+
+// The amount of a booking in centavos, the way Stripe counts it
+export const toCents = (reais: number) => Math.round(reais * 100);
+
 // The names of the Firestore collections (and the subcollections), as the rules know them
 export const COLLECTIONS = {
   professionals: 'professionals',

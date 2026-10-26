@@ -1,4 +1,4 @@
-import { BookingStatus, Lang } from '../../../shared/domain';
+import { BookingStatus, Lang, PaymentStatus } from '../../../shared/domain';
 
 export type { BookingStatus };
 
@@ -26,5 +26,7 @@ export type Booking = {
   // Language of the page where the booking was made (the e-mails go in it)
   lang?: Lang;
   // No payment integration yet: bookings are created with the payment pending
-  paymentStatus: 'pending' | 'paid';
+  paymentStatus: PaymentStatus;
+  // The hold on the card of the client (Stripe). Only in the test environment, where the payment exists.
+  paymentIntentId?: string;
 };

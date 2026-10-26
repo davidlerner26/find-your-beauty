@@ -146,6 +146,22 @@ describe('bookings and busy slots', () => {
     await assertFails(book(CLIENT, bookingData({ isAdmin: true })));
   });
 
+  it('accepts the id of the hold on the card, as a short text only', async () => {
+    await assertSucceeds(
+      book(CLIENT, bookingData({ clientUid: CLIENT, paymentIntentId: 'pi_123' })),
+    );
+  });
+
+  it('denies a hold id that is not a short text', async () => {
+    await assertFails(book(CLIENT, bookingData({ paymentIntentId: 123 })));
+    await assertFails(book(CLIENT, bookingData({ paymentIntentId: 'x'.repeat(101) })));
+  });
+
+  it('denies a client that says its booking is already paid', async () => {
+    await assertFails(book(CLIENT, bookingData({ paymentStatus: 'paid' })));
+    await assertFails(book(CLIENT, bookingData({ paymentStatus: 'authorized' })));
+  });
+
   it('denies a booking made in the name of another client', async () => {
     const db = env.authenticatedContext(OTHER).firestore();
     await assertFails(setDoc(doc(db, 'bookings', 'b1'), bookingData({ clientUid: CLIENT })));

@@ -1,3 +1,5 @@
+import { errorCode } from './error-code';
+
 const EMAIL = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
 
 export const isValidEmail = (email: string) => EMAIL.test(email.trim());
@@ -31,5 +33,4 @@ const AUTH_ERRORS: Record<string, string> = {
 };
 
 export const authErrorMessage = (error: unknown) =>
-  AUTH_ERRORS[(error as { code?: string }).code ?? ''] ??
-  $localize`Algo deu errado. Tente novamente.`;
+  AUTH_ERRORS[errorCode(error) ?? ''] ?? $localize`Algo deu errado. Tente novamente.`;

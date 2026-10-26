@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { authErrorMessage, isValidEmail } from '../../utils/validators';
+import { errorCode } from '../../utils/error-code';
 
 @Component({
   selector: 'app-login',
@@ -55,7 +56,7 @@ export class Login {
       }
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
-      if ((error as { code?: string }).code === 'auth/email-not-verified') {
+      if (errorCode(error) === 'auth/email-not-verified') {
         this.router.navigateByUrl('/verificar-email');
         return;
       }
@@ -71,7 +72,7 @@ export class Login {
       await this.auth.signInWithGoogle(this.rememberMe, this.pro() ? 'professional' : 'client');
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
-      const code = (error as { code?: string }).code;
+      const code = errorCode(error);
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
       if (
         code === 'auth/not-professional' ||

@@ -5,6 +5,7 @@ import { Auth } from '../../services/auth';
 import { Feedback } from '../../services/feedback';
 import { log } from '../../utils/log';
 import { T } from '../../utils/texts';
+import { errorCode } from '../../utils/error-code';
 
 type Step = { title: string; description: string; image: string };
 
@@ -56,7 +57,7 @@ export class Onboarding {
       this.router.navigateByUrl('/');
     } catch (error) {
       // Closing the popup is not an error: stay on the page
-      const code = (error as { code?: string }).code;
+      const code = errorCode(error);
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
       log.error('Failed to sign in with Google', error);
       this.feedback.show($localize`Não foi possível entrar com o Google. Tente novamente.`);

@@ -18,6 +18,7 @@ import { priceAt } from '../../utils/pricing';
 import { busyIdsFor, freeStartTimes, isWorkingDay, toDateKey } from '../../utils/slots';
 import { INTL_LOCALE } from '../../utils/locale';
 import { log } from '../../utils/log';
+import { errorCode } from '../../utils/error-code';
 
 type Day = { date: Date; weekday: string; number: number; disabled: boolean };
 
@@ -300,7 +301,7 @@ export class Booking {
       log.error('Failed to create booking', error);
       // Slots can only be created once, so a denied write means someone took this time first
       this.error.set(
-        (error as { code?: string }).code === 'permission-denied'
+        errorCode(error) === 'permission-denied'
           ? $localize`Este horário acabou de ser ocupado. Escolha outro.`
           : $localize`Não foi possível enviar a solicitação. Tente novamente.`,
       );

@@ -15,6 +15,7 @@ import {
   isValidPassword,
   PASSWORD_RULE,
 } from '../../utils/validators';
+import { errorCode } from '../../utils/error-code';
 
 @Component({
   selector: 'app-signup',
@@ -146,7 +147,7 @@ export class Signup {
       else await this.auth.signInWithGoogle();
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
-      const code = (error as { code?: string }).code;
+      const code = errorCode(error);
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return;
       if (code === 'auth/account-is-client' || code === 'auth/pending-approval') {
         this.googleError.set(authErrorMessage(error));

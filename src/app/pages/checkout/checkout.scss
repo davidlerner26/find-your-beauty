@@ -157,11 +157,38 @@ hr {
   div {
     display: grid;
     gap: 0.15rem;
+    flex: 1;
   }
 
   .muted {
     font-size: 0.85rem;
   }
+
+  // The card is a link to the cards of the client, where another can be chosen
+  &:is(a) {
+    color: inherit;
+  }
+
+  .chevron {
+    color: var(--primary);
+  }
+
+  &.add {
+    justify-content: center;
+    color: var(--primary);
+    border-style: dashed;
+  }
+}
+
+.loading,
+.need-card {
+  margin: 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.need-card {
+  margin-top: 0.75rem;
 }
 
 .brand {

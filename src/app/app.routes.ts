@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './guards/admin';
+import { cardsGuard } from './guards/cards';
 import { checkoutGuard } from './guards/checkout';
 import { clientGuard } from './guards/client';
 import { proGuard } from './guards/pro';
@@ -27,6 +28,11 @@ export const routes: Routes = [
     path: 'profissionais/:id/pagamento',
     canActivate: [clientGuard, checkoutGuard],
     loadComponent: () => import('./pages/checkout/checkout').then((m) => m.Checkout),
+  },
+  {
+    path: 'cartoes',
+    canActivate: [cardsGuard],
+    loadComponent: () => import('./pages/cards/cards').then((m) => m.CardsPage),
   },
   {
     path: 'verificar-email',

@@ -1,0 +1,165 @@
+:host {
+  display: block;
+  padding-bottom: 3rem;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.top {
+  position: relative;
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #f0f0f0;
+
+  h1 {
+    font-size: 1.25rem;
+  }
+}
+
+.back {
+  position: absolute;
+  left: 1.5rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.content {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.empty {
+  margin: 0;
+  text-align: center;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1.5px solid #e1e8ea;
+  border-radius: 999px;
+  background: #fff;
+
+  &.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+}
+
+.pick {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 0.5rem 0.9rem 1.25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.info {
+  display: grid;
+  flex: 1;
+  gap: 0.15rem;
+
+  .muted {
+    font-size: 0.85rem;
+  }
+}
+
+.check {
+  color: var(--primary);
+}
+
+.brand {
+  display: flex;
+
+  i {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--primary);
+
+    & + i {
+      margin-left: -0.55rem;
+      background: var(--accent);
+    }
+  }
+}
+
+.remove {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-right: 0.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: #c9302c;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.new {
+  padding: 1.25rem;
+  border-radius: 20px;
+  background: var(--primary-light);
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.add {
+  height: 3.25rem;
+  border: 1.5px solid var(--primary);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.note {
+  margin: 0;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.error {
+  margin: 0;
+  color: #c9302c;
+  text-align: center;
+}

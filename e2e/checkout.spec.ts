@@ -3,6 +3,7 @@ import { expect, Page, test } from '@playwright/test';
 import { openFirstFreeDay } from './support/booking';
 import { CLIENT, CLIENT2, PRO } from './support/data';
 import { signIn } from './support/helpers';
+import { DECLINED_CARD, GOOD_CARD, pay, saveCard } from './support/payments';
 import { seed } from './support/seed';
 
 test.beforeEach(async () => {
@@ -32,8 +33,7 @@ test.describe('payment before the booking (test environment)', () => {
     await expect(summary.getByText('1 hora')).toBeVisible();
     await expect(summary.getByText(PRO.service)).toBeVisible();
     await expect(summary.getByText('R$ 100,00')).toHaveCount(2);
-    await expect(summary.getByText(`${CLIENT.firstName} ${CLIENT.lastName}`)).toBeVisible();
-    await expect(page.getByText('o pagamento é simulado e nada é cobrado')).toBeVisible();
+    await expect(page.getByText('o valor fica reservado no cartão')).toBeVisible();
 
     // Nothing was booked yet
     await page.goto('/agenda');
@@ -44,9 +44,7 @@ test.describe('payment before the booking (test environment)', () => {
     await signIn(page, CLIENT.email);
     await chooseATime(page);
 
-    await page.getByRole('button', { name: 'Pagar agora' }).click();
-    // While it processes the button cannot be pressed again
-    await expect(page.getByRole('button', { name: 'Processando...' })).toBeDisabled();
+    await pay(page);
 
     await expect(page).toHaveURL(/\/agenda$/);
     await expect(bookings(page)).toHaveCount(1);
@@ -97,11 +95,11 @@ test.describe('payment before the booking (test environment)', () => {
     const other = await otherContext.newPage();
     await signIn(other, CLIENT2.email);
     await chooseATime(other);
-    await other.getByRole('button', { name: 'Pagar agora' }).click();
+    await pay(other);
     await expect(other).toHaveURL(/\/agenda$/);
     await otherContext.close();
 
-    await page.getByRole('button', { name: 'Pagar agora' }).click();
+    await pay(page);
     await expect(page.getByRole('alert')).toHaveText(
       'Este horário acabou de ser ocupado. Escolha outro.',
     );
@@ -143,5 +141,63 @@ test.describe('without the payment (how production books)', () => {
     // And the payment address goes back to the booking screen
     await page.goto(`/profissionais/${PRO.uid}/pagamento`);
     await expect(page).toHaveURL(/\/agendar$/);
+  });
+});
+
+test.describe('paying with a saved card', () => {
+  test('without a card the client cannot pay, and is asked to add one', async ({ page }) => {
+    await signIn(page, CLIENT.email);
+    await chooseATime(page);
+
+    await expect(page.getByText('Cadastre um cartão para pagar o agendamento.')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Pagar agora' })).toBeDisabled();
+  });
+
+  test('adding a card from the payment screen comes back with it chosen, and pays', async ({
+    page,
+  }) => {
+    await signIn(page, CLIENT.email);
+    await chooseATime(page);
+
+    await page.getByRole('link', { name: 'Cadastrar cartão' }).click();
+    await expect(page).toHaveURL(/\/cartoes\?escolher=1$/);
+    await saveCard(page);
+
+    await expect(page).toHaveURL(/\/pagamento$/);
+    const method = page.getByRole('link', { name: 'Trocar o cartão' });
+    await expect(method).toContainText('Visa •••• 4242');
+    await expect(page.getByRole('button', { name: 'Pagar agora' })).toBeEnabled();
+
+    await page.getByRole('button', { name: 'Pagar agora' }).click();
+    await expect(page).toHaveURL(/\/agenda$/);
+    await expect(bookings(page)).toHaveCount(1);
+  });
+
+  test('a card that the bank refuses says so, books nothing, and another card can be chosen', async ({
+    page,
+  }) => {
+    await signIn(page, CLIENT.email);
+    await chooseATime(page);
+    await page.getByRole('link', { name: 'Cadastrar cartão' }).click();
+    await saveCard(page, GOOD_CARD);
+    await page.getByRole('link', { name: 'Trocar o cartão' }).click();
+    await saveCard(page, DECLINED_CARD);
+
+    // The card that was saved last is the chosen one: the one that is refused
+    await expect(page.getByRole('link', { name: 'Trocar o cartão' })).toContainText('•••• 0002');
+    await page.getByRole('button', { name: 'Pagar agora' }).click();
+    await expect(page.getByRole('alert')).toHaveText(
+      'O cartão não foi aprovado. Tente outro cartão.',
+    );
+    await expect(page).toHaveURL(/\/pagamento$/);
+
+    // Choosing the good one pays
+    await page.getByRole('link', { name: 'Trocar o cartão' }).click();
+    await page.getByRole('button', { name: 'Visa •••• 4242' }).click();
+    await expect(page).toHaveURL(/\/pagamento$/);
+    await expect(page.getByRole('link', { name: 'Trocar o cartão' })).toContainText('•••• 4242');
+    await page.getByRole('button', { name: 'Pagar agora' }).click();
+    await expect(page).toHaveURL(/\/agenda$/);
+    await expect(bookings(page)).toHaveCount(1);
   });
 });

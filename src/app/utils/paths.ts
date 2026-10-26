@@ -17,6 +17,8 @@ export const PATHS = {
   professionals: '/profissionais',
   professional: (id: string) => `/profissionais/${id}`,
   booking: (id: string) => `/profissionais/${id}/agendar`,
-  // The (simulated) payment that comes before a booking in the test environment
+  // The cards of the client (test environment)
+  cards: '/cartoes',
+  // The payment that comes before a booking in the test environment
   checkout: (id: string) => `/profissionais/${id}/pagamento`,
 } as const;

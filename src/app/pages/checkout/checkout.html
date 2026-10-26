@@ -48,16 +48,48 @@
         <strong>{{ booking.total | price }}</strong>
       </p>
 
-      <div class="method">
-        <span class="brand" aria-hidden="true"><i></i><i></i></span>
-        <div>
-          <strong>{{ holder() }}</strong>
-          <span i18n class="muted">Cartão de teste •••• 4242</span>
+      @if (!withCards) {
+        <div class="method">
+          <span class="brand" aria-hidden="true"><i></i><i></i></span>
+          <div>
+            <strong>{{ holder() }}</strong>
+            <span i18n class="muted">Cartão de teste •••• 4242</span>
+          </div>
         </div>
-      </div>
+      } @else if (cards.loading() && !cards.list().length) {
+        <p i18n class="muted loading" role="status">Carregando seus cartões...</p>
+      } @else if (cards.selected(); as card) {
+        <a
+          class="method"
+          [routerLink]="paths.cards"
+          [queryParams]="{ escolher: 1 }"
+          i18n-aria-label
+          aria-label="Trocar o cartão"
+        >
+          <span class="brand" aria-hidden="true"><i></i><i></i></span>
+          <div>
+            <strong>{{ brandLabel(card.brand) }} •••• {{ card.last4 }}</strong>
+            <span i18n class="muted">Vence {{ card.expMonth }}/{{ card.expYear }}</span>
+          </div>
+          <mat-icon class="chevron" aria-hidden="true">chevron_right</mat-icon>
+        </a>
+      } @else {
+        <a class="method add" [routerLink]="paths.cards" [queryParams]="{ escolher: 1 }">
+          <mat-icon aria-hidden="true">add</mat-icon>
+          <strong i18n>Cadastrar cartão</strong>
+        </a>
+        <p i18n class="muted need-card">Cadastre um cartão para pagar o agendamento.</p>
+      }
     </section>
 
-    <p i18n class="note muted">Ambiente de teste: o pagamento é simulado e nada é cobrado.</p>
+    @if (withCards) {
+      <p i18n class="note muted">
+        Ambiente de teste: o valor fica reservado no cartão e só é cobrado quando o profissional
+        aceitar. Use cartões de teste da Stripe.
+      </p>
+    } @else {
+      <p i18n class="note muted">Ambiente de teste: o pagamento é simulado e nada é cobrado.</p>
+    }
 
     @if (error()) {
       <p class="error" role="alert">{{ error() }}</p>
@@ -65,7 +97,7 @@
   </div>
 
   <footer class="pay-bar">
-    <button type="button" class="pay" [disabled]="paying()" (click)="pay()">
+    <button type="button" class="pay" [disabled]="paying() || !canPay()" (click)="pay()">
       @if (paying()) {
         <ng-container i18n>Processando...</ng-container>
       } @else {

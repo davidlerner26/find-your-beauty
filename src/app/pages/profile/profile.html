@@ -198,6 +198,10 @@
 
     <p i18n class="status"><span class="dot"></span> Você está logado</p>
 
+    @if (cards.available && auth.role() === 'client') {
+      <a i18n class="admin-link" [routerLink]="paths.cards">Meus cartões</a>
+    }
+
     @if (auth.isAdmin()) {
       <a i18n class="admin-link" routerLink="/admin">Administração</a>
     }

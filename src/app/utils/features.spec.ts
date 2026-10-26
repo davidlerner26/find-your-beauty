@@ -30,4 +30,9 @@ describe('the production environment', () => {
     expect(environment.name).toBe('prod');
     expect(environment.features.checkout).toBe(false);
   });
+
+  it('has no payments: no Stripe, no saved cards, and the booking carries no hold', () => {
+    expect(environment.payments.provider).toBe('off');
+    expect(environment.payments.stripePublishableKey).toBe('');
+  });
 });

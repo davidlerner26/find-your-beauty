@@ -80,7 +80,16 @@ and `e2e`, off in production, and a unit test fails if production turns on); `ut
 booking screen builds the request (`booking-request.ts`), leaves it in `CheckoutDraft` (memory only) and goes to
 the payment screen; `checkoutGuard` sends back anyone who comes without a chosen booking, and everyone where the
 feature is off. The e2e build lets a test turn it off with `localStorage['e2e-checkout'] = 'off'`, so both ways of
-booking are tested. A real payment (and a discount line like the one in the design) is left for later.
+booking are tested.
+
+With a Stripe key configured the payment is real (in Stripe's test mode): the client saves a card on the cards
+screen (`pages/cards`, Stripe's own form), "Pagar agora" puts a hold on it, and the booking carries the hold's id.
+The Cloud Functions take the money when the professional accepts and release or refund it otherwise; the amount is
+always worked out on the server. `services/payments.types.ts` is the interface, with `StripePayments` (callables
+and Stripe.js) and `FakePayments` (the e2e build: cards in the browser). The server side is `functions/src/
+payments.ts` (all the logic, tested with an in-memory Stripe), `payments-api.ts` (the callables) and the two
+booking triggers. Setup, test cards and limits: [stripe.md](stripe.md). Until the key is filled in, the screen
+keeps the simulated payment. A discount line like the one in the design is left for later.
 
 ## Storybook
 

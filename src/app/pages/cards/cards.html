@@ -1,0 +1,59 @@
+<header class="top">
+  <button i18n-aria-label type="button" class="back" aria-label="Voltar" (click)="goBack()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <h1 i18n>Cartões</h1>
+</header>
+
+<div class="content">
+  @if (cards.loading() && !cards.list().length) {
+    <app-spinner />
+  } @else if (cards.failed()) {
+    <p i18n class="error" role="alert">Não foi possível carregar os cartões. Tente novamente.</p>
+  } @else {
+    @if (!cards.list().length && !adding()) {
+      <p i18n class="empty muted">Você ainda não tem um cartão cadastrado.</p>
+    }
+
+    <ul class="list">
+      @for (card of cards.list(); track card.id) {
+        <li class="card" [class.selected]="cards.selected()?.id === card.id">
+          <button type="button" class="pick" (click)="choose(card)">
+            <span class="brand" aria-hidden="true"><i></i><i></i></span>
+            <span class="info">
+              <strong>{{ brandLabel(card.brand) }} •••• {{ card.last4 }}</strong>
+              <span i18n class="muted">Vence {{ card.expMonth }}/{{ card.expYear }}</span>
+            </span>
+            @if (cards.selected()?.id === card.id) {
+              <mat-icon class="check" aria-hidden="true">check</mat-icon>
+            }
+          </button>
+          <button
+            i18n-aria-label
+            type="button"
+            class="remove"
+            [attr.aria-label]="'Remover ' + brandLabel(card.brand) + ' final ' + card.last4"
+            [disabled]="removing() === card.id"
+            (click)="remove(card)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </li>
+      }
+    </ul>
+
+    @if (adding()) {
+      <section class="new" aria-labelledby="new-card-title">
+        <h2 i18n id="new-card-title">Novo cartão</h2>
+        <app-card-form (saved)="onSaved()" (cancelled)="adding.set(false)" />
+      </section>
+    } @else {
+      <button i18n type="button" class="add" (click)="adding.set(true)">Cadastrar cartão</button>
+    }
+
+    <p i18n class="note muted">
+      Os dados do cartão são guardados pela Stripe. O Find Your Beauty nunca os recebe. Ambiente de
+      teste: use cartões de teste da Stripe, nada é cobrado de verdade.
+    </p>
+  }
+</div>

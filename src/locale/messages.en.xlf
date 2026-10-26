@@ -4898,6 +4898,222 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1430398206450780603" datatype="html">
+        <source>Novo cartão</source>
+        <target>New card</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1489594014147364215" datatype="html">
+        <source>Meus cartões</source>
+        <target>My cards</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1997278271842473417" datatype="html">
+        <source>Remover o cartão <x id="brand" equiv-text="brand"/> final <x id="last4" equiv-text="last4"/>?</source>
+        <target>Remove the <x id="brand" equiv-text="brand"/> card ending in <x id="last4" equiv-text="last4"/>?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1593692045300318071" datatype="html">
+        <source>Cartão</source>
+        <target>Card</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1701556820106855407" datatype="html">
+        <source>Carregando o formulário do cartão...</source>
+        <target>Loading the card form...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2192448497105098599" datatype="html">
+        <source>O cartão está vencido. Tente outro cartão.</source>
+        <target>The card has expired. Try another card.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2317110513245075274" datatype="html">
+        <source>Cartão salvo</source>
+        <target>Card saved</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2996640964854388354" datatype="html">
+        <source>Cadastre um cartão para pagar o agendamento.</source>
+        <target>Add a card to pay for the booking.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3090633283587254121" datatype="html">
+        <source>Não foi possível salvar o cartão. Tente novamente.</source>
+        <target>We could not save the card. Please try again.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3438701122458326471" datatype="html">
+        <source> Os dados do cartão são guardados pela Stripe. O Find Your Beauty nunca os recebe. Ambiente de teste: use cartões de teste da Stripe, nada é cobrado de verdade. </source>
+        <target> Your card details are kept by Stripe. Find Your Beauty never receives them. Test environment: use Stripe test cards, nothing is really charged. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3644824625454771698" datatype="html">
+        <source>Carregando seus cartões...</source>
+        <target>Loading your cards...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4213910763958692900" datatype="html">
+        <source>Salvar cartão</source>
+        <target>Save card</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4466891288049412162" datatype="html">
+        <source>Você ainda não tem um cartão cadastrado.</source>
+        <target>You do not have a card yet.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4587453700248495962" datatype="html">
+        <source>Cartão removido</source>
+        <target>Card removed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="598027928078618677" datatype="html">
+        <source>Não foi possível salvar o cartão.</source>
+        <target>We could not save the card.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6023315206861571536" datatype="html">
+        <source>Não foi possível remover o cartão. Tente novamente.</source>
+        <target>We could not remove the card. Please try again.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6210740784242512947" datatype="html">
+        <source>O cartão não foi aprovado. Tente outro cartão.</source>
+        <target>The card was not approved. Try another card.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6230511174940130975" datatype="html">
+        <source>Os dados do cartão estão incorretos. Confira ou tente outro cartão.</source>
+        <target>The card details are wrong. Check them or try another card.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6322784621518383430" datatype="html">
+        <source> Ambiente de teste: o valor fica reservado no cartão e só é cobrado quando o profissional aceitar. Use cartões de teste da Stripe. </source>
+        <target> Test environment: the amount is held on the card and only charged when the professional accepts. Use Stripe test cards. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6523756874633641667" datatype="html">
+        <source>O banco não confirmou o cartão. Tente de novo ou use outro cartão.</source>
+        <target>The bank did not confirm the card. Try again or use another card.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6870456859469978365" datatype="html">
+        <source>Trocar o cartão</source>
+        <target>Change the card</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7211363577174205662" datatype="html">
+        <source>Cadastrar cartão</source>
+        <target>Add a card</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7386066242411587169" datatype="html">
+        <source>O cartão não tem saldo suficiente. Tente outro cartão.</source>
+        <target>The card has insufficient funds. Try another card.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8014107431291464821" datatype="html">
+        <source>Não foi possível carregar os cartões. Tente novamente.</source>
+        <target>We could not load the cards. Please try again.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8049011011449222339" datatype="html">
+        <source>Cartões</source>
+        <target>Cards</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9103165812837000414" datatype="html">
+        <source> Não foi possível abrir o formulário do cartão. Tente novamente mais tarde. </source>
+        <target> We could not open the card form. Please try again later. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2664530233940099473" datatype="html">
+        <source>Vence <x id="INTERPOLATION" equiv-text="{{ card.expMonth }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ card.expYear }}"/></source>
+        <target>Expires <x id="INTERPOLATION" equiv-text="{{ card.expMonth }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ card.expYear }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -1,51 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { firestoreFake } from '../../testing/firestore-fake';
 import { ProfessionalAccounts } from './professional-accounts';
 import { Users } from './users';
 
-// Firestore is replaced by an in-memory recorder
-const fake = vi.hoisted(() => ({
-  store: new Map<string, Record<string, unknown>>(),
-  writes: [] as {
-    kind: 'set' | 'update';
-    path: string;
-    data: Record<string, unknown>;
-    options?: unknown;
-  }[],
-}));
+// Firestore is replaced by the shared fake
+vi.mock('firebase/firestore', async () =>
+  (await import('../../testing/firestore-fake')).firestoreModule(),
+);
 
-vi.mock('firebase/firestore', () => {
-  const ref = (path: string, converter?: { fromFirestore: (snapshot: unknown) => unknown }) => ({
-    path,
-    id: path.split('/').pop(),
-    converter,
-    withConverter: (next: never) => ref(path, next),
-  });
-  return {
-    getFirestore: () => ({}),
-    doc: (_db: unknown, ...parts: string[]) => ref(parts.join('/')),
-    serverTimestamp: () => 'SERVER_TIME',
-    deleteField: () => 'DELETE_FIELD',
-    getDoc: async (r: ReturnType<typeof ref>) => {
-      const raw = fake.store.get(r.path);
-      const snapshot = { id: r.id, data: () => raw };
-      return {
-        exists: () => !!raw,
-        data: () => (raw && r.converter ? r.converter.fromFirestore(snapshot) : raw),
-      };
-    },
-    setDoc: async (r: { path: string }, data: Record<string, unknown>, options?: unknown) => {
-      fake.writes.push({ kind: 'set', path: r.path, data, options });
-    },
-    updateDoc: async (r: { path: string }, data: Record<string, unknown>) => {
-      fake.writes.push({ kind: 'update', path: r.path, data });
-    },
-  };
-});
+const fake = firestoreFake;
 
-beforeEach(() => {
-  fake.store.clear();
-  fake.writes.length = 0;
-});
+beforeEach(() => fake.reset());
 
 describe('Users', () => {
   const users = () => TestBed.inject(Users);

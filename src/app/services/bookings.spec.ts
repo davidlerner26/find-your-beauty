@@ -1,61 +1,15 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { firestoreFake } from '../../testing/firestore-fake';
 import { Auth } from './auth';
 import { Bookings } from './bookings';
 
-// Firestore is replaced by a recorder: the tests look at what would be written
-const fake = vi.hoisted(() => ({
-  batches: [] as {
-    sets: { path: string; data: Record<string, unknown> }[];
-    updates: { path: string; data: Record<string, unknown> }[];
-    deletes: string[];
-    commit: ReturnType<typeof vi.fn>;
-  }[],
-  failNextCommit: null as Error | null,
-  listeners: [] as {
-    field: string;
-    value: string;
-    next: (snapshot: unknown) => void;
-    unsubscribe: ReturnType<typeof vi.fn>;
-  }[],
-}));
+// Firestore is replaced by the shared fake: the tests look at what would be written
+vi.mock('firebase/firestore', async () =>
+  (await import('../../testing/firestore-fake')).firestoreModule(),
+);
 
-vi.mock('firebase/firestore', () => ({
-  getFirestore: () => ({}),
-  collection: (_db: unknown, ...parts: string[]) => ({ kind: 'collection', path: parts.join('/') }),
-  doc: (first: { kind?: string; path?: string }, ...parts: string[]) =>
-    first?.kind === 'collection'
-      ? { path: `${first.path}/auto1`, id: 'auto1' }
-      : { path: parts.join('/'), id: parts[parts.length - 1] },
-  query: (source: unknown, condition: unknown) => ({ source, condition }),
-  where: (field: string, _op: string, value: string) => ({ field, value }),
-  serverTimestamp: () => 'SERVER_TIME',
-  Timestamp: class {},
-  onSnapshot: (q: { condition: { field: string; value: string } }, next: never) => {
-    const unsubscribe = vi.fn();
-    fake.listeners.push({ ...q.condition, next, unsubscribe });
-    return unsubscribe;
-  },
-  writeBatch: () => {
-    const batch = {
-      sets: [] as { path: string; data: Record<string, unknown> }[],
-      updates: [] as { path: string; data: Record<string, unknown> }[],
-      deletes: [] as string[],
-      commit: vi.fn(async () => {
-        const failure = fake.failNextCommit;
-        fake.failNextCommit = null;
-        if (failure) throw failure;
-      }),
-      set: (ref: { path: string }, data: Record<string, unknown>) =>
-        batch.sets.push({ path: ref.path, data }),
-      update: (ref: { path: string }, data: Record<string, unknown>) =>
-        batch.updates.push({ path: ref.path, data }),
-      delete: (ref: { path: string }) => batch.deletes.push(ref.path),
-    };
-    fake.batches.push(batch);
-    return batch;
-  },
-}));
+const fake = firestoreFake;
 
 type Role = 'client' | 'professional' | null;
 
@@ -84,11 +38,7 @@ const newBooking = {
   paymentStatus: 'pending' as const,
 };
 
-beforeEach(() => {
-  fake.batches.length = 0;
-  fake.listeners.length = 0;
-  fake.failNextCommit = null;
-});
+beforeEach(() => fake.reset());
 
 describe('Bookings.create', () => {
   it('needs a signed in user', async () => {

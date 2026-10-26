@@ -4,6 +4,8 @@
 export const environment = {
   name: 'e2e',
   useEmulators: true,
+  // Saved cards and holds are kept in the browser: there is no Stripe in the end to end tests
+  payments: { provider: 'fake' as 'off' | 'stripe' | 'fake', stripePublishableKey: '' },
   features: {
     featuredProfessionals: true,
     checkout: true,

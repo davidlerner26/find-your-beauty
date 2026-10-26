@@ -1,5 +1,6 @@
 import { expect, Page } from '@playwright/test';
 import { PRO } from './data';
+import { pay } from './payments';
 
 // Opens the booking form of the professional's service and picks the 15th of the next month: always in the
 // future, and the same day for every test (the days that are enabled change while the page loads)
@@ -31,8 +32,7 @@ export async function bookFirstFreeTime(page: Page, options: { notes?: string } 
   await page.getByRole('button', { name: 'Finalizar' }).click();
   // In the test environment the (simulated) payment comes first
   await expect(page).toHaveURL(/\/(agenda|pagamento)$/);
-  if (page.url().endsWith('/pagamento'))
-    await page.getByRole('button', { name: 'Pagar agora' }).click();
+  if (page.url().endsWith('/pagamento')) await pay(page);
   await expect(page).toHaveURL(/\/agenda$/);
   return time;
 }

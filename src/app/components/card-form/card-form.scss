@@ -1,0 +1,62 @@
+.card-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.error {
+  margin: 0;
+  color: #c9302c;
+  font-size: 0.9rem;
+}
+
+// The fields of the fake form used by the end to end tests; Stripe's form brings its own look
+.mount ::ng-deep input {
+  width: 100%;
+  padding: 0.85rem 1.1rem;
+  border: 1.5px solid transparent;
+  border-radius: 14px;
+  background: #f1f2f6;
+  font-size: 1rem;
+  outline: 0;
+
+  &:focus {
+    border-color: var(--primary);
+    background: #fff;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+
+  button {
+    flex: 1;
+    height: 3rem;
+    border-radius: 999px;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+  }
+
+  .cancel {
+    border: 1.5px solid var(--primary);
+    background: #fff;
+    color: var(--primary);
+  }
+
+  .save {
+    border: 0;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 600;
+  }
+}

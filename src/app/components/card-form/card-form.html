@@ -1,0 +1,37 @@
+<form class="card-form" (submit)="$event.preventDefault(); save()">
+  @if (state() === 'loading') {
+    <p i18n class="muted" role="status">Carregando o formulário do cartão...</p>
+  }
+  @if (state() === 'unavailable') {
+    <p i18n class="error" role="alert">
+      Não foi possível abrir o formulário do cartão. Tente novamente mais tarde.
+    </p>
+  }
+
+  <div #mount class="mount" [hidden]="state() === 'unavailable'"></div>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (state() === 'ready' || state() === 'saving') {
+    <div class="actions">
+      <button
+        i18n
+        type="button"
+        class="cancel"
+        [disabled]="state() === 'saving'"
+        (click)="cancelled.emit()"
+      >
+        Cancelar
+      </button>
+      <button type="submit" class="save" [disabled]="state() === 'saving'">
+        @if (state() === 'saving') {
+          <ng-container i18n>Salvando...</ng-container>
+        } @else {
+          <ng-container i18n>Salvar cartão</ng-container>
+        }
+      </button>
+    </div>
+  }
+</form>

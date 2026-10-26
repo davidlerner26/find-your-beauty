@@ -14,6 +14,8 @@ import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import { T } from '../../utils/texts';
 import { log } from '../../utils/log';
+import { Cards } from '../../services/cards';
+import { PATHS } from '../../utils/paths';
 
 @Component({
   selector: 'app-profile',
@@ -23,6 +25,8 @@ import { log } from '../../utils/log';
 })
 export class Profile {
   protected readonly auth = inject(Auth);
+  protected readonly cards = inject(Cards);
+  protected readonly paths = PATHS;
   private readonly users = inject(Users);
   private readonly feedback = inject(Feedback);
 

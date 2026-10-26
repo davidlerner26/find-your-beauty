@@ -4,6 +4,8 @@ export const environment = {
   name: 'prod',
   // Only the end to end tests connect to the local Firebase emulators (environment.e2e.ts)
   useEmulators: false,
+  // Payments with Stripe: only the test environment has them (see services/payments.ts)
+  payments: { provider: 'off' as 'off' | 'stripe' | 'fake', stripePublishableKey: '' },
   // Features that are only turned on in the test environment for now
   features: {
     featuredProfessionals: false,

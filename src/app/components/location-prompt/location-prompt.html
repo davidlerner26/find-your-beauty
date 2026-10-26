@@ -1,12 +1,6 @@
 @if (location.shouldAsk()) {
-  <div class="backdrop" (click)="dismiss()">
-    <div
-      class="card"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="location-title"
-      (click)="$event.stopPropagation()"
-    >
+  <div class="backdrop" role="presentation" (click)="onBackdrop($event)">
+    <div class="card" role="dialog" aria-modal="true" aria-labelledby="location-title" appDialog>
       <svg
         class="icon"
         viewBox="0 0 64 64"

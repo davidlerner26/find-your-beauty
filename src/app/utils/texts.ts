@@ -4,6 +4,9 @@ export const T = {
   favorite: (on: boolean) => (on ? $localize`Remover dos favoritos` : $localize`Favoritar`),
   copyAddress: (copied: boolean) =>
     copied ? $localize`Endereço copiado` : $localize`Copiar endereço`,
+  opensAt: (day: string) => $localize`Abertura: ${day}:day:`,
+  closesAt: (day: string) => $localize`Fechamento: ${day}:day:`,
+  chatWith: (name: string) => $localize`Conversar com ${name}:name:`,
   addService: (selected: boolean, name: string) =>
     selected ? $localize`Remover ${name}:name:` : $localize`Adicionar ${name}:name:`,
   stars: (count: number) =>

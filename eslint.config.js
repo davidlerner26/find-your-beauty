@@ -35,11 +35,6 @@ module.exports = defineConfig([
   {
     files: ['**/*.html'],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility, prettier],
-    rules: {
-      // Real accessibility gaps; tracked as warnings until the accessibility pass (theme 11).
-      '@angular-eslint/template/click-events-have-key-events': 'warn',
-      '@angular-eslint/template/interactive-supports-focus': 'warn',
-      '@angular-eslint/template/role-has-required-aria': 'warn',
-    },
+    rules: {},
   },
 ]);

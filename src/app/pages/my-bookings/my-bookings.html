@@ -65,7 +65,7 @@
               i18n-aria-label
               class="chat-icon"
               [routerLink]="['/mensagens', booking.professionalId]"
-              aria-label="Conversar com {{ booking.professionalName }}"
+              [attr.aria-label]="t.chatWith(booking.professionalName)"
               title="Conversar"
             >
               <mat-icon>chat_bubble</mat-icon>

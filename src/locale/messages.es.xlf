@@ -4802,6 +4802,30 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3240277578358018942" datatype="html">
+        <source>Conversar com <x id="name" equiv-text="name"/></source>
+        <target>Chatear con <x id="name" equiv-text="name"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/utils/texts.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3052102610955119593" datatype="html">
+        <source>Abertura: <x id="day" equiv-text="day"/></source>
+        <target>Abre: <x id="day" equiv-text="day"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/utils/texts.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3157395636827131713" datatype="html">
+        <source>Fechamento: <x id="day" equiv-text="day"/></source>
+        <target>Cierra: <x id="day" equiv-text="day"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/utils/texts.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

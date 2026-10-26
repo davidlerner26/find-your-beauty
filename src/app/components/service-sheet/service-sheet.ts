@@ -5,12 +5,13 @@ import { formatDuration, Service } from '../../models/professional';
 import { PricePipe } from '../../utils/price.pipe';
 import { ruleLabel } from '../../utils/pricing';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { DialogFocus } from '../../utils/dialog.directive';
 
 // The screen of a service: a sheet over the page with the photos (swipe sideways, with slide dots),
 // the price, the duration and the whole description. Opened by "Ler mais" in the card of the service.
 @Component({
   selector: 'app-service-sheet',
-  imports: [CarouselArrows, CatalogPipe, MatIconModule, PricePipe],
+  imports: [DialogFocus, CarouselArrows, CatalogPipe, MatIconModule, PricePipe],
   templateUrl: './service-sheet.html',
   styleUrl: './service-sheet.scss',
 })

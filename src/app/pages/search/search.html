@@ -107,7 +107,14 @@
   <a class="result" [routerLink]="['/profissionais', item.id]">
     <div class="result-image">
       <!-- The photos of the professional: swipe sideways (arrows on wide screens) -->
-      <div #photosEl class="photos" (scroll)="onPhotosScroll($event, item.id)">
+      <div
+        #photosEl
+        class="photos"
+        tabindex="0"
+        role="group"
+        [attr.aria-label]="item.name"
+        (scroll)="onPhotosScroll($event, item.id)"
+      >
         @for (photo of item.photos; track photo) {
           <div class="slide">
             <img
@@ -161,8 +168,15 @@
 </ng-template>
 
 @if (sheetOpen()) {
-  <div class="backdrop" (click)="cancelSheet()"></div>
-  <div i18n-aria-label class="sheet" role="dialog" aria-label="Filtros">
+  <div class="backdrop" role="presentation" (click)="cancelSheet()"></div>
+  <div
+    i18n-aria-label
+    class="sheet"
+    role="dialog"
+    appDialog
+    (escape)="cancelSheet()"
+    aria-label="Filtros"
+  >
     <div class="handle"></div>
     <div class="sheet-head">
       <button i18n type="button" class="link" (click)="cancelSheet()">Cancelar</button>

@@ -2,7 +2,9 @@
   class="backdrop"
   role="dialog"
   aria-modal="true"
-  (click)="closed.emit()"
+  appDialog
+  (click)="onBackdrop($event)"
+  (keydown.escape)="closed.emit()"
   (touchstart)="onTouchStart($event)"
   (touchend)="onTouchEnd($event)"
 >
@@ -30,5 +32,5 @@
     </button>
     <span class="count">{{ current + 1 }} / {{ photos().length }}</span>
   }
-  <img [src]="photos()[current]" [alt]="alt()" (click)="$event.stopPropagation()" />
+  <img [src]="photos()[current]" [alt]="alt()" />
 </div>

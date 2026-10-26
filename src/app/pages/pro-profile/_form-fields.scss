@@ -85,6 +85,12 @@ select {
   background: none;
   color: #e5484d;
   cursor: pointer;
+
+  // The red does not read on the teal of the professional area: a light one, underlined so it still says "remove"
+  :host-context(.pro-theme) & {
+    color: #fff0f0;
+    text-decoration: underline;
+  }
 }
 
 .check {
@@ -104,6 +110,10 @@ select {
 
 .error {
   color: #e5484d;
+
+  :host-context(.pro-theme) & {
+    color: #fff0f0;
+  }
 }
 
 .upload,

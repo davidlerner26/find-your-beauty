@@ -1,13 +1,7 @@
 @if (message()) {
   <!-- Feedback of an action: floats on top, goes away by itself or when tapped -->
   @for (id of [messageId]; track id) {
-    <button
-      type="button"
-      class="missing"
-      role="status"
-      aria-live="polite"
-      (click)="message.set('')"
-    >
+    <button type="button" class="missing" aria-live="polite" (click)="message.set('')">
       {{ message() }}
     </button>
   }
@@ -15,7 +9,7 @@
   <!-- Floats at the top, so it is in view without scrolling. A new text makes a new element, which shows again and fades out by itself. -->
   @for (text of [missingText]; track text) {
     @if (dismissedText() !== text) {
-      <button type="button" class="missing" role="status" (click)="dismissedText.set(text)">
+      <button type="button" class="missing" aria-live="polite" (click)="dismissedText.set(text)">
         {{ text }}
       </button>
     }

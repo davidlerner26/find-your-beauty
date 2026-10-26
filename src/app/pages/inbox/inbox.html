@@ -61,6 +61,14 @@
 }
 
 <ng-template #tabsBar>
+  <!-- The title of the screen, for screen readers: the tabs are the title that is seen -->
+  <h1 class="visually-hidden">
+    @if (tab() === 'mensagens') {
+      <ng-container i18n>Mensagens</ng-container>
+    } @else {
+      <ng-container i18n>Notificações</ng-container>
+    }
+  </h1>
   <div class="tabs">
     <a i18n [routerLink]="base() + '/mensagens'" [class.active]="tab() === 'mensagens'"
       >Mensagens</a

@@ -12,13 +12,23 @@
   }
   <div class="hero">
     <!-- The cover is the gallery: swipe sideways to go through the photos -->
-    <div #heroPhotosEl class="hero-photos" (scroll)="onHeroScroll($event)">
+    <div
+      #heroPhotosEl
+      class="hero-photos"
+      tabindex="0"
+      role="group"
+      [attr.aria-label]="t.photoOf(artist.name)"
+      (scroll)="onHeroScroll($event)"
+    >
       @for (photo of heroPhotos(artist); track photo; let i = $index) {
         <img
           [attr.loading]="i === 0 ? 'eager' : 'lazy'"
           [attr.fetchpriority]="i === 0 ? 'high' : null"
           decoding="async"
+          tabindex="0"
+          role="button"
           (click)="openViewer($event, heroPhotos(artist), i)"
+          (keydown.enter)="openViewer($event, heroPhotos(artist), i)"
           [src]="photo"
           [alt]="t.photoOf(artist.name)"
           [style.object-position]="
@@ -54,8 +64,11 @@
         class="round"
         [routerLink]="floating() ? null : '/explore'"
         [queryParams]="{ focus: artist.id }"
+        [attr.role]="floating() ? 'button' : null"
+        [attr.tabindex]="floating() ? 0 : null"
         aria-label="Ver no mapa"
         (click)="onMapButton()"
+        (keydown.enter)="onMapButton()"
       >
         <mat-icon class="filled">map</mat-icon>
       </a>
@@ -70,7 +83,7 @@
           i18n-aria-label
           class="chat-icon"
           [routerLink]="['/mensagens', artist.id]"
-          aria-label="Conversar com {{ artist.name }}"
+          [attr.aria-label]="t.chatWith(artist.name)"
         >
           <mat-icon>chat_bubble</mat-icon>
         </a>
@@ -190,12 +203,18 @@
                 <div
                   #servicePhotosEl
                   class="service-photos"
+                  tabindex="0"
+                  role="group"
+                  [attr.aria-label]="service.name"
                   (scroll)="onServicePhotos($event, service.id)"
                 >
                   @for (photo of service.photos; track photo; let n = $index) {
                     <div class="service-slide">
                       <img
+                        tabindex="0"
+                        role="button"
                         (click)="openViewer($event, service.photos!, n)"
+                        (keydown.enter)="openViewer($event, service.photos!, n)"
                         [src]="photo"
                         [alt]="service.name"
                         loading="lazy"
@@ -417,7 +436,11 @@
       <p class="price">{{ total() | price }}</p>
     </div>
     <div class="book-actions">
-      <a class="chat" [routerLink]="['/mensagens', artist.id]">
+      <a
+        class="chat"
+        [routerLink]="['/mensagens', artist.id]"
+        [attr.aria-label]="t.chatWith(artist.name)"
+      >
         <mat-icon>chat_bubble</mat-icon>
       </a>
       <button

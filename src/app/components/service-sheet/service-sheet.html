@@ -2,11 +2,13 @@
   class="screen-backdrop"
   [class.dragging]="dragging()"
   [style.opacity]="backdropOpacity()"
+  role="presentation"
   (click)="closed.emit()"
 ></div>
 <div
   class="service-screen"
   role="dialog"
+  appDialog
   [attr.aria-label]="service().name"
   [class.dragging]="dragging()"
   [style.transform]="'translateY(' + offset() + 'px)'"

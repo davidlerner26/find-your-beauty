@@ -1,10 +1,11 @@
 import { Component, HostListener, input, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { DialogFocus } from '../../utils/dialog.directive';
 
 // Photos in full screen: arrows, keys and swipe go to the next one
 @Component({
   selector: 'app-photo-viewer',
-  imports: [MatIconModule],
+  imports: [DialogFocus, MatIconModule],
   templateUrl: './photo-viewer.html',
   styleUrl: './photo-viewer.scss',
 })
@@ -19,6 +20,11 @@ export class PhotoViewer {
 
   protected get current() {
     return this.index() ?? this.start();
+  }
+
+  // A tap on the dark area closes it; a tap on the photo or the buttons does not
+  protected onBackdrop(event: Event) {
+    if (event.target === event.currentTarget) this.closed.emit();
   }
 
   protected go(step: number) {
@@ -37,8 +43,7 @@ export class PhotoViewer {
 
   @HostListener('document:keydown', ['$event'])
   protected onKey(event: KeyboardEvent) {
-    if (event.key === 'Escape') this.closed.emit();
-    else if (event.key === 'ArrowRight' && this.photos().length > 1) this.go(1);
+    if (event.key === 'ArrowRight' && this.photos().length > 1) this.go(1);
     else if (event.key === 'ArrowLeft' && this.photos().length > 1) this.go(-1);
   }
 }

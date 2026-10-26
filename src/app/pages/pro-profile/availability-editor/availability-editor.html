@@ -15,12 +15,14 @@
           <div class="times">
             <input
               type="time"
+              [attr.aria-label]="t.opensAt(day.label)"
               [name]="'start' + day.key"
               [(ngModel)]="availability().weekly[day.key].start"
             />
             <span i18n>às</span>
             <input
               type="time"
+              [attr.aria-label]="t.closesAt(day.label)"
               [name]="'end' + day.key"
               [(ngModel)]="availability().weekly[day.key].end"
             />

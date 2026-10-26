@@ -16,10 +16,12 @@ import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
 import { Filters, MAX_KM, noFilters, SortKey } from './search-filter';
 import { SearchStore } from './search.store';
+import { DialogFocus } from '../../utils/dialog.directive';
 
 @Component({
   selector: 'app-search',
   imports: [
+    DialogFocus,
     CarouselArrows,
     CatalogPipe,
     ReviewsLabelPipe,

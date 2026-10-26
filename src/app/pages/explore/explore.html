@@ -96,11 +96,18 @@
     </div>
   </div>
   @if (listOpen()) {
-    <div class="backdrop" [class.closing]="closing()" (click)="closeList()"></div>
+    <div
+      class="backdrop"
+      role="presentation"
+      [class.closing]="closing()"
+      (click)="closeList()"
+    ></div>
     <div
       i18n-aria-label
       class="sheet"
       role="dialog"
+      appDialog
+      (escape)="closeList()"
       aria-label="Profissionais próximos"
       [class.dragging]="dragStart() !== null"
       [style.transform]="'translateY(' + sheetOffset() + 'px)'"
@@ -149,12 +156,22 @@
 <ng-template #offerCard let-salon let-index="index">
   <article
     class="offer"
+    tabindex="0"
+    [attr.aria-label]="salon.name"
     [class.selected]="index === selected()"
     (click)="openSalon(index, salon.id)"
+    (keydown.enter)="onCardKey($event, index, salon.id)"
   >
     <div class="offer-image">
       <!-- The photos of the professional: swipe sideways to see them -->
-      <div #photosEl class="photos" (scroll)="onPhotosScroll($event, salon.id)">
+      <div
+        #photosEl
+        class="photos"
+        tabindex="0"
+        role="group"
+        [attr.aria-label]="salon.name"
+        (scroll)="onPhotosScroll($event, salon.id)"
+      >
         @for (photo of salon.photos; track photo) {
           <div class="slide">
             @if (!loadedPhotos().includes(photo)) {

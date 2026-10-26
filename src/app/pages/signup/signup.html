@@ -126,8 +126,10 @@
             i18n-placeholder
             name="place-search"
             placeholder="Endereço"
-            autocomplete="nope"
+            autocomplete="off"
             role="combobox"
+            aria-autocomplete="list"
+            aria-controls="place-suggestions"
             [attr.aria-expanded]="place.open() && place.suggestions().length > 0"
             [ngModel]="place.value"
             (ngModelChange)="place.input($event)"

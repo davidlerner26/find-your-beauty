@@ -4,9 +4,11 @@
     <input
       i18n-placeholder
       name="place-search"
-      autocomplete="nope"
+      autocomplete="off"
       placeholder="Comece a digitar o endereço"
       role="combobox"
+      aria-autocomplete="list"
+      aria-controls="address-field-list"
       [attr.aria-expanded]="open() && suggestions().length > 0"
       [ngModel]="address()"
       (ngModelChange)="onInput($event)"
@@ -17,10 +19,10 @@
   </label>
 
   @if (open() && suggestions().length) {
-    <ul class="suggestions" role="listbox">
+    <ul class="suggestions" role="listbox" id="address-field-list">
       @for (suggestion of suggestions(); track suggestion.text) {
         <!-- mousedown is prevented so the input keeps focus and the click still lands -->
-        <li role="option">
+        <li role="option" aria-selected="false">
           <button type="button" (mousedown)="$event.preventDefault()" (click)="choose(suggestion)">
             {{ suggestion.text }}
           </button>

@@ -8,6 +8,7 @@ import {
 } from '../../../components/date-range-picker/date-range-picker';
 import { addBlockedRange, invalidDayKeys, rangeLabel } from '../profile-form';
 import { WEEKDAYS } from '../weekdays';
+import { T } from '../../../utils/texts';
 
 // The days and hours the professional works, and the periods blocked for holidays and days off.
 // The form hands over its hours and the editor changes them in place; it is told when to save.
@@ -22,6 +23,7 @@ export class AvailabilityEditor {
   // Blocking or unblocking a period is saved right away
   readonly changed = output<void>();
 
+  protected readonly t = T;
   protected readonly weekdays = WEEKDAYS;
   protected readonly today = toDateKey(new Date());
   protected readonly pending = signal<PendingRange>({ start: null, end: null });

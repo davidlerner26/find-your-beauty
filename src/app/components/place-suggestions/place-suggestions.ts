@@ -6,10 +6,10 @@ import { PlaceSuggestion } from '../../utils/place-search';
   selector: 'app-place-suggestions',
   template: `
     @if (suggestions().length) {
-      <ul class="suggestions" role="listbox">
+      <ul class="suggestions" role="listbox" [id]="listId()">
         @for (suggestion of suggestions(); track suggestion.text) {
           <!-- mousedown is prevented so the input keeps focus and the click still lands -->
-          <li role="option">
+          <li role="option" aria-selected="false">
             <button
               type="button"
               (mousedown)="$event.preventDefault()"
@@ -27,5 +27,7 @@ import { PlaceSuggestion } from '../../utils/place-search';
 })
 export class PlaceSuggestions {
   readonly suggestions = input.required<PlaceSuggestion[]>();
+  // The id of the list: the input that it belongs to points at it with aria-controls
+  readonly listId = input('place-suggestions');
   readonly pick = output<PlaceSuggestion>();
 }

@@ -36,6 +36,7 @@ import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
 import { PATHS } from '../../utils/paths';
+import { DialogFocus } from '../../utils/dialog.directive';
 
 const pin = (color: string) =>
   'data:image/svg+xml;utf8,' +
@@ -49,6 +50,7 @@ let lastSelectedId: string | null = null;
 @Component({
   selector: 'app-explore',
   imports: [
+    DialogFocus,
     ArtistDetails,
     CarouselArrows,
     ChipsRow,
@@ -409,6 +411,11 @@ export class Explore implements OnInit {
   }
 
   // First tap on a carousel card selects it; tapping the selected card (or any card of the list) opens the page
+  // Enter on the card itself opens it (Enter on the heart inside it keeps being the heart's)
+  protected onCardKey(event: Event, index: number, id: string) {
+    if (event.target === event.currentTarget) this.openSalon(index, id);
+  }
+
   protected openSalon(index: number, id: string) {
     // Wide screens: the page of the professional is a card over the map
     if (window.matchMedia('(min-width: 1024px)').matches) {

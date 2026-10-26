@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { httpsCallable } from 'firebase/functions';
 import { environment } from '../../environments/environment';
-import { firebaseApp } from './firebase';
+import { functions } from './firebase';
 
 // Where Instagram sends the professional back after she allows the access.
 // It has to be listed in the Meta app as a valid OAuth redirect URI.
 const redirectUri = () => `${location.origin}/pro/instagram`;
 const STATE_KEY = 'instagram-oauth-state';
 
-const functions = getFunctions(firebaseApp, 'southamerica-east1');
 const call = <Request, Response>(name: string) => httpsCallable<Request, Response>(functions, name);
 
 // Instagram API with Instagram Login: the Cloud Functions keep the token and copy the photos to our Storage

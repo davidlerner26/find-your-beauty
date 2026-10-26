@@ -4,7 +4,6 @@ import {
   browserSessionPersistence,
   confirmPasswordReset,
   createUserWithEmailAndPassword,
-  getAuth,
   deleteUser,
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -17,10 +16,10 @@ import {
   verifyPasswordResetCode,
 } from 'firebase/auth';
 import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { httpsCallable } from 'firebase/functions';
 import { DEFAULT_AVAILABILITY } from '../models/professional';
 import { APP_LANGUAGE } from '../utils/locale';
-import { db, firebaseApp } from './firebase';
+import { db, firebaseAuth, functions } from './firebase';
 import { log } from '../utils/log';
 
 export type SignUpData = {
@@ -41,12 +40,11 @@ export type Role = 'client' | 'professional';
 const VERIFICATION_FROM = new Date('2026-10-23T00:00:00-03:00').getTime();
 const VERIFICATION_KEY = 'email-verification';
 
-const functions = getFunctions(firebaseApp, 'southamerica-east1');
 const call = <Request, Response>(name: string) => httpsCallable<Request, Response>(functions, name);
 
 @Injectable({ providedIn: 'root' })
 export class Auth {
-  private readonly auth = getAuth(firebaseApp);
+  private readonly auth = firebaseAuth;
   private readonly googleProvider = new GoogleAuthProvider();
   private roleRequest = 0;
   private markReady!: () => void;
@@ -338,7 +336,7 @@ export class Auth {
   // The e-mail with the link is sent by a Cloud Function (through Resend)
   async sendPasswordReset(email: string) {
     await httpsCallable(
-      getFunctions(firebaseApp, 'southamerica-east1'),
+      functions,
       'sendPasswordReset',
     )({
       email: email.trim(),

@@ -52,3 +52,7 @@ scripts/seed/images/
 
 # Firebase emulators
 *-debug.log
+
+# Playwright
+playwright-report/
+test-results/

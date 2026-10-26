@@ -3,6 +3,7 @@
 // The values below come from the web app of the dev project (Firebase Console > Project settings > Your apps).
 export const environment = {
   name: 'dev',
+  useEmulators: false,
   // Features that are only turned on in the test environment for now (production has them off)
   features: {
     featuredProfessionals: true,

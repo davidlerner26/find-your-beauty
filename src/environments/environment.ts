@@ -2,6 +2,8 @@
 // takes the place of this file in the `dev` build.
 export const environment = {
   name: 'prod',
+  // Only the end to end tests connect to the local Firebase emulators (environment.e2e.ts)
+  useEmulators: false,
   // Features that are only turned on in the test environment for now
   features: {
     featuredProfessionals: false,

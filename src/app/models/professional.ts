@@ -159,6 +159,10 @@ export type Professional = {
   // An admin denied the account (approved stays false)
   rejected?: boolean;
   admin?: boolean;
+  // The sign up was sent (the profile is complete) and waits for an admin
+  submitted?: boolean;
+  // Language of the page where the account was created: the e-mails go in it
+  lang?: 'pt' | 'en' | 'es';
   // The professional's choice to show the profile (default: yes)
   visible?: boolean;
   // What clients see: visible and complete. Computed when the profile is saved.

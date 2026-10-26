@@ -9,7 +9,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
-import { Professional } from '../models/professional';
+import { professionalConverter } from '../models/converters';
 import { db } from './firebase';
 
 export type PendingProfessional = {
@@ -51,8 +51,10 @@ export class Admin {
 
   // The whole profile, even if it is not published
   async get(id: string) {
-    const snapshot = await getDoc(doc(db, 'professionals', id));
-    return snapshot.exists() ? ({ ...snapshot.data(), id: snapshot.id } as Professional) : null;
+    const snapshot = await getDoc(
+      doc(db, 'professionals', id).withConverter(professionalConverter),
+    );
+    return snapshot.exists() ? snapshot.data() : null;
   }
 
   // The CPF of a professional (private: only the owner and admins can read it)

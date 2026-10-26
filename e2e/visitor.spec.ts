@@ -1,5 +1,11 @@
 import { expect, test } from '@playwright/test';
 import { PRO } from './support/data';
+import { seed } from './support/seed';
+
+// Read only tests: they start from the seed, whatever the other files changed
+test.beforeAll(async () => {
+  await seed();
+});
 
 test.describe('visitor', () => {
   test('sees the home and a professional page', async ({ page }) => {

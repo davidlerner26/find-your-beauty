@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   browserLocalPersistence,
   browserSessionPersistence,
@@ -15,11 +15,11 @@ import {
   User,
   verifyPasswordResetCode,
 } from 'firebase/auth';
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
-import { DEFAULT_AVAILABILITY } from '../models/professional';
 import { APP_LANGUAGE } from '../utils/locale';
-import { db, firebaseAuth, functions } from './firebase';
+import { firebaseAuth, functions } from './firebase';
+import { ProfessionalAccounts } from './professional-accounts';
+import { Users } from './users';
 import { log } from '../utils/log';
 
 export type SignUpData = {
@@ -45,6 +45,8 @@ const call = <Request, Response>(name: string) => httpsCallable<Request, Respons
 @Injectable({ providedIn: 'root' })
 export class Auth {
   private readonly auth = firebaseAuth;
+  private readonly users = inject(Users);
+  private readonly professionalAccounts = inject(ProfessionalAccounts);
   private readonly googleProvider = new GoogleAuthProvider();
   private roleRequest = 0;
   private markReady!: () => void;
@@ -115,11 +117,11 @@ export class Auth {
     if (area === 'client' && this.role() === 'client') await this.createUserDocIfMissing(user);
     if (area === 'professional' && this.role() !== 'professional' && !this.signupIncomplete()) {
       // A Google account with no account here (not even a client) has to sign up first
-      const client = await getDoc(doc(db, 'users', user.uid)).catch((error) => {
+      const hasClientAccount = await this.users.exists(user.uid).catch((error) => {
         log.error('Failed to check the client account', error);
         return null;
       });
-      if (client && !client.exists()) {
+      if (hasClientAccount === false) {
         // Signing in with Google created the account in Firebase: it is removed, since the sign up wasn't done
         await deleteUser(user).catch((error) => {
           log.warn('Failed to remove the unfinished account, signing out instead', error);
@@ -149,7 +151,7 @@ export class Auth {
 
     // The account already exists at this point, so a failure here must not fail the sign up
     try {
-      await setDoc(doc(db, 'users', user.uid), {
+      await this.users.create(user.uid, {
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         email: email.trim(),
@@ -157,10 +159,6 @@ export class Auth {
         cpf,
         address: address ?? '',
         addressPosition: addressPosition ?? { lat: 0, lng: 0 },
-        admin: false,
-        // The language of the page: the e-mails of the account go in it
-        lang: APP_LANGUAGE,
-        createdAt: serverTimestamp(),
       });
     } catch (error) {
       log.error('Failed to save user', error);
@@ -230,11 +228,11 @@ export class Auth {
     await updateProfile(user, { displayName: name });
     this.user.set({ ...user } as User);
 
-    await this.createProfessionalDoc(user, name, email.trim(), phone);
+    await this.professionalAccounts.create({ uid: user.uid, name, email: email.trim(), phone });
     // The CPF is private: it is not in the public profile
-    await setDoc(doc(db, 'professionals', user.uid, 'private', 'identity'), { cpf }).catch(
-      (error) => log.error('Failed to save the CPF', error),
-    );
+    await this.professionalAccounts
+      .saveCpf(user.uid, cpf)
+      .catch((error) => log.error('Failed to save the CPF', error));
     // Stays signed in: the second step of the sign up completes the profile
     await this.resolveRole(user);
   }
@@ -247,55 +245,27 @@ export class Auth {
     this.pendingApproval.set(false);
     const { user } = await signInWithPopup(this.auth, this.googleProvider);
 
-    const [profile, client] = await Promise.all([
-      getDoc(doc(db, 'professionals', user.uid)),
-      getDoc(doc(db, 'users', user.uid)),
+    const [profile, isClient] = await Promise.all([
+      this.professionalAccounts.status(user.uid),
+      this.users.exists(user.uid),
     ]);
-    if (!profile.exists()) {
-      if (client.exists()) {
+    if (!profile) {
+      if (isClient) {
         await signOut(this.auth);
         throw { code: 'auth/account-is-client' };
       }
-      await this.createProfessionalDoc(
-        user,
-        user.displayName ?? '',
-        user.email ?? '',
-        user.phoneNumber ?? '',
-      );
+      await this.professionalAccounts.create({
+        uid: user.uid,
+        name: user.displayName ?? '',
+        email: user.email ?? '',
+        phone: user.phoneNumber ?? '',
+      });
     }
 
     if (await this.resolveRole(user)) {
       await signOut(this.auth);
       throw { code: 'auth/pending-approval' };
     }
-  }
-
-  private createProfessionalDoc(user: User, name: string, email: string, phone: string) {
-    return setDoc(doc(db, 'professionals', user.uid), {
-      ownerUid: user.uid,
-      name,
-      email,
-      phone,
-      image: '',
-      address: '',
-      tags: [],
-      rating: 0,
-      reviewsCount: '0',
-      views: '0',
-      about: [],
-      services: [],
-      gallery: [],
-      position: { lat: 0, lng: 0 },
-      visible: true,
-      published: false,
-      availability: DEFAULT_AVAILABILITY,
-      // Waits for an admin. `submitted` becomes true when the profile is complete (second step of the sign up).
-      approved: false,
-      submitted: false,
-      admin: false,
-      lang: APP_LANGUAGE,
-      createdAt: serverTimestamp(),
-    });
   }
 
   async signInWithEmail(email: string, password: string, remember = true) {
@@ -386,21 +356,20 @@ export class Auth {
       role = 'client';
       try {
         const [profile, account] = await Promise.all([
-          getDoc(doc(db, 'professionals', user.uid)),
-          getDoc(doc(db, 'users', user.uid)),
+          this.professionalAccounts.status(user.uid),
+          this.users.get(user.uid),
         ]);
-        admin = account.data()?.['admin'] === true;
-        if (profile.exists()) {
+        admin = account?.admin === true;
+        if (profile) {
           // Not approved yet: no access to the app (the callers close the session).
           // A sign up that wasn't finished, or that an admin denied, goes back to the second step to be (re)sent.
-          const data = profile.data();
           if (
-            data['approved'] === false &&
-            (data['submitted'] !== true || data['rejected'] === true)
+            profile.approved === false &&
+            (profile.submitted !== true || profile.rejected === true)
           ) {
             role = null;
             incomplete = true;
-          } else if (profile.data()['approved'] === false) {
+          } else if (profile.approved === false) {
             role = null;
             pending = true;
             this.pendingApproval.set(true);
@@ -424,18 +393,12 @@ export class Auth {
 
   private async createUserDocIfMissing(user: User) {
     try {
-      const ref = doc(db, 'users', user.uid);
-      if ((await getDoc(ref)).exists()) return;
-
       const [firstName = '', ...rest] = (user.displayName ?? '').trim().split(/\s+/);
-      await setDoc(ref, {
+      await this.users.createIfMissing(user.uid, {
         firstName,
         lastName: rest.join(' '),
-        email: user.email,
+        email: user.email ?? '',
         phone: user.phoneNumber ?? '',
-        admin: false,
-        lang: APP_LANGUAGE,
-        createdAt: serverTimestamp(),
       });
     } catch (error) {
       log.error('Failed to save user', error);

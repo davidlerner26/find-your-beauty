@@ -1,6 +1,12 @@
 import { expect, test } from '@playwright/test';
 import { CLIENT, PASSWORD, PRO } from './support/data';
 import { signIn } from './support/helpers';
+import { seed } from './support/seed';
+
+// Read only tests: they start from the seed, whatever the other files changed
+test.beforeAll(async () => {
+  await seed();
+});
 
 test.describe('login', () => {
   test('a client signs in and reaches the home', async ({ page }) => {

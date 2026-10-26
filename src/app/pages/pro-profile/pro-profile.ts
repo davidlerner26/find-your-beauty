@@ -4,7 +4,6 @@ import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { parseInstagram } from '../../utils/instagram';
-import { deleteField, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import {
@@ -23,7 +22,7 @@ import { durationToText, maskDuration, parseDuration } from '../../utils/duratio
 import { maskMoney, moneyToText, parseMoney } from '../../utils/money';
 import { toDateKey, toMinutes } from '../../utils/slots';
 import { Auth } from '../../services/auth';
-import { db } from '../../services/firebase';
+import { ProfessionalAccounts } from '../../services/professional-accounts';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Photos } from '../../services/photos';
 import { Feedback } from '../../services/feedback';
@@ -66,6 +65,7 @@ type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePre
 })
 export class ProProfile {
   private readonly auth = inject(Auth);
+  private readonly accounts = inject(ProfessionalAccounts);
   private readonly professionals = inject(Professionals);
   private readonly router = inject(Router);
   private readonly photos = inject(Photos);
@@ -582,8 +582,7 @@ export class ProProfile {
 
   private async loadCpf() {
     try {
-      const snapshot = await getDoc(doc(db, 'professionals', this.uid(), 'private', 'identity'));
-      this.savedCpf = snapshot.data()?.['cpf'] ?? '';
+      this.savedCpf = await this.accounts.getCpf(this.uid());
       // What was typed before the answer came is kept
       if (!this.cpf) this.cpf = formatCpf(this.savedCpf);
     } catch (error) {
@@ -610,11 +609,7 @@ export class ProProfile {
   // Only a valid CPF is saved, and only when it changed
   private async saveCpf() {
     if (!isValidCpf(this.cpf) || this.cpf === this.savedCpf) return;
-    await setDoc(
-      doc(db, 'professionals', this.uid(), 'private', 'identity'),
-      { cpf: this.cpf },
-      { merge: true },
-    );
+    await this.accounts.saveCpf(this.uid(), this.cpf);
     this.savedCpf = this.cpf;
   }
 
@@ -643,7 +638,7 @@ export class ProProfile {
   }
 
   // What the form writes to the profile. `instagram` and `place` are left out when they can't be saved yet.
-  private profileFields(services: Service[], instagram: string | null | undefined, draft = false) {
+  private profileFields(services: Service[], instagram: string | undefined, draft = false) {
     // A draft keeps the previous address until a suggestion is chosen, and the previous hours while they are invalid
     const keepAddress = draft && this.needsAddress && !this.addressConfirmed();
     const keepHours = draft && this.invalidDays.length > 0;
@@ -653,8 +648,6 @@ export class ProProfile {
       ...(instagram === undefined ? {} : { instagram }),
       image: this.image.trim(),
       imagePosition: this.imagePosition(),
-      coverImage: deleteField(),
-      coverPosition: deleteField(),
       serviceMode: this.serviceMode(),
       lang: APP_LANGUAGE,
       ...(keepAddress
@@ -687,10 +680,9 @@ export class ProProfile {
   private autoSaveTimer?: ReturnType<typeof setTimeout>;
   private lastSaved = '';
 
-  // The sentinels that delete old fields are left out of the comparison
+  // What is compared to know whether there is anything new to save
   private snapshot(fields: object) {
-    const { coverImage, coverPosition, ...rest } = fields as Record<string, unknown>;
-    return JSON.stringify({ ...rest, cpf: this.cpf });
+    return JSON.stringify({ ...fields, cpf: this.cpf });
   }
 
   protected autoSave() {
@@ -715,7 +707,7 @@ export class ProProfile {
     if (snapshot === this.lastSaved) return;
 
     try {
-      await updateDoc(doc(db, 'professionals', this.uid()), { ...fields, ...status });
+      await this.accounts.update(this.uid(), { ...fields, ...status });
       await this.saveCpf();
       this.lastSaved = snapshot;
       // A short toast, like the other messages of the screen
@@ -762,7 +754,7 @@ export class ProProfile {
 
     try {
       const fields = this.profileFields(services, instagram);
-      await updateDoc(doc(db, 'professionals', this.uid()), {
+      await this.accounts.update(this.uid(), {
         ...fields,
         visible,
         published,

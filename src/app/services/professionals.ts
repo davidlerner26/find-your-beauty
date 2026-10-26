@@ -1,5 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+import { professionalConverter } from '../models/converters';
 import { Professional } from '../models/professional';
 import { db } from './firebase';
 import { log } from '../utils/log';
@@ -19,9 +20,9 @@ export class Professionals {
     this.load();
     // The catalog follows the database: a profile that is approved or published shows up for everyone right away
     onSnapshot(
-      collection(db, 'professionals'),
+      this.catalog(),
       (snapshot) => {
-        this.list.set(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Professional));
+        this.list.set(snapshot.docs.map((doc) => doc.data()));
         this.status.set('ready');
       },
       (error) => log.error('Failed to follow the professionals', error),
@@ -31,13 +32,17 @@ export class Professionals {
   async load() {
     this.status.set('loading');
     try {
-      const snapshot = await getDocs(collection(db, 'professionals'));
-      this.list.set(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Professional));
+      const snapshot = await getDocs(this.catalog());
+      this.list.set(snapshot.docs.map((doc) => doc.data()));
       this.status.set('ready');
     } catch (error) {
       log.error('Failed to load professionals', error);
       this.status.set('error');
     }
+  }
+
+  private catalog() {
+    return collection(db, 'professionals').withConverter(professionalConverter);
   }
 
   byId(id: string) {

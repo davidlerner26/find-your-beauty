@@ -1,0 +1,42 @@
+<div class="autocomplete">
+  <label i18n>
+    Endereço
+    <input
+      i18n-placeholder
+      name="place-search"
+      autocomplete="nope"
+      placeholder="Comece a digitar o endereço"
+      role="combobox"
+      [attr.aria-expanded]="open() && suggestions().length > 0"
+      [ngModel]="address()"
+      (ngModelChange)="onInput($event)"
+      (focus)="open.set(true)"
+      (blur)="close()"
+      (keydown.escape)="close()"
+    />
+  </label>
+
+  @if (open() && suggestions().length) {
+    <ul class="suggestions" role="listbox">
+      @for (suggestion of suggestions(); track suggestion.text) {
+        <!-- mousedown is prevented so the input keeps focus and the click still lands -->
+        <li role="option">
+          <button type="button" (mousedown)="$event.preventDefault()" (click)="choose(suggestion)">
+            {{ suggestion.text }}
+          </button>
+        </li>
+      }
+      <li i18n class="powered">Powered by Google</li>
+    </ul>
+  }
+</div>
+
+@if (error()) {
+  <p class="hint error">{{ error() }}</p>
+} @else if (confirmed()) {
+  <p i18n class="hint confirmed">✓ Endereço confirmado no mapa.</p>
+} @else if (address().trim().length >= 3) {
+  <p i18n class="hint muted">Escolha uma das sugestões para confirmar o endereço.</p>
+} @else {
+  <p i18n class="hint muted">Busque o endereço e escolha uma sugestão para aparecer no Explorar.</p>
+}

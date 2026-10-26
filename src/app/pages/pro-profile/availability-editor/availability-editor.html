@@ -1,0 +1,81 @@
+<section>
+  <h2 i18n>Horários de atendimento</h2>
+  <div class="week">
+    @for (day of weekdays; track day.key) {
+      <div class="weekday">
+        <label class="check">
+          <input
+            type="checkbox"
+            [name]="'on' + day.key"
+            [(ngModel)]="availability().weekly[day.key].enabled"
+          />
+          {{ day.label }}
+        </label>
+        @if (availability().weekly[day.key].enabled) {
+          <div class="times">
+            <input
+              type="time"
+              [name]="'start' + day.key"
+              [(ngModel)]="availability().weekly[day.key].start"
+            />
+            <span i18n>às</span>
+            <input
+              type="time"
+              [name]="'end' + day.key"
+              [(ngModel)]="availability().weekly[day.key].end"
+            />
+          </div>
+        } @else {
+          <span i18n class="muted">Folga</span>
+        }
+      </div>
+    }
+  </div>
+  @if (invalidDays.length) {
+    <p i18n class="error">
+      O fechamento precisa ser depois da abertura em: {{ invalidDays.length }} dia(s).
+    </p>
+  }
+
+  <h3 i18n>Dias bloqueados</h3>
+  <p i18n class="hint muted">
+    Clique no dia que quer bloquear. Para um período, clique também no último dia.
+  </p>
+  <app-date-range-picker
+    [min]="today"
+    [blocked]="availability().blockedRanges"
+    [(range)]="pending"
+  />
+  @if (pending().start; as start) {
+    <p i18n class="selected">
+      Selecionado: <strong>{{ rangeLabel(start, pending().end) }}</strong>
+    </p>
+  }
+  <button
+    i18n
+    type="button"
+    class="secondary"
+    [disabled]="!pending().start"
+    (click)="blockPending()"
+  >
+    Bloquear período
+  </button>
+
+  <div class="chips">
+    @for (range of availability().blockedRanges; track range.start + range.end) {
+      <span class="chip">
+        {{ rangeLabel(range.start, range.end) }}
+        <button
+          i18n-aria-label
+          type="button"
+          aria-label="Desbloquear período"
+          (click)="unblock(range)"
+        >
+          ✕
+        </button>
+      </span>
+    } @empty {
+      <p i18n class="hint muted">Nenhum período bloqueado. Use para férias e folgas.</p>
+    }
+  </div>
+</section>

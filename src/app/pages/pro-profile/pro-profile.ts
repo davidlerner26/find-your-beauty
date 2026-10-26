@@ -9,45 +9,45 @@ import { formatPhone } from '../../utils/phone';
 import {
   Availability,
   Professional,
-  DateRange,
   ImagePosition,
   DEFAULT_AVAILABILITY,
   Service,
   SERVICE_PLACES,
   ServiceMode,
 } from '../../models/professional';
-import { toDateKey } from '../../utils/slots';
 import { Auth } from '../../services/auth';
 import { ProfessionalAccounts } from '../../services/professional-accounts';
-import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Photos } from '../../services/photos';
 import { Feedback } from '../../services/feedback';
 import { PhotoPositioner } from '../../components/photo-positioner/photo-positioner';
-import {
-  DateRangePicker,
-  PendingRange,
-} from '../../components/date-range-picker/date-range-picker';
 import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
-import { APP_LANGUAGE, INTL_LOCALE } from '../../utils/locale';
+import { APP_LANGUAGE } from '../../utils/locale';
+import { AddressField, NO_POSITION, Position } from './address-field/address-field';
+import { AvailabilityEditor } from './availability-editor/availability-editor';
 import { ServicesEditor } from './services-editor/services-editor';
+import { WEEKDAYS } from './weekdays';
 import { log } from '../../utils/log';
 import {
-  addBlockedRange,
   aboutToParagraphs,
   invalidDayKeys,
   missingFields,
   paragraphsToAbout,
-  rangeLabel,
   toAvailabilityDraft,
 } from './profile-form';
 import { isServiceComplete, ServiceDraft, toService, toServiceDraft } from './service-draft';
 
-type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePrediction };
-
 @Component({
   selector: 'app-pro-profile',
-  imports: [PhotoPositioner, DateRangePicker, ServicesEditor, Spinner, FormsModule, MatIconModule],
+  imports: [
+    PhotoPositioner,
+    AddressField,
+    AvailabilityEditor,
+    ServicesEditor,
+    Spinner,
+    FormsModule,
+    MatIconModule,
+  ],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
 })
@@ -57,7 +57,6 @@ export class ProProfile {
   private readonly professionals = inject(Professionals);
   private readonly router = inject(Router);
   private readonly photos = inject(Photos);
-  private readonly maps = inject(GoogleMapsLoader);
   protected readonly instagramService = inject(Instagram);
   private readonly feedback = inject(Feedback);
 
@@ -82,41 +81,24 @@ export class ProProfile {
   protected readonly imagePosition = signal<ImagePosition>({ x: 50, y: 50 });
   protected gallery: string[] = [];
   private removedPhotos: string[] = [];
-  protected address = '';
+  protected readonly address = signal('');
   protected readonly servicePlaces = SERVICE_PLACES;
   // Nothing is chosen on a new sign up: the professional has to pick one
   protected readonly serviceMode = signal<ServiceMode | null>(null);
   protected about = '';
   protected services: ServiceDraft[] = [];
   protected readonly serviceTried = signal(false);
-  protected position = { lat: 0, lng: 0 };
+  protected readonly position = signal<Position>(NO_POSITION);
   protected availability: Availability = structuredClone(DEFAULT_AVAILABILITY);
-  protected readonly today = toDateKey(new Date());
-  protected readonly pending = signal<PendingRange>({ start: null, end: null });
-
-  // Monday first, as in the Brazilian calendar
-  protected readonly weekdays = [
-    { key: '1', label: $localize`Segunda` },
-    { key: '2', label: $localize`Terça` },
-    { key: '3', label: $localize`Quarta` },
-    { key: '4', label: $localize`Quinta` },
-    { key: '5', label: $localize`Sexta` },
-    { key: '6', label: $localize`Sábado` },
-    { key: '0', label: $localize`Domingo` },
-  ];
+  protected readonly weekdays = WEEKDAYS;
 
   protected readonly visible = signal(true);
   protected readonly saving = signal(false);
   protected readonly message = signal('');
   // A new one each time a message is shown, so the floating message starts over
   protected messageId = 0;
-  // Address search (Google Places): the address only counts once a suggestion was chosen
-  protected readonly suggestions = signal<AddressSuggestion[]>([]);
-  protected readonly addressOpen = signal(false);
+  // The address only counts once a suggestion was chosen (see the address field)
   protected readonly addressConfirmed = signal(false);
-  protected readonly addressError = signal('');
-  private addressTimer?: ReturnType<typeof setTimeout>;
-  private sessionToken?: google.maps.places.AutocompleteSessionToken;
   // The profile photo and the gallery have their own loading
   protected readonly uploading = signal(false);
   protected readonly uploadingGallery = signal(false);
@@ -159,12 +141,12 @@ export class ProProfile {
         (profile.image ? profile.imagePosition : legacy.coverPosition) ?? { x: 50, y: 50 },
       );
       this.gallery = [...profile.gallery];
-      this.address = profile.address;
+      this.address.set(profile.address);
       // Profiles from before this choice existed work at their address
       this.serviceMode.set(profile.serviceMode ?? (profile.address ? 'studio' : null));
       this.about = paragraphsToAbout(profile.about);
       this.services = profile.services.map(toServiceDraft);
-      this.position = { ...profile.position };
+      this.position.set({ ...profile.position });
       this.addressConfirmed.set(this.hasPosition);
       this.availability = toAvailabilityDraft(profile.availability);
       this.visible.set(profile.visible !== false);
@@ -190,7 +172,8 @@ export class ProProfile {
   }
 
   protected get hasPosition() {
-    return this.position.lat !== 0 || this.position.lng !== 0;
+    const { lat, lng } = this.position();
+    return lat !== 0 || lng !== 0;
   }
 
   // What is missing before the profile can be shown to clients
@@ -201,7 +184,7 @@ export class ProProfile {
       image: this.image,
       hasServiceMode: !!this.serviceMode(),
       needsAddress: this.needsAddress,
-      address: this.address,
+      address: this.address(),
       addressConfirmed: this.addressConfirmed(),
       services: this.services,
     });
@@ -222,25 +205,6 @@ export class ProProfile {
     );
     return this.weekdays.filter(({ key }) => invalid.includes(key));
   }
-
-  protected blockPending() {
-    if (!this.pending().start) return;
-
-    this.availability.blockedRanges = addBlockedRange(
-      this.availability.blockedRanges,
-      this.pending(),
-    );
-    this.pending.set({ start: null, end: null });
-    // Blocking a period saves right away
-    this.autoSave();
-  }
-
-  protected unblock(range: DateRange) {
-    this.availability.blockedRanges = this.availability.blockedRanges.filter((r) => r !== range);
-    this.autoSave();
-  }
-
-  protected readonly rangeLabel = rangeLabel;
 
   // Shows the feedback at the top of the page and brings it into view
   private show(text: string, milliseconds = 5500) {
@@ -308,85 +272,6 @@ export class ProProfile {
 
   protected readonly serviceComplete = isServiceComplete;
 
-  protected onAddressInput(value: string) {
-    this.address = value;
-    // Editing the text breaks the link with the chosen place: it has to be chosen again
-    this.addressConfirmed.set(false);
-    this.position = { lat: 0, lng: 0 };
-    this.addressError.set('');
-    clearTimeout(this.addressTimer);
-
-    if (value.trim().length < 3) {
-      this.suggestions.set([]);
-      return;
-    }
-    // Waits for a pause in the typing so it doesn't search on every key
-    this.addressTimer = setTimeout(() => this.searchAddress(value), 250);
-  }
-
-  private async searchAddress(input: string) {
-    try {
-      await this.maps.load();
-      const { AutocompleteSuggestion, AutocompleteSessionToken } = google.maps.places;
-      this.sessionToken ??= new AutocompleteSessionToken();
-
-      const { suggestions } = await AutocompleteSuggestion.fetchAutocompleteSuggestions({
-        input,
-        sessionToken: this.sessionToken,
-        includedRegionCodes: ['br'],
-        language: INTL_LOCALE,
-        region: 'br',
-      });
-
-      // The user kept typing while this was loading: that answer is already old
-      if (input !== this.address) return;
-
-      this.suggestions.set(
-        suggestions.flatMap((suggestion) =>
-          suggestion.placePrediction
-            ? [
-                {
-                  text: suggestion.placePrediction.text.text,
-                  prediction: suggestion.placePrediction,
-                },
-              ]
-            : [],
-        ),
-      );
-      this.addressOpen.set(true);
-    } catch (error) {
-      log.error('Address search failed', error);
-      this.suggestions.set([]);
-      this.addressError.set(
-        $localize`Não foi possível buscar endereços agora. Tente novamente em instantes.`,
-      );
-    }
-  }
-
-  protected async chooseAddress(suggestion: AddressSuggestion) {
-    this.addressOpen.set(false);
-    this.suggestions.set([]);
-
-    try {
-      const place = suggestion.prediction.toPlace();
-      await place.fetchFields({ fields: ['formattedAddress', 'location'] });
-      if (!place.location) throw new Error('place-without-location');
-
-      this.address = place.formattedAddress ?? suggestion.text;
-      this.position = { lat: place.location.lat(), lng: place.location.lng() };
-      this.addressConfirmed.set(true);
-      // Choosing a place closes the billing session of the search
-      this.sessionToken = undefined;
-    } catch (error) {
-      log.error('Failed to load the place', error);
-      this.addressError.set($localize`Não foi possível carregar este endereço. Escolha outro.`);
-    }
-  }
-
-  protected closeAddressList() {
-    this.addressOpen.set(false);
-  }
-
   private async loadCpf() {
     try {
       this.savedCpf = await this.accounts.getCpf(this.uid());
@@ -442,8 +327,8 @@ export class ProProfile {
         ? {}
         : {
             // Home-only professionals have no address on the map
-            address: this.needsAddress ? this.address.trim() : '',
-            position: this.needsAddress ? this.position : { lat: 0, lng: 0 },
+            address: this.needsAddress ? this.address().trim() : '',
+            position: this.needsAddress ? this.position() : NO_POSITION,
           }),
       about: aboutToParagraphs(this.about),
       services,

@@ -1,0 +1,53 @@
+@use '../form-fields';
+
+// The field and its hint are items of the grid of the section that holds them
+:host {
+  display: contents;
+}
+
+.autocomplete {
+  position: relative;
+}
+
+.suggestions {
+  position: absolute;
+  z-index: 5;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 0.35rem 0 0;
+  padding: 0.35rem;
+  list-style: none;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  max-height: 16rem;
+  overflow-y: auto;
+
+  button {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 0;
+    border-radius: 10px;
+    background: none;
+    text-align: left;
+    font-size: 0.95rem;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--primary-light);
+    }
+  }
+}
+
+.powered {
+  padding: 0.4rem 0.85rem 0.2rem;
+  text-align: right;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.hint.confirmed {
+  color: #1f8f4d;
+}

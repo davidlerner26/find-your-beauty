@@ -49,3 +49,6 @@ Thumbs.db
 .env
 .angular
 scripts/seed/images/
+
+# Firebase emulators
+*-debug.log

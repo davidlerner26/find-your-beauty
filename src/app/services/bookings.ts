@@ -84,6 +84,8 @@ export class Bookings {
       batch.set(doc(db, 'professionals', booking.professionalId, 'busy', busyId), {
         date: busyId.split('_')[0],
         clientUid: user.uid,
+        // The rules check the slot against this booking, created in the same batch
+        bookingId: bookingRef.id,
       });
     }
     batch.set(bookingRef, {

@@ -11,10 +11,17 @@ service firebase.storage {
     }
 
     // Files of a conversation: only its two participants (up to 10 MB). Its id is {clientUid}_{professionalId}.
+    // Only photos and common documents: no scripts, executables or web pages.
     match /chats/{conversationId}/{allPaths=**} {
       allow read: if request.auth != null && (conversationId.split('_')[0] == request.auth.uid ||
         request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(conversationId)).data.participants);
       allow create: if request.auth != null && request.resource.size < 10 * 1024 * 1024 &&
+        (request.resource.contentType.matches('image/(jpeg|png|webp|gif|heic|heif)') ||
+          request.resource.contentType == 'application/pdf' ||
+          request.resource.contentType == 'text/plain' ||
+          request.resource.contentType == 'application/msword' ||
+          request.resource.contentType == 'application/vnd.ms-excel' ||
+          request.resource.contentType.matches('application/vnd\\.openxmlformats-officedocument\\..*')) &&
         (conversationId.split('_')[0] == request.auth.uid ||
         request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(conversationId)).data.participants);
     }

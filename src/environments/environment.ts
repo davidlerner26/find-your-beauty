@@ -7,6 +7,8 @@ export const environment = {
   // Features that are only turned on in the test environment for now
   features: {
     featuredProfessionals: false,
+    // The payment screen before a booking is created (see utils/features.ts). Production books straight away.
+    checkout: false,
   },
   googleMapsApiKey: 'AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I',
   // Instagram API with Instagram Login (public). Empty = the connect button is disabled.

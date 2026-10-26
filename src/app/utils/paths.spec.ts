@@ -29,5 +29,7 @@ describe('PATHS', () => {
     expect(PATHS.professional('p1')).toBe('/profissionais/p1');
     expect(PATHS.booking('p1')).toBe('/profissionais/p1/agendar');
     expect(PATHS.professionals).toBe('/profissionais');
+    expect(declared.has('/profissionais/:id/pagamento')).toBe(true);
+    expect(PATHS.checkout('p1')).toBe('/profissionais/p1/pagamento');
   });
 });

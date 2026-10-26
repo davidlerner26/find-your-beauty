@@ -15,13 +15,14 @@ import { Users } from '../../services/users';
 import { missingProfileData } from '../../models/user';
 import { Professionals } from '../../services/professionals';
 import { priceAt } from '../../utils/pricing';
-import { busyIdsFor, toDateKey } from '../../utils/slots';
 import { CalendarDay as Day } from '../../utils/calendar';
 import { BookingFlowStore } from './booking-flow.store';
 import { log } from '../../utils/log';
-import { errorCode } from '../../utils/error-code';
 import { isOpen } from '../../../../shared/domain';
 import { PATHS } from '../../utils/paths';
+import { CheckoutDraft } from '../../services/checkout-draft';
+import { checkoutEnabled } from '../../utils/features';
+import { bookingErrorMessage, buildBookingRequest } from './booking-request';
 
 @Component({
   selector: 'app-booking',
@@ -40,6 +41,7 @@ export class Booking {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly feedback = inject(Feedback);
   private readonly flow = inject(BookingFlowStore);
+  private readonly checkoutDraft = inject(CheckoutDraft);
 
   readonly id = input.required<string>();
   readonly servicos = input<string>('');
@@ -199,33 +201,28 @@ export class Booking {
       this.saving.set(false);
     }
 
-    const date = toDateKey(day);
-    const [hour, minute] = time.split(':').map(Number);
-    const place = this.effectivePlace();
-    const durationMinutes = services.reduce((sum, service) => sum + service.durationMinutes, 0);
+    const request = buildBookingRequest({
+      artist,
+      services,
+      day,
+      time,
+      notes: this.notes,
+      place: this.effectivePlace(),
+      clientAddress,
+      slotMinutes: this.availability().slotMinutes,
+    });
+
+    // The test environment asks for the (simulated) payment first; production books straight away
+    if (checkoutEnabled()) {
+      this.checkoutDraft.set(request);
+      this.router.navigate([PATHS.checkout(artist.id)]);
+      return;
+    }
 
     this.error.set('');
     this.saving.set(true);
     try {
-      await this.bookings.create({
-        professionalId: artist.id,
-        professionalUid: artist.ownerUid ?? null,
-        professionalName: artist.name,
-        services: services.map((service) => ({
-          id: service.id,
-          name: service.name,
-          price: priceAt(service, day, time),
-          durationMinutes: service.durationMinutes,
-        })),
-        startsAt: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, minute),
-        durationMinutes,
-        total: this.total(),
-        notes: this.notes.trim(),
-        busyIds: busyIdsFor(date, time, durationMinutes, this.availability().slotMinutes),
-        place,
-        ...(place === 'home' ? { clientAddress } : {}),
-        paymentStatus: 'pending',
-      });
+      await this.bookings.create(request);
       this.feedback.show(
         $localize`Agendamento solicitado! Você será avisado quando o profissional responder.`,
         5000,
@@ -233,12 +230,7 @@ export class Booking {
       this.router.navigate([PATHS.agenda]);
     } catch (error) {
       log.error('Failed to create booking', error);
-      // Slots can only be created once, so a denied write means someone took this time first
-      this.error.set(
-        errorCode(error) === 'permission-denied'
-          ? $localize`Este horário acabou de ser ocupado. Escolha outro.`
-          : $localize`Não foi possível enviar a solicitação. Tente novamente.`,
-      );
+      this.error.set(bookingErrorMessage(error));
     } finally {
       this.saving.set(false);
     }

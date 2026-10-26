@@ -6,6 +6,7 @@ export const environment = {
   useEmulators: true,
   features: {
     featuredProfessionals: true,
+    checkout: true,
   },
   googleMapsApiKey: '',
   instagramAppId: '',

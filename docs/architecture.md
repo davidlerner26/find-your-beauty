@@ -70,6 +70,18 @@ password). Plain `ngModel` is fine for loose fields (search box, chat).
 scan runs in the e2e tests on the main screens. Dialogs use the `appDialog` directive (focus in, Tab trapped,
 Escape closes, focus restored).
 
+## Payment screen (test environment only)
+
+In the test environment, "Finalizar" on the booking screen opens a payment screen (`pages/checkout`, route
+`/profissionais/:id/pagamento`) and the booking is only created by "Pagar agora". The payment is **simulated**:
+nothing is charged and the booking is still created with `paymentStatus: 'pending'` (the rules only accept that).
+Production keeps booking straight away. The switch is `features.checkout` in the environment files (on in `dev`
+and `e2e`, off in production, and a unit test fails if production turns on); `utils/features.ts` reads it. The
+booking screen builds the request (`booking-request.ts`), leaves it in `CheckoutDraft` (memory only) and goes to
+the payment screen; `checkoutGuard` sends back anyone who comes without a chosen booking, and everyone where the
+feature is off. The e2e build lets a test turn it off with `localStorage['e2e-checkout'] = 'off'`, so both ways of
+booking are tested. A real payment (and a discount line like the one in the design) is left for later.
+
 ## Storybook
 
 `npm run storybook` shows the shared components of `src/app/components/` (spinner, toast, chips row, carousel

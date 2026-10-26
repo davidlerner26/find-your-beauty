@@ -4834,6 +4834,70 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1310843512761246931" datatype="html">
+        <source>Ambiente de teste: o pagamento é simulado e nada é cobrado.</source>
+        <target>Entorno de prueba: el pago es simulado y no se cobra nada.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2519221048669104768" datatype="html">
+        <source>Pagamento</source>
+        <target>Pago</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3167465703959318308" datatype="html">
+        <source>Resumo do agendamento</source>
+        <target>Resumen de la reserva</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4286459967004275147" datatype="html">
+        <source>Cartão de teste •••• 4242</source>
+        <target>Tarjeta de prueba •••• 4242</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4517036178942903044" datatype="html">
+        <source>Profissional</source>
+        <target>Profesional</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5150145368957523796" datatype="html">
+        <source>Pagar agora</source>
+        <target>Pagar ahora</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5333574128711786193" datatype="html">
+        <source>Processando...</source>
+        <target>Procesando...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6170019178516226599" datatype="html">
+        <source>Duração</source>
+        <target>Duración</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

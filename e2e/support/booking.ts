@@ -29,6 +29,10 @@ export async function bookFirstFreeTime(page: Page, options: { notes?: string } 
   if (options.notes)
     await page.getByPlaceholder('Digite suas observações aqui').fill(options.notes);
   await page.getByRole('button', { name: 'Finalizar' }).click();
+  // In the test environment the (simulated) payment comes first
+  await expect(page).toHaveURL(/\/(agenda|pagamento)$/);
+  if (page.url().endsWith('/pagamento'))
+    await page.getByRole('button', { name: 'Pagar agora' }).click();
   await expect(page).toHaveURL(/\/agenda$/);
   return time;
 }

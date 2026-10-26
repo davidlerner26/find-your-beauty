@@ -1,0 +1,76 @@
+@if (request(); as booking) {
+  <header class="top">
+    <button i18n-aria-label type="button" class="back" aria-label="Voltar" (click)="goBack()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <h1 i18n>Pagamento</h1>
+  </header>
+
+  <div class="content">
+    <section class="ticket" aria-labelledby="summary-title">
+      <h2 i18n id="summary-title" class="visually-hidden">Resumo do agendamento</h2>
+
+      <dl class="facts">
+        <div>
+          <dt i18n>Data</dt>
+          <dd>{{ dateLabel() }}</dd>
+        </div>
+        <div>
+          <dt i18n>Horário</dt>
+          <dd>{{ timeLabel() }}</dd>
+        </div>
+        <div>
+          <dt i18n>Profissional</dt>
+          <dd>{{ booking.professionalName }}</dd>
+        </div>
+        <div>
+          <dt i18n>Duração</dt>
+          <dd>{{ durationLabel() }}</dd>
+        </div>
+      </dl>
+
+      <hr />
+
+      <h3 i18n class="services-title">Serviços</h3>
+      <ul class="lines">
+        @for (service of booking.services; track service.id) {
+          <li>
+            <span>{{ service.name }}</span>
+            <strong>{{ service.price | price }}</strong>
+          </li>
+        }
+      </ul>
+
+      <div class="dashed notches" aria-hidden="true"></div>
+
+      <p class="total">
+        <span i18n>Total</span>
+        <strong>{{ booking.total | price }}</strong>
+      </p>
+
+      <div class="method">
+        <span class="brand" aria-hidden="true"><i></i><i></i></span>
+        <div>
+          <strong>{{ holder() }}</strong>
+          <span i18n class="muted">Cartão de teste •••• 4242</span>
+        </div>
+      </div>
+    </section>
+
+    <p i18n class="note muted">Ambiente de teste: o pagamento é simulado e nada é cobrado.</p>
+
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+  </div>
+
+  <footer class="pay-bar">
+    <button type="button" class="pay" [disabled]="paying()" (click)="pay()">
+      @if (paying()) {
+        <ng-container i18n>Processando...</ng-container>
+      } @else {
+        <ng-container i18n>Pagar agora</ng-container>
+      }
+    </button>
+  </footer>
+}

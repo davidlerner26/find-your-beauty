@@ -7,6 +7,8 @@ export const environment = {
   // Features that are only turned on in the test environment for now (production has them off)
   features: {
     featuredProfessionals: true,
+    // A simulated payment screen comes before the booking is created: nothing is charged
+    checkout: true,
   },
   // The same key of production works when the referrers of the key include dev.findyourbeauty.com.br
   googleMapsApiKey: 'AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I',

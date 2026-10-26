@@ -17,6 +17,7 @@ import { PricePipe } from '../../utils/price.pipe';
 import { INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
+import { isClosed, isOpen } from '../../../../shared/domain';
 
 const STATUS_LABEL: Record<BookingStatus, string> = {
   pending: $localize`Aguardando`,
@@ -52,19 +53,18 @@ export class MyBookings {
   protected readonly t = T;
 
   // The address that was just copied (its button shows a check for a moment) and the message about it
+  protected readonly isOpen = isOpen;
   protected readonly copiedId = signal('');
   protected readonly toast = signal('');
 
   // Still going to happen: waiting for an answer or confirmed
   protected readonly upcoming = computed(() =>
-    this.bookings.mine().filter((booking) => ['pending', 'confirmed'].includes(booking.status)),
+    this.bookings.mine().filter((booking) => isOpen(booking.status)),
   );
   protected readonly history = computed(() =>
     this.bookings
       .mine()
-      .filter((booking) =>
-        ['completed', 'declined', 'cancelled', 'cancelledByProfessional'].includes(booking.status),
-      )
+      .filter((booking) => isClosed(booking.status))
       .reverse(),
   );
 

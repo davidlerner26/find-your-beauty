@@ -15,6 +15,7 @@ import { Professionals } from '../../services/professionals';
 import { formatRelative } from '../../utils/format-date';
 import { T } from '../../utils/texts';
 import { log } from '../../utils/log';
+import { PATHS } from '../../utils/paths';
 
 // Ignores the case and the accents, so "nao" finds "não"
 const fold = (text: string) =>
@@ -103,7 +104,7 @@ export class Inbox {
         .markAsRead(notification.id)
         .catch((error) => log.error('Failed to mark as read', error));
     }
-    this.router.navigateByUrl(this.auth.role() === 'professional' ? '/pro' : '/agenda');
+    this.router.navigateByUrl(this.auth.role() === 'professional' ? PATHS.proHome : PATHS.agenda);
   }
 
   // Looks in the name and in everything that was said; a match in a message shows that message instead of the last one

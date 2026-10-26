@@ -14,6 +14,7 @@ import { ruleLabel } from '../../utils/pricing';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
+import { PATHS } from '../../utils/paths';
 
 const WEEKDAYS = [
   $localize`Domingo`,
@@ -83,7 +84,7 @@ export class AdminProfessional {
       if (approve) await this.admin.approve(professional.id);
       else await this.admin.reject(professional.id);
       // Answered: it is no longer in the waiting list
-      this.router.navigateByUrl('/admin');
+      this.router.navigateByUrl(PATHS.admin);
     } catch (error) {
       log.error('Failed to answer', error);
       this.error.set($localize`Não foi possível concluir. Tente novamente.`);

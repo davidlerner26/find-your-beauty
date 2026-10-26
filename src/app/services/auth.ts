@@ -21,6 +21,7 @@ import { firebaseAuth, functions } from './firebase';
 import { ProfessionalAccounts } from './professional-accounts';
 import { Users } from './users';
 import { log } from '../utils/log';
+import { PATHS } from '../utils/paths';
 
 export type SignUpData = {
   firstName: string;
@@ -84,7 +85,7 @@ export class Auth {
 
   homePath() {
     if (this.signupIncomplete()) return '/pro/cadastro';
-    return this.role() === 'professional' ? '/pro' : '/';
+    return this.role() === 'professional' ? PATHS.proHome : PATHS.home;
   }
 
   // Stay signed in after closing the browser (default), or only until the tab is closed

@@ -12,6 +12,8 @@ import { Auth } from './auth';
 import { Feedback } from './feedback';
 import { db } from './firebase';
 import { log } from '../utils/log';
+import { COLLECTIONS } from '../../../shared/domain';
+import { PATHS } from '../utils/paths';
 
 // users/{uid}/favorites/{professionalId}: the professionals a client hearted
 @Injectable({ providedIn: 'root' })
@@ -36,7 +38,7 @@ export class Favorites {
 
       this.loading.set(true);
       const unsubscribe = onSnapshot(
-        collection(db, 'users', uid, 'favorites'),
+        collection(db, COLLECTIONS.users, uid, COLLECTIONS.favorites),
         (snapshot) => {
           this.ids.set(snapshot.docs.map((d) => d.id));
           this.loading.set(false);
@@ -58,12 +60,12 @@ export class Favorites {
   async toggle(professionalId: string) {
     const uid = this.auth.user()?.uid;
     if (!uid) {
-      this.router.navigate(['/entrar']);
+      this.router.navigate([PATHS.login]);
       return;
     }
     if (this.auth.role() !== 'client') return;
 
-    const favorite = doc(db, 'users', uid, 'favorites', professionalId);
+    const favorite = doc(db, COLLECTIONS.users, uid, COLLECTIONS.favorites, professionalId);
     const removing = this.has(professionalId);
     try {
       if (removing) await deleteDoc(favorite);

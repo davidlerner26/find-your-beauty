@@ -20,6 +20,7 @@ import { resizeImage } from '../utils/image';
 import { Auth } from './auth';
 import { db, storage } from './firebase';
 import { log } from '../utils/log';
+import { COLLECTIONS } from '../../../shared/domain';
 
 // What the conversation list shows for the last message
 const preview = (content: MessageContent) =>
@@ -49,7 +50,7 @@ export class Messages {
       }
 
       const q = query(
-        collection(db, 'conversations'),
+        collection(db, COLLECTIONS.conversations),
         where('participants', 'array-contains', uid),
       );
       const unsubscribe = onSnapshot(
@@ -93,7 +94,7 @@ export class Messages {
     const loaded = await Promise.all(
       stale.map(async (conversation) => {
         const snapshot = await getDocs(
-          collection(db, 'conversations', conversation.id, 'messages'),
+          collection(db, COLLECTIONS.conversations, conversation.id, COLLECTIONS.messages),
         ).catch((error) => {
           log.error('Failed to load the messages of a conversation', error);
           return null;
@@ -132,7 +133,7 @@ export class Messages {
     }
 
     const q = query(
-      collection(db, 'conversations', conversationId, 'messages'),
+      collection(db, COLLECTIONS.conversations, conversationId, COLLECTIONS.messages),
       orderBy('createdAt', 'asc'),
     );
     return onSnapshot(
@@ -160,8 +161,12 @@ export class Messages {
     const user = this.auth.user();
     if (!user) return;
 
-    const conversation = doc(db, 'conversations', this.clientConversationId(professional.id));
-    const message = doc(collection(conversation, 'messages'));
+    const conversation = doc(
+      db,
+      COLLECTIONS.conversations,
+      this.clientConversationId(professional.id),
+    );
+    const message = doc(collection(conversation, COLLECTIONS.messages));
 
     const batch = writeBatch(db);
     batch.set(message, { senderUid: user.uid, ...content, createdAt: serverTimestamp() });
@@ -187,8 +192,8 @@ export class Messages {
     const uid = this.auth.user()?.uid;
     if (!uid) return;
 
-    const conversation = doc(db, 'conversations', conversationId);
-    const message = doc(collection(conversation, 'messages'));
+    const conversation = doc(db, COLLECTIONS.conversations, conversationId);
+    const message = doc(collection(conversation, COLLECTIONS.messages));
 
     const batch = writeBatch(db);
     batch.set(message, { senderUid: uid, ...content, createdAt: serverTimestamp() });
@@ -219,7 +224,7 @@ export class Messages {
 
   async markAsRead(conversation: Conversation) {
     const isClient = this.auth.user()?.uid === conversation.clientUid;
-    await updateDoc(doc(db, 'conversations', conversation.id), {
+    await updateDoc(doc(db, COLLECTIONS.conversations, conversation.id), {
       [isClient ? 'unreadClient' : 'unreadProfessional']: 0,
     });
   }

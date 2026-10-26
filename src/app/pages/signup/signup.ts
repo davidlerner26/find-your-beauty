@@ -24,6 +24,7 @@ import {
 } from '../../utils/form-validators';
 import { authErrorMessage, PASSWORD_RULE } from '../../utils/validators';
 import { errorCode } from '../../utils/error-code';
+import { PATHS } from '../../utils/paths';
 
 @Component({
   selector: 'app-signup',
@@ -112,7 +113,7 @@ export class Signup {
         await this.auth.signUpProfessional(data);
       } else {
         await this.auth.signUpWithEmail(data);
-        this.router.navigateByUrl('/verificar-email');
+        this.router.navigateByUrl(PATHS.verifyEmail);
       }
     } catch (error) {
       this.formError.set(authErrorMessage(error));

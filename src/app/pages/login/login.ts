@@ -11,6 +11,7 @@ import { Auth } from '../../services/auth';
 import { emailValidator } from '../../utils/form-validators';
 import { authErrorMessage } from '../../utils/validators';
 import { errorCode } from '../../utils/error-code';
+import { PATHS } from '../../utils/paths';
 
 @Component({
   selector: 'app-login',
@@ -58,7 +59,7 @@ export class Login {
       this.router.navigateByUrl(this.auth.homePath());
     } catch (error) {
       if (errorCode(error) === 'auth/email-not-verified') {
-        this.router.navigateByUrl('/verificar-email');
+        this.router.navigateByUrl(PATHS.verifyEmail);
         return;
       }
       this.formError.set(authErrorMessage(error));

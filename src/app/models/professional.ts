@@ -1,4 +1,5 @@
 import { localizeAddress } from '../utils/address';
+import { Lang } from '../../../shared/domain';
 // professionals/{professionalId}/reviews/{clientUid}: one review per client
 export type Review = {
   id: string;
@@ -162,7 +163,7 @@ export type Professional = {
   // The sign up was sent (the profile is complete) and waits for an admin
   submitted?: boolean;
   // Language of the page where the account was created: the e-mails go in it
-  lang?: 'pt' | 'en' | 'es';
+  lang?: Lang;
   // The professional's choice to show the profile (default: yes)
   visible?: boolean;
   // What clients see: visible and complete. Computed when the profile is saved.

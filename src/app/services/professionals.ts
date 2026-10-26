@@ -4,6 +4,7 @@ import { professionalConverter } from '../models/converters';
 import { Professional } from '../models/professional';
 import { db } from './firebase';
 import { log } from '../utils/log';
+import { COLLECTIONS } from '../../../shared/domain';
 
 @Injectable({ providedIn: 'root' })
 export class Professionals {
@@ -42,7 +43,7 @@ export class Professionals {
   }
 
   private catalog() {
-    return collection(db, 'professionals').withConverter(professionalConverter);
+    return collection(db, COLLECTIONS.professionals).withConverter(professionalConverter);
   }
 
   byId(id: string) {
@@ -52,7 +53,10 @@ export class Professionals {
   // Slots already taken from `dateKey` on, by day: { "yyyy-mm-dd": Set of "HH:mm" }
   async busyFrom(id: string, dateKey: string) {
     const snapshot = await getDocs(
-      query(collection(db, 'professionals', id, 'busy'), where('date', '>=', dateKey)),
+      query(
+        collection(db, COLLECTIONS.professionals, id, COLLECTIONS.busy),
+        where('date', '>=', dateKey),
+      ),
     );
     const byDay = new Map<string, Set<string>>();
     for (const doc of snapshot.docs) {
@@ -65,7 +69,10 @@ export class Professionals {
   // Slots ("HH:mm") already taken on a day: they live in professionals/{id}/busy, readable by anyone
   async busyTimes(id: string, dateKey: string) {
     const snapshot = await getDocs(
-      query(collection(db, 'professionals', id, 'busy'), where('date', '==', dateKey)),
+      query(
+        collection(db, COLLECTIONS.professionals, id, COLLECTIONS.busy),
+        where('date', '==', dateKey),
+      ),
     );
     return new Set(snapshot.docs.map((doc) => doc.id.split('_')[1]));
   }

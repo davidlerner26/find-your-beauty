@@ -12,6 +12,7 @@ import { Notification } from '../models/message';
 import { Auth } from './auth';
 import { db } from './firebase';
 import { log } from '../utils/log';
+import { COLLECTIONS } from '../../../shared/domain';
 
 @Injectable({ providedIn: 'root' })
 export class Notifications {
@@ -33,7 +34,10 @@ export class Notifications {
       }
 
       this.loading.set(true);
-      const q = query(collection(db, 'users', uid, 'notifications'), orderBy('createdAt', 'desc'));
+      const q = query(
+        collection(db, COLLECTIONS.users, uid, COLLECTIONS.notifications),
+        orderBy('createdAt', 'desc'),
+      );
       const unsubscribe = onSnapshot(
         q,
         (snapshot) => {
@@ -65,6 +69,8 @@ export class Notifications {
   async markAsRead(id: string) {
     const uid = this.auth.user()?.uid;
     if (!uid) return;
-    await updateDoc(doc(db, 'users', uid, 'notifications', id), { unread: false });
+    await updateDoc(doc(db, COLLECTIONS.users, uid, COLLECTIONS.notifications, id), {
+      unread: false,
+    });
   }
 }

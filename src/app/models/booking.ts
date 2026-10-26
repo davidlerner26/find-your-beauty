@@ -1,5 +1,6 @@
-export type BookingStatus =
-  'pending' | 'confirmed' | 'declined' | 'completed' | 'cancelled' | 'cancelledByProfessional';
+import { BookingStatus, Lang } from '../../../shared/domain';
+
+export type { BookingStatus };
 
 // bookings/{id}
 export type Booking = {
@@ -23,7 +24,7 @@ export type Booking = {
   // The address of the client, for a service at home
   clientAddress?: string;
   // Language of the page where the booking was made (the e-mails go in it)
-  lang?: 'pt' | 'en' | 'es';
+  lang?: Lang;
   // No payment integration yet: bookings are created with the payment pending
   paymentStatus: 'pending' | 'paid';
 };

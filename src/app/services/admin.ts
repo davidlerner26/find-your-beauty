@@ -11,6 +11,7 @@ import {
 } from 'firebase/firestore';
 import { professionalConverter } from '../models/converters';
 import { db } from './firebase';
+import { COLLECTIONS } from '../../../shared/domain';
 
 export type PendingProfessional = {
   id: string;
@@ -28,7 +29,7 @@ export class Admin {
   // Everyone who is not approved: waiting (oldest first) and denied
   async pending() {
     const snapshot = await getDocs(
-      query(collection(db, 'professionals'), where('approved', '==', false)),
+      query(collection(db, COLLECTIONS.professionals), where('approved', '==', false)),
     );
     // Only the ones that finished the sign up (second step). Older accounts without `submitted` haven't.
     const list = snapshot.docs
@@ -52,23 +53,25 @@ export class Admin {
   // The whole profile, even if it is not published
   async get(id: string) {
     const snapshot = await getDoc(
-      doc(db, 'professionals', id).withConverter(professionalConverter),
+      doc(db, COLLECTIONS.professionals, id).withConverter(professionalConverter),
     );
     return snapshot.exists() ? snapshot.data() : null;
   }
 
   // The CPF of a professional (private: only the owner and admins can read it)
   async cpfOf(id: string) {
-    const snapshot = await getDoc(doc(db, 'professionals', id, 'private', 'identity'));
+    const snapshot = await getDoc(
+      doc(db, COLLECTIONS.professionals, id, COLLECTIONS.private, 'identity'),
+    );
     return (snapshot.data()?.['cpf'] as string | undefined) ?? '';
   }
 
   // Approving makes the profile public at once: it was complete when it was sent, so it is published
   // (unless the professional chose to hide it)
   async approve(id: string) {
-    const snapshot = await getDoc(doc(db, 'professionals', id));
+    const snapshot = await getDoc(doc(db, COLLECTIONS.professionals, id));
     const visible = snapshot.data()?.['visible'] !== false;
-    await updateDoc(doc(db, 'professionals', id), {
+    await updateDoc(doc(db, COLLECTIONS.professionals, id), {
       approved: true,
       rejected: false,
       published: visible,
@@ -76,6 +79,6 @@ export class Admin {
   }
 
   reject(id: string) {
-    return updateDoc(doc(db, 'professionals', id), { approved: false, rejected: true });
+    return updateDoc(doc(db, COLLECTIONS.professionals, id), { approved: false, rejected: true });
   }
 }

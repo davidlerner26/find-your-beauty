@@ -44,6 +44,7 @@ import { formatRelative } from '../../utils/format-date';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
+import { PATHS } from '../../utils/paths';
 
 @Component({
   selector: 'app-artist-details',
@@ -317,11 +318,11 @@ export class ArtistDetails {
   protected book() {
     // Visitors have to sign in first
     if (!this.auth.user()) {
-      this.router.navigate(['/entrar']);
+      this.router.navigate([PATHS.login]);
       return;
     }
     if (this.missingData().length) return;
-    this.router.navigate(['/profissionais', this.id(), 'agendar'], {
+    this.router.navigate([PATHS.booking(this.id())], {
       queryParams: { servicos: this.selectedIds().join(',') },
     });
   }

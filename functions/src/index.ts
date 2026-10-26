@@ -8,6 +8,7 @@ import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { asLang, emailOf, L, Lang, link, money, resendKey, sendEmail, when } from './email';
 import { serviceName } from './catalog';
 import { checkEmailCode } from './email-code';
+import { COLLECTIONS } from './shared/domain';
 import { clientIp, hit, RateLimit } from './rate-limit';
 import {
   onDocumentCreated,
@@ -241,7 +242,10 @@ export const completeFinishedBookings = onSchedule(
   async () => {
     const now = Date.now();
     // Only the status is filtered by the query (no composite index); the end of the appointment is checked here
-    const confirmed = await db.collection('bookings').where('status', '==', 'confirmed').get();
+    const confirmed = await db
+      .collection(COLLECTIONS.bookings)
+      .where('status', '==', 'confirmed')
+      .get();
     const finished = confirmed.docs.filter((booking) => {
       const { startsAt, durationMinutes } = booking.data();
       return startsAt.toMillis() + (durationMinutes ?? 0) * 60_000 <= now;

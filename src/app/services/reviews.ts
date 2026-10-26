@@ -14,6 +14,7 @@ import {
 import { Review } from '../models/professional';
 import { Auth } from './auth';
 import { db } from './firebase';
+import { COLLECTIONS } from '../../../shared/domain';
 
 @Injectable({ providedIn: 'root' })
 export class Reviews {
@@ -22,7 +23,7 @@ export class Reviews {
   async list(professionalId: string) {
     const snapshot = await getDocs(
       query(
-        collection(db, 'professionals', professionalId, 'reviews'),
+        collection(db, COLLECTIONS.professionals, professionalId, COLLECTIONS.reviews),
         orderBy('createdAt', 'desc'),
       ),
     );
@@ -45,7 +46,7 @@ export class Reviews {
 
     const snapshot = await getDocs(
       query(
-        collection(db, 'bookings'),
+        collection(db, COLLECTIONS.bookings),
         where('clientUid', '==', uid),
         where('professionalId', '==', professionalId),
       ),
@@ -58,20 +59,23 @@ export class Reviews {
     const user = this.auth.user();
     if (!user) throw new Error('not-authenticated');
 
-    await setDoc(doc(db, 'professionals', professionalId, 'reviews', user.uid), {
-      clientUid: user.uid,
-      author: user.displayName || 'Cliente',
-      bookingId,
-      stars,
-      text: text.trim(),
-      createdAt: serverTimestamp(),
-    });
+    await setDoc(
+      doc(db, COLLECTIONS.professionals, professionalId, COLLECTIONS.reviews, user.uid),
+      {
+        clientUid: user.uid,
+        author: user.displayName || 'Cliente',
+        bookingId,
+        stars,
+        text: text.trim(),
+        createdAt: serverTimestamp(),
+      },
+    );
   }
 
   // The client removes their own review. A Cloud Function updates the professional's rating.
   async remove(professionalId: string) {
     const uid = this.auth.user()?.uid;
     if (!uid) return;
-    await deleteDoc(doc(db, 'professionals', professionalId, 'reviews', uid));
+    await deleteDoc(doc(db, COLLECTIONS.professionals, professionalId, COLLECTIONS.reviews, uid));
   }
 }

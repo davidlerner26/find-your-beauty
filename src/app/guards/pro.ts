@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Auth } from '../services/auth';
+import { PATHS } from '../utils/paths';
 
 // Only professional accounts get into /pro
 export const proGuard: CanActivateFn = async () => {
@@ -10,6 +11,6 @@ export const proGuard: CanActivateFn = async () => {
   await auth.whenReady;
   if (auth.role() === 'professional') return true;
   // Account created but the profile is not complete: back to the second step of the sign up
-  if (auth.signupIncomplete()) return router.parseUrl('/pro/cadastro');
-  return router.parseUrl(auth.user() ? '/' : '/pro/entrar');
+  if (auth.signupIncomplete()) return router.parseUrl(PATHS.proSignup);
+  return router.parseUrl(auth.user() ? PATHS.home : PATHS.proLogin);
 };

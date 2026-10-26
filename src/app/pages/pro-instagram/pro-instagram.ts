@@ -4,6 +4,7 @@ import { Spinner } from '../../components/spinner/spinner';
 import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
 import { log } from '../../utils/log';
+import { PATHS } from '../../utils/paths';
 
 // Where Instagram sends the professional back (?code=... or ?error=...)
 @Component({
@@ -58,7 +59,7 @@ export class ProInstagram {
     try {
       await this.instagram.finish(code, this.state());
       await this.professionals.load();
-      this.router.navigateByUrl('/pro/perfil');
+      this.router.navigateByUrl(PATHS.proProfile);
     } catch (error) {
       log.error('Failed to connect Instagram', error);
       const message = (error as { message?: string }).message ?? '';

@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';
+import type { Lang } from './shared/domain';
 import { defineSecret, defineString } from 'firebase-functions/params';
 
 // E-mails are sent with Resend. The API key is a secret:
@@ -14,8 +15,7 @@ const envName = defineString('ENV_NAME', { default: '' });
 
 // The look of the app: white, a big bold title, gray text, round teal buttons and light gray boxes
 // The languages of the site: the e-mail goes in the language of the page where the action was made
-export type Lang = 'pt' | 'en' | 'es';
-export const asLang = (value: unknown): Lang => (value === 'en' || value === 'es' ? value : 'pt');
+export { asLang, type Lang } from './shared/domain';
 
 // Picks the text of the language
 export const L = (lang: Lang, text: Record<Lang, string>) => text[lang];

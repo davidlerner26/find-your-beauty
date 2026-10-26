@@ -9,11 +9,13 @@ import {
   where,
   writeBatch,
 } from 'firebase/firestore';
-import { Booking, BookingStatus } from '../models/booking';
+import { Booking } from '../models/booking';
+import { freesSlots, ProfessionalAnswer } from '../../../shared/domain';
 import { Auth } from './auth';
 import { APP_LANGUAGE } from '../utils/locale';
 import { db } from './firebase';
 import { log } from '../utils/log';
+import { COLLECTIONS } from '../../../shared/domain';
 
 @Injectable({ providedIn: 'root' })
 export class Bookings {
@@ -46,7 +48,7 @@ export class Bookings {
       }
 
       loading?.set(true);
-      const q = query(collection(db, 'bookings'), where(field, '==', uid));
+      const q = query(collection(db, COLLECTIONS.bookings), where(field, '==', uid));
       const unsubscribe = onSnapshot(
         q,
         (snapshot) => {
@@ -77,17 +79,20 @@ export class Bookings {
     if (!user) throw new Error('not-authenticated');
 
     const clientName = user.displayName || user.email || 'Cliente';
-    const bookingRef = doc(collection(db, 'bookings'));
+    const bookingRef = doc(collection(db, COLLECTIONS.bookings));
 
     const batch = writeBatch(db);
     // One document per slot: it can only be created once, so two clients can't take the same slot
     for (const busyId of booking.busyIds) {
-      batch.set(doc(db, 'professionals', booking.professionalId, 'busy', busyId), {
-        date: busyId.split('_')[0],
-        clientUid: user.uid,
-        // The rules check the slot against this booking, created in the same batch
-        bookingId: bookingRef.id,
-      });
+      batch.set(
+        doc(db, COLLECTIONS.professionals, booking.professionalId, COLLECTIONS.busy, busyId),
+        {
+          date: busyId.split('_')[0],
+          clientUid: user.uid,
+          // The rules check the slot against this booking, created in the same batch
+          bookingId: bookingRef.id,
+        },
+      );
     }
     batch.set(bookingRef, {
       ...booking,
@@ -104,21 +109,20 @@ export class Bookings {
   }
 
   // The professional answers a request or concludes a booking. A Cloud Function notifies the client.
-  async setStatus(
-    booking: Booking,
-    status: Extract<
-      BookingStatus,
-      'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional'
-    >,
-  ) {
+  async setStatus(booking: Booking, status: ProfessionalAnswer) {
     if (!booking.id) return;
 
     const batch = writeBatch(db);
-    batch.update(doc(db, 'bookings', booking.id), { status, updatedAt: serverTimestamp() });
+    batch.update(doc(db, COLLECTIONS.bookings, booking.id), {
+      status,
+      updatedAt: serverTimestamp(),
+    });
     // A declined or cancelled booking frees its slots
-    if (status === 'declined' || status === 'cancelledByProfessional') {
+    if (freesSlots(status)) {
       for (const busyId of booking.busyIds ?? []) {
-        batch.delete(doc(db, 'professionals', booking.professionalId, 'busy', busyId));
+        batch.delete(
+          doc(db, COLLECTIONS.professionals, booking.professionalId, COLLECTIONS.busy, busyId),
+        );
       }
     }
     await batch.commit();
@@ -129,12 +133,14 @@ export class Bookings {
     if (!booking.id) return;
 
     const batch = writeBatch(db);
-    batch.update(doc(db, 'bookings', booking.id), {
+    batch.update(doc(db, COLLECTIONS.bookings, booking.id), {
       status: 'cancelled',
       updatedAt: serverTimestamp(),
     });
     for (const busyId of booking.busyIds ?? []) {
-      batch.delete(doc(db, 'professionals', booking.professionalId, 'busy', busyId));
+      batch.delete(
+        doc(db, COLLECTIONS.professionals, booking.professionalId, COLLECTIONS.busy, busyId),
+      );
     }
     await batch.commit();
   }

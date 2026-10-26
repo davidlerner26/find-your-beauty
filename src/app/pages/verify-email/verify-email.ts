@@ -11,6 +11,7 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { T } from '../../utils/texts';
+import { PATHS } from '../../utils/paths';
 
 const LENGTH = 4;
 const RESEND_SECONDS = 60;
@@ -49,7 +50,7 @@ export class VerifyEmail implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (!this.auth.verification()) {
-      this.router.navigateByUrl('/entrar');
+      this.router.navigateByUrl(PATHS.login);
       return;
     }
     this.startTimer();
@@ -113,7 +114,7 @@ export class VerifyEmail implements OnInit, OnDestroy {
     try {
       const signedIn = await this.auth.verifyEmail(this.code());
       // Without the password (the page was reloaded), the client signs in by hand
-      this.router.navigateByUrl(signedIn ? this.auth.homePath() : '/entrar');
+      this.router.navigateByUrl(signedIn ? this.auth.homePath() : PATHS.login);
     } catch (error) {
       this.error.set(
         (error as { message?: string }).message || $localize`Não foi possível verificar o código.`,

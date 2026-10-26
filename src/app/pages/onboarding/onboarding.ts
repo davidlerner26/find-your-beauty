@@ -6,6 +6,7 @@ import { Feedback } from '../../services/feedback';
 import { log } from '../../utils/log';
 import { T } from '../../utils/texts';
 import { errorCode } from '../../utils/error-code';
+import { PATHS } from '../../utils/paths';
 
 type Step = { title: string; description: string; image: string };
 
@@ -54,7 +55,7 @@ export class Onboarding {
   protected async signInWithGoogle() {
     try {
       await this.auth.signInWithGoogle();
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl(PATHS.home);
     } catch (error) {
       // Closing the popup is not an error: stay on the page
       const code = errorCode(error);

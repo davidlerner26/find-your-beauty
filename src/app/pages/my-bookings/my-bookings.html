@@ -58,7 +58,7 @@
           <strong i18n>Total</strong> <strong>{{ booking.total | price }}</strong>
         </p>
 
-        @if (booking.status === 'pending' || booking.status === 'confirmed') {
+        @if (isOpen(booking.status)) {
           <div class="actions">
             <a
               i18n-title

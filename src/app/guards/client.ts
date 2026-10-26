@@ -4,6 +4,7 @@ import { missingProfileData } from '../models/user';
 import { Auth } from '../services/auth';
 import { Users } from '../services/users';
 import { log } from '../utils/log';
+import { PATHS } from '../utils/paths';
 
 // Booking is for signed-in clients with all the profile data filled in:
 // visitors go to the login, professionals back to the start, and a client with missing data to the
@@ -15,12 +16,12 @@ export const clientGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) 
 
   await auth.whenReady;
   const user = auth.user();
-  if (!user) return router.parseUrl('/entrar');
-  if (auth.role() !== 'client') return router.parseUrl('/');
+  if (!user) return router.parseUrl(PATHS.login);
+  if (auth.role() !== 'client') return router.parseUrl(PATHS.home);
 
   try {
     if (missingProfileData(await users.get(user.uid)).length) {
-      return router.parseUrl(`/profissionais/${route.paramMap.get('id')}`);
+      return router.parseUrl(PATHS.professional(route.paramMap.get('id') ?? ''));
     }
   } catch (error) {
     log.error('Failed to check the profile data', error);

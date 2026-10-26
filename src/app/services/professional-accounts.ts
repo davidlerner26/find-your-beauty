@@ -4,6 +4,7 @@ import { professionalConverter } from '../models/converters';
 import { DEFAULT_AVAILABILITY, Professional, ServiceMode } from '../models/professional';
 import { APP_LANGUAGE } from '../utils/locale';
 import { db } from './firebase';
+import { COLLECTIONS } from '../../../shared/domain';
 
 // What a professional edits in the own profile (everything but the fields only an admin can change)
 export type ProfessionalUpdate = Partial<
@@ -26,7 +27,7 @@ export class ProfessionalAccounts {
   // The sign up state of the account, or null when there is no professional document for the uid
   async status(uid: string) {
     const snapshot = await getDoc(
-      doc(db, 'professionals', uid).withConverter(professionalConverter),
+      doc(db, COLLECTIONS.professionals, uid).withConverter(professionalConverter),
     );
     if (!snapshot.exists()) return null;
     const { approved, submitted, rejected } = snapshot.data();
@@ -35,7 +36,7 @@ export class ProfessionalAccounts {
 
   // The first step of the sign up. The account waits for an admin: the rules only accept `approved: false`.
   create({ uid, name, email, phone }: NewProfessional) {
-    return setDoc(doc(db, 'professionals', uid), {
+    return setDoc(doc(db, COLLECTIONS.professionals, uid), {
       ownerUid: uid,
       name,
       email,
@@ -64,7 +65,7 @@ export class ProfessionalAccounts {
 
   // Saves the profile. The covers from before the single photo are removed from the document on the way.
   update(uid: string, fields: ProfessionalUpdate) {
-    return updateDoc(doc(db, 'professionals', uid), {
+    return updateDoc(doc(db, COLLECTIONS.professionals, uid), {
       ...fields,
       coverImage: deleteField(),
       coverPosition: deleteField(),
@@ -73,11 +74,17 @@ export class ProfessionalAccounts {
 
   // The CPF is private: it lives in professionals/{uid}/private/identity, which only the owner and admins read
   async getCpf(uid: string): Promise<string> {
-    const snapshot = await getDoc(doc(db, 'professionals', uid, 'private', 'identity'));
+    const snapshot = await getDoc(
+      doc(db, COLLECTIONS.professionals, uid, COLLECTIONS.private, 'identity'),
+    );
     return snapshot.data()?.['cpf'] ?? '';
   }
 
   saveCpf(uid: string, cpf: string) {
-    return setDoc(doc(db, 'professionals', uid, 'private', 'identity'), { cpf }, { merge: true });
+    return setDoc(
+      doc(db, COLLECTIONS.professionals, uid, COLLECTIONS.private, 'identity'),
+      { cpf },
+      { merge: true },
+    );
   }
 }

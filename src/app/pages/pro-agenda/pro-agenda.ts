@@ -12,6 +12,7 @@ import { formatClock } from '../../utils/format-date';
 import { INTL_LOCALE } from '../../utils/locale';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
+import { isClosed, ProfessionalAnswer } from '../../../../shared/domain';
 
 const STATUS_LABEL: Record<BookingStatus, string> = {
   pending: $localize`Aguardando`,
@@ -47,9 +48,7 @@ export class ProAgenda {
   protected readonly history = computed(() =>
     this.bookings
       .received()
-      .filter((booking) =>
-        ['completed', 'declined', 'cancelled', 'cancelledByProfessional'].includes(booking.status),
-      )
+      .filter((booking) => isClosed(booking.status))
       .reverse(),
   );
 
@@ -65,10 +64,7 @@ export class ProAgenda {
     });
   }
 
-  protected answer(
-    booking: Booking,
-    status: 'confirmed' | 'declined' | 'completed' | 'cancelledByProfessional',
-  ) {
+  protected answer(booking: Booking, status: ProfessionalAnswer) {
     // Cancelling a confirmed booking can't be undone: the client is told and the time is released
     if (
       status === 'cancelledByProfessional' &&

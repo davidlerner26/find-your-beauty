@@ -4,6 +4,7 @@ import { userConverter } from '../models/converters';
 import { UserProfile } from '../models/user';
 import { APP_LANGUAGE } from '../utils/locale';
 import { db } from './firebase';
+import { COLLECTIONS } from '../../../shared/domain';
 
 // What a new client account starts with
 export type NewUser = Pick<UserProfile, 'firstName' | 'lastName' | 'email' | 'phone'> &
@@ -13,7 +14,7 @@ export type NewUser = Pick<UserProfile, 'firstName' | 'lastName' | 'email' | 'ph
 @Injectable({ providedIn: 'root' })
 export class Users {
   private ref(uid: string) {
-    return doc(db, 'users', uid).withConverter(userConverter);
+    return doc(db, COLLECTIONS.users, uid).withConverter(userConverter);
   }
 
   // Returns null when the user has no document in `users`
@@ -28,7 +29,7 @@ export class Users {
 
   // Creates the client document. Nobody can make themselves an admin: the rules only accept `admin: false`.
   create(uid: string, data: NewUser) {
-    return setDoc(doc(db, 'users', uid), {
+    return setDoc(doc(db, COLLECTIONS.users, uid), {
       ...data,
       admin: false,
       // The language of the page: the e-mails of the account go in it
@@ -52,6 +53,6 @@ export class Users {
       'firstName' | 'lastName' | 'phone' | 'cpf' | 'address' | 'addressPosition'
     >,
   ) {
-    return setDoc(doc(db, 'users', uid), data, { merge: true });
+    return setDoc(doc(db, COLLECTIONS.users, uid), data, { merge: true });
   }
 }

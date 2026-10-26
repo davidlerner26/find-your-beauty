@@ -36,6 +36,7 @@ import {
   toAvailabilityDraft,
 } from './profile-form';
 import { isServiceComplete, ServiceDraft, toService, toServiceDraft } from './service-draft';
+import { PATHS } from '../../utils/paths';
 
 @Component({
   selector: 'app-pro-profile',
@@ -500,7 +501,7 @@ export class ProProfile {
   }
 
   protected signOut() {
-    this.router.navigateByUrl('/pro/entrar');
+    this.router.navigateByUrl(PATHS.proLogin);
     this.auth
       .signOut()
       .then(() => this.feedback.show($localize`Você saiu da conta`))

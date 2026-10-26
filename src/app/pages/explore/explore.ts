@@ -35,6 +35,7 @@ import { INTL_LOCALE } from '../../utils/locale';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
+import { PATHS } from '../../utils/paths';
 
 const pin = (color: string) =>
   'data:image/svg+xml;utf8,' +
@@ -404,7 +405,7 @@ export class Explore implements OnInit {
     // Nothing stays selected (the map screen is rebuilt, so the memory of the last card is cleared too)
     lastSelectedId = null;
     this.selected.set(-1);
-    this.router.navigate(['/explore']);
+    this.router.navigate([PATHS.explore]);
   }
 
   // First tap on a carousel card selects it; tapping the selected card (or any card of the list) opens the page
@@ -412,7 +413,7 @@ export class Explore implements OnInit {
     // Wide screens: the page of the professional is a card over the map
     if (window.matchMedia('(min-width: 1024px)').matches) {
       lastSelectedId = id;
-      this.router.navigate(['/profissionais', id]);
+      this.router.navigate([PATHS.professionals, id]);
       return;
     }
     if (index >= 0 && index !== this.selected()) {
@@ -420,7 +421,7 @@ export class Explore implements OnInit {
       return;
     }
     lastSelectedId = id;
-    this.router.navigate(['/profissionais', id]);
+    this.router.navigate([PATHS.professionals, id]);
   }
 
   // Brings the salon's card into view in the carousel

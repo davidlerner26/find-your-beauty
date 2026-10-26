@@ -20,6 +20,8 @@ import { CalendarDay as Day } from '../../utils/calendar';
 import { BookingFlowStore } from './booking-flow.store';
 import { log } from '../../utils/log';
 import { errorCode } from '../../utils/error-code';
+import { isOpen } from '../../../../shared/domain';
+import { PATHS } from '../../utils/paths';
 
 @Component({
   selector: 'app-booking',
@@ -112,7 +114,7 @@ export class Booking {
       .mine()
       .some(
         (booking) =>
-          ['pending', 'confirmed'].includes(booking.status) &&
+          isOpen(booking.status) &&
           booking.startsAt.getTime() < end &&
           booking.startsAt.getTime() + booking.durationMinutes * 60000 > start,
       );
@@ -169,7 +171,7 @@ export class Booking {
     if (!artist || !day || !time || !services.length) return;
 
     if (!this.auth.user()) {
-      this.router.navigate(['/entrar']);
+      this.router.navigate([PATHS.login]);
       return;
     }
 
@@ -228,7 +230,7 @@ export class Booking {
         $localize`Agendamento solicitado! Você será avisado quando o profissional responder.`,
         5000,
       );
-      this.router.navigate(['/agenda']);
+      this.router.navigate([PATHS.agenda]);
     } catch (error) {
       log.error('Failed to create booking', error);
       // Slots can only be created once, so a denied write means someone took this time first

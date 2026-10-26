@@ -1,0 +1,133 @@
+@use '../form-fields';
+
+// The section sits in the wide column of the form, like the other long ones
+:host {
+  display: block;
+  grid-column: 1 / -1;
+}
+
+.service {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--primary-light);
+
+  .row {
+    display: grid;
+    // Category, price and duration on one line, on every screen size
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 0.5rem;
+
+    input,
+    select {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      min-width: 0;
+    }
+
+    select {
+      padding-right: 1.75rem;
+      background-position: right 0.6rem center;
+      background-size: 0.7rem;
+    }
+  }
+
+  input,
+  select,
+  textarea {
+    background-color: #fff;
+  }
+
+  // Labels stay visible above the fields, not as placeholders that disappear
+  .field-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .invalid {
+    border-color: #e5484d;
+  }
+}
+
+// Prices that change with the day and the time
+.rules {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+
+  .link {
+    padding: 0;
+  }
+}
+
+.rule {
+  width: 100%;
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  border: 1px solid var(--muted);
+  border-radius: 12px;
+  justify-items: start;
+}
+
+.rule-days {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.rule-day {
+  padding: 0.35rem 0.7rem;
+  border: 1.5px solid var(--muted);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  &.active {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+  }
+}
+
+.rule-fields {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 0.5rem;
+
+  align-items: start;
+
+  input:not([type='checkbox']) {
+    min-width: 0;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+  }
+
+  // A time field with its checkbox under it
+  .rule-time {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .check {
+    font-size: 0.85rem;
+  }
+}
+
+// Photos of a service, inside its card
+.service-photos {
+  display: grid;
+  gap: 0.6rem;
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,209 @@
+<section>
+  <div class="head">
+    <h2 i18n>Serviços</h2>
+    <button i18n type="button" class="link" (click)="addService()">+ Adicionar</button>
+  </div>
+
+  @for (service of services(); track service.id; let i = $index) {
+    <div class="service">
+      <div class="row">
+        <label>
+          <span i18n class="field-label">Categoria *</span>
+          <select
+            [name]="'scat' + i"
+            [class.invalid]="fieldInvalid(!service.category)"
+            [class.empty]="!service.category"
+            [ngModel]="service.category"
+            (ngModelChange)="setCategory(service, $event)"
+          >
+            <option i18n value="" disabled>Selecione</option>
+            @for (category of categories; track category) {
+              <option [value]="category">{{ category | catalog }}</option>
+            }
+          </select>
+        </label>
+        <label>
+          <span i18n class="field-label">Preço (R$) *</span>
+          <input
+            [name]="'sprice' + i"
+            inputmode="numeric"
+            maxlength="11"
+            [class.invalid]="fieldInvalid(!(parseMoney(service.price) > 0))"
+            [value]="service.price"
+            (input)="onPriceInput(service, $event)"
+          />
+        </label>
+        <label>
+          <span i18n class="field-label">Duração *</span>
+          <input
+            [name]="'sdur' + i"
+            inputmode="numeric"
+            maxlength="5"
+            [class.invalid]="fieldInvalid(!parseDuration(service.duration))"
+            [value]="service.duration"
+            (input)="onDurationInput(service, $event)"
+          />
+        </label>
+      </div>
+      <!-- Names come from the chosen category, so it stays disabled until one is picked -->
+      <label>
+        <span i18n class="field-label">Nome do serviço *</span>
+        <select
+          [name]="'sname' + i"
+          [disabled]="!service.category"
+          [class.invalid]="fieldInvalid(!service.name.trim())"
+          [class.empty]="!service.name"
+          [(ngModel)]="service.name"
+        >
+          <option i18n value="" disabled>Selecione</option>
+          @for (name of serviceNames(service); track name) {
+            <option [value]="name">{{ name | catalog }}</option>
+          }
+        </select>
+      </label>
+      <!-- Another price for some days of the week and times -->
+      <div class="rules">
+        <span i18n class="field-label">Preço por dia e horário</span>
+        @for (rule of service.priceRules; track rule.id; let r = $index) {
+          <div class="rule">
+            <div i18n-aria-label class="rule-days" role="group" aria-label="Dias da semana">
+              @for (item of ruleDays; track item.day) {
+                <button
+                  type="button"
+                  class="rule-day"
+                  [class.active]="rule.days.includes(item.day)"
+                  [attr.aria-pressed]="rule.days.includes(item.day)"
+                  (click)="toggleRuleDay(rule, item.day)"
+                >
+                  {{ item.label }}
+                </button>
+              }
+            </div>
+            <div class="rule-fields">
+              <div class="rule-time">
+                <label>
+                  <span i18n class="field-label">Das</span>
+                  <input
+                    type="time"
+                    [name]="'rstart' + i + '-' + r"
+                    [disabled]="rule.start === dayStart"
+                    [ngModel]="rule.start === dayStart ? '' : rule.start"
+                    (ngModelChange)="rule.start = $event"
+                  />
+                </label>
+                <label i18n class="check">
+                  <input
+                    type="checkbox"
+                    [name]="'rstartday' + i + '-' + r"
+                    [checked]="rule.start === dayStart"
+                    (change)="rule.start = rule.start === dayStart ? '' : dayStart"
+                  />
+                  Início do dia
+                </label>
+              </div>
+              <div class="rule-time">
+                <label>
+                  <span i18n class="field-label">Até</span>
+                  <input
+                    type="time"
+                    [name]="'rend' + i + '-' + r"
+                    [disabled]="rule.end === dayEnd"
+                    [ngModel]="rule.end === dayEnd ? '' : rule.end"
+                    (ngModelChange)="rule.end = $event"
+                  />
+                </label>
+                <label i18n class="check">
+                  <input
+                    type="checkbox"
+                    [name]="'rendday' + i + '-' + r"
+                    [checked]="rule.end === dayEnd"
+                    (change)="rule.end = rule.end === dayEnd ? '' : dayEnd"
+                  />
+                  Fim do dia
+                </label>
+              </div>
+              <label>
+                <span i18n class="field-label">Preço (R$)</span>
+                <input
+                  [name]="'rprice' + i + '-' + r"
+                  inputmode="numeric"
+                  maxlength="11"
+                  [value]="rule.price"
+                  (input)="onRulePriceInput(rule, $event)"
+                />
+              </label>
+            </div>
+            @if (tried() && !ruleComplete(rule)) {
+              <p i18n class="hint error">
+                Escolha os dias, um horário de início antes do fim e o preço.
+              </p>
+            }
+            <button i18n type="button" class="remove" (click)="removeRule(service, rule)">
+              Remover
+            </button>
+          </div>
+        }
+        <button i18n type="button" class="link" (click)="addRule(service)">
+          + Preço por dia e horário
+        </button>
+        @if (!service.priceRules.length) {
+          <p i18n class="hint muted">
+            Ex: aos sábados o serviço custa mais. O preço vale pelo horário de início do
+            atendimento.
+          </p>
+        }
+      </div>
+      <!-- Photos of the service: the card of the service on the professional page shows them as a gallery -->
+      <div class="service-photos">
+        <div class="head">
+          <span i18n class="field-label">Fotos do serviço</span>
+          <label i18n class="link upload-link">
+            @if (uploadingService() === service.id) {
+              <app-spinner [small]="true" />
+            } @else {
+              + Adicionar fotos
+            }
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              [disabled]="uploadingService() !== null"
+              #serviceFile
+              (change)="uploadServicePhotos(service, serviceFile)"
+            />
+          </label>
+        </div>
+        @if (service.photos.length) {
+          <div class="gallery">
+            @for (photo of service.photos; track photo) {
+              <div class="thumb">
+                <img i18n-alt [src]="photo" alt="Foto do serviço" />
+                <button
+                  i18n-aria-label
+                  type="button"
+                  aria-label="Remover foto"
+                  (click)="removeServicePhoto(service, photo)"
+                >
+                  ✕
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <label>
+        <span i18n class="field-label">Descrição</span>
+        <textarea
+          [name]="'sdesc' + i"
+          rows="3"
+          maxlength="1000"
+          [(ngModel)]="service.description"
+        ></textarea>
+      </label>
+      <button i18n type="button" class="remove" (click)="removeService(service)">Remover</button>
+    </div>
+  } @empty {
+    <p i18n class="muted">Nenhum serviço ainda.</p>
+  }
+</section>

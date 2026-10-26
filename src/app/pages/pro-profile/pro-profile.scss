@@ -1,3 +1,5 @@
+@use './form-fields';
+
 .profile {
   max-width: 40rem;
   margin: 0 auto;
@@ -9,157 +11,11 @@ h1 {
   margin-bottom: 1rem;
 }
 
-h2 {
-  font-size: 1.15rem;
-}
-
-.muted {
-  color: var(--muted);
-}
-
-section {
-  display: grid;
-  // minmax(0, 1fr): a wide child can't stretch the column past the screen
-  grid-template-columns: minmax(0, 1fr);
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-
-label {
-  display: grid;
-  gap: 0.4rem;
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 0.85rem 1.1rem;
-  border: 1.5px solid transparent;
-  border-radius: 14px;
-  background: #f1f2f6;
-  font-size: 1rem;
-  outline: 0;
-
-  &:focus {
-    border-color: var(--primary);
-    background-color: #fff;
-  }
-}
-
-// Text areas only grow down, never to the sides
-textarea {
-  resize: vertical;
-}
-
-// Own arrow instead of the browser's: more room on the right and a thin rounded chevron
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  padding-right: 3rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none'%3E%3Cpath d='M1.5 1.75 7 7.25l5.5-5.5' stroke='%232f6b7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1.25rem center;
-  background-size: 0.9rem;
-  cursor: pointer;
-
-  // The "Selecione" placeholder looks like a placeholder
-  &.empty {
-    color: var(--muted);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-}
-
 .preview {
   width: 8rem;
   height: 8rem;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.link {
-  border: 0;
-  background: none;
-  color: var(--primary);
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.service {
-  display: grid;
-  gap: 0.75rem;
-  padding: 1rem;
-  border-radius: 16px;
-  background: var(--primary-light);
-
-  .row {
-    display: grid;
-    // Category, price and duration on one line, on every screen size
-    grid-template-columns: 1.3fr 1fr 1fr;
-    gap: 0.5rem;
-
-    input,
-    select {
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-      min-width: 0;
-    }
-
-    select {
-      padding-right: 1.75rem;
-      background-position: right 0.6rem center;
-      background-size: 0.7rem;
-    }
-  }
-
-  input,
-  select,
-  textarea {
-    background-color: #fff;
-  }
-
-  // Labels stay visible above the fields, not as placeholders that disappear
-  .field-label {
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .invalid {
-    border-color: #e5484d;
-  }
-}
-
-.remove {
-  justify-self: end;
-  border: 0;
-  background: none;
-  color: #e5484d;
-  cursor: pointer;
-}
-
-.check {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-
-  input {
-    width: 1.2rem;
-    height: 1.2rem;
-  }
-}
-
-.hint {
-  font-size: 0.9rem;
 }
 
 .message {
@@ -284,10 +140,6 @@ h3 {
   }
 }
 
-.error {
-  color: #e5484d;
-}
-
 .photo {
   display: flex;
   align-items: center;
@@ -301,63 +153,6 @@ h3 {
   background: var(--primary-light);
   color: var(--primary);
   font-size: 0.85rem;
-}
-
-.upload,
-.upload-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.7rem 1.4rem;
-  border: 1.5px solid var(--primary);
-  border-radius: 999px;
-  color: var(--primary);
-  cursor: pointer;
-}
-
-.upload-link {
-  padding: 0;
-  border: 0;
-
-  // The spinner takes the place of the text, with no room around it
-  app-spinner {
-    padding: 0;
-  }
-}
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-  gap: 0.75rem;
-
-  // The empty message must span the whole grid, not a single photo column
-  > p {
-    grid-column: 1 / -1;
-  }
-}
-
-.thumb {
-  position: relative;
-
-  img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 12px;
-  }
-
-  button {
-    position: absolute;
-    top: 0.35rem;
-    right: 0.35rem;
-    width: 1.6rem;
-    height: 1.6rem;
-    border: 0;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    cursor: pointer;
-  }
 }
 
 .with-icon {
@@ -492,88 +287,6 @@ h3 {
   to {
     opacity: 0;
     visibility: hidden;
-  }
-}
-
-// Prices that change with the day and the time
-.rules {
-  display: grid;
-  gap: 0.6rem;
-  justify-items: start;
-
-  .link {
-    padding: 0;
-  }
-}
-
-.rule {
-  width: 100%;
-  display: grid;
-  gap: 0.6rem;
-  padding: 0.75rem;
-  border: 1px solid var(--muted);
-  border-radius: 12px;
-  justify-items: start;
-}
-
-.rule-days {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.rule-day {
-  padding: 0.35rem 0.7rem;
-  border: 1.5px solid var(--muted);
-  border-radius: 999px;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-
-  &.active {
-    border-color: var(--primary);
-    background: var(--primary-light);
-    color: var(--primary);
-    font-weight: 600;
-  }
-}
-
-.rule-fields {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1.2fr;
-  gap: 0.5rem;
-
-  align-items: start;
-
-  input:not([type='checkbox']) {
-    min-width: 0;
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
-  }
-
-  // A time field with its checkbox under it
-  .rule-time {
-    display: grid;
-    gap: 0.4rem;
-  }
-
-  .check {
-    font-size: 0.85rem;
-  }
-}
-
-// Photos of a service, inside its card
-.service-photos {
-  display: grid;
-  gap: 0.6rem;
-
-  .head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
   }
 }
 

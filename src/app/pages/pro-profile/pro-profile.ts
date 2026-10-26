@@ -13,12 +13,9 @@ import {
   ImagePosition,
   DEFAULT_AVAILABILITY,
   Service,
-  ServiceCategory,
   SERVICE_PLACES,
   ServiceMode,
 } from '../../models/professional';
-import { maskDuration, parseDuration } from '../../utils/duration';
-import { maskMoney, parseMoney } from '../../utils/money';
 import { toDateKey } from '../../utils/slots';
 import { Auth } from '../../services/auth';
 import { ProfessionalAccounts } from '../../services/professional-accounts';
@@ -33,7 +30,7 @@ import {
 import { Instagram } from '../../services/instagram';
 import { Professionals } from '../../services/professionals';
 import { APP_LANGUAGE, INTL_LOCALE } from '../../utils/locale';
-import { CatalogPipe } from '../../utils/catalog.pipe';
+import { ServicesEditor } from './services-editor/services-editor';
 import { log } from '../../utils/log';
 import {
   addBlockedRange,
@@ -44,25 +41,13 @@ import {
   rangeLabel,
   toAvailabilityDraft,
 } from './profile-form';
-import {
-  isRuleComplete,
-  isServiceComplete,
-  newRuleDraft,
-  newServiceDraft,
-  PriceRuleDraft,
-  ServiceDraft,
-  serviceNamesOf,
-  setCategory,
-  toggleRuleDay,
-  toService,
-  toServiceDraft,
-} from './service-draft';
+import { isServiceComplete, ServiceDraft, toService, toServiceDraft } from './service-draft';
 
 type AddressSuggestion = { text: string; prediction: google.maps.places.PlacePrediction };
 
 @Component({
   selector: 'app-pro-profile',
-  imports: [CatalogPipe, PhotoPositioner, DateRangePicker, Spinner, FormsModule, MatIconModule],
+  imports: [PhotoPositioner, DateRangePicker, ServicesEditor, Spinner, FormsModule, MatIconModule],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
 })
@@ -78,8 +63,6 @@ export class ProProfile {
 
   // Second step of the sign up: the same form, but the profile has to be complete to be sent
   readonly signup = input(false);
-
-  protected readonly categories: ServiceCategory[] = ['Maquiagem', 'Cabelo'];
 
   protected name = '';
   protected phone = '';
@@ -139,7 +122,7 @@ export class ProProfile {
   protected readonly uploadingGallery = signal(false);
   private filled = false;
 
-  private readonly uid = computed(() => this.auth.user()?.uid ?? '');
+  protected readonly uid = computed(() => this.auth.user()?.uid ?? '');
   protected readonly profile = computed(() => this.professionals.byId(this.uid()));
 
   constructor() {
@@ -307,112 +290,23 @@ export class ProProfile {
     }
   }
 
-  // Photos of a service: the id of the service that is uploading
-  protected readonly uploadingService = signal<string | null>(null);
-
-  protected async uploadServicePhotos(service: ServiceDraft, input: HTMLInputElement) {
-    const files = Array.from(input.files ?? []);
-    input.value = '';
-    if (!files.length) return;
-
-    this.uploadingService.set(service.id);
-    try {
-      const urls = await Promise.all(
-        files.map((file) => this.photos.upload(this.uid(), 'services', file)),
-      );
-      service.photos = [...service.photos, ...urls];
-      this.autoSave();
-    } catch (error) {
-      this.showUploadError(error);
-    } finally {
-      this.uploadingService.set(null);
-    }
-  }
-
-  protected removeServicePhoto(service: ServiceDraft, url: string) {
-    service.photos = service.photos.filter((photo) => photo !== url);
-    this.removedPhotos.push(url);
-    this.autoSave();
-  }
-
   protected removeGalleryPhoto(url: string) {
     this.gallery = this.gallery.filter((photo) => photo !== url);
     this.removedPhotos.push(url);
     this.autoSave();
   }
 
-  private showUploadError(error: unknown) {
+  protected showUploadError(error: unknown) {
     log.error('Upload failed', error);
     this.show($localize`Não foi possível enviar a foto. Use uma imagem e tente novamente.`);
   }
 
-  protected readonly serviceNames = serviceNamesOf;
-  protected readonly setCategory = setCategory;
-
-  protected addService() {
-    this.services = [...this.services, newServiceDraft()];
+  // Photos that the profile no longer uses: deleted from the storage when it is saved
+  protected discardPhotos(urls: string[]) {
+    this.removedPhotos.push(...urls);
   }
 
   protected readonly serviceComplete = isServiceComplete;
-  protected readonly ruleComplete = isRuleComplete;
-  protected readonly toggleRuleDay = toggleRuleDay;
-
-  protected readonly parseDuration = parseDuration;
-  protected readonly parseMoney = parseMoney;
-
-  // Other prices of a service: on some days of the week and times
-  protected readonly ruleDays = [
-    { day: 1, label: $localize`Seg` },
-    { day: 2, label: $localize`Ter` },
-    { day: 3, label: $localize`Qua` },
-    { day: 4, label: $localize`Qui` },
-    { day: 5, label: $localize`Sex` },
-    { day: 6, label: $localize`Sáb` },
-    { day: 0, label: $localize`Dom` },
-  ];
-
-  // "Início do dia" and "Fim do dia" stand for the whole edge of the day (the end is not included)
-  protected readonly dayStart = '00:00';
-  protected readonly dayEnd = '24:00';
-
-  protected addRule(service: ServiceDraft) {
-    service.priceRules = [...service.priceRules, newRuleDraft()];
-  }
-
-  protected removeRule(service: ServiceDraft, rule: PriceRuleDraft) {
-    service.priceRules = service.priceRules.filter((r) => r !== rule);
-    this.autoSave();
-  }
-
-  protected onRulePriceInput(rule: PriceRuleDraft, event: Event) {
-    const input = event.target as HTMLInputElement;
-    rule.price = maskMoney(input.value);
-    input.value = rule.price;
-  }
-
-  protected onPriceInput(service: ServiceDraft, event: Event) {
-    const input = event.target as HTMLInputElement;
-    service.price = maskMoney(input.value);
-    input.value = service.price;
-  }
-
-  protected onDurationInput(service: ServiceDraft, event: Event) {
-    const input = event.target as HTMLInputElement;
-    service.duration = maskDuration(input.value);
-    // Written back so a rejected extra digit disappears from the field too
-    input.value = service.duration;
-  }
-
-  // Highlights an empty required field once a save was attempted
-  protected fieldInvalid(empty: boolean) {
-    return this.serviceTried() && empty;
-  }
-
-  protected removeService(service: ServiceDraft) {
-    // Its photos go away from the storage once the profile is saved
-    this.removedPhotos.push(...service.photos);
-    this.services = this.services.filter((item) => item !== service);
-  }
 
   protected onAddressInput(value: string) {
     this.address = value;

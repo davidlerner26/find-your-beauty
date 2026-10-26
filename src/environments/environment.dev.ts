@@ -6,7 +6,11 @@ export const environment = {
   useEmulators: false,
   // The publishable key (pk_test_...) of the Stripe account in test mode. Public by design. Until it is filled in,
   // the payment screen keeps the simulated payment.
-  payments: { provider: 'stripe' as 'off' | 'stripe' | 'fake', stripePublishableKey: '' },
+  payments: {
+    provider: 'stripe' as 'off' | 'stripe' | 'fake',
+    stripePublishableKey:
+      'pk_test_51IsufTFj72YXHxyo77ch8AbjTWhoNHA1u3l6pybWdD7Wqs3CSlIsE9Nzlyf5IC6oB20yEdvCpLE92SlXyZin13ms009c7bm7ag',
+  },
   // Features that are only turned on in the test environment for now (production has them off)
   features: {
     featuredProfessionals: true,

@@ -50,7 +50,7 @@ Thumbs.db
 .angular
 scripts/seed/images/
 
-# Firebase emulators
+# Firebase emulators and CLI logs (also the " 2" copies that iCloud makes)
 *-debug.log
 
 # Playwright
@@ -59,3 +59,4 @@ test-results/
 
 *storybook.log
 storybook-static
+*-debug*.log

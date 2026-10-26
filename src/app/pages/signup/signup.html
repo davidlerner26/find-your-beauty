@@ -10,7 +10,7 @@
 } @else if (pro() && auth.signupIncomplete()) {
   <app-pro-profile [signup]="true" />
 } @else {
-  <form class="auth" (ngSubmit)="submit()" novalidate>
+  <form class="auth" [formGroup]="form" (ngSubmit)="submit()" novalidate>
     <!-- Which area this is: the other one is one tap away -->
     <nav i18n-aria-label class="role-tabs" aria-label="Tipo de conta">
       <a
@@ -45,92 +45,82 @@
       }
     </p>
 
-    <label class="field" [class.invalid]="showError('name') && !nameValid">
+    <label class="field" [class.invalid]="showError(form.controls.firstName)">
       <mat-icon class="filled">person</mat-icon>
       <input
         i18n-placeholder
-        name="name"
-        (blur)="touch('name')"
+        formControlName="firstName"
         placeholder="Nome"
         autocomplete="given-name"
-        [(ngModel)]="firstName"
       />
     </label>
-    @if (showError('name') && !nameValid) {
+    @if (showError(form.controls.firstName)) {
       <p i18n class="error">O nome precisa ter pelo menos 3 caracteres.</p>
     }
 
-    <label class="field" [class.invalid]="showError('lastName') && !lastNameValid">
+    <label class="field" [class.invalid]="showError(form.controls.lastName)">
       <mat-icon class="filled">person</mat-icon>
       <input
         i18n-placeholder
-        name="lastName"
-        (blur)="touch('lastName')"
+        formControlName="lastName"
         placeholder="Sobrenome"
         autocomplete="family-name"
-        [(ngModel)]="lastName"
       />
     </label>
-    @if (showError('lastName') && !lastNameValid) {
+    @if (showError(form.controls.lastName)) {
       <p i18n class="error">O sobrenome precisa ter pelo menos 2 caracteres.</p>
     }
 
-    <label class="field" [class.invalid]="showError('email') && !emailValid">
+    <label class="field" [class.invalid]="showError(form.controls.email)">
       <mat-icon class="filled">mail</mat-icon>
       <input
         i18n-placeholder
         type="email"
-        name="email"
-        (blur)="touch('email')"
+        formControlName="email"
         placeholder="E-mail"
         autocomplete="email"
-        [(ngModel)]="email"
       />
     </label>
-    @if (showError('email') && !emailValid) {
+    @if (showError(form.controls.email)) {
       <p i18n class="error">Digite um e-mail válido.</p>
     }
 
-    <label class="field" [class.invalid]="showError('phone') && !phoneValid">
+    <label class="field" [class.invalid]="showError(form.controls.phone)">
       <mat-icon class="filled">call</mat-icon>
       <input
         i18n-placeholder
         type="tel"
-        name="phone"
-        (blur)="touch('phone')"
+        formControlName="phone"
         placeholder="Celular"
         autocomplete="tel-national"
         inputmode="numeric"
         maxlength="20"
-        [value]="phone"
-        (input)="onPhoneInput($event)"
+        (input)="maskPhone()"
       />
     </label>
-    @if (showError('phone') && !phoneValid) {
+    @if (showError(form.controls.phone)) {
       <p i18n class="error">Digite o celular completo, com DDD e 9 dígitos.</p>
     }
 
-    <label class="field" [class.invalid]="showError('cpf') && !cpfValid">
+    <label class="field" [class.invalid]="showError(form.controls.cpf)">
       <mat-icon class="filled">badge</mat-icon>
       <input
         i18n-placeholder
-        name="cpf"
-        (blur)="touch('cpf')"
+        formControlName="cpf"
         placeholder="CPF"
         inputmode="numeric"
         maxlength="14"
         autocomplete="off"
-        [value]="cpf"
-        (input)="onCpfInput($event)"
+        (input)="maskCpf()"
       />
     </label>
-    @if (showError('cpf') && !cpfValid) {
+    @if (showError(form.controls.cpf)) {
       <p i18n class="error">Digite um CPF válido.</p>
     }
 
     @if (!pro()) {
       <div class="autocomplete">
-        <label class="field" [class.invalid]="showError('address') && !addressValid">
+        <label class="field" [class.invalid]="showAddressError()">
           <mat-icon class="filled">location_on</mat-icon>
           <input
             i18n-placeholder
@@ -142,7 +132,7 @@
             [ngModel]="place.value"
             (ngModelChange)="place.input($event)"
             (focus)="place.open.set(true)"
-            (blur)="place.close(); touch('address')"
+            (blur)="place.close(); touchAddress()"
             (keydown.escape)="place.close()"
           />
         </label>
@@ -155,21 +145,19 @@
       </div>
       @if (place.error()) {
         <p class="error">{{ place.error() }}</p>
-      } @else if (showError('address') && !addressValid) {
+      } @else if (showAddressError()) {
         <p i18n class="error">Busque o endereço e escolha uma das sugestões.</p>
       }
     }
 
-    <label class="field" [class.invalid]="showError('password') && !passwordValid">
+    <label class="field" [class.invalid]="showError(form.controls.password)">
       <mat-icon class="filled">lock</mat-icon>
       <input
         i18n-placeholder
-        name="password"
-        (blur)="touch('password')"
+        formControlName="password"
         placeholder="Senha"
         autocomplete="new-password"
         [type]="showPassword() ? 'text' : 'password'"
-        [(ngModel)]="password"
       />
       <button
         i18n-aria-label
@@ -181,7 +169,7 @@
         <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
     </label>
-    @if (showError('password') && !passwordValid) {
+    @if (showError(form.controls.password)) {
       <p class="error">{{ passwordRule }}</p>
     }
 

@@ -9,6 +9,8 @@
     <section class="card">
       @if (user.photoURL) {
         <img
+          loading="lazy"
+          decoding="async"
           class="avatar"
           [src]="user.photoURL"
           [alt]="user.displayName || t.profilePhoto()"

@@ -13,6 +13,8 @@
     <a class="peer-link" [routerLink]="peer.link">
       @if (peer.image) {
         <img
+          loading="lazy"
+          decoding="async"
           class="avatar"
           referrerpolicy="no-referrer"
           [src]="peer.image"
@@ -34,6 +36,8 @@
         @if (!isMine(message)) {
           @if (peer.image) {
             <img
+              loading="lazy"
+              decoding="async"
               class="avatar small"
               referrerpolicy="no-referrer"
               [src]="peer.image"
@@ -48,7 +52,12 @@
           <div class="bubble" [class.image]="message.image">
             @if (message.image) {
               <a [href]="message.image" target="_blank" rel="noopener"
-                ><img i18n-alt [src]="message.image" alt="Foto enviada"
+                ><img
+                  loading="lazy"
+                  decoding="async"
+                  i18n-alt
+                  [src]="message.image"
+                  alt="Foto enviada"
               /></a>
             } @else if (message.file) {
               <a class="file" [href]="message.file.url" target="_blank" rel="noopener">{{

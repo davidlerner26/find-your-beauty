@@ -1,5 +1,12 @@
 <main class="container">
-  <img i18n-alt class="logo" src="logo-full.svg" alt="Find Your Beauty" />
+  <img
+    loading="lazy"
+    decoding="async"
+    i18n-alt
+    class="logo"
+    src="logo-full.svg"
+    alt="Find Your Beauty"
+  />
   <section class="hero">
     <div>
       @if (firstName(); as name) {
@@ -50,6 +57,8 @@
                       <app-spinner class="loading" [small]="true" />
                     }
                     <img
+                      loading="lazy"
+                      decoding="async"
                       [src]="photo"
                       [alt]="salon.name"
                       [style.object-position]="

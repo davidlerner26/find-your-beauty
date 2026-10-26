@@ -93,6 +93,8 @@
         >
           @if (item.image) {
             <img
+              loading="lazy"
+              decoding="async"
               referrerpolicy="no-referrer"
               [src]="item.image"
               [alt]="item.title"

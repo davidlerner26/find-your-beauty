@@ -27,6 +27,12 @@ const clearEmulators = async () => {
   );
 };
 
+// Small pictures that need no network: a professional with a photo and a gallery behaves like a real one
+const picture = (color: string) =>
+  `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" fill="${color}"/></svg>`,
+  )}`;
+
 const week = (enabled: boolean) =>
   Object.fromEntries(
     [0, 1, 2, 3, 4, 5, 6].map((day) => [day, { enabled, start: '08:00', end: '20:00' }]),
@@ -37,7 +43,7 @@ const professional = (uid: string, name: string, email: string, mode: 'studio' |
   name,
   email,
   phone: '(21) 90000-0001',
-  image: '',
+  image: picture('#c98b9e'),
   imagePosition: { x: 50, y: 40 },
   address: mode === 'home' ? '' : 'Rua das Flores, 100 - Botafogo, Rio de Janeiro - RJ, 22250-040',
   serviceMode: mode,
@@ -56,7 +62,7 @@ const professional = (uid: string, name: string, email: string, mode: 'studio' |
       description: 'Maquiagem para o dia a dia.',
     },
   ],
-  gallery: [],
+  gallery: [picture('#8bb7c9'), picture('#b7c98b')],
   position: mode === 'home' ? { lat: 0, lng: 0 } : { lat: -22.9519, lng: -43.1837 },
   visible: true,
   published: true,

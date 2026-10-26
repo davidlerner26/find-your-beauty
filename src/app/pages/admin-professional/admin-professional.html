@@ -14,6 +14,8 @@
     <section class="card head">
       @if (p.image) {
         <img
+          loading="lazy"
+          decoding="async"
           class="photo"
           [src]="p.image"
           [alt]="p.name"
@@ -163,7 +165,7 @@
             [attr.aria-label]="t.workOf(p.name)"
             (click)="openPhoto.set(i)"
           >
-            <img [src]="photo" [alt]="t.workOf(p.name)" />
+            <img loading="lazy" decoding="async" [src]="photo" [alt]="t.workOf(p.name)" />
           </button>
         } @empty {
           <p i18n class="muted">Nenhuma foto.</p>

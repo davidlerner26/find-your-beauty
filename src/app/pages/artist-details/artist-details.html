@@ -15,6 +15,9 @@
     <div #heroPhotosEl class="hero-photos" (scroll)="onHeroScroll($event)">
       @for (photo of heroPhotos(artist); track photo; let i = $index) {
         <img
+          [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+          [attr.fetchpriority]="i === 0 ? 'high' : null"
+          decoding="async"
           (click)="openViewer($event, heroPhotos(artist), i)"
           [src]="photo"
           [alt]="t.photoOf(artist.name)"

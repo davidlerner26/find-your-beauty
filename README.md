@@ -1,59 +1,58 @@
-# FindYourBeauty
+# Find Your Beauty
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.27.
+A multilingual (Portuguese, English, Spanish) marketplace that connects clients with makeup artists and hair
+stylists in Rio de Janeiro. Clients search by service, location and rating, book real-time slots and chat with
+professionals; professionals manage their own profile and schedule, and an admin approves new accounts.
 
-## Development server
+Angular 21 (standalone, zoneless, Signals, NgRx SignalStore) · Firebase (Auth, Firestore, Storage, Cloud
+Functions) · installable PWA · Netlify.
 
-To start a local development server, run:
+- Production: https://findyourbeauty.com.br · Test environment: https://dev.findyourbeauty.com.br
+- How the environments, Firebase projects and Netlify fit together: [docs/ambientes.md](docs/ambientes.md) (pt)
+- How the code is organized and why: [docs/architecture.md](docs/architecture.md)
+- Manual test plan: [docs/plano-de-testes.md](docs/plano-de-testes.md) (pt)
 
-```bash
-ng serve
-```
+## Getting started
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Node 22 and npm 11.
 
 ```bash
-ng generate --help
+npm ci
+npm ci --prefix functions
+npm start            # the app on http://localhost:4200, using the Firebase of the TEST environment
 ```
 
-## Building
+`npm start` never touches production. `npm run start:en` and `npm run start:es` serve the other languages;
+`npm run start:prod` talks to the production Firebase (careful).
 
-To build the project run:
+## Scripts
 
-```bash
-ng build
-```
+| Command                                 | What it does                                                          |
+| --------------------------------------- | --------------------------------------------------------------------- |
+| `npm start`                             | Dev server against the test Firebase project                          |
+| `npm run build` / `npm run build:dev`   | Production build / test-environment build (all three languages)       |
+| `npm test`                              | Unit tests (Vitest, through `ng test`)                                |
+| `npm run test:rules`                    | Firestore and Storage security rules, in the Firebase emulators       |
+| `npm run test:functions`                | Cloud Functions logic, in the Firestore emulator                      |
+| `npm run e2e`                           | Playwright end to end tests against the emulators (starts everything) |
+| `npm run e2e -- e2e/login.spec.ts`      | Only some e2e files (extra arguments go to Playwright)                |
+| `npm run e2e:ui`                        | Playwright UI mode                                                    |
+| `npm run lint` / `npm run format:check` | ESLint (Angular, accessibility) / Prettier                            |
+| `npm run sync:shared` / `check:shared`  | Copy `shared/domain.ts` to the Cloud Functions / check the copy       |
+| `npm run i18n`                          | Extract the texts to `src/locale/messages.xlf`                        |
+| `npm run deploy:dev` / `deploy:prod`    | Functions, rules and indexes to the test / production Firebase        |
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The emulator tests (`test:rules`, `test:functions`, `e2e`) need **Java 21 or newer** on the PATH.
 
-## Running unit tests
+## Before you push
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+GitHub Actions run the same checks as `npm run lint`, `format:check`, `check:shared`, `test`, `build`,
+`build:dev`, `test:rules`, `test:functions` and `e2e` (see [.github/workflows/ci.yml](.github/workflows/ci.yml)).
+Run the ones that touch your change; `npm run e2e` takes about a minute.
 
-```bash
-ng test
-```
+## Deploying
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Netlify builds the site on every push: `main` is production, any other branch is the test environment.
+Functions and rules are deployed by hand and **never before asking**: see [docs/ambientes.md](docs/ambientes.md).
+When a change touches both the app and the Firestore rules, **deploy the app first**, then the rules (the app
+sends fields that the new rules require; the old app would be refused by them).

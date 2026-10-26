@@ -75,3 +75,23 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 7
+
+  storybook:
+    name: Storybook builds and every story is accessible
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run build-storybook
+      - name: Browsers
+        run: npx playwright install --with-deps chromium
+      - name: Open every story
+        run: npm run test:storybook
+        env:
+          CI: 'true'

@@ -6,3 +6,4 @@ node_modules/
 functions/lib/
 package-lock.json
 src/locale/
+storybook-static/

@@ -4,9 +4,19 @@ const { defineConfig, globalIgnores } = require('eslint/config');
 const tseslint = require('typescript-eslint');
 const angular = require('angular-eslint');
 const prettier = require('eslint-config-prettier');
+const storybook = require('eslint-plugin-storybook');
 
 module.exports = defineConfig([
-  globalIgnores(['dist/', '.angular/', '.netlify/', '.vite/', 'functions/', 'node_modules/']),
+  globalIgnores([
+    'dist/',
+    '.angular/',
+    '.netlify/',
+    '.vite/',
+    'functions/',
+    'node_modules/',
+    'storybook-static/',
+  ]),
+  ...storybook.configs['flat/recommended'],
   {
     files: ['**/*.ts'],
     extends: [

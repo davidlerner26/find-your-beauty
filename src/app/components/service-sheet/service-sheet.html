@@ -26,7 +26,14 @@
     >
       @if (service().photos?.length) {
         <div class="screen-photo">
-          <div #sheetPhotosEl class="screen-photos" (scroll)="onScroll($event)">
+          <div
+            #sheetPhotosEl
+            class="screen-photos"
+            tabindex="0"
+            role="group"
+            [attr.aria-label]="service().name"
+            (scroll)="onScroll($event)"
+          >
             @for (photo of service().photos; track photo) {
               <div class="screen-slide">
                 <img [src]="photo" [alt]="service().name" draggable="false" />

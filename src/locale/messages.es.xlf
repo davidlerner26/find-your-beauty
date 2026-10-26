@@ -4826,6 +4826,14 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1505510577611163956" datatype="html">
+        <source>Sugestões de endereço</source>
+        <target>Sugerencias de dirección</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/place-suggestions/place-suggestions.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

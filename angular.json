@@ -151,6 +151,22 @@
             "outputPath": "src/locale",
             "format": "xlf"
           }
+        },
+        "storybook": {
+          "builder": "@storybook/angular-vite:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "find-your-beauty:build",
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular-vite:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "find-your-beauty:build",
+            "outputDir": "storybook-static"
+          }
         }
       },
       "i18n": {

@@ -6,12 +6,20 @@ import { PlaceSuggestion } from '../../utils/place-search';
   selector: 'app-place-suggestions',
   template: `
     @if (suggestions().length) {
-      <ul class="suggestions" role="listbox" [id]="listId()">
+      <ul
+        i18n-aria-label
+        class="suggestions"
+        role="listbox"
+        aria-label="Sugestões de endereço"
+        [id]="listId()"
+      >
         @for (suggestion of suggestions(); track suggestion.text) {
           <!-- mousedown is prevented so the input keeps focus and the click still lands -->
-          <li role="option" aria-selected="false">
+          <li role="presentation">
             <button
               type="button"
+              role="option"
+              aria-selected="false"
               (mousedown)="$event.preventDefault()"
               (click)="pick.emit(suggestion)"
             >
@@ -19,7 +27,7 @@ import { PlaceSuggestion } from '../../utils/place-search';
             </button>
           </li>
         }
-        <li class="powered">Powered by Google</li>
+        <li class="powered" role="presentation">Powered by Google</li>
       </ul>
     }
   `,

@@ -11,7 +11,8 @@
   gap: 0.75rem;
   padding: 0.75rem 0.75rem 0.75rem 1rem;
   border-radius: 12px;
-  background: rgba(36, 87, 101, 0.7);
+  // Nearly opaque: over a light page a see-through one would not leave the white text readable
+  background: rgba(36, 87, 101, 0.92);
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   color: #fff;

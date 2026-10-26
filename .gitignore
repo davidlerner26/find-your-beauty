@@ -56,3 +56,6 @@ scripts/seed/images/
 # Playwright
 playwright-report/
 test-results/
+
+*storybook.log
+storybook-static

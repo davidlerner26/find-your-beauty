@@ -19,16 +19,28 @@
   </label>
 
   @if (open() && suggestions().length) {
-    <ul class="suggestions" role="listbox" id="address-field-list">
+    <ul
+      i18n-aria-label
+      class="suggestions"
+      role="listbox"
+      aria-label="Sugestões de endereço"
+      id="address-field-list"
+    >
       @for (suggestion of suggestions(); track suggestion.text) {
         <!-- mousedown is prevented so the input keeps focus and the click still lands -->
-        <li role="option" aria-selected="false">
-          <button type="button" (mousedown)="$event.preventDefault()" (click)="choose(suggestion)">
+        <li role="presentation">
+          <button
+            type="button"
+            role="option"
+            aria-selected="false"
+            (mousedown)="$event.preventDefault()"
+            (click)="choose(suggestion)"
+          >
             {{ suggestion.text }}
           </button>
         </li>
       }
-      <li i18n class="powered">Powered by Google</li>
+      <li i18n class="powered" role="presentation">Powered by Google</li>
     </ul>
   }
 </div>

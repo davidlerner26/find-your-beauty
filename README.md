@@ -27,27 +27,29 @@ npm start            # the app on http://localhost:4200, using the Firebase of t
 
 ## Scripts
 
-| Command                                 | What it does                                                          |
-| --------------------------------------- | --------------------------------------------------------------------- |
-| `npm start`                             | Dev server against the test Firebase project                          |
-| `npm run build` / `npm run build:dev`   | Production build / test-environment build (all three languages)       |
-| `npm test`                              | Unit tests (Vitest, through `ng test`)                                |
-| `npm run test:rules`                    | Firestore and Storage security rules, in the Firebase emulators       |
-| `npm run test:functions`                | Cloud Functions logic, in the Firestore emulator                      |
-| `npm run e2e`                           | Playwright end to end tests against the emulators (starts everything) |
-| `npm run e2e -- e2e/login.spec.ts`      | Only some e2e files (extra arguments go to Playwright)                |
-| `npm run e2e:ui`                        | Playwright UI mode                                                    |
-| `npm run lint` / `npm run format:check` | ESLint (Angular, accessibility) / Prettier                            |
-| `npm run sync:shared` / `check:shared`  | Copy `shared/domain.ts` to the Cloud Functions / check the copy       |
-| `npm run i18n`                          | Extract the texts to `src/locale/messages.xlf`                        |
-| `npm run deploy:dev` / `deploy:prod`    | Functions, rules and indexes to the test / production Firebase        |
+| Command                                              | What it does                                                          |
+| ---------------------------------------------------- | --------------------------------------------------------------------- |
+| `npm start`                                          | Dev server against the test Firebase project                          |
+| `npm run build` / `npm run build:dev`                | Production build / test-environment build (all three languages)       |
+| `npm test`                                           | Unit tests (Vitest, through `ng test`)                                |
+| `npm run test:rules`                                 | Firestore and Storage security rules, in the Firebase emulators       |
+| `npm run test:functions`                             | Cloud Functions logic, in the Firestore emulator                      |
+| `npm run e2e`                                        | Playwright end to end tests against the emulators (starts everything) |
+| `npm run e2e -- e2e/login.spec.ts`                   | Only some e2e files (extra arguments go to Playwright)                |
+| `npm run e2e:ui`                                     | Playwright UI mode                                                    |
+| `npm run lint` / `npm run format:check`              | ESLint (Angular, accessibility) / Prettier                            |
+| `npm run storybook`                                  | Catalog of the shared components on http://localhost:6006             |
+| `npm run build-storybook` / `npm run test:storybook` | Static catalog in `storybook-static/` / open every story and run axe  |
+| `npm run sync:shared` / `check:shared`               | Copy `shared/domain.ts` to the Cloud Functions / check the copy       |
+| `npm run i18n`                                       | Extract the texts to `src/locale/messages.xlf`                        |
+| `npm run deploy:dev` / `deploy:prod`                 | Functions, rules and indexes to the test / production Firebase        |
 
 The emulator tests (`test:rules`, `test:functions`, `e2e`) need **Java 21 or newer** on the PATH.
 
 ## Before you push
 
 GitHub Actions run the same checks as `npm run lint`, `format:check`, `check:shared`, `test`, `build`,
-`build:dev`, `test:rules`, `test:functions` and `e2e` (see [.github/workflows/ci.yml](.github/workflows/ci.yml)).
+`build:dev`, `test:rules`, `test:functions`, `e2e` and the Storybook build with its story tests (see [.github/workflows/ci.yml](.github/workflows/ci.yml)).
 Run the ones that touch your change; `npm run e2e` takes about a minute.
 
 ## Deploying

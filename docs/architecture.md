@@ -70,6 +70,21 @@ password). Plain `ngModel` is fine for loose fields (search box, chat).
 scan runs in the e2e tests on the main screens. Dialogs use the `appDialog` directive (focus in, Tab trapped,
 Escape closes, focus restored).
 
+## Storybook
+
+`npm run storybook` shows the shared components of `src/app/components/` (spinner, toast, chips row, carousel
+arrows, date range picker, photo viewer, photo positioner, place suggestions, service sheet, location prompt),
+each with its states (empty, loading, long text, selected...). The stories sit next to the component
+(`*.stories.ts`); the data they need is in `components/story-assets.ts`, so they need no Firebase or network. The
+toolbar switches between the light look of the clients and the teal look of the professional area. Only shared
+components have stories: the pages depend on Firebase and the router.
+
+`npm run build-storybook` writes the static site to `storybook-static/` (git ignores it), and
+`npm run test:storybook` opens **every** story in it and runs axe, so a new story is tested without touching the
+test, and CI fails when a component is not accessible. The first run of this test found real problems in the
+address suggestions list, the photos of the service sheet and the toast. Texts in the stories are in Portuguese
+(the source language of the app); translations are not loaded.
+
 ## Tests
 
 | What                                 | Where              | Runs in                  |

@@ -86,7 +86,8 @@
             <p class="rating">
               <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{
                 salon.reviews
-              }})
+              }}
+              {{ salon.reviews | reviewsLabel }})
             </p>
           </article>
         }

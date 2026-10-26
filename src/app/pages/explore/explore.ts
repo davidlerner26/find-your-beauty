@@ -10,6 +10,7 @@ import { Component, computed, effect, ElementRef, input, OnInit, signal } from '
 import { GoogleMap, MapCircle, MapMarker } from '@angular/google-maps';
 import { Spinner } from '../../components/spinner/spinner';
 import { Favorites } from '../../services/favorites';
+import { Feedback } from '../../services/feedback';
 import { GoogleMapsLoader } from '../../services/google-maps-loader';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
@@ -91,6 +92,9 @@ export class Explore implements OnInit {
   protected readonly selected = signal(-1);
   private restored = false;
   private chipShown = false;
+  // The professional the map already went to (the effects below run again when the position of the user arrives or
+  // changes, and they must not take the map back from the user)
+  private centeredFor: string | null = null;
   // Card photos that finished loading (or failed), so the spinner stops
   protected readonly loadedPhotos = signal<string[]>([]);
 
@@ -101,6 +105,7 @@ export class Explore implements OnInit {
     private readonly host: ElementRef<HTMLElement>,
     protected readonly favorites: Favorites,
     private readonly router: Router,
+    private readonly feedback: Feedback,
   ) {
     effect(() => {
       const service = this.service();
@@ -133,8 +138,12 @@ export class Explore implements OnInit {
       if (index < 0) return;
       lastSelectedId = id;
       this.restored = true;
+      // The index follows the order of the list (by distance), so it is kept up to date; the map only goes there once
       this.selected.set(index);
-      this.center.set({ ...this.visibleSalons[index].position });
+      if (this.centeredFor !== 'focus:' + id) {
+        this.centeredFor = 'focus:' + id;
+        this.center.set({ ...this.visibleSalons[index].position });
+      }
     });
 
     // The card of a professional is open: their pin is selected and the map goes there
@@ -146,7 +155,10 @@ export class Explore implements OnInit {
       lastSelectedId = id;
       this.restored = true;
       this.selected.set(index);
-      this.center.set(this.visibleSalons[index].position);
+      if (this.centeredFor !== 'open:' + id) {
+        this.centeredFor = 'open:' + id;
+        this.center.set({ ...this.visibleSalons[index].position });
+      }
     });
 
     // Centers the map on the user as soon as the position is known
@@ -158,6 +170,11 @@ export class Explore implements OnInit {
     // Coming back from a professional's page: selects that card again
     effect(() => {
       if (this.restored || !lastSelectedId) return;
+      // Wide screens: going to the map (not to a professional) starts with no card selected
+      if (window.matchMedia('(min-width: 1024px)').matches && !this.openId() && !this.focus()) {
+        lastSelectedId = null;
+        return;
+      }
       const index = this.visibleSalons.findIndex((salon) => salon.id === lastSelectedId);
       if (index < 0) return;
       this.restored = true;
@@ -372,6 +389,11 @@ export class Explore implements OnInit {
 
   // Button: asks for the position (the browser prompt only shows if it wasn't decided yet)
   protected async locateMe() {
-    if (await this.userLocation.request()) this.center.set(this.userLocation.position()!);
+    if (await this.userLocation.request()) {
+      // A new object every time, so the map goes there even after it was dragged away
+      this.center.set({ ...this.userLocation.position()! });
+    } else {
+      this.feedback.show($localize`Não foi possível obter a sua localização. Permita o acesso no navegador.`);
+    }
   }
 }

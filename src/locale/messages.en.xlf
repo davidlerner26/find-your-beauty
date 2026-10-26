@@ -4786,6 +4786,14 @@
           <context context-type="linenumber">49,51</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2833333733949063350" datatype="html">
+        <source>Não foi possível obter a sua localização. Permita o acesso no navegador.</source>
+        <target>Could not get your location. Allow access in the browser.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/explore/explore.ts</context>
+          <context context-type="linenumber">391</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

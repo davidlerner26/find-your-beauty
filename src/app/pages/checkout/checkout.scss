@@ -211,6 +211,11 @@ hr {
   margin: 1rem 0 0;
   text-align: center;
   font-size: 0.85rem;
+
+  a {
+    color: #1565c0;
+    text-decoration: underline;
+  }
 }
 
 .error {

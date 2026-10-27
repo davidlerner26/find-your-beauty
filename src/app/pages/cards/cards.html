@@ -46,16 +46,16 @@
       <section class="new" aria-labelledby="new-card-title">
         <h2 i18n id="new-card-title">Novo cartão</h2>
         <app-card-form (saved)="onSaved()" (cancelled)="adding.set(false)" />
+
+        <p i18n class="note muted">
+          Os dados do cartão são guardados pela Stripe. O Find Your Beauty nunca os recebe. Ambiente
+          de teste: use
+          <a href="https://docs.stripe.com/testing#cards" target="_blank" rel="noopener">cartões</a>
+          de teste da Stripe, nada é cobrado de verdade.
+        </p>
       </section>
     } @else {
       <button i18n type="button" class="add" (click)="adding.set(true)">Cadastrar cartão</button>
     }
-
-    <p i18n class="note muted">
-      Os dados do cartão são guardados pela Stripe. O Find Your Beauty nunca os recebe. Ambiente de
-      teste: use
-      <a href="https://docs.stripe.com/testing#cards" target="_blank" rel="noopener">cartões</a> de
-      teste da Stripe, nada é cobrado de verdade.
-    </p>
   }
 </div>

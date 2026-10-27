@@ -76,7 +76,7 @@ export class Home {
   );
 
   protected readonly featuredSalons = computed(() =>
-    [...this.salons()].sort((a, b) => b.rating - a.rating).slice(0, 4),
+    [...this.salons()].sort((a, b) => b.rating - a.rating).slice(0, 8),
   );
 
   // The professionals the client hearted

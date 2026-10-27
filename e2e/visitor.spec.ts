@@ -33,6 +33,21 @@ test.describe('visitor', () => {
     await expect(page.getByText('Você não está logado')).toBeVisible();
   });
 
+  test('the "Entrar" button has the same size on the bookings, messages and notifications screens', async ({
+    page,
+  }) => {
+    const sizes: Record<string, { width: number; height: number } | null> = {};
+    for (const path of ['/agenda', '/mensagens', '/notificacoes']) {
+      await page.goto(path);
+      const button = page.getByRole('link', { name: 'Entrar', exact: true }).last();
+      await expect(button).toBeVisible();
+      const box = await button.boundingBox();
+      sizes[path] = box && { width: box.width, height: box.height };
+    }
+    expect(sizes['/mensagens']).toEqual(sizes['/agenda']);
+    expect(sizes['/notificacoes']).toEqual(sizes['/agenda']);
+  });
+
   test('cannot open the admin or the professional area', async ({ page }) => {
     await page.goto('/admin');
     await expect(page).toHaveURL(/\/$/);

@@ -179,7 +179,7 @@ h2 {
 
 .signin {
   width: 100%;
-  height: 3.25rem;
+  height: 3.5rem;
   margin-top: 1rem;
   display: flex;
   align-items: center;
@@ -187,6 +187,8 @@ h2 {
   border-radius: 999px;
   background: var(--primary);
   color: #fff;
+  font-size: 1.05rem;
+  text-decoration: none;
 }
 
 .avatar-initial {
@@ -224,6 +226,13 @@ h2 {
   .inbox {
     max-width: none;
     padding: 1rem 2.5rem 4rem;
+  }
+
+  // A visitor: the button doesn't need the whole width (as on the bookings screen)
+  .signin {
+    width: 22rem;
+    max-width: 100%;
+    margin-inline: auto;
   }
 
   // The menu on top has one screen for the messages and another for the notifications

@@ -31,6 +31,21 @@ test.describe('professional profile', () => {
     await expect(page.getByRole('heading', { name: 'Ana Souza Editada' }).first()).toBeVisible();
   });
 
+  test('the Instagram username is saved and the public page links to it', async ({ page }) => {
+    await signIn(page, PRO.email, 'professional');
+    await page.goto('/pro/perfil');
+
+    await page.locator('input[name=instagram]').fill('@ana.makeup');
+    await page.locator('input[name=phone]').focus();
+    await expect(page.getByText('Alterações salvas')).toBeVisible();
+
+    await page.goto(`/profissionais/${PRO.uid}`);
+    await expect(page.getByRole('link', { name: '@ana.makeup' })).toHaveAttribute(
+      'href',
+      'https://instagram.com/ana.makeup',
+    );
+  });
+
   test('an invalid CPF is not saved', async ({ page }) => {
     await signIn(page, PRO.email, 'professional');
     await page.goto('/pro/perfil');

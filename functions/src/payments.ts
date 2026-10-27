@@ -31,7 +31,7 @@ export interface StripeLike {
     create(params: {
       customer: string;
       usage: 'off_session';
-      payment_method_types: string[];
+      automatic_payment_methods: { enabled: true };
     }): Promise<{ client_secret: string | null }>;
   };
   paymentMethods: {
@@ -46,7 +46,7 @@ export interface StripeLike {
         currency: string;
         customer: string;
         payment_method: string;
-        payment_method_types: string[];
+        automatic_payment_methods: { enabled: true; allow_redirects: 'never' };
         capture_method: 'manual';
         confirm: true;
         description?: string;
@@ -125,7 +125,8 @@ export class Payments {
     const setup = await this.stripe.setupIntents.create({
       customer,
       usage: 'off_session',
-      payment_method_types: ['card'],
+      // The methods come from the Stripe dashboard (the API no longer takes a list)
+      automatic_payment_methods: { enabled: true },
     });
     if (!setup.client_secret) throw new Error('Stripe gave no client secret');
     return { clientSecret: setup.client_secret };
@@ -191,7 +192,7 @@ export class Payments {
           currency: CURRENCY,
           customer,
           payment_method: request.paymentMethodId,
-          payment_method_types: ['card'],
+          automatic_payment_methods: { enabled: true, allow_redirects: 'never' },
           capture_method: 'manual',
           confirm: true,
           description: request.description,

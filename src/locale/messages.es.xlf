@@ -4970,9 +4970,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3438701122458326471" datatype="html">
-        <source> Os dados do cartão são guardados pela Stripe. O Find Your Beauty nunca os recebe. Ambiente de teste: use cartões de teste da Stripe, nada é cobrado de verdade. </source>
-        <target> Los datos de la tarjeta los guarda Stripe. Find Your Beauty nunca los recibe. Entorno de prueba: usa tarjetas de prueba de Stripe, no se cobra nada de verdad. </target>
+      <trans-unit id="2140544259182729142" datatype="html">
+        <source> Os dados do cartão são guardados pela Stripe. O Find Your Beauty nunca os recebe. Ambiente de teste: use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.stripe.com/testing#cards&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>cartões<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> de teste da Stripe, nada é cobrado de verdade. </source>
+        <target> Los datos de la tarjeta los guarda Stripe. Find Your Beauty nunca los recibe. Entorno de prueba: usa <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.stripe.com/testing#cards&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>tarjetas<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> de prueba de Stripe, no se cobra nada de verdad. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
           <context context-type="linenumber">1</context>
@@ -5042,9 +5042,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6322784621518383430" datatype="html">
-        <source> Ambiente de teste: o valor fica reservado no cartão e só é cobrado quando o profissional aceitar. Use cartões de teste da Stripe. </source>
-        <target> Entorno de prueba: el valor queda reservado en la tarjeta y solo se cobra cuando el profesional acepte. Usa tarjetas de prueba de Stripe. </target>
+      <trans-unit id="3235739786801990440" datatype="html">
+        <source> Ambiente de teste: o valor fica reservado no cartão e só é cobrado quando o profissional aceitar. Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.stripe.com/testing#cards&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>cartões<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> de teste da Stripe. </source>
+        <target> Entorno de prueba: el valor queda reservado en la tarjeta y solo se cobra cuando el profesional acepte. Usa <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.stripe.com/testing#cards&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;"/>tarjetas<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> de prueba de Stripe. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
           <context context-type="linenumber">1</context>

@@ -44,14 +44,18 @@
           <span class="status" [class]="booking.status">{{ label(booking) }}</span>
         </div>
 
-        <ul class="services">
-          @for (service of booking.services; track service.id) {
-            <li>
-              <span>{{ service.name | catalog }}</span
-              ><span>{{ service.price | price }}</span>
-            </li>
-          }
-        </ul>
+        <!-- Collapsed by default, so every card has the same height -->
+        <details class="services">
+          <summary i18n>Serviços</summary>
+          <ul>
+            @for (service of booking.services; track service.id) {
+              <li>
+                <span>{{ service.name | catalog }}</span
+                ><span>{{ service.price | price }}</span>
+              </li>
+            }
+          </ul>
+        </details>
         <p class="total">
           <strong i18n>Total</strong> <strong>{{ booking.total | price }}</strong>
         </p>

@@ -24,6 +24,9 @@ test.describe('booking', () => {
 
     const booking = card(page, PRO.name);
     await expect(booking.getByText('Aguardando')).toBeVisible();
+    // The services are collapsed, so every card has the same height
+    await expect(booking.getByText(PRO.service)).toBeHidden();
+    await booking.getByText('Serviços', { exact: true }).click();
     await expect(booking.getByText(PRO.service)).toBeVisible();
     await expect(booking.getByText('R$ 100,00').first()).toBeVisible();
 

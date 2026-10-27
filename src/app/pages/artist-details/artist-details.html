@@ -416,7 +416,9 @@
   </div>
 
   <footer class="book-bar">
-    @if (missingData().length) {
+    @if (auth.ready() && !auth.user()) {
+      <a i18n class="missing-data" routerLink="/entrar">Entre na sua conta para agendar.</a>
+    } @else if (missingData().length) {
       <a i18n class="missing-data" routerLink="/perfil">
         Complete seus dados no perfil para agendar. Falta: {{ missingData().join(', ') }}.
       </a>
@@ -446,7 +448,7 @@
         i18n-aria-label
         type="button"
         class="book"
-        [disabled]="!selectedServices().length || missingData().length > 0"
+        [disabled]="!auth.user() || !selectedServices().length || missingData().length > 0"
         aria-label="Agendar"
         title="Agendar"
         (click)="book()"

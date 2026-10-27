@@ -2142,14 +2142,6 @@
           <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9195080189263080546" datatype="html">
-        <source>Meus agendamentos</source>
-        <target>My bookings</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.html</context>
-          <context context-type="linenumber">5,7</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7287277182686930372" datatype="html">
         <source>Você não está logado.</source>
         <target>You are not signed in.</target>
@@ -5119,6 +5111,14 @@
         <target>@username</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8205223529740460956" datatype="html">
+        <source>Entre na sua conta para agendar.</source>
+        <target>Sign in to book.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/artist-details/artist-details.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

@@ -28,6 +28,17 @@ test.describe('visitor', () => {
     await expect(page).toHaveURL(/\/entrar$/);
   });
 
+  test('is told on the professional page that signing in is needed to book', async ({ page }) => {
+    await page.goto(`/profissionais/${PRO.uid}`);
+    const notice = page.getByRole('link', { name: 'Entre na sua conta para agendar.' });
+    await expect(notice).toBeVisible();
+    // The button to book is never enabled for a visitor, even with a service chosen
+    await page.getByRole('button', { name: `Adicionar ${PRO.service}` }).click();
+    await expect(page.getByRole('button', { name: 'Agendar' })).toBeDisabled();
+    await notice.click();
+    await expect(page).toHaveURL(/\/entrar$/);
+  });
+
   test('is told to sign in on private screens', async ({ page }) => {
     await page.goto('/agenda');
     await expect(page.getByText('Você não está logado')).toBeVisible();

@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 :host {
   min-height: 100vh;
   display: flex;
@@ -40,7 +41,7 @@ h1 {
   height: 4.5rem;
   border: 1.5px solid transparent;
   border-radius: 14px;
-  background: #f1f2f6;
+  background: var(--surface);
   color: var(--text);
   font: inherit;
   font-size: 1.75rem;
@@ -69,7 +70,7 @@ h1 {
 }
 
 .error {
-  color: #e5484d;
+  color: var(--danger);
 }
 
 .notice {
@@ -80,7 +81,7 @@ h1 {
   height: 3.5rem;
   margin-top: 1.5rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--primary);
   color: #fff;
   font: inherit;
@@ -103,7 +104,7 @@ h1 {
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
-@media (min-width: 1024px) {
+@include desktop {
   :host {
     position: relative;
     justify-content: flex-end;

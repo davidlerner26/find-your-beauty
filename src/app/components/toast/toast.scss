@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 .toast {
   position: fixed;
   z-index: 30;
@@ -10,7 +11,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 0.75rem 0.75rem 1rem;
-  border-radius: 12px;
+  border-radius: var(--radius);
   // Nearly opaque: over a light page a see-through one would not leave the white text readable
   background: rgba(36, 87, 101, 0.92);
   -webkit-backdrop-filter: blur(6px);
@@ -60,7 +61,7 @@
 }
 
 // Wide screens: on the bottom right corner of the screen
-@media (min-width: 1024px) {
+@include desktop {
   .toast {
     top: auto;
     left: auto;
@@ -80,7 +81,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
   .toast {
     animation: none;
   }

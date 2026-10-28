@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 :host {
   display: flex;
   align-items: center;
@@ -30,7 +31,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
   .ring {
     animation-duration: 2.4s;
   }

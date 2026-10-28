@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 :host {
   display: flex;
   align-items: center;
@@ -23,7 +24,7 @@
   display: none;
 }
 
-@media (min-width: 1024px) {
+@include desktop {
   .arrow {
     flex: none;
     display: flex;
@@ -36,7 +37,7 @@
     border-radius: 50%;
     background: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    color: #1c1c1c;
+    color: var(--ink);
     cursor: pointer;
 
     mat-icon {

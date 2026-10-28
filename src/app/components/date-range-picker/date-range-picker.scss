@@ -61,12 +61,12 @@
   &.edge {
     background: var(--primary);
     color: #fff;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
   }
 
   // With both ends picked, the band is closed on the inner side
   &.start {
-    border-radius: 999px 0 0 999px;
+    border-radius: var(--radius-pill) 0 0 999px;
   }
 
   &.end {
@@ -74,7 +74,7 @@
   }
 
   &.start.end {
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
   }
 
   &:disabled {
@@ -84,13 +84,13 @@
 
   // Already blocked: a red band, closed on the ends of each blocked period
   &.blocked {
-    background: #fde6e7;
-    color: #e5484d;
+    background: var(--danger-bg);
+    color: var(--danger);
     text-decoration: line-through;
   }
 
   &.blocked-first {
-    border-radius: 999px 0 0 999px;
+    border-radius: var(--radius-pill) 0 0 999px;
   }
 
   &.blocked-last {
@@ -98,7 +98,7 @@
   }
 
   &.blocked-first.blocked-last {
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
   }
 }
 
@@ -115,6 +115,6 @@
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  background: #fde6e7;
-  border: 1.5px solid #e5484d;
+  background: var(--danger-bg);
+  border: 1.5px solid var(--danger);
 }

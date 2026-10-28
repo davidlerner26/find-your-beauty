@@ -46,7 +46,7 @@
   }
 
   .invalid {
-    border-color: #e5484d;
+    border-color: var(--danger);
   }
 }
 
@@ -67,7 +67,7 @@
   gap: 0.6rem;
   padding: 0.75rem;
   border: 1px solid var(--muted);
-  border-radius: 12px;
+  border-radius: var(--radius);
   justify-items: start;
 }
 
@@ -80,7 +80,7 @@
 .rule-day {
   padding: 0.35rem 0.7rem;
   border: 1.5px solid var(--muted);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: transparent;
   color: inherit;
   font: inherit;

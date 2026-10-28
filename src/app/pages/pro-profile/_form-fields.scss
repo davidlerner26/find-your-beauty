@@ -28,7 +28,7 @@ textarea {
   padding: 0.85rem 1.1rem;
   border: 1.5px solid transparent;
   border-radius: 14px;
-  background: #f1f2f6;
+  background: var(--surface);
   font-size: 1rem;
   outline: 0;
 
@@ -83,7 +83,7 @@ select {
   justify-self: end;
   border: 0;
   background: none;
-  color: #e5484d;
+  color: var(--danger);
   cursor: pointer;
 
   // The red does not read on the teal of the professional area: a light one, underlined so it still says "remove"
@@ -109,7 +109,7 @@ select {
 }
 
 .error {
-  color: #e5484d;
+  color: var(--danger);
 
   :host-context(.pro-theme) & {
     color: #fff0f0;
@@ -123,7 +123,7 @@ select {
   justify-content: center;
   padding: 0.7rem 1.4rem;
   border: 1.5px solid var(--primary);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--primary);
   cursor: pointer;
 }
@@ -156,7 +156,7 @@ select {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: var(--radius);
   }
 
   button {

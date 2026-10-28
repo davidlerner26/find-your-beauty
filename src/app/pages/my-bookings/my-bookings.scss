@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 .agenda {
   max-width: 48rem;
   margin: 0 auto;
@@ -51,21 +52,21 @@ h2 {
 .status {
   align-self: flex-start;
   padding: 0.25rem 0.75rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 0.8rem;
   background: var(--primary-light);
   color: var(--primary);
 
   &.pending {
-    background: #fdf1d8;
+    background: var(--warning-bg);
     color: #9a5b0b;
   }
 
   &.declined,
   &.cancelled,
   &.cancelledByProfessional {
-    background: #fde6e7;
-    color: #e5484d;
+    background: var(--danger-bg);
+    color: var(--danger);
   }
 }
 
@@ -132,7 +133,7 @@ h2 {
     justify-content: space-between;
   }
 
-  @media (prefers-reduced-motion: reduce) {
+  @include reduced-motion {
     &::details-content,
     summary::after {
       transition: none;
@@ -144,7 +145,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   padding-top: 0.75rem;
-  border-top: 1px dashed #d6d6d6;
+  border-top: 1px dashed var(--border);
 }
 
 .notes {
@@ -162,7 +163,7 @@ h2 {
   a {
     flex: 1;
     height: 2.9rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-size: 1rem;
     cursor: pointer;
   }
@@ -199,9 +200,9 @@ h2 {
 .actions .cancel {
   flex: none;
   width: 2.9rem;
-  border: 1.5px solid #e5484d;
+  border: 1.5px solid var(--danger);
   background: #fff;
-  color: #e5484d;
+  color: var(--danger);
 
   mat-icon {
     width: 1.4rem;
@@ -281,7 +282,7 @@ h3 a {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--primary);
   color: #fff;
   font-size: 1.05rem;
@@ -289,7 +290,7 @@ h3 a {
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
-@media (min-width: 1024px) {
+@include desktop {
   .agenda {
     max-width: none;
     padding: 3rem 2.5rem 4rem;

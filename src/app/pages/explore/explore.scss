@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 :host {
   display: block;
 }
@@ -61,8 +62,8 @@
 .filter {
   flex: none;
   padding: 0.6rem 2rem;
-  border: 1.5px solid #d6d6d6;
-  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-pill);
   background: #fff;
   font-size: 1rem;
   cursor: pointer;
@@ -111,7 +112,7 @@
   flex: 0 0 min(24rem, calc(100vw - 5rem));
   display: flex;
   min-height: 9.5rem;
-  border-radius: 12px;
+  border-radius: var(--radius);
   overflow: hidden;
   background: #fff;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
@@ -176,7 +177,7 @@
   border: 0;
   border-radius: 50%;
   background: #fff;
-  color: #e5484d;
+  color: var(--danger);
   cursor: pointer;
 }
 
@@ -212,7 +213,7 @@
   left: 0;
   padding: 0.25rem 0.75rem;
   border-radius: 0 20px 20px 0;
-  background: #fdf1d8;
+  background: var(--warning-bg);
   color: var(--accent);
   font-size: 0.8rem;
   pointer-events: none;
@@ -310,8 +311,8 @@
   width: 3rem;
   height: 0.3rem;
   margin: 0 auto;
-  border-radius: 999px;
-  background: #d6d6d6;
+  border-radius: var(--radius-pill);
+  background: var(--border);
 }
 
 .sheet-filters {
@@ -339,7 +340,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
   .sheet,
   .backdrop {
     animation: none;
@@ -348,7 +349,7 @@
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
-@media (min-width: 1024px) {
+@include desktop {
   // The arrows take the place of the dots
   .dots {
     display: none;

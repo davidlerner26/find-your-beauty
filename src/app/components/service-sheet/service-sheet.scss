@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 // The screen of a service: a sheet over the page (opened by "Ler mais")
 .screen-backdrop {
   position: fixed;
@@ -46,7 +47,7 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
   .service-screen,
   .screen-backdrop {
     animation: none;
@@ -70,7 +71,7 @@
     height: 2.25rem;
 
     .screen-handle::after {
-      background: #d6d6d6;
+      background: var(--border);
       box-shadow: none;
     }
   }
@@ -130,7 +131,7 @@
   span {
     width: 0.45rem;
     height: 0.45rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: #fff;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
     transition: width 0.2s;
@@ -162,7 +163,7 @@
     left: 0;
     right: 0;
     height: 0.3rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.35);
   }
@@ -239,7 +240,7 @@
   width: 100%;
   height: 3.5rem;
   border: 1.5px solid var(--primary);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--primary);
   color: #fff;
   font: inherit;
@@ -254,7 +255,7 @@
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
-@media (min-width: 1024px) {
+@include desktop {
   // The arrows take the place of the dots
   .screen-dots {
     display: none;

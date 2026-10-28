@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 $tabs-height: 5rem;
 
 .with-tabs {
@@ -71,7 +72,7 @@ $tabs-height: 5rem;
   display: none;
 }
 
-@media (min-width: 1024px) {
+@include desktop {
   $topbar-height: 4.5rem;
 
   .topbar {
@@ -110,7 +111,7 @@ $tabs-height: 5rem;
       align-items: center;
       gap: 0.5rem;
       padding: 0.6rem 1.1rem;
-      border-radius: 999px;
+      border-radius: var(--radius-pill);
       color: #6b7280;
       font-weight: 600;
       transition:
@@ -150,7 +151,7 @@ $tabs-height: 5rem;
     gap: 0.5rem;
     height: 2.75rem;
     padding: 0 1.4rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-weight: 600;
   }
 
@@ -189,7 +190,7 @@ $tabs-height: 5rem;
 
     .signin {
       background: #fff;
-      color: #2f6b7a;
+      color: var(--teal);
     }
   }
 }
@@ -213,7 +214,7 @@ $tabs-height: 5rem;
 }
 
 // Wide screens: the banner is in the header (env-tag), not on the corner
-@media (min-width: 1024px) {
+@include desktop {
   .env-banner {
     display: none;
   }
@@ -221,7 +222,7 @@ $tabs-height: 5rem;
   .env-tag {
     flex: none;
     padding: 0.25rem 0.75rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: #fff1e0;
     color: #b45f06;
     font-size: 0.75rem;

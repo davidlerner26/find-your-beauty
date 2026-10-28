@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 .onboarding {
   position: relative;
   min-height: 100vh;
@@ -49,7 +50,7 @@ h1 {
   height: 0.65rem;
   padding: 0;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #fff;
   cursor: pointer;
   transition: width 0.2s;
@@ -64,7 +65,7 @@ h1 {
 .google {
   height: 3.5rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,14 +104,14 @@ h1 {
   align-items: center;
   justify-content: center;
   border: 1.5px solid rgba(255, 255, 255, 0.85);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: #fff;
   font-size: 1.05rem;
   text-decoration: none;
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
-@media (min-width: 1024px) {
+@include desktop {
   // The text on the left, the photo on the rest of the screen
   .onboarding {
     align-items: center;

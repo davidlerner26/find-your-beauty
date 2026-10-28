@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 .page {
   max-width: 40rem;
   margin: 0 auto;
@@ -32,9 +33,9 @@
 
 .error {
   padding: 0.75rem 1rem;
-  border-radius: 12px;
-  background: #fde6e7;
-  color: #e5484d;
+  border-radius: var(--radius);
+  background: var(--danger-bg);
+  color: var(--danger);
 }
 
 .card {
@@ -81,19 +82,19 @@
   display: inline-block;
   margin-top: 0.35rem;
   padding: 0.25rem 0.75rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 0.8rem;
   background: var(--primary-light);
   color: var(--primary);
 
   &.waiting {
-    background: #fdf1d8;
+    background: var(--warning-bg);
     color: #9a5b0b;
   }
 
   &.denied {
-    background: #fde6e7;
-    color: #e5484d;
+    background: var(--danger-bg);
+    color: var(--danger);
   }
 }
 
@@ -104,7 +105,7 @@
   button {
     flex: 1;
     height: 3rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-size: 1rem;
     cursor: pointer;
 
@@ -122,9 +123,9 @@
 }
 
 .deny {
-  border: 1.5px solid #e5484d;
+  border: 1.5px solid var(--danger);
   background: #fff;
-  color: #e5484d;
+  color: var(--danger);
 }
 
 dl {
@@ -162,7 +163,7 @@ dl {
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-soft);
 
   &:last-child {
     border-bottom: 0;
@@ -208,12 +209,12 @@ dl {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: var(--radius);
   }
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
-@media (min-width: 1024px) {
+@include desktop {
   .page {
     max-width: none;
     padding: 3rem 2.5rem 4rem;

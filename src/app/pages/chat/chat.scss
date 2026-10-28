@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 :host {
   display: flex;
   flex-direction: column;
@@ -11,7 +12,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .icon-btn {
@@ -91,7 +92,7 @@
 
 .bubble {
   padding: 0.9rem 1.1rem;
-  border-radius: 12px;
+  border-radius: var(--radius);
   background: var(--primary);
   color: #fff;
 
@@ -158,15 +159,15 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem 1rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-soft);
 
   .draft {
     flex: 1;
     height: 3rem;
     padding: 0 1.25rem;
     border: 0;
-    border-radius: 999px;
-    background: #f1f2f6;
+    border-radius: var(--radius-pill);
+    background: var(--surface);
     font-size: 1rem;
     outline: 0;
   }
@@ -228,7 +229,7 @@
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
-@media (min-width: 1024px) {
+@include desktop {
   // The chat lives in the right pane of the messages screen: the height of the pane (the screen under the top bar)
   :host {
     height: calc(100vh - 4.5rem);

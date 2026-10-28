@@ -21,6 +21,19 @@ a {
   --accent: #ee8b2e;
   --text: #1c1c1c;
   --muted: #6b6b6b;
+
+  // Fixed colors of the component styles: the professional theme (`pro-theme`) does not change them
+  --teal: #2f6b7a;
+  --ink: #1c1c1c;
+  --danger: #e5484d;
+  --danger-strong: #c9302c;
+  --danger-bg: #fde6e7;
+  --warning-bg: #fdf1d8;
+  --border: #d6d6d6;
+  --border-soft: #eee;
+  --surface: #f1f2f6;
+  --radius: 12px;
+  --radius-pill: 999px;
 }
 
 body {

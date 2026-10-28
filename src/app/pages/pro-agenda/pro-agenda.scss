@@ -1,3 +1,4 @@
+@use 'breakpoints' as *;
 .agenda {
   max-width: 48rem;
   margin: 0 auto;
@@ -21,8 +22,8 @@ h2 {
 .notice {
   display: block;
   padding: 1rem 1.25rem;
-  border-radius: 12px;
-  background: #fdf1d8;
+  border-radius: var(--radius);
+  background: var(--warning-bg);
   color: #9a5b0b;
 }
 
@@ -71,21 +72,21 @@ h2 {
 .status {
   align-self: flex-start;
   padding: 0.25rem 0.75rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 0.8rem;
   background: var(--primary-light);
   color: var(--primary);
 
   &.pending {
-    background: #fdf1d8;
+    background: var(--warning-bg);
     color: #9a5b0b;
   }
 
   &.declined,
   &.cancelled,
   &.cancelledByProfessional {
-    background: #fde6e7;
-    color: #e5484d;
+    background: var(--danger-bg);
+    color: var(--danger);
   }
 }
 
@@ -106,7 +107,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   padding-top: 0.75rem;
-  border-top: 1px dashed #d6d6d6;
+  border-top: 1px dashed var(--border);
 }
 
 .notes {
@@ -121,7 +122,7 @@ h2 {
   button {
     flex: 1;
     height: 2.9rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-size: 1rem;
     cursor: pointer;
   }
@@ -134,9 +135,9 @@ h2 {
 }
 
 .decline {
-  border: 1.5px solid #e5484d;
+  border: 1.5px solid var(--danger);
   background: #fff;
-  color: #e5484d;
+  color: var(--danger);
 }
 
 .actions .cancel {
@@ -159,7 +160,7 @@ h2 {
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
-@media (min-width: 1024px) {
+@include desktop {
   .agenda {
     max-width: none;
     padding: 3rem 2.5rem 4rem;

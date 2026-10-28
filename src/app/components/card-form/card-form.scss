@@ -10,7 +10,7 @@
 
 .error {
   margin: 0;
-  color: #c9302c;
+  color: var(--danger-strong);
   font-size: 0.9rem;
 }
 
@@ -20,7 +20,7 @@
   padding: 0.85rem 1.1rem;
   border: 1.5px solid transparent;
   border-radius: 14px;
-  background: #f1f2f6;
+  background: var(--surface);
   font-size: 1rem;
   outline: 0;
 
@@ -37,7 +37,7 @@
   button {
     flex: 1;
     height: 3rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     font-size: 1rem;
     cursor: pointer;
 

@@ -58,7 +58,7 @@
   align-items: center;
   gap: 0.5rem;
   border: 1.5px solid #e1e8ea;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #fff;
 
   &.selected {
@@ -121,7 +121,7 @@
   border: 0;
   border-radius: 50%;
   background: none;
-  color: #c9302c;
+  color: var(--danger-strong);
   cursor: pointer;
 
   &:disabled {
@@ -144,7 +144,7 @@
 .add {
   height: 3.25rem;
   border: 1.5px solid var(--primary);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #fff;
   color: var(--primary);
   font-size: 1rem;
@@ -165,6 +165,6 @@
 
 .error {
   margin: 0;
-  color: #c9302c;
+  color: var(--danger-strong);
   text-align: center;
 }

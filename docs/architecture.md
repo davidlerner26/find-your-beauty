@@ -91,6 +91,21 @@ payments.ts` (all the logic, tested with an in-memory Stripe), `payments-api.ts`
 booking triggers. Setup, test cards and limits: [stripe.md](stripe.md). Until the key is filled in, the screen
 keeps the simulated payment. A discount line like the one in the design is left for later.
 
+## Styles
+
+Component styles are SCSS (scoped). What is shared lives in two places:
+
+- **Tokens** are CSS variables in `:root` of `src/styles.scss`. `--primary`, `--text` and `--muted` are the theme:
+  the professional area (`body.pro-theme`) swaps them. The fixed tokens (`--teal`, `--ink`, `--danger*`, `--border*`,
+  `--surface`, `--divider`, `--success`, `--warning`, `--disabled`, `--shadow-card`, `--radius`, `--radius-pill`)
+  are never changed by a theme.
+- **Mixins** are in `src/styles/_breakpoints.scss` (`desktop`, `reduced-motion`). Use them with
+  `@use 'breakpoints' as *;` in any component style (`stylePreprocessorOptions.includePaths` in `angular.json`).
+
+Do not write a hex color that has a token, nor `@media (min-width: 1024px)`, by hand. A new repeated value is a new
+token in `src/styles.scss`. `body.pro-theme` in `src/styles.scss` is the only place that overrides components with
+`!important`.
+
 ## Storybook
 
 `npm run storybook` shows the shared components of `src/app/components/` (spinner, toast, chips row, carousel

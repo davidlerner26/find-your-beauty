@@ -22,7 +22,7 @@ h2 {
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--divider);
 
   h1 {
     font-size: 1.25rem;
@@ -167,7 +167,7 @@ h2 {
   display: flex;
   border-radius: var(--radius);
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card);
 }
 
 .result-image {
@@ -341,7 +341,7 @@ h2 {
     cursor: pointer;
 
     &:disabled {
-      color: #ccc;
+      color: var(--disabled);
       cursor: default;
     }
   }

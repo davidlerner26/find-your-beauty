@@ -1,0 +1,12 @@
+// Breakpoints shared by the component styles: `@use 'breakpoints' as *;`
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

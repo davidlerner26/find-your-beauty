@@ -41,7 +41,7 @@
 .card {
   padding: 1.25rem;
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card);
   overflow-wrap: anywhere;
 
   h3 {
@@ -89,7 +89,7 @@
 
   &.waiting {
     background: var(--warning-bg);
-    color: #9a5b0b;
+    color: var(--warning);
   }
 
   &.denied {

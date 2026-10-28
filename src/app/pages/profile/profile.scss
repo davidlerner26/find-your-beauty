@@ -1,3 +1,4 @@
+@use 'patterns' as *;
 @use 'breakpoints' as *;
 .profile {
   max-width: 32rem;
@@ -203,9 +204,7 @@ h1 {
 }
 
 .save {
-  border: 0;
-  background: var(--primary);
-  color: #fff;
+  @include solid-button;
 }
 
 .cancel {

@@ -1,8 +1,7 @@
+@use 'patterns' as *;
 @use 'breakpoints' as *;
 .admin {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+  @include page-column;
 }
 
 h1 {
@@ -91,9 +90,7 @@ h2 {
   cursor: pointer;
 
   mat-icon {
-    width: 1.2rem;
-    height: 1.2rem;
-    font-size: 1.2rem;
+    @include icon-size(1.2rem);
   }
 
   &:disabled {
@@ -108,9 +105,7 @@ h2 {
 }
 
 .deny {
-  border: 1.5px solid var(--danger);
-  background: #fff;
-  color: var(--danger);
+  @include danger-outline-button;
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.

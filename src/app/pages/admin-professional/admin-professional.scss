@@ -1,3 +1,4 @@
+@use 'patterns' as *;
 @use 'breakpoints' as *;
 .page {
   max-width: 40rem;
@@ -117,15 +118,11 @@
 }
 
 .approve {
-  border: 0;
-  background: var(--primary);
-  color: #fff;
+  @include solid-button;
 }
 
 .deny {
-  border: 1.5px solid var(--danger);
-  background: #fff;
-  color: var(--danger);
+  @include danger-outline-button;
 }
 
 dl {

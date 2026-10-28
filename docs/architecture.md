@@ -101,6 +101,9 @@ Component styles are SCSS (scoped). What is shared lives in two places:
   are never changed by a theme.
 - **Mixins** are in `src/styles/_breakpoints.scss` (`desktop`, `reduced-motion`). Use them with
   `@use 'breakpoints' as *;` in any component style (`stylePreprocessorOptions.includePaths` in `angular.json`).
+- **Patterns** are mixins for blocks that several screens repeated as they were, in `src/styles/_patterns.scss`
+  (`page-column`, `solid-button`, `danger-outline-button`, `icon-size`, `cover-image`, `selected`, `heart-button`,
+  `back-button`). Before copying a block between two styles, check there or add a mixin.
 
 Do not write a hex color that has a token, nor `@media (min-width: 1024px)`, by hand. A new repeated value is a new
 token in `src/styles.scss`. `body.pro-theme` in `src/styles.scss` is the only place that overrides components with

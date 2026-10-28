@@ -1,3 +1,4 @@
+@use 'patterns' as *;
 @use 'breakpoints' as *;
 :host {
   display: block;
@@ -22,15 +23,7 @@
 }
 
 .back {
-  position: absolute;
-  left: 1.5rem;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--primary);
-  cursor: pointer;
+  @include back-button;
 }
 
 .content {
@@ -142,9 +135,7 @@ h2 {
   cursor: pointer;
 
   &.selected {
-    background: var(--primary-light);
-    border-color: var(--primary);
-    color: var(--primary);
+    @include selected;
   }
 }
 
@@ -209,16 +200,12 @@ textarea {
   cursor: pointer;
 
   mat-icon {
-    width: 1.4rem;
-    height: 1.4rem;
-    font-size: 1.4rem;
+    @include icon-size(1.4rem);
   }
 }
 
 .checkout mat-icon {
-  width: 1.6rem;
-  height: 1.6rem;
-  font-size: 1.6rem;
+  @include icon-size(1.6rem);
 }
 
 .checkout {

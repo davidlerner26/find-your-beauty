@@ -1,3 +1,4 @@
+@use 'patterns' as *;
 @use 'breakpoints' as *;
 :host {
   display: block;
@@ -179,17 +180,7 @@ h2 {
 
 // The heart on the corner of the photo
 .heart {
-  z-index: 1;
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 0;
-  border-radius: 50%;
-  background: #fff;
-  color: var(--danger);
-  cursor: pointer;
+  @include heart-button;
 }
 
 // Swipe sideways with the finger to go through the photos
@@ -213,11 +204,7 @@ h2 {
   scroll-snap-align: start;
 
   img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    @include cover-image;
   }
 }
 
@@ -398,9 +385,7 @@ h2 {
   cursor: pointer;
 
   &.active {
-    background: var(--primary-light);
-    border-color: var(--primary);
-    color: var(--primary);
+    @include selected;
   }
 
   &:disabled {

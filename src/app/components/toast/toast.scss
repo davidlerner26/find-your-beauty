@@ -1,3 +1,4 @@
+@use 'patterns' as *;
 @use 'breakpoints' as *;
 .toast {
   position: fixed;
@@ -47,9 +48,7 @@
   }
 
   mat-icon {
-    width: 1.2rem;
-    height: 1.2rem;
-    font-size: 1.2rem;
+    @include icon-size(1.2rem);
   }
 }
 

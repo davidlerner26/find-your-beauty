@@ -1,3 +1,4 @@
+@use 'patterns' as *;
 :host {
   display: block;
   padding-bottom: 3rem;
@@ -21,15 +22,7 @@
 }
 
 .back {
-  position: absolute;
-  left: 1.5rem;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--primary);
-  cursor: pointer;
+  @include back-button;
 }
 
 .content {

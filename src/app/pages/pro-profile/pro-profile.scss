@@ -1,3 +1,4 @@
+@use 'patterns' as *;
 @use 'breakpoints' as *;
 @use './form-fields';
 
@@ -131,9 +132,7 @@ h1 {
   cursor: pointer;
 
   &.active {
-    border-color: var(--primary);
-    background: var(--primary-light);
-    color: var(--primary);
+    @include selected;
   }
 }
 

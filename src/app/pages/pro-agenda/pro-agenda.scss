@@ -1,8 +1,7 @@
+@use 'patterns' as *;
 @use 'breakpoints' as *;
 .agenda {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+  @include page-column;
 }
 
 h1 {
@@ -129,15 +128,11 @@ h2 {
 }
 
 .accept {
-  border: 0;
-  background: var(--primary);
-  color: #fff;
+  @include solid-button;
 }
 
 .decline {
-  border: 1.5px solid var(--danger);
-  background: #fff;
-  color: var(--danger);
+  @include danger-outline-button;
 }
 
 .actions .cancel {
@@ -149,9 +144,7 @@ h2 {
   justify-content: center;
 
   mat-icon {
-    width: 1.4rem;
-    height: 1.4rem;
-    font-size: 1.4rem;
+    @include icon-size(1.4rem);
   }
 }
 

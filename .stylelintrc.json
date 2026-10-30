@@ -1,0 +1,57 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "rules": {
+    "declaration-no-important": true,
+    "media-feature-name-value-allowed-list": {
+      "min-width": []
+    },
+    "declaration-property-value-disallowed-list": {
+      "/.*/": [
+        "/#(?!(?:fff|1565c0|245765|2faa5f|6b7280|aab2c0|b42318|b45f06|b4d2da|b5b5b5|c0392b|c3dde3|c4c7cf|c9c9d1|cfd6da|ddd|e1e8ea|e4e6ec|e5eef0|e8e8ee|ececec|ececf1|ee8b2e|f7fafb|f9fafb|fff0f0|fff1e0)\\b)[0-9a-f]{3,8}\\b/i"
+      ]
+    },
+    "max-nesting-depth": [
+      3,
+      {
+        "ignoreAtRules": ["include", "media"]
+      }
+    ],
+    "color-function-notation": null,
+    "color-function-alias-notation": null,
+    "alpha-value-notation": null,
+    "scss/double-slash-comment-empty-line-before": null,
+    "rule-empty-line-before": null,
+    "declaration-empty-line-before": null,
+    "scss/dollar-variable-empty-line-before": null,
+    "media-feature-range-notation": null,
+    "import-notation": null,
+    "value-keyword-case": null,
+    "shorthand-property-no-redundant-values": null,
+    "declaration-block-no-redundant-longhand-properties": null,
+    "property-no-vendor-prefix": null,
+    "selector-class-pattern": null,
+    "font-family-name-quotes": null,
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["ng-deep"]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/styles.scss"],
+      "rules": {
+        "declaration-no-important": null,
+        "declaration-property-value-disallowed-list": null
+      }
+    },
+    {
+      "files": ["src/styles/_breakpoints.scss"],
+      "rules": {
+        "media-feature-name-value-allowed-list": null
+      }
+    }
+  ],
+  "ignoreFiles": ["**/* 2.*", "node_modules/**"]
+}

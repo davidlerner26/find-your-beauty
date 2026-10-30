@@ -109,6 +109,11 @@ Do not write a hex color that has a token, nor `@media (min-width: 1024px)`, by 
 token in `src/styles.scss`. `body.pro-theme` in `src/styles.scss` is the only place that overrides components with
 `!important`.
 
+`npm run lint:styles` (Stylelint, also in the CI) enforces this: it rejects a new hex color in a component style, a
+`min-width` media query written by hand and `!important`. `.stylelintrc.json` lists the one-off colors that already
+existed (they are allowed as they are); a color used again should become a token in `src/styles.scss` instead of
+being added to that list. `src/styles.scss` and `src/styles/_breakpoints.scss` are exempt.
+
 ## Storybook
 
 `npm run storybook` shows the shared components of `src/app/components/` (spinner, toast, chips row, carousel

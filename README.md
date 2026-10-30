@@ -38,6 +38,7 @@ npm start            # the app on http://localhost:4200, using the Firebase of t
 | `npm run e2e -- e2e/login.spec.ts`                   | Only some e2e files (extra arguments go to Playwright)                |
 | `npm run e2e:ui`                                     | Playwright UI mode                                                    |
 | `npm run lint` / `npm run format:check`              | ESLint (Angular, accessibility) / Prettier                            |
+| `npm run lint:styles`                                | Stylelint (tokens, mixins, no `!important` outside the theme)         |
 | `npm run storybook`                                  | Catalog of the shared components on http://localhost:6006             |
 | `npm run build-storybook` / `npm run test:storybook` | Static catalog in `storybook-static/` / open every story and run axe  |
 | `npm run sync:shared` / `check:shared`               | Copy `shared/domain.ts` to the Cloud Functions / check the copy       |

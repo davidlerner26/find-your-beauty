@@ -26,6 +26,8 @@ jobs:
 
       - name: Lint
         run: npm run lint
+      - name: Lint styles
+        run: npm run lint:styles
       - name: Format
         run: npm run format:check
       - name: The Cloud Functions copy of the shared code is up to date

@@ -16,8 +16,8 @@ $tabs-height: 5rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background: #fff;
-  box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.08);
+  background: var(--tabbar-bg, #fff);
+  box-shadow: var(--tabbar-shadow, 0 -6px 18px rgba(0, 0, 0, 0.08));
   z-index: 10;
 
   a {
@@ -26,7 +26,7 @@ $tabs-height: 5rem;
     flex-direction: column;
     align-items: center;
     gap: 0.4rem;
-    color: #aab2c0;
+    color: var(--tabbar-fg, #aab2c0);
 
     &.active {
       color: var(--primary);
@@ -156,7 +156,7 @@ $tabs-height: 5rem;
 
   .signin {
     background: var(--primary);
-    color: #fff;
+    color: var(--on-primary);
   }
 
   // The bottom tabs are replaced by the bar on top

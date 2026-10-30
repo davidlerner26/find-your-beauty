@@ -95,10 +95,15 @@ keeps the simulated payment. A discount line like the one in the design is left 
 
 Component styles are SCSS (scoped). What is shared lives in two places:
 
-- **Tokens** are CSS variables in `:root` of `src/styles.scss`. `--primary`, `--text` and `--muted` are the theme:
-  the professional area (`body.pro-theme`) swaps them. The fixed tokens (`--teal`, `--ink`, `--danger*`, `--border*`,
-  `--surface`, `--divider`, `--success`, `--warning`, `--disabled`, `--shadow-card`, `--radius`, `--radius-pill`)
-  are never changed by a theme.
+- **Tokens** are CSS variables in `:root` of `src/styles.scss`. `--primary`, `--text`, `--muted` and `--on-primary`
+  (the letters on a `--primary` background) are the theme: the professional area (`body.pro-theme`) swaps them. The
+  fixed tokens (`--teal`, `--ink`, `--gray`, `--danger*`, `--border*`, `--surface`, `--divider`, `--success`,
+  `--warning`, `--disabled`, `--shadow-card`, `--radius`, `--radius-pill`) are never changed by a theme.
+- **The professional theme only sets variables.** `body.pro-theme` sets the ones above plus a few the components read
+  with a fallback to their own look (`--line`, `--card-bg`, `--bubble-bg`, `--tabbar-bg`, `--error-fg`...), as in
+  `border-bottom: 1px solid var(--line, var(--border-soft))`. A component that must look different there reads such
+  a variable; it is never overridden by class name. Text that sits on the teal uses `--teal` (not `--primary`, which
+  is white there), and a button's letters use `--on-primary`.
 - **Mixins** are in `src/styles/_breakpoints.scss` (`desktop`, `reduced-motion`). Use them with
   `@use 'breakpoints' as *;` in any component style (`stylePreprocessorOptions.includePaths` in `angular.json`).
 - **Patterns** are mixins for blocks that several screens repeated as they were, in `src/styles/_patterns.scss`
@@ -106,11 +111,10 @@ Component styles are SCSS (scoped). What is shared lives in two places:
   `back-button`). Before copying a block between two styles, check there or add a mixin.
 
 Do not write a hex color that has a token, nor `@media (min-width: 1024px)`, by hand. A new repeated value is a new
-token in `src/styles.scss`. `body.pro-theme` in `src/styles.scss` is the only place that overrides components with
-`!important`.
+token in `src/styles.scss`. `!important` is not used.
 
 `npm run lint:styles` (Stylelint, also in the CI) enforces this: it rejects a new hex color in a component style, a
-`min-width` media query written by hand and `!important`. `.stylelintrc.json` lists the one-off colors that already
+`min-width` media query written by hand and any `!important`. `.stylelintrc.json` lists the one-off colors that already
 existed (they are allowed as they are); a color used again should become a token in `src/styles.scss` instead of
 being added to that list. `src/styles.scss` and `src/styles/_breakpoints.scss` are exempt.
 

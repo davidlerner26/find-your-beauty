@@ -70,7 +70,7 @@ h1 {
 }
 
 .error {
-  color: var(--danger);
+  color: var(--error-fg, var(--danger));
 }
 
 .notice {
@@ -83,7 +83,7 @@ h1 {
   border: 0;
   border-radius: var(--radius-pill);
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
   font: inherit;
   font-size: 1.1rem;
   cursor: pointer;

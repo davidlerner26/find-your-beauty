@@ -237,7 +237,7 @@ textarea {
   padding: 0.75rem 1rem;
   border-radius: var(--radius);
   background: var(--danger-bg);
-  color: var(--danger);
+  color: var(--error-fg, var(--danger));
 }
 
 // Price of a time that is not the normal one

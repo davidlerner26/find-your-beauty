@@ -21,10 +21,12 @@ a {
   --accent: #ee8b2e;
   --text: #1c1c1c;
   --muted: #6b6b6b;
+  --on-primary: #fff;
 
   // Fixed colors of the component styles: the professional theme (`pro-theme`) does not change them
   --teal: #2f6b7a;
   --ink: #1c1c1c;
+  --gray: #6b6b6b;
   --danger: #e5484d;
   --danger-strong: #c9302c;
   --danger-bg: #fde6e7;
@@ -47,15 +49,41 @@ body {
 }
 
 // Professional area (/pro/*): the teal of the buttons becomes the background and the letters turn white.
-// The app toggles `pro-theme` on <body>. Variables do most of the work: --primary turns white, so links,
-// outlines and icons that used the teal stay visible. The rules below fix what variables can't:
-// solid buttons (white with teal letters), inputs (stay light) and the bars. They use !important because
-// component styles are scoped (attribute selectors) and would win on specificity.
+// The app toggles `pro-theme` on <body>. It only sets variables: --primary turns white, so everything that used
+// the teal (links, outlines, icons, solid buttons) stays visible, and the components read the variables below
+// with a fallback to their own look (`var(--line, var(--border-soft))`), so they work without this theme.
 body.pro-theme {
   --primary: #fff;
   --primary-light: rgba(255, 255, 255, 0.08);
   --text: #fff;
   --muted: rgba(255, 255, 255, 0.92);
+
+  // Text on a solid button: the buttons are white here, so the letters are teal
+  --on-primary: var(--teal);
+  --error-fg: #ffc9cb;
+  --confirmed-fg: #b8f0cf;
+
+  // Lists and dividers
+  --line: rgba(255, 255, 255, 0.22);
+  --line-strong: rgba(255, 255, 255, 0.35);
+
+  // Cards
+  --card-bg: rgba(255, 255, 255, 0.1);
+  --card-border: 1px solid rgba(255, 255, 255, 0.22);
+  --card-shadow: none;
+
+  // Messages
+  --chat-bg: transparent;
+  --bubble-bg: rgba(255, 255, 255, 0.16);
+  --bubble-fg: #fff;
+  --bubble-mine-bg: #fff;
+  --bubble-mine-fg: var(--teal);
+
+  // Bottom menu
+  --tabbar-bg: #245765;
+  --tabbar-shadow: 0 -6px 18px rgba(0, 0, 0, 0.2);
+  --tabbar-fg: rgba(255, 255, 255, 0.6);
+
   background: #2f6b7a;
   color: #fff;
 
@@ -67,108 +95,7 @@ body.pro-theme {
   input,
   select,
   textarea {
-    color: #1c1c1c !important;
-  }
-
-  // Solid buttons: white with teal letters
-  .primary,
-  .accept,
-  .signin,
-  .send,
-  .secondary {
-    background: #fff !important;
-    color: #2f6b7a !important;
-  }
-
-  // Google button stays white, so its letters are teal
-  .google {
-    color: #2f6b7a !important;
-  }
-
-  // Selected tab of the client / professional switch: white with teal letters
-  .role-tabs a.active {
-    color: #2f6b7a !important;
-  }
-
-  .error {
-    color: #ffc9cb !important;
-  }
-
-  .hint.confirmed {
-    color: #b8f0cf !important;
-  }
-
-  // Cards
-  .booking {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: none !important;
-  }
-
-  .total {
-    border-top-color: rgba(255, 255, 255, 0.35) !important;
-  }
-
-  // Lists and dividers
-  .tabs,
-  .list > li,
-  .top,
-  .composer {
-    border-color: rgba(255, 255, 255, 0.22) !important;
-  }
-
-  // Message list
-  .search {
-    background: #f1f2f6 !important;
-    color: #2f6b7a !important;
-  }
-
-  .messages {
-    background: transparent !important;
-  }
-
-  .bubble {
-    background: rgba(255, 255, 255, 0.16) !important;
-    color: #fff !important;
-  }
-
-  .mine .bubble {
-    background: #fff !important;
-    color: #2f6b7a !important;
-  }
-
-  // Icons inside light fields (phone, Instagram) stay gray, teal when focused
-  .with-icon mat-icon,
-  .with-icon svg {
-    color: #6b6b6b !important;
-  }
-
-  .with-icon:focus-within mat-icon,
-  .with-icon:focus-within svg {
-    color: #2f6b7a !important;
-  }
-
-  // Login and sign up fields are light pills
-  .field {
-    color: #6b6b6b !important;
-
-    &:focus-within {
-      color: #2f6b7a !important;
-    }
-  }
-
-  // Bottom menu
-  nav.tabs {
-    background: #245765 !important;
-    box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.2);
-
-    a {
-      color: rgba(255, 255, 255, 0.6) !important;
-
-      &.active {
-        color: #fff !important;
-      }
-    }
+    color: var(--ink);
   }
 
   // Widgets that are white cards: they get the original light colors back
@@ -179,6 +106,7 @@ body.pro-theme {
     --primary-light: #e3f4f7;
     --text: #1c1c1c;
     --muted: #6b6b6b;
+    --on-primary: #fff;
     color: #1c1c1c;
   }
 

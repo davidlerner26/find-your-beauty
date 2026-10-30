@@ -109,11 +109,7 @@ select {
 }
 
 .error {
-  color: var(--danger);
-
-  :host-context(.pro-theme) & {
-    color: #fff0f0;
-  }
+  color: var(--error-fg, var(--danger));
 }
 
 .upload,

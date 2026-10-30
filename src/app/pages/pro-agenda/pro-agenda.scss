@@ -33,8 +33,10 @@ h2 {
 
 .booking {
   padding: 1.25rem;
+  border: var(--card-border, 0);
   border-radius: 16px;
-  box-shadow: var(--shadow-card);
+  background: var(--card-bg, transparent);
+  box-shadow: var(--card-shadow, var(--shadow-card));
 }
 
 .booking-head {
@@ -106,7 +108,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   padding-top: 0.75rem;
-  border-top: 1px dashed var(--border);
+  border-top: 1px dashed var(--line-strong, var(--border));
 }
 
 .notes {

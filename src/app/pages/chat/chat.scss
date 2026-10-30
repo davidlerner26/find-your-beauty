@@ -12,7 +12,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--line, var(--border-soft));
 }
 
 .icon-btn {
@@ -66,7 +66,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  background: #f7fafb;
+  background: var(--chat-bg, #f7fafb);
 }
 
 .row {
@@ -93,12 +93,12 @@
 .bubble {
   padding: 0.9rem 1.1rem;
   border-radius: var(--radius);
-  background: var(--primary);
-  color: #fff;
+  background: var(--bubble-bg, var(--primary));
+  color: var(--bubble-fg, #fff);
 
   .mine & {
-    background: var(--primary-light);
-    color: var(--text);
+    background: var(--bubble-mine-bg, var(--primary-light));
+    color: var(--bubble-mine-fg, var(--text));
   }
 
   &.image {
@@ -159,7 +159,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem 1rem;
-  border-top: 1px solid var(--border-soft);
+  border-top: 1px solid var(--line, var(--border-soft));
 
   .draft {
     flex: 1;
@@ -180,7 +180,7 @@
   border: 0;
   border-radius: 50%;
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
   cursor: pointer;
 }
 
@@ -218,7 +218,7 @@
   color: var(--muted);
 
   &.error {
-    color: #c0392b;
+    color: var(--error-fg, #c0392b);
   }
 }
 

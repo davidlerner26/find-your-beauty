@@ -213,7 +213,7 @@ hr {
 
 .error {
   margin: 1rem 0 0;
-  color: var(--danger-strong);
+  color: var(--error-fg, var(--danger-strong));
   text-align: center;
 }
 

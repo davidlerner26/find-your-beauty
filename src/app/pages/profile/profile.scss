@@ -88,7 +88,7 @@ h1 {
 .signin {
   width: 100%;
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
 }
 
 .details {
@@ -123,7 +123,7 @@ h1 {
 }
 
 .error {
-  color: var(--danger);
+  color: var(--error-fg, var(--danger));
 }
 
 .details-head {

@@ -49,5 +49,5 @@
 }
 
 .hint.confirmed {
-  color: var(--success);
+  color: var(--confirmed-fg, var(--success));
 }

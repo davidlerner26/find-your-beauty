@@ -11,7 +11,7 @@
 @mixin solid-button {
   background: var(--primary);
   border: 0;
-  color: #fff;
+  color: var(--on-primary);
 }
 
 // White button with a red outline (decline, deny)

@@ -81,12 +81,12 @@ h1 {
 
 .primary {
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
 }
 
 .google {
   background: #fff;
-  color: var(--primary);
+  color: var(--teal);
 }
 
 .signin {

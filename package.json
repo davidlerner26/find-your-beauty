@@ -44,7 +44,7 @@
     "@angular/service-worker": "^21.2.25",
     "@ngrx/signals": "^21.1.1",
     "@stripe/stripe-js": "^10.2.0",
-    "firebase": "^12.19.0",
+    "firebase": "^13.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -59,7 +59,7 @@
     "@angular/localize": "^21.2.25",
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^10.0.1",
-    "@firebase/rules-unit-testing": "^5.0.2",
+    "@firebase/rules-unit-testing": "^6.0.0",
     "@playwright/test": "^1.64.1",
     "@storybook/addon-a11y": "^10.6.4",
     "@storybook/addon-docs": "^10.6.4",

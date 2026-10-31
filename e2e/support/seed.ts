@@ -125,3 +125,10 @@ export async function seed() {
     admin: true,
   });
 }
+
+// Changes fields of a professional that is already in the emulator (what the Cloud Functions would write)
+export async function updateProfessional(uid: string, fields: Record<string, unknown>) {
+  requireEmulators();
+  if (!getApps().length) initializeApp({ projectId: PROJECT_ID });
+  await getFirestore().doc(`professionals/${uid}`).update(fields);
+}

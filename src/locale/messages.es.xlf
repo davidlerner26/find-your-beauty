@@ -5122,6 +5122,54 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1092196382465170488" datatype="html">
+        <source>A conexão com o Instagram ainda não foi configurada.</source>
+        <target>La conexión con Instagram aún no está configurada.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">180,181</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3174907561922167227" datatype="html">
+        <source> Desconectar </source>
+        <target> Desconectar </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">160</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3268561445062977546" datatype="html">
+        <source> Conectado como @<x id="INTERPOLATION" equiv-text="{{ profile()?.instagram }}"/>. <x id="INTERPOLATION_1" equiv-text="{{ profile()?.instagramPhotos?.length ?? 0 }}"/> fotos aparecem no seu perfil. Elas são atualizadas todas as noites. </source>
+        <target> Conectado como @<x id="INTERPOLATION" equiv-text="{{ profile()?.instagram }}"/>. <x id="INTERPOLATION_1" equiv-text="{{ profile()?.instagramPhotos?.length ?? 0 }}"/> fotos aparecen en tu perfil. Se actualizan todas las noches. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">135,138</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3406851173589560276" datatype="html">
+        <source><x id="START_BLOCK_IF" equiv-text="@if (instagramBusy()) {"/> Aguarde... <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Atualizar fotos <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
+        <target><x id="START_BLOCK_IF" equiv-text="@if (instagramBusy()) {"/> Espera... <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Actualizar fotos <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">147,152</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7199264225311660046" datatype="html">
+        <source> Conecte a sua conta para mostrar as 12 fotos mais recentes do seu Instagram no perfil. A conta precisa ser profissional (Criador ou Empresa): conta pessoal não funciona. Para mudar, no Instagram vá em Configurações &gt; Tipo de conta e ferramentas &gt; Mudar para conta profissional. </source>
+        <target> Conecta tu cuenta para mostrar las 12 fotos más recientes de tu Instagram en tu perfil. La cuenta debe ser profesional (Creador o Empresa): una cuenta personal no funciona. Para cambiarla, en Instagram ve a Configuración &gt; Tipo de cuenta y herramientas &gt; Cambiar a cuenta profesional. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">165,167</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7603294268640455859" datatype="html">
+        <source> Conectar Instagram </source>
+        <target> Conectar Instagram </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">177</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -127,26 +127,31 @@
         </label>
       </section>
 
-      <!-- Instagram desligado por enquanto (a integração ainda não foi configurada na Meta). Para voltar, é só tirar este comentário.
       @if (!signup()) {
         <section>
           <h2>Instagram</h2>
           @if (profile()?.instagramConnected) {
-            <p class="hint muted">
+            <p i18n class="hint muted">
               Conectado como &#64;{{ profile()?.instagram }}.
               {{ profile()?.instagramPhotos?.length ?? 0 }} fotos aparecem no seu perfil. Elas são
               atualizadas todas as noites.
             </p>
             <div class="block">
               <button
+                i18n
                 type="button"
                 class="secondary"
                 [disabled]="instagramBusy()"
                 (click)="refreshInstagram()"
               >
-                @if (instagramBusy()) { Aguarde... } @else { Atualizar fotos }
+                @if (instagramBusy()) {
+                  Aguarde...
+                } @else {
+                  Atualizar fotos
+                }
               </button>
               <button
+                i18n
                 type="button"
                 class="signout"
                 [disabled]="instagramBusy()"
@@ -156,13 +161,14 @@
               </button>
             </div>
           } @else {
-            <p class="hint muted">
-              Conecte a sua conta para mostrar as 12 fotos mais recentes do seu Instagram no perfil. A
-              conta precisa ser profissional (Criador ou Empresa): conta pessoal não funciona. Para
-              mudar, no Instagram vá em Configurações &gt; Tipo de conta e ferramentas &gt; Mudar para
-              conta profissional.
+            <p i18n class="hint muted">
+              Conecte a sua conta para mostrar as 12 fotos mais recentes do seu Instagram no perfil.
+              A conta precisa ser profissional (Criador ou Empresa): conta pessoal não funciona.
+              Para mudar, no Instagram vá em Configurações &gt; Tipo de conta e ferramentas &gt;
+              Mudar para conta profissional.
             </p>
             <button
+              i18n
               type="button"
               class="secondary"
               [disabled]="!instagramService.available"
@@ -171,13 +177,12 @@
               Conectar Instagram
             </button>
             @if (!instagramService.available) {
-              <p class="hint muted">A conexão com o Instagram ainda não foi configurada.</p>
+              <p i18n class="hint muted">A conexão com o Instagram ainda não foi configurada.</p>
             }
           }
         </section>
       }
 
--->
       <section>
         <div class="head">
           <h2 i18n>Galeria</h2>

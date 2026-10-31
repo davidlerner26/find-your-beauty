@@ -19,8 +19,9 @@ export const environment = {
   },
   // The same key of production works when the referrers of the key include dev.findyourbeauty.com.br
   googleMapsApiKey: 'AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I',
-  // Instagram API with Instagram Login. Empty = the connect button is disabled (there is no test app on Meta yet).
-  instagramAppId: '',
+  // Instagram API with Instagram Login: the same Meta app as production. Its OAuth redirect URIs include
+  // https://dev.findyourbeauty.com.br/pro/instagram and, while the app is in development mode, only its testers connect.
+  instagramAppId: '1138530759119798',
   firebase: {
     apiKey: 'AIzaSyBwamplQdQ7d2BYMuD56DfVigkO1fuSpEw',
     authDomain: 'find-your-beauty-dev.firebaseapp.com',

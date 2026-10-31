@@ -3,7 +3,6 @@ import { Component, computed, effect, input, signal, inject } from '@angular/cor
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { parseInstagram } from '../../utils/instagram';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import {
@@ -77,7 +76,6 @@ export class ProProfile {
   }
   private savedCpf = '';
   private reloadedList = false;
-  protected instagram = '';
   protected image = '';
   protected readonly imagePosition = signal<ImagePosition>({ x: 50, y: 50 });
   protected gallery: string[] = [];
@@ -131,7 +129,6 @@ export class ProProfile {
       this.filled = true;
       this.name = profile.name;
       this.phone = profile.phone ? formatPhone(profile.phone) : '';
-      this.instagram = profile.instagram ? '@' + profile.instagram : '';
       // Accounts from when there were two photos: the old cover is used when there is no profile photo
       const legacy = profile as Professional & {
         coverImage?: string;
@@ -311,15 +308,14 @@ export class ProProfile {
     return this.services.filter(isServiceComplete).map(toService);
   }
 
-  // What the form writes to the profile. `instagram` and `place` are left out when they can't be saved yet.
-  private profileFields(services: Service[], instagram: string | undefined, draft = false) {
+  // What the form writes to the profile. `place` is left out when it can't be saved yet.
+  private profileFields(services: Service[], draft = false) {
     // A draft keeps the previous address until a suggestion is chosen, and the previous hours while they are invalid
     const keepAddress = draft && this.needsAddress && !this.addressConfirmed();
     const keepHours = draft && this.invalidDays.length > 0;
     return {
       name: this.name.trim(),
       phone: this.phone.trim(),
-      ...(instagram === undefined ? {} : { instagram }),
       image: this.image.trim(),
       imagePosition: this.imagePosition(),
       serviceMode: this.serviceMode(),
@@ -363,12 +359,7 @@ export class ProProfile {
 
   private async saveDraft() {
     if (!this.filled || this.saving()) return;
-    const instagram = parseInstagram(this.instagram);
-    const fields = this.profileFields(
-      this.completeServices(),
-      instagram === null ? undefined : instagram,
-      true,
-    );
+    const fields = this.profileFields(this.completeServices(), true);
     // Once the sign up is sent, `visible` and `published` follow the form; before, the profile isn't shown anyway
     const visible = this.visible();
     const status = this.signup()
@@ -395,12 +386,6 @@ export class ProProfile {
       return;
     }
 
-    const instagram = parseInstagram(this.instagram);
-    if (instagram === null) {
-      this.show($localize`Usuário do Instagram inválido. Use o formato @usuario.`);
-      return;
-    }
-
     if (this.signup() && this.missing.length) {
       this.serviceTried.set(true);
       this.show(`Para enviar o cadastro falta: ${this.missing.join(', ')}.`);
@@ -424,7 +409,7 @@ export class ProProfile {
     const published = visible && this.missing.length === 0;
 
     try {
-      const fields = this.profileFields(services, instagram);
+      const fields = this.profileFields(services);
       await this.accounts.update(this.uid(), {
         ...fields,
         visible,

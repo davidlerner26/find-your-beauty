@@ -3294,14 +3294,6 @@
           <context context-type="linenumber">670</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7035888761323906659" datatype="html">
-        <source>Usuário do Instagram inválido. Use o formato @usuario.</source>
-        <target>Invalid Instagram username. Use the format @username.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
-          <context context-type="linenumber">676</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5883100616914724429" datatype="html">
         <source>Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.</source>
         <target>Fill in all the required fields of the services or remove the empty ones.</target>
@@ -5103,14 +5095,6 @@
         <target>Expires <x id="INTERPOLATION" equiv-text="{{ card.expMonth }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ card.expYear }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/cards/cards.html</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8194820964908825299" datatype="html">
-        <source>@usuario</source>
-        <target>@username</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

@@ -43,6 +43,8 @@ const professional = (uid: string, name: string, email: string, mode: 'studio' |
   name,
   email,
   phone: '(21) 90000-0001',
+  // What the connection with Instagram stores: the public page links to the profile
+  instagram: 'ana.makeup',
   image: picture('#c98b9e'),
   imagePosition: { x: 50, y: 40 },
   address: mode === 'home' ? '' : 'Rua das Flores, 100 - Botafogo, Rio de Janeiro - RJ, 22250-040',

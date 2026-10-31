@@ -43,16 +43,15 @@ test.describe('professional profile', () => {
     await expect(page.getByRole('heading', { name: 'Ana Souza Editada' }).first()).toBeVisible();
   });
 
-  test('the Instagram username is saved and the public page links to it', async ({ page }) => {
+  test('the Instagram field is not in the form, and the public page links to the connected profile', async ({
+    page,
+  }) => {
     await signIn(page, PRO.email, 'professional');
     await page.goto('/pro/perfil');
-
-    await page.locator('input[name=instagram]').fill('@ana.makeup');
-    await page.locator('input[name=phone]').focus();
-    await expect(page.getByText('Alterações salvas')).toBeVisible();
+    await expect(page.locator('input[name=instagram]')).toHaveCount(0);
 
     await page.goto(`/profissionais/${PRO.uid}`);
-    await expect(page.getByRole('link', { name: '@ana.makeup' })).toHaveAttribute(
+    await expect(page.locator('a.instagram')).toHaveAttribute(
       'href',
       'https://instagram.com/ana.makeup',
     );

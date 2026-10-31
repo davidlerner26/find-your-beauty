@@ -112,6 +112,16 @@ export const connectInstagram = onCall(
         redirect_uri: redirectUri,
         code,
       }),
+    }).catch((error) => {
+      // What is needed to tell a wrong redirect address from a wrong secret or a used code (no secrets)
+      logger.error('Instagram refused the code', {
+        redirectUri,
+        appId: appId.value(),
+        secretLength: appSecret.value().length,
+        codeLength: code.length,
+        message: (error as Error).message,
+      });
+      throw error;
     });
     const long = await getJson(
       `${GRAPH}/access_token?grant_type=ig_exchange_token&client_secret=${appSecret.value()}&access_token=${short['access_token']}`,

@@ -33,8 +33,21 @@ export class Instagram {
     location.href = url.toString();
   }
 
+  // A code works once: when the page asks again for the same code (a second render, a reload of the tab), the answer
+  // of the first request is shared instead of sending the code again, which Instagram would refuse
+  private readonly finishing = new Map<string, ReturnType<Instagram['exchange']>>();
+
   // Back from Instagram: checks the state and trades the code for the connection
-  async finish(code: string, state: string | undefined) {
+  finish(code: string, state: string | undefined) {
+    const existing = this.finishing.get(code);
+    if (existing) return existing;
+
+    const request = this.exchange(code, state);
+    this.finishing.set(code, request);
+    return request;
+  }
+
+  private async exchange(code: string, state: string | undefined) {
     let expected: string | null = null;
     try {
       expected = sessionStorage.getItem(STATE_KEY);

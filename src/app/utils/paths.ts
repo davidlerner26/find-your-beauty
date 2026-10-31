@@ -13,6 +13,8 @@ export const PATHS = {
   proLogin: '/pro/entrar',
   proSignup: '/pro/cadastro',
   proProfile: '/pro/perfil',
+  proMessages: '/pro/mensagens',
+  proNotifications: '/pro/notificacoes',
   // The page of a professional, and its booking screen
   professionals: '/profissionais',
   professional: (id: string) => `/profissionais/${id}`,

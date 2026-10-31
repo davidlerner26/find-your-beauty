@@ -2,8 +2,9 @@ import { Routes } from '@angular/router';
 import { adminGuard } from './guards/admin';
 import { cardsGuard } from './guards/cards';
 import { checkoutGuard } from './guards/checkout';
-import { clientGuard } from './guards/client';
-import { proGuard } from './guards/pro';
+import { clientAreaGuard, clientEntryGuard, clientGuard } from './guards/client';
+import { proEntryGuard, proGuard } from './guards/pro';
+import { PATHS } from './utils/paths';
 
 export const routes: Routes = [
   {
@@ -52,29 +53,35 @@ export const routes: Routes = [
   },
   {
     path: 'entrar',
+    canActivate: [clientEntryGuard],
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
   },
   {
     path: 'cadastro',
+    canActivate: [clientEntryGuard],
     loadComponent: () => import('./pages/signup/signup').then((m) => m.Signup),
   },
   {
     path: 'mensagens',
-    data: { tab: 'mensagens' },
+    canActivate: [clientAreaGuard],
+    data: { tab: 'mensagens', proPath: PATHS.proMessages },
     loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
   },
   {
     path: 'agenda',
+    canActivate: [clientAreaGuard],
     loadComponent: () => import('./pages/my-bookings/my-bookings').then((m) => m.MyBookings),
   },
   {
     path: 'notificacoes',
-    data: { tab: 'notificacoes' },
+    canActivate: [clientAreaGuard],
+    data: { tab: 'notificacoes', proPath: PATHS.proNotifications },
     loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
   },
   {
     path: 'mensagens/:id',
-    data: { tab: 'mensagens' },
+    canActivate: [clientAreaGuard],
+    data: { tab: 'mensagens', proPath: PATHS.proMessages },
     loadComponent: () => import('./pages/inbox/inbox').then((m) => m.Inbox),
   },
   {
@@ -84,6 +91,8 @@ export const routes: Routes = [
   },
   {
     path: 'perfil',
+    canActivate: [clientAreaGuard],
+    data: { proPath: PATHS.proProfile },
     loadComponent: () => import('./pages/profile/profile').then((m) => m.Profile),
   },
   {
@@ -110,11 +119,13 @@ export const routes: Routes = [
   // Professional area
   {
     path: 'pro/entrar',
+    canActivate: [proEntryGuard],
     data: { pro: true },
     loadComponent: () => import('./pages/login/login').then((m) => m.Login),
   },
   {
     path: 'pro/cadastro',
+    canActivate: [proEntryGuard],
     data: { pro: true },
     loadComponent: () => import('./pages/signup/signup').then((m) => m.Signup),
   },

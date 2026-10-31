@@ -28,3 +28,25 @@ export const clientGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) 
   }
   return true;
 };
+
+// The screens of the client (agenda, messages, notifications, profile) are not for professionals: they go to the
+// same screen of the professional area, given in the `proPath` of the route (the agenda when there is none).
+// Visitors get in: each screen tells them to sign in.
+export const clientAreaGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
+  const auth = inject(Auth);
+  const router = inject(Router);
+
+  await auth.whenReady;
+  if (auth.role() !== 'professional') return true;
+  return router.parseUrl((route.data['proPath'] as string | undefined) ?? PATHS.proHome);
+};
+
+// The login and the sign up of the client: a professional who is signed in has no use for them
+export const clientEntryGuard: CanActivateFn = async () => {
+  const auth = inject(Auth);
+  const router = inject(Router);
+
+  await auth.whenReady;
+  if (auth.role() === 'professional') return router.parseUrl(PATHS.proHome);
+  return true;
+};

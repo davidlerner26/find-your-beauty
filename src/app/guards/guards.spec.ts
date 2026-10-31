@@ -9,8 +9,8 @@ import {
 import { Auth } from '../services/auth';
 import { Users } from '../services/users';
 import { adminGuard } from './admin';
-import { clientGuard } from './client';
-import { proGuard } from './pro';
+import { clientAreaGuard, clientEntryGuard, clientGuard } from './client';
+import { proEntryGuard, proGuard } from './pro';
 
 type Role = 'client' | 'professional' | null;
 
@@ -120,5 +120,52 @@ describe('clientGuard', () => {
     expect(await run(clientGuard)).toBe(true);
     expect(error).toHaveBeenCalled();
     error.mockRestore();
+  });
+});
+
+describe('proEntryGuard', () => {
+  it('lets visitors and a sign up that is still going in', async () => {
+    setup(fakeAuth({}));
+    expect(await run(proEntryGuard)).toBe(true);
+  });
+
+  it('sends clients to the start and professionals to their agenda', async () => {
+    setup(fakeAuth({ uid: 'c', role: 'client' }));
+    expect(await run(proEntryGuard)).toBe('/');
+    TestBed.resetTestingModule();
+    setup(fakeAuth({ uid: 'p', role: 'professional' }));
+    expect(await run(proEntryGuard)).toBe('/pro');
+  });
+});
+
+describe('clientAreaGuard', () => {
+  const routeWith = (proPath?: string) =>
+    ({
+      data: proPath ? { proPath } : {},
+      paramMap: { get: () => null },
+    }) as unknown as ActivatedRouteSnapshot;
+
+  it('lets visitors and clients in', async () => {
+    setup(fakeAuth({}));
+    expect(await run(clientAreaGuard, routeWith())).toBe(true);
+    TestBed.resetTestingModule();
+    setup(fakeAuth({ uid: 'c', role: 'client' }));
+    expect(await run(clientAreaGuard, routeWith())).toBe(true);
+  });
+
+  it('sends a professional to the same screen of the professional area, or to the agenda', async () => {
+    setup(fakeAuth({ uid: 'p', role: 'professional' }));
+    expect(await run(clientAreaGuard, routeWith('/pro/mensagens'))).toBe('/pro/mensagens');
+    expect(await run(clientAreaGuard, routeWith())).toBe('/pro');
+  });
+});
+
+describe('clientEntryGuard', () => {
+  it('lets visitors and clients in, and sends a professional to the agenda', async () => {
+    setup(fakeAuth({}));
+    expect(await run(clientEntryGuard)).toBe(true);
+    TestBed.resetTestingModule();
+    setup(fakeAuth({ uid: 'p', role: 'professional' }));
+    expect(await run(clientEntryGuard)).toBe('/pro');
   });
 });

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { COMPANY } from '../../company';
 
 @Component({
   selector: 'app-privacy',
@@ -88,6 +89,10 @@ import { RouterLink } from '@angular/router';
 
     <h2 i18n>Contato</h2>
     <p i18n>Dúvidas sobre esta política: <strong>contato@findyourbeauty.com.br</strong>.</p>
+
+    <p class="company">{{ company.name }} · CNPJ {{ company.cnpj }}</p>
   `,
 })
-export class Privacy {}
+export class Privacy {
+  protected readonly company = COMPANY;
+}

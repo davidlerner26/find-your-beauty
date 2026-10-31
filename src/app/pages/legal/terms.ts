@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { COMPANY } from '../../company';
 
 @Component({
   selector: 'app-terms',
@@ -63,6 +64,10 @@ import { RouterLink } from '@angular/router';
       <strong>contato@findyourbeauty.com.br</strong>. Veja também a
       <a routerLink="/privacidade">Política de Privacidade</a>.
     </p>
+
+    <p class="company">{{ company.name }} · CNPJ {{ company.cnpj }}</p>
   `,
 })
-export class Terms {}
+export class Terms {
+  protected readonly company = COMPANY;
+}

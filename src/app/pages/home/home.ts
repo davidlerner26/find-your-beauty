@@ -24,6 +24,7 @@ import { T } from '../../utils/texts';
 import { environment } from '../../../environments/environment';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
+import { COMPANY } from '../../company';
 
 const CATEGORY_ICONS: Record<string, string> = { Maquiagem: 'brush', Cabelo: 'content_cut' };
 
@@ -65,6 +66,7 @@ export class Home {
   protected readonly favorites = inject(Favorites);
 
   protected readonly t = T;
+  protected readonly company = COMPANY;
   // The section of featured professionals is only shown in the test environment for now
   protected readonly showFeatured = environment.features.featuredProfessionals;
   protected readonly firstName = computed(

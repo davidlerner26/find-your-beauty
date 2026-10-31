@@ -17,6 +17,13 @@ test.describe('visitor', () => {
     await expect(page.getByText(PRO.service).first()).toBeVisible();
   });
 
+  test('shows the company and its CNPJ on the home and on the legal pages', async ({ page }) => {
+    for (const path of ['/', '/privacidade', '/termos']) {
+      await page.goto(path);
+      await expect(page.getByText('DAVID LERNER · CNPJ 42.416.006/0001-94')).toBeVisible();
+    }
+  });
+
   test('finds a professional by name in the search', async ({ page }) => {
     await page.goto('/busca');
     await page.getByPlaceholder('Busque profissional ou serviço..').fill('Ana');

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { COMPANY } from '../../company';
+import { SiteFooter } from '../../components/site-footer/site-footer';
 
 @Component({
   selector: 'app-privacy',
-  imports: [RouterLink],
+  imports: [RouterLink, SiteFooter],
   styleUrl: './legal.scss',
   template: `
     <a i18n class="back" routerLink="/">← Voltar</a>
@@ -90,9 +90,7 @@ import { COMPANY } from '../../company';
     <h2 i18n>Contato</h2>
     <p i18n>Dúvidas sobre esta política: <strong>contato@findyourbeauty.com.br</strong>.</p>
 
-    <p class="company">{{ company.name }} · CNPJ {{ company.cnpj }}</p>
+    <app-site-footer />
   `,
 })
-export class Privacy {
-  protected readonly company = COMPANY;
-}
+export class Privacy {}

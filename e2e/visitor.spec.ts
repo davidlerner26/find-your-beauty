@@ -17,10 +17,24 @@ test.describe('visitor', () => {
     await expect(page.getByText(PRO.service).first()).toBeVisible();
   });
 
-  test('shows the company and its CNPJ on the home and on the legal pages', async ({ page }) => {
+  test('has a footer with the legal pages, the contact and the company on the home and on the legal pages', async ({
+    page,
+  }) => {
     for (const path of ['/', '/privacidade', '/termos']) {
       await page.goto(path);
-      await expect(page.getByText('DAVID LERNER · CNPJ 42.416.006/0001-94')).toBeVisible();
+      const footer = page.getByRole('contentinfo');
+      await expect(footer.getByRole('link', { name: 'Termos de Uso' })).toHaveAttribute(
+        'href',
+        '/termos',
+      );
+      await expect(footer.getByRole('link', { name: 'Política de Privacidade' })).toHaveAttribute(
+        'href',
+        '/privacidade',
+      );
+      await expect(
+        footer.getByRole('link', { name: 'contato@findyourbeauty.com.br' }),
+      ).toBeVisible();
+      await expect(footer.getByText('DAVID LERNER · CNPJ 42.416.006/0001-94')).toBeVisible();
     }
   });
 

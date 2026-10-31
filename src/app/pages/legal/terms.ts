@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { COMPANY } from '../../company';
+import { SiteFooter } from '../../components/site-footer/site-footer';
 
 @Component({
   selector: 'app-terms',
-  imports: [RouterLink],
+  imports: [RouterLink, SiteFooter],
   styleUrl: './legal.scss',
   template: `
     <a i18n class="back" routerLink="/">← Voltar</a>
@@ -65,9 +65,7 @@ import { COMPANY } from '../../company';
       <a routerLink="/privacidade">Política de Privacidade</a>.
     </p>
 
-    <p class="company">{{ company.name }} · CNPJ {{ company.cnpj }}</p>
+    <app-site-footer />
   `,
 })
-export class Terms {
-  protected readonly company = COMPANY;
-}
+export class Terms {}

@@ -93,6 +93,11 @@ const STILL_HELD = [
   'requires_confirmation',
 ];
 
+// Does a new booking have to come with a hold on a card? Only where payments are on, and not for the mobile app, which
+// has no payment in any environment (it says so in `source`; everything else is the site).
+export const needsPayment = (paymentsOn: boolean, source: unknown) =>
+  paymentsOn && source !== 'mobile';
+
 export class Payments {
   constructor(
     private readonly stripe: StripeLike,

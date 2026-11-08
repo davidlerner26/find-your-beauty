@@ -152,6 +152,13 @@ describe('bookings and busy slots', () => {
     );
   });
 
+  it('accepts the source of the booking: the site or the mobile app, nothing else', async () => {
+    await assertSucceeds(book(CLIENT, bookingData({ clientUid: CLIENT, source: 'mobile' })));
+    await assertSucceeds(book(CLIENT, bookingData({ clientUid: CLIENT, source: 'web' })));
+    await assertFails(book(CLIENT, bookingData({ source: 'robot' })));
+    await assertFails(book(CLIENT, bookingData({ source: 1 })));
+  });
+
   it('denies a hold id that is not a short text', async () => {
     await assertFails(book(CLIENT, bookingData({ paymentIntentId: 123 })));
     await assertFails(book(CLIENT, bookingData({ paymentIntentId: 'x'.repeat(101) })));

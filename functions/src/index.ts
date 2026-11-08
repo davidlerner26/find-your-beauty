@@ -10,6 +10,7 @@ import { serviceName } from './catalog';
 import * as logger from 'firebase-functions/logger';
 import { checkEmailCode } from './email-code';
 import { paymentsOn, payments, stripeKey } from './payments-api';
+import { needsPayment } from './payments';
 import { priceAt, Service } from './pricing';
 import { CLOSED_BOOKING_STATUSES, COLLECTIONS } from './shared/domain';
 import { clientIp, hit, RateLimit } from './rate-limit';
@@ -131,7 +132,7 @@ export const onBookingCreated = onDocumentCreated(
 
     // Where there are payments, a booking comes with the hold on the card that the client made for it. It is checked
     // here, where the browser can't fake it: the client's own, for this amount, still held, used by this booking only.
-    if (paymentsOn()) {
+    if (needsPayment(paymentsOn(), booking.source)) {
       const verified = await payments().verifyForBooking(
         { clientUid: booking.clientUid, total, paymentIntentId: booking.paymentIntentId },
         bookingId,

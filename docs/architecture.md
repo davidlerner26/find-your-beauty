@@ -89,7 +89,9 @@ always worked out on the server. `services/payments.types.ts` is the interface, 
 and Stripe.js) and `FakePayments` (the e2e build: cards in the browser). The server side is `functions/src/
 payments.ts` (all the logic, tested with an in-memory Stripe), `payments-api.ts` (the callables) and the two
 booking triggers. Setup, test cards and limits: [stripe.md](stripe.md). Until the key is filled in, the screen
-keeps the simulated payment. A discount line like the one in the design is left for later.
+keeps the simulated payment. The mobile app has no payment in any environment: its bookings say `source: 'mobile'`
+(`firestore.rules` accepts `web` or `mobile`) and `onBookingCreated` does not ask them for the hold
+(`needsPayment` in `payments.ts`). A discount line like the one in the design is left for later.
 
 ## Styles
 

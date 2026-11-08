@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { PaymentError, Payments } from '../src/payments';
+import { needsPayment, PaymentError, Payments } from '../src/payments';
 import { fakeStripe } from './fake-stripe';
 
 // Runs against the Firestore emulator (npm run test:functions)
@@ -324,5 +324,18 @@ describe('capture and release', () => {
     fake.state.failNext = new Error('Stripe is down');
     expect(await payments.release(id)).toBeNull();
     expect(await payments.release('pi_unknown')).toBeNull();
+  });
+});
+
+describe('needsPayment', () => {
+  it('asks for the hold only where payments are on', () => {
+    expect(needsPayment(true, 'web')).toBe(true);
+    expect(needsPayment(true, undefined)).toBe(true);
+    expect(needsPayment(false, 'web')).toBe(false);
+  });
+
+  it('never asks the mobile app, which has no payment', () => {
+    expect(needsPayment(true, 'mobile')).toBe(false);
+    expect(needsPayment(false, 'mobile')).toBe(false);
   });
 });

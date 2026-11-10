@@ -115,7 +115,8 @@
         </label>
       </section>
 
-      <section>
+      <!-- Only for professionals that are already connected, while the connect button is off -->
+      <section [hidden]="!profile()?.instagramConnected">
         <h2>Instagram</h2>
         @if (profile()?.instagramConnected) {
           <p i18n class="hint muted">
@@ -147,7 +148,10 @@
               Desconectar
             </button>
           </div>
-        } @else {
+        }
+        <!--
+          Connecting is off for now (Meta has not granted advanced access to instagram_business_basic yet):
+          bring this back when it does. Professionals who are already connected keep the block above.
           <p i18n class="hint muted">
             Conecte a sua conta para mostrar as 12 fotos mais recentes do seu Instagram no perfil. A
             conta precisa ser profissional (Criador ou Empresa): conta pessoal não funciona. Para
@@ -177,7 +181,7 @@
           @if (!instagramService.available) {
             <p i18n class="hint muted">A conexão com o Instagram ainda não foi configurada.</p>
           }
-        }
+        -->
       </section>
 
       <section>

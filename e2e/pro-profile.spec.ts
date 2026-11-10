@@ -8,16 +8,12 @@ test.beforeEach(async () => {
 });
 
 test.describe('professional profile', () => {
-  test('shows the Instagram connection, turned off while the Meta app is not configured', async ({
-    page,
-  }) => {
+  test('does not offer the Instagram connection while it is turned off', async ({ page }) => {
     await signIn(page, PRO.email, 'professional');
     await page.goto('/pro/perfil');
-    await expect(page.getByRole('heading', { name: 'Instagram', exact: true })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Conectar Instagram' })).toBeDisabled();
-    await expect(
-      page.getByText('A conexão com o Instagram ainda não foi configurada.'),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Galeria' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Instagram', exact: true })).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Conectar Instagram' })).toHaveCount(0);
   });
 
   test('the changes are saved by themselves, with the CPF kept apart, and survive a reload', async ({

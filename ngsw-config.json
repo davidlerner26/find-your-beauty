@@ -26,6 +26,8 @@
     "!/en",
     "!/en/**",
     "!/es",
-    "!/es/**"
+    "!/es/**",
+    "!/instagram-app",
+    "!/instagram-app/**"
   ]
 }

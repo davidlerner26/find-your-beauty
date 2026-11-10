@@ -115,74 +115,73 @@
         </label>
       </section>
 
-      <!-- Only for professionals that are already connected, while the connect button is off -->
-      <section [hidden]="!profile()?.instagramConnected">
-        <h2>Instagram</h2>
-        @if (profile()?.instagramConnected) {
-          <p i18n class="hint muted">
-            Conectado como &#64;{{ profile()?.instagram }}.
-            {{ profile()?.instagramPhotos?.length ?? 0 }} fotos aparecem no seu perfil. Elas são
-            atualizadas todas as noites.
-          </p>
-          <div class="block">
+      <!-- Off in production until Meta grants advanced access: only the connected professionals keep it -->
+      @if (instagramService.connectEnabled || profile()?.instagramConnected) {
+        <section>
+          <h2>Instagram</h2>
+          @if (profile()?.instagramConnected) {
+            <p i18n class="hint muted">
+              Conectado como &#64;{{ profile()?.instagram }}.
+              {{ profile()?.instagramPhotos?.length ?? 0 }} fotos aparecem no seu perfil. Elas são
+              atualizadas todas as noites.
+            </p>
+            <div class="block">
+              <button
+                i18n
+                type="button"
+                class="refresh"
+                [disabled]="instagramBusy()"
+                (click)="refreshInstagram()"
+              >
+                @if (instagramBusy()) {
+                  Aguarde...
+                } @else {
+                  Atualizar fotos
+                }
+              </button>
+              <button
+                i18n
+                type="button"
+                class="signout"
+                [disabled]="instagramBusy()"
+                (click)="disconnectInstagram()"
+              >
+                Desconectar
+              </button>
+            </div>
+          } @else {
+            <p i18n class="hint muted">
+              Conecte a sua conta para mostrar as 12 fotos mais recentes do seu Instagram no perfil.
+              A conta precisa ser profissional (Criador ou Empresa): conta pessoal não funciona.
+              Para mudar, no Instagram vá em Configurações &gt; Tipo de conta e ferramentas &gt;
+              Mudar para conta profissional.
+            </p>
             <button
-              i18n
               type="button"
-              class="refresh"
-              [disabled]="instagramBusy()"
-              (click)="refreshInstagram()"
+              class="instagram"
+              [disabled]="!instagramService.available"
+              (click)="connectInstagram()"
             >
-              @if (instagramBusy()) {
-                Aguarde...
-              } @else {
-                Atualizar fotos
-              }
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="5.5" />
+                <circle cx="12" cy="12" r="4.2" />
+                <circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" />
+              </svg>
+              <span i18n>Conectar Instagram</span>
             </button>
-            <button
-              i18n
-              type="button"
-              class="signout"
-              [disabled]="instagramBusy()"
-              (click)="disconnectInstagram()"
-            >
-              Desconectar
-            </button>
-          </div>
-        }
-        <!--
-          Connecting is off for now (Meta has not granted advanced access to instagram_business_basic yet):
-          bring this back when it does. Professionals who are already connected keep the block above.
-          <p i18n class="hint muted">
-            Conecte a sua conta para mostrar as 12 fotos mais recentes do seu Instagram no perfil. A
-            conta precisa ser profissional (Criador ou Empresa): conta pessoal não funciona. Para
-            mudar, no Instagram vá em Configurações &gt; Tipo de conta e ferramentas &gt; Mudar para
-            conta profissional.
-          </p>
-          <button
-            type="button"
-            class="instagram"
-            [disabled]="!instagramService.available"
-            (click)="connectInstagram()"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="5.5" />
-              <circle cx="12" cy="12" r="4.2" />
-              <circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" />
-            </svg>
-            <span i18n>Conectar Instagram</span>
-          </button>
-          @if (!instagramService.available) {
-            <p i18n class="hint muted">A conexão com o Instagram ainda não foi configurada.</p>
+            @if (!instagramService.available) {
+              <p i18n class="hint muted">A conexão com o Instagram ainda não foi configurada.</p>
+            }
           }
-        -->
-      </section>
+        </section>
+      }
 
       <section>
         <div class="head">

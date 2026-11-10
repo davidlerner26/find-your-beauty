@@ -11,6 +11,8 @@ export const environment = {
   payments: { provider: 'off' as 'off' | 'stripe' | 'fake', stripePublishableKey: '' },
   // Features that are only turned on in the test environment for now
   features: {
+    // Connecting an Instagram account: off until Meta grants advanced access to instagram_business_basic (the review)
+    instagramConnect: false,
     featuredProfessionals: false,
     // The payment screen before a booking is created (see utils/features.ts). Production books straight away.
     checkout: false,

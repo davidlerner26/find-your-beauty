@@ -14,6 +14,8 @@ const call = <Request, Response>(name: string) => httpsCallable<Request, Respons
 @Injectable({ providedIn: 'root' })
 export class Instagram {
   readonly available = !!environment.instagramAppId;
+  // Is the connect button offered? Production has it off until Meta grants advanced access
+  readonly connectEnabled = environment.features.instagramConnect;
 
   // Sends the professional to Instagram to allow the access
   connect() {

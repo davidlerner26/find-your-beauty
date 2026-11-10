@@ -10,6 +10,7 @@ export const environment = {
   // Saved cards and holds are kept in the browser: there is no Stripe in the end to end tests
   payments: { provider: 'fake' as 'off' | 'stripe' | 'fake', stripePublishableKey: '' },
   features: {
+    instagramConnect: true,
     featuredProfessionals: true,
     checkout: true,
   },

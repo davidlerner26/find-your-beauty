@@ -190,8 +190,3 @@ When you refactor a screen without changing how it looks, compare screenshots be
   callables). The rate limits and the security rules cover the main risks. Reconsider the tracker when usage grows and
   App Check if there are signs of abuse.
 - Google Maps key referrers and the Resend secret are configured per project: see [ambientes.md](ambientes.md).
-- Instagram connection of the mobile app: Instagram only takes https redirect addresses listed in the Meta app, so
-  `public/instagram-app/index.html` (a static page, kept out of the service worker's navigation list in
-  `ngsw-config.json`) receives `?code=...&state=...` and hands them to the app by its link
-  (`findyourbeauty://pro/instagram`). `https://<site>/instagram-app/` (with the trailing slash) of each environment has
-  to be listed in the Meta app as a valid OAuth redirect URI.

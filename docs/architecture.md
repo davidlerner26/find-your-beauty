@@ -56,6 +56,16 @@ in `utils/texts.ts` (`T`): an interpolated `aria-label="... {{ x }}"` on an `<a>
 Translations are added by hand to `src/locale/messages.en.xlf` and `messages.es.xlf`; the build prints the id of a
 message that has none, and the placeholder names in the translation must match the source.
 
+**Profiles made by an admin.** `/admin/perfis` lists the drafts an admin made for professionals who have no account, and
+`/admin/perfis/:id` edits one (`services/professional-drafts.ts`). A draft is `professionalDrafts/{id}`, which only admins
+read (`firestore.rules`; its photos are in `professionalDrafts/{id}/` of Storage, also admin only), so it is never in the
+catalog. The Cloud Functions in `functions/src/claim.ts` do the rest: `createProfessionalInvite` (admin) saves the hash of a
+one-use token and sends the invite by e-mail, `professionalInviteInfo` tells the invite page who it is for, and
+`claimProfessionalDraft` (the page `/convite/:draftId/:token`) checks the token and that the account e-mail is the invited
+one, copies the draft and its photos to `professionals/{uid}` and deletes the draft. The document id has to be the uid, so the
+claim copies instead of keeping the draft id. The new profile is approved but not published until the professional completes
+it (CPF, hours, services). The mobile app has the same screens.
+
 **Errors.** Log with `log.error(message, error)` (`utils/log.ts`), never `console`. `AppErrorHandler` logs what
 nobody caught and tells the user once every 10 seconds. A sink can be plugged in with `setLogSink` for an error
 tracker.

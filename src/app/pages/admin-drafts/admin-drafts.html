@@ -1,0 +1,58 @@
+<div class="drafts">
+  <a i18n class="back" [routerLink]="paths.admin">Voltar para a administração</a>
+  <h1 i18n>Perfis criados por você</h1>
+  <p i18n class="muted">
+    Crie o perfil de um profissional que ainda não tem conta e envie um convite por e-mail. Ele
+    assume o perfil entrando com o e-mail do convite.
+  </p>
+  <a i18n class="primary" [routerLink]="paths.adminNewDraft">Criar perfil</a>
+
+  @if (loading()) {
+    <app-spinner />
+  } @else {
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+    }
+    @if (message()) {
+      <p class="success" role="status">{{ message() }}</p>
+    }
+
+    <div class="list">
+      @for (draft of list(); track draft.id) {
+        <article class="item">
+          <a class="info" [routerLink]="paths.adminDraft(draft.id)">
+            <h3>{{ draft.form.name }}</h3>
+            <p class="muted">{{ draft.form.email }}</p>
+            @switch (status(draft)) {
+              @case ('sent') {
+                <p i18n class="muted">Convite enviado {{ relative(draft.invitedAt) }}</p>
+              }
+              @case ('expired') {
+                <p i18n class="muted warn">Convite expirado</p>
+              }
+              @default {
+                <p i18n class="muted">Convite ainda não enviado</p>
+              }
+            }
+          </a>
+          <button
+            i18n
+            type="button"
+            class="invite"
+            [disabled]="working() === draft.id"
+            (click)="invite(draft)"
+          >
+            <mat-icon>mail</mat-icon>
+            @if (status(draft) === 'none') {
+              Enviar convite
+            } @else {
+              Reenviar convite
+            }
+          </button>
+        </article>
+      } @empty {
+        <p i18n class="muted">Nenhum perfil criado ainda.</p>
+      }
+    </div>
+  }
+</div>

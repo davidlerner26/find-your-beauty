@@ -8,6 +8,11 @@ export const PATHS = {
   verifyEmail: '/verificar-email',
   agenda: '/agenda',
   admin: '/admin',
+  // Profiles an admin makes for professionals who have no account yet, and the invite page they receive
+  adminDrafts: '/admin/perfis',
+  adminDraft: (id: string) => `/admin/perfis/${id}`,
+  adminNewDraft: '/admin/perfis/novo',
+  invite: (draftId: string, token: string) => `/convite/${draftId}/${token}`,
   // The professional area
   proHome: '/pro',
   proLogin: '/pro/entrar',

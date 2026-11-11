@@ -151,6 +151,21 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/admin-professional/admin-professional').then((m) => m.AdminProfessional),
   },
+  {
+    path: 'admin/perfis',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./pages/admin-drafts/admin-drafts').then((m) => m.AdminDrafts),
+  },
+  {
+    path: 'admin/perfis/:id',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./pages/admin-draft/admin-draft').then((m) => m.AdminDraft),
+  },
+  // The link of the e-mail that invites a professional to claim a profile an admin made
+  {
+    path: 'convite/:draftId/:token',
+    loadComponent: () => import('./pages/invite/invite').then((m) => m.Invite),
+  },
   // Professional area
   {
     path: 'pro/entrar',

@@ -29,6 +29,7 @@ const AUTH_ERRORS: Record<string, string> = {
   'auth/not-client': $localize`Esta conta é de profissional. Use o login da área profissional.`,
   'auth/expired-action-code': $localize`Este link expirou. Peça um novo link de redefinição.`,
   'auth/invalid-action-code': $localize`Este link é inválido ou já foi usado. Peça um novo link de redefinição.`,
+  'auth/invite-email': $localize`Entre com o e-mail do convite.`,
   'auth/operation-not-allowed': $localize`Login por e-mail não está ativado no Firebase.`,
 };
 

@@ -276,6 +276,51 @@ export class Auth {
     }
   }
 
+  // --- An invite to claim a profile an admin made (see ProfessionalDrafts) ---
+  // The link was sent to the invited e-mail, so these accounts skip the e-mail code of the client sign up. The
+  // account only becomes a professional when claimProfessional succeeds.
+
+  // The name, the photo and the e-mail of the invite, or an error when the link is not valid (the message is ready)
+  async inviteInfo(draftId: string, token: string) {
+    const { data } = await call<
+      { draftId: string; token: string; lang: string },
+      { name: string; image: string; email: string }
+    >('professionalInviteInfo')({ draftId, token, lang: APP_LANGUAGE });
+    return data;
+  }
+
+  async signUpWithInvite(email: string, password: string) {
+    const { user } = await createUserWithEmailAndPassword(this.auth, email.trim(), password);
+    this.user.set({ ...user } as User);
+    await this.resolveRole(user);
+  }
+
+  async signInWithInvite(email: string, password: string) {
+    const { user } = await signInWithEmailAndPassword(this.auth, email.trim(), password);
+    await this.resolveRole(user);
+  }
+
+  // The Google account has to be the one of the invite: another one is removed, as the sign in just created it
+  async signInWithGoogleForInvite(invitedEmail: string) {
+    const { user } = await signInWithPopup(this.auth, this.googleProvider);
+    if ((user.email ?? '').toLowerCase() !== invitedEmail.toLowerCase()) {
+      await deleteUser(user).catch((error) => {
+        log.warn('Failed to remove the account with another e-mail, signing out instead', error);
+        return signOut(this.auth);
+      });
+      throw { code: 'auth/invite-email' };
+    }
+    await this.resolveRole(user);
+  }
+
+  // The Cloud Function copies the draft to professionals/{uid}; then the account is a professional
+  async claimProfessional(draftId: string, token: string) {
+    await call<{ draftId: string; token: string; lang: string }, { ok: boolean }>(
+      'claimProfessionalDraft',
+    )({ draftId, token, lang: APP_LANGUAGE });
+    await this.resolveRole(this.auth.currentUser);
+  }
+
   async signInWithEmail(email: string, password: string, remember = true) {
     await this.remember(remember);
     this.pendingApproval.set(false);

@@ -85,4 +85,5 @@ export const COLLECTIONS = {
   reviews: 'reviews',
   busy: 'busy',
   private: 'private',
+  professionalDrafts: 'professionalDrafts',
 } as const;

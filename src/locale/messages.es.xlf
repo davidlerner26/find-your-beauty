@@ -5118,6 +5118,432 @@
           <context context-type="linenumber">286,287</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5844305495919476459" datatype="html">
+        <source>Salvando...</source>
+        <target>Guardando...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/card-form/card-form.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3510033440570126083" datatype="html">
+        <source>Voltar para os perfis</source>
+        <target>Volver a los perfiles</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5480093615268017813" datatype="html">
+        <source>Criar perfil</source>
+        <target>Crear perfil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">8,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3109061688544988185" datatype="html">
+        <source>Editar perfil</source>
+        <target>Editar perfil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">6,9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7041338836988756611" datatype="html">
+        <source>Digite o nome (pelo menos 3 letras).</source>
+        <target>Escribe el nombre (al menos 3 letras).</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5681511788313022118" datatype="html">
+        <source> E-mail do convite <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input name=&quot;email&quot; type=&quot;email&quot; autocomplete=&quot;off&quot; [(ngModel)]=&quot;form.email&quot; /&gt;"/></source>
+        <target> Correo de la invitación <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input name=&quot;email&quot; type=&quot;email&quot; autocomplete=&quot;off&quot; [(ngModel)]=&quot;form.email&quot; /&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3678320927302465608" datatype="html">
+        <source> O convite vai para este e-mail, e só quem entrar com ele consegue assumir o perfil. </source>
+        <target> La invitación va a este correo, y solo quien entre con él puede asumir el perfil. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4330803085312031851" datatype="html">
+        <source> Idioma dos e-mails <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select name=&quot;lang&quot; [(ngModel)]=&quot;form.lang&quot;&gt;"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option value=&quot;pt&quot;&gt;"/>Português<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="START_TAG_OPTION_1" ctype="x-option_1" equiv-text="&lt;option value=&quot;en&quot;&gt;"/>English<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="START_TAG_OPTION_2" ctype="x-option_2" equiv-text="&lt;option value=&quot;es&quot;&gt;"/>Español<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select&gt;"/></source>
+        <target> Idioma de los correos <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select name=&quot;lang&quot; [(ngModel)]=&quot;form.lang&quot;&gt;"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option value=&quot;pt&quot;&gt;"/>Português<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="START_TAG_OPTION_1" ctype="x-option_1" equiv-text="&lt;option value=&quot;en&quot;&gt;"/>English<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="START_TAG_OPTION_2" ctype="x-option_2" equiv-text="&lt;option value=&quot;es&quot;&gt;"/>Español<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">39,47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="555636527814354237" datatype="html">
+        <source> Instagram <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+            name=&quot;instagram&quot;
+            type=&quot;text&quot;
+            autocomplete=&quot;off&quot;
+            i18n-placeholder
+            placeholder=&quot;@usuario&quot;
+            [(ngModel)]=&quot;form.instagram&quot;
+          /&gt;"/></source>
+        <target> Instagram <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+            name=&quot;instagram&quot;
+            type=&quot;text&quot;
+            autocomplete=&quot;off&quot;
+            i18n-placeholder
+            placeholder=&quot;@usuario&quot;
+            [(ngModel)]=&quot;form.instagram&quot;
+          /&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">48,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8194820964908825299" datatype="html">
+        <source>@usuario</source>
+        <target>@usuario</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">54,55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5344997540069341660" datatype="html">
+        <source> Sobre <x id="START_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;textarea name=&quot;about&quot; rows=&quot;5&quot; maxlength=&quot;1500&quot; [(ngModel)]=&quot;form.about&quot;&gt;"/><x id="CLOSE_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;/textarea&gt;"/></source>
+        <target> Acerca de <x id="START_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;textarea name=&quot;about&quot; rows=&quot;5&quot; maxlength=&quot;1500&quot; [(ngModel)]=&quot;form.about&quot;&gt;"/><x id="CLOSE_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;/textarea&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">60,64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6191984909108942164" datatype="html">
+        <source> Serviços, horários, endereço e CPF ficam para o profissional completar depois de assumir o perfil. </source>
+        <target> Los servicios, los horarios, la dirección y el CPF quedan para que el profesional los complete después de asumir el perfil. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="712571621894641906" datatype="html">
+        <source>Há um convite enviado e ainda válido.</source>
+        <target>Hay una invitación enviada y todavía válida.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">99,100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7707401778752691565" datatype="html">
+        <source>O convite expirou. Envie outro.</source>
+        <target>La invitación venció. Envía otra.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">102,103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4865784086925666948" datatype="html">
+        <source> Salvar e enviar convite </source>
+        <target> Guardar y enviar invitación </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">126,127</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="588379082181674274" datatype="html">
+        <source>Cancelar convite</source>
+        <target>Cancelar invitación</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">130,131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1223576102128275419" datatype="html">
+        <source>Apagar perfil</source>
+        <target>Eliminar perfil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">132,133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4265108079609334554" datatype="html">
+        <source>Não foi possível enviar a foto.</source>
+        <target>No fue posible subir la foto.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="359079990187383006" datatype="html">
+        <source>Cancelar o convite? O link enviado deixa de funcionar.</source>
+        <target>¿Cancelar la invitación? El enlace enviado deja de funcionar.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7555851379825509157" datatype="html">
+        <source>Não foi possível cancelar o convite.</source>
+        <target>No fue posible cancelar la invitación.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2460349946594309459" datatype="html">
+        <source>Apagar o perfil de <x id="name" equiv-text="this.form.name"/>? Isso não pode ser desfeito.</source>
+        <target>¿Eliminar el perfil de <x id="name" equiv-text="this.form.name"/>? Esto no se puede deshacer.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="287719696798849420" datatype="html">
+        <source>Não foi possível apagar o perfil.</source>
+        <target>No fue posible eliminar el perfil.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
+          <context context-type="linenumber">147</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9209061653617582002" datatype="html">
+        <source>Voltar para a administração</source>
+        <target>Volver a la administración</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1536220475912167256" datatype="html">
+        <source>Perfis criados por você</source>
+        <target>Perfiles que creaste</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1156050386388137424" datatype="html">
+        <source> Crie o perfil de um profissional que ainda não tem conta e envie um convite por e-mail. Ele assume o perfil entrando com o e-mail do convite. </source>
+        <target> Crea el perfil de un profesional que aún no tiene cuenta y envía una invitación por correo. Asume el perfil entrando con el correo de la invitación. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6485853772692553319" datatype="html">
+        <source>Convite enviado <x id="INTERPOLATION" equiv-text="{{ relative(draft.invitedAt) }}"/></source>
+        <target>Invitación enviada <x id="INTERPOLATION" equiv-text="{{ relative(draft.invitedAt) }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">28,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1712117691217066484" datatype="html">
+        <source>Convite expirado</source>
+        <target>Invitación vencida</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8372853998055285360" datatype="html">
+        <source>Convite ainda não enviado</source>
+        <target>Invitación aún no enviada</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">34,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8429930523548751434" datatype="html">
+        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>mail<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (status(draft) === &apos;none&apos;) {"/> Enviar convite <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Reenviar convite <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
+        <target><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>mail<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (status(draft) === &apos;none&apos;) {"/> Enviar invitación <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Reenviar invitación <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">45,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4106912774473439841" datatype="html">
+        <source>Nenhum perfil criado ainda.</source>
+        <target>Ningún perfil creado todavía.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">54,55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5978759807608371547" datatype="html">
+        <source>Não foi possível carregar os perfis.</source>
+        <target>No fue posible cargar los perfiles.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="239038508404736296" datatype="html">
+        <source>Convite enviado para <x id="email" equiv-text="draft.form.email"/>.</source>
+        <target>Invitación enviada a <x id="email" equiv-text="draft.form.email"/>.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8396717957409784129" datatype="html">
+        <source>Não foi possível enviar o convite. Tente novamente.</source>
+        <target>No fue posible enviar la invitación. Inténtalo de nuevo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="206715047889193588" datatype="html">
+        <source>Perfis criados por você, sem conta</source>
+        <target>Perfiles que creaste, sin cuenta</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">3,5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7157689774366887163" datatype="html">
+        <source>Convite indisponível</source>
+        <target>Invitación no disponible</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6375381316230058169" datatype="html">
+        <source> Montamos o seu perfil no Find Your Beauty. Entre com <x id="INTERPOLATION" equiv-text="{{ invite.email }}"/> para assumir o perfil. </source>
+        <target> Armamos tu perfil en Find Your Beauty. Entra con <x id="INTERPOLATION" equiv-text="{{ invite.email }}"/> para asumir el perfil. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">10,13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3317425477689651388" datatype="html">
+        <source><x id="START_BLOCK_IF" equiv-text="@if (working()) {"/> Assumindo... <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Assumir o meu perfil <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
+        <target><x id="START_BLOCK_IF" equiv-text="@if (working()) {"/> Asumiendo... <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Asumir mi perfil <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">15,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1108331051522911007" datatype="html">
+        <source> Você está com outra conta aberta (<x id="INTERPOLATION" equiv-text="{{ auth.user()?.email }}"/>). Para assumir o perfil, use o e-mail do convite. </source>
+        <target> Tienes otra cuenta abierta (<x id="INTERPOLATION" equiv-text="{{ auth.user()?.email }}"/>). Para asumir el perfil, usa el correo de la invitación. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">24,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1303539280556690377" datatype="html">
+        <source> Sair desta conta </source>
+        <target> Salir de esta cuenta </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">28,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5048121378055173491" datatype="html">
+        <source><x id="START_BLOCK_IF" equiv-text="@if (working()) {"/> Aguarde... <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (hasAccount()) {"/> Entrar e assumir o perfil <x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Criar senha e assumir o perfil <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
+        <target><x id="START_BLOCK_IF" equiv-text="@if (working()) {"/> Espera... <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (hasAccount()) {"/> Entrar y asumir el perfil <x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Crear contraseña y asumir el perfil <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">56,63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3845525539698108893" datatype="html">
+        <source><x id="START_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;svg viewBox=&quot;0 0 48 48&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="START_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#EA4335&quot;
+              d=&quot;M24 9.500c3.540 0 6.710 1.220 9.210 3.600l6.850-6.850C35.900 2.380 30.470 0 24 0 14.620 0 6.510 5.380 2.560 13.220l7.980 6.190C12.430 13.720 17.740 9.500 24 9.500z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="START_TAG__SVG_PATH_1" ctype="x-_svg_path_1" equiv-text="&lt;path
+              fill=&quot;#4285F4&quot;
+              d=&quot;M46.980 24.550c0-1.570-.15-3.090-.38-4.550H24v9.020h12.940c-.58 2.960-2.260 5.480-4.780 7.180l7.730 6c4.510-4.180 7.090-10.360 7.090-17.650z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="START_TAG__SVG_PATH_2" ctype="x-_svg_path_2" equiv-text="&lt;path
+              fill=&quot;#FBBC05&quot;
+              d=&quot;M10.530 28.590c-.48-1.450-.76-2.990-.76-4.590s.27-3.140.76-4.590l-7.980-6.190C.92 16.460 0 20.120 0 24c0 3.880.92 7.540 2.560 10.780l7.970-6.190z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="START_TAG__SVG_PATH_3" ctype="x-_svg_path_3" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;/svg&gt;"/> Continuar com Google </source>
+        <target><x id="START_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;svg viewBox=&quot;0 0 48 48&quot; aria-hidden=&quot;true&quot;&gt;"/><x id="START_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#EA4335&quot;
+              d=&quot;M24 9.500c3.540 0 6.710 1.220 9.210 3.600l6.850-6.850C35.900 2.380 30.470 0 24 0 14.620 0 6.510 5.380 2.560 13.220l7.980 6.190C12.430 13.720 17.740 9.500 24 9.500z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="START_TAG__SVG_PATH_1" ctype="x-_svg_path_1" equiv-text="&lt;path
+              fill=&quot;#4285F4&quot;
+              d=&quot;M46.980 24.550c0-1.570-.15-3.090-.38-4.550H24v9.020h12.940c-.58 2.960-2.260 5.480-4.780 7.180l7.730 6c4.510-4.180 7.090-10.360 7.090-17.650z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="START_TAG__SVG_PATH_2" ctype="x-_svg_path_2" equiv-text="&lt;path
+              fill=&quot;#FBBC05&quot;
+              d=&quot;M10.530 28.590c-.48-1.450-.76-2.990-.76-4.590s.27-3.140.76-4.590l-7.980-6.190C.92 16.460 0 20.120 0 24c0 3.880.92 7.540 2.560 10.780l7.970-6.190z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="START_TAG__SVG_PATH_3" ctype="x-_svg_path_3" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_PATH" ctype="x-_svg_path" equiv-text="&lt;path
+              fill=&quot;#34A853&quot;
+              d=&quot;M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z&quot;
+            /&gt;"/><x id="CLOSE_TAG__SVG_SVG" ctype="x-_svg_svg" equiv-text="&lt;/svg&gt;"/> Continuar con Google </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">68,87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3525491260355087326" datatype="html">
+        <source> Criar uma senha </source>
+        <target> Crear una contraseña </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1483857798050119706" datatype="html">
+        <source> Já tenho uma conta </source>
+        <target> Ya tengo una cuenta </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3528799168790508410" datatype="html">
+        <source>Este convite não vale mais. Peça um novo convite.</source>
+        <target>Esta invitación ya no es válida. Pide una nueva.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5046619237707416265" datatype="html">
+        <source>Entre com o e-mail do convite.</source>
+        <target>Entra con el correo de la invitación.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/utils/validators.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

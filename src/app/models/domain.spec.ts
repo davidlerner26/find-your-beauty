@@ -46,7 +46,7 @@ describe('asLang', () => {
 describe('COLLECTIONS', () => {
   it('names the collections the Firestore rules protect', () => {
     for (const name of Object.values(COLLECTIONS)) {
-      expect(name).toMatch(/^[a-z]+$/);
+      expect(name).toMatch(/^[a-zA-Z]+$/);
     }
     expect(COLLECTIONS.busy).toBe('busy');
     expect(COLLECTIONS.private).toBe('private');

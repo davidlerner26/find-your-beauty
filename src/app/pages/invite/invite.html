@@ -1,0 +1,107 @@
+<div class="auth">
+  @if (loading()) {
+    <app-spinner />
+  } @else if (invalid()) {
+    <h1 i18n>Convite indisponível</h1>
+    <p class="subtitle">{{ invalid() }}</p>
+  } @else if (invite(); as invite) {
+    <h1 i18n>Olá, {{ invite.name }}</h1>
+    <p i18n class="subtitle">
+      Montamos o seu perfil no Find Your Beauty. Entre com {{ invite.email }} para assumir o perfil.
+    </p>
+
+    @if (auth.user() && matches()) {
+      <button i18n type="button" class="primary" [disabled]="working()" (click)="claimNow()">
+        @if (working()) {
+          Assumindo...
+        } @else {
+          Assumir o meu perfil
+        }
+      </button>
+    } @else {
+      @if (auth.user()) {
+        <p i18n class="subtitle">
+          Você está com outra conta aberta ({{ auth.user()?.email }}). Para assumir o perfil, use o
+          e-mail do convite.
+        </p>
+        <button i18n type="button" class="primary" (click)="useAnotherAccount()">
+          Sair desta conta
+        </button>
+      } @else {
+        <form class="auth" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <label class="field" [class.invalid]="showError">
+            <mat-icon class="filled">lock</mat-icon>
+            <input
+              i18n-placeholder
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              [placeholder]="hasAccount() ? 'Sua senha' : 'Crie uma senha'"
+              [autocomplete]="hasAccount() ? 'current-password' : 'new-password'"
+            />
+            <button
+              i18n-aria-label
+              type="button"
+              class="toggle"
+              aria-label="Mostrar senha"
+              (click)="showPassword.set(!showPassword())"
+            >
+              <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </label>
+          @if (showError) {
+            <p class="error">{{ passwordRule }}</p>
+          }
+
+          <button i18n type="submit" class="primary" [disabled]="working()">
+            @if (working()) {
+              Aguarde...
+            } @else if (hasAccount()) {
+              Entrar e assumir o perfil
+            } @else {
+              Criar senha e assumir o perfil
+            }
+          </button>
+        </form>
+
+        <p i18n class="divider">ou</p>
+        <button i18n type="button" class="google" [disabled]="working()" (click)="google()">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <path
+              fill="#EA4335"
+              d="M24 9.500c3.540 0 6.710 1.220 9.210 3.600l6.850-6.850C35.900 2.380 30.470 0 24 0 14.620 0 6.510 5.380 2.560 13.220l7.980 6.190C12.430 13.720 17.740 9.500 24 9.500z"
+            />
+            <path
+              fill="#4285F4"
+              d="M46.980 24.550c0-1.570-.15-3.090-.38-4.550H24v9.020h12.940c-.58 2.960-2.260 5.480-4.780 7.180l7.730 6c4.510-4.180 7.090-10.360 7.090-17.650z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M10.530 28.590c-.48-1.450-.76-2.990-.76-4.590s.27-3.140.76-4.590l-7.980-6.190C.92 16.460 0 20.120 0 24c0 3.880.92 7.540 2.560 10.780l7.970-6.190z"
+            />
+            <path
+              fill="#34A853"
+              d="M24 48c6.480 0 11.930-2.130 15.890-5.810l-7.730-6c-2.150 1.450-4.920 2.300-8.160 2.300-6.260 0-11.570-4.220-13.470-9.910l-7.980 6.190C6.510 42.620 14.620 48 24 48z"
+            />
+          </svg>
+          Continuar com Google
+        </button>
+
+        <p class="switch">
+          @if (hasAccount()) {
+            <button i18n type="button" class="link-btn" (click)="hasAccount.set(false)">
+              Criar uma senha
+            </button>
+          } @else {
+            <button i18n type="button" class="link-btn" (click)="hasAccount.set(true)">
+              Já tenho uma conta
+            </button>
+          }
+        </p>
+      }
+    }
+
+    @if (formError()) {
+      <p class="error" role="alert">{{ formError() }}</p>
+    }
+  }
+</div>

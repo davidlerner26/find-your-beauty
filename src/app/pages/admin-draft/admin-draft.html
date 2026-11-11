@@ -1,0 +1,137 @@
+<div class="draft">
+  <a i18n class="back" [routerLink]="paths.adminDrafts">Voltar para os perfis</a>
+  @if (isNew) {
+    <h1 i18n>Criar perfil</h1>
+  } @else {
+    <h1 i18n>Editar perfil</h1>
+  }
+
+  @if (loading()) {
+    <app-spinner />
+  } @else {
+    <form (ngSubmit)="save(false)" novalidate>
+      <section>
+        <label i18n>
+          Nome
+          <input name="name" type="text" maxlength="80" [(ngModel)]="form.name" />
+        </label>
+        @if (problems.includes('name')) {
+          <p i18n class="error" role="alert">Digite o nome (pelo menos 3 letras).</p>
+        }
+
+        <label i18n>
+          E-mail do convite
+          <input name="email" type="email" autocomplete="off" [(ngModel)]="form.email" />
+        </label>
+        @if (problems.includes('email')) {
+          <p i18n class="error" role="alert">Digite um e-mail válido.</p>
+        }
+        <p i18n class="hint muted">
+          O convite vai para este e-mail, e só quem entrar com ele consegue assumir o perfil.
+        </p>
+
+        <label i18n>
+          Celular
+          <input name="phone" type="tel" maxlength="20" [(ngModel)]="form.phone" />
+        </label>
+
+        <label i18n>
+          Idioma dos e-mails
+          <select name="lang" [(ngModel)]="form.lang">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </label>
+
+        <label i18n>
+          Instagram
+          <input
+            name="instagram"
+            type="text"
+            autocomplete="off"
+            i18n-placeholder
+            placeholder="@usuario"
+            [(ngModel)]="form.instagram"
+          />
+        </label>
+
+        <label i18n>
+          Sobre
+          <textarea name="about" rows="5" maxlength="1500" [(ngModel)]="form.about"></textarea>
+        </label>
+
+        <h3 i18n>Foto</h3>
+        <div class="photo">
+          @if (form.image) {
+            <img class="preview" [src]="form.image" alt="" />
+          } @else {
+            <span i18n class="preview empty">Sem foto</span>
+          }
+          <label i18n class="upload">
+            @if (uploading()) {
+              Enviando...
+            } @else if (form.image) {
+              Trocar foto
+            } @else {
+              Escolher foto
+            }
+            <input
+              type="file"
+              accept="image/*"
+              hidden
+              [disabled]="uploading()"
+              #file
+              (change)="uploadPhoto(file)"
+            />
+          </label>
+        </div>
+      </section>
+
+      <p i18n class="hint muted">
+        Serviços, horários, endereço e CPF ficam para o profissional completar depois de assumir o
+        perfil.
+      </p>
+
+      @if (!isNew) {
+        @switch (status()) {
+          @case ('sent') {
+            <p i18n class="hint">Há um convite enviado e ainda válido.</p>
+          }
+          @case ('expired') {
+            <p i18n class="hint error">O convite expirou. Envie outro.</p>
+          }
+        }
+      }
+
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+
+      <div class="actions">
+        <button i18n type="submit" class="primary" [disabled]="saving() || uploading()">
+          @if (saving()) {
+            Salvando...
+          } @else {
+            Salvar
+          }
+        </button>
+        <button
+          i18n
+          type="button"
+          class="secondary"
+          [disabled]="saving() || uploading()"
+          (click)="save(true)"
+        >
+          Salvar e enviar convite
+        </button>
+        @if (!isNew) {
+          @if (draft()?.invited) {
+            <button i18n type="button" class="link" (click)="revoke()">Cancelar convite</button>
+          }
+          <button i18n type="button" class="link danger" (click)="remove()">Apagar perfil</button>
+        }
+      </div>
+    </form>
+  }
+</div>

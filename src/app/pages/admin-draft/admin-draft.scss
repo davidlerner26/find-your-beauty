@@ -1,0 +1,72 @@
+@use '../../../styles/patterns' as *;
+@use '../pro-profile/form-fields';
+
+.draft {
+  @include page-column;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.back {
+  color: var(--primary);
+  font-size: 0.95rem;
+}
+
+.photo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.preview {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.preview.empty {
+  display: grid;
+  place-items: center;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 0.85rem;
+}
+
+.actions {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.primary,
+.secondary {
+  padding: 0.9rem 1.4rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.secondary {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.danger {
+  color: var(--danger);
+}

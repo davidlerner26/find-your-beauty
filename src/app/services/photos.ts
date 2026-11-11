@@ -6,12 +6,18 @@ import { log } from '../utils/log';
 
 @Injectable({ providedIn: 'root' })
 export class Photos {
-  // Uploads a photo of the professional and returns its public URL
-  async upload(uid: string, folder: 'profile' | 'gallery' | 'services', file: File) {
+  // Uploads a photo of the professional and returns its public URL. A draft an admin makes keeps its photos in
+  // professionalDrafts/{id} until the professional claims it.
+  async upload(
+    uid: string,
+    folder: 'profile' | 'gallery' | 'services',
+    file: File,
+    root: 'professionals' | 'professionalDrafts' = 'professionals',
+  ) {
     if (!file.type.startsWith('image/')) throw new Error('not-an-image');
 
     const blob = await resizeImage(file);
-    const photo = ref(storage, `professionals/${uid}/${folder}/${Date.now()}.jpg`);
+    const photo = ref(storage, `${root}/${uid}/${folder}/${Date.now()}.jpg`);
     await uploadBytes(photo, blob, { contentType: 'image/jpeg' });
     return getDownloadURL(photo);
   }

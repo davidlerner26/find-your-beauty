@@ -88,7 +88,7 @@ describe('photos', () => {
 
 describe('profileFromDraft', () => {
   const photos = new Map([[draft.image, 'NEW-PROFILE']]);
-  const profile = profileFromDraft(draft, 'u1', 'd1', photos);
+  const profile = profileFromDraft(draft, 'u1', 'd1', photos, ' Ana@Example.com ');
 
   it('makes an approved, public profile owned by the account', () => {
     expect(profile).toMatchObject({
@@ -123,7 +123,7 @@ describe('profileFromDraft', () => {
       [draft.gallery[0], 'NEW-GALLERY'],
       [draft.services[0].photos[0], 'NEW-SERVICE'],
     ]);
-    const full = profileFromDraft(draft, 'u1', 'd1', copied);
+    const full = profileFromDraft(draft, 'u1', 'd1', copied, 'ana@example.com');
     expect(full['gallery']).toEqual(['NEW-GALLERY', 'https://example.com/outside.jpg']);
     expect((full['services'] as { photos: string[] }[])[0].photos).toEqual(['NEW-SERVICE']);
   });

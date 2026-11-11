@@ -3,12 +3,13 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
 import { ProfessionalDraft, ProfessionalDrafts } from '../../services/professional-drafts';
+import { copyText } from '../../utils/clipboard';
 import { inviteStatus } from '../../utils/drafts';
 import { formatRelative } from '../../utils/format-date';
 import { log } from '../../utils/log';
 import { PATHS } from '../../utils/paths';
 
-// The profiles an admin made for professionals who have no account yet, and the state of each invite
+// The profiles an admin made for professionals who have no account yet, and the state of each invite link
 @Component({
   selector: 'app-admin-drafts',
   imports: [RouterLink, Spinner, MatIconModule],
@@ -22,8 +23,9 @@ export class AdminDrafts {
   protected readonly list = signal<ProfessionalDraft[]>([]);
   protected readonly loading = signal(true);
   protected readonly error = signal('');
-  protected readonly message = signal('');
-  // Id of the draft whose invite is being sent
+  // The link that was just made, shown to be copied by hand when the browser did not copy it
+  protected readonly made = signal<{ name: string; url: string; copied: boolean } | null>(null);
+  // Id of the draft whose link is being made
   protected readonly working = signal<string | null>(null);
   protected readonly status = inviteStatus;
   protected readonly relative = formatRelative;
@@ -45,19 +47,23 @@ export class AdminDrafts {
     }
   }
 
-  protected async invite(draft: ProfessionalDraft) {
+  protected async makeLink(draft: ProfessionalDraft) {
     this.working.set(draft.id);
     this.error.set('');
-    this.message.set('');
+    this.made.set(null);
     try {
-      await this.drafts.sendInvite(draft.id);
-      this.message.set($localize`Convite enviado para ${draft.form.email}:email:.`);
+      const url = await this.drafts.createInviteLink(draft.id);
+      this.made.set({ name: draft.form.name, url, copied: await copyText(url) });
       this.list.set(await this.drafts.list());
     } catch (error) {
-      log.error('Failed to send the invite', error);
-      this.error.set($localize`Não foi possível enviar o convite. Tente novamente.`);
+      log.error('Failed to make the invite link', error);
+      this.error.set($localize`Não foi possível gerar o link. Tente novamente.`);
     } finally {
       this.working.set(null);
     }
+  }
+
+  protected selectAll(event: Event) {
+    (event.target as HTMLInputElement).select();
   }
 }

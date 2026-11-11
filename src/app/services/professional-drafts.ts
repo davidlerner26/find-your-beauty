@@ -33,7 +33,7 @@ export type ProfessionalDraft = {
 const toDate = (value: unknown) => (value instanceof Timestamp ? value.toDate() : null);
 
 // Profiles an admin makes for professionals who have no account yet. They are not public: only admins read
-// `professionalDrafts` (see firestore.rules). An invite by e-mail lets the professional claim one; claiming copies it
+// `professionalDrafts` (see firestore.rules). An invite link lets the professional claim one; claiming copies it
 // to `professionals/{uid}` (Cloud Function claimProfessionalDraft).
 @Injectable({ providedIn: 'root' })
 export class ProfessionalDrafts {
@@ -76,15 +76,17 @@ export class ProfessionalDrafts {
     });
   }
 
-  // Sends the invite by e-mail. A new one replaces the old: the previous link stops working.
-  async sendInvite(id: string) {
-    await httpsCallable<{ draftId: string }, { ok: boolean; expiresAt: number }>(
+  // Makes the invite link, to send by hand. A new one replaces the old: the previous link stops working. The link
+  // is only shown now (the server keeps the hash of its token).
+  async createInviteLink(id: string) {
+    const { data } = await httpsCallable<{ draftId: string }, { ok: boolean; url: string }>(
       functions,
       'createProfessionalInvite',
     )({ draftId: id });
+    return data.url;
   }
 
-  // The link in the e-mail stops working
+  // The link stops working
   revokeInvite(id: string) {
     return updateDoc(doc(db, COLLECTIONS.professionalDrafts, id), {
       inviteHash: deleteField(),

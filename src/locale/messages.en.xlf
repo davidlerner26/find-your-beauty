@@ -5162,22 +5162,6 @@
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5681511788313022118" datatype="html">
-        <source> E-mail do convite <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input name=&quot;email&quot; type=&quot;email&quot; autocomplete=&quot;off&quot; [(ngModel)]=&quot;form.email&quot; /&gt;"/></source>
-        <target> Invite email <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input name=&quot;email&quot; type=&quot;email&quot; autocomplete=&quot;off&quot; [(ngModel)]=&quot;form.email&quot; /&gt;"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">23,25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3678320927302465608" datatype="html">
-        <source> O convite vai para este e-mail, e só quem entrar com ele consegue assumir o perfil. </source>
-        <target> The invite goes to this email, and only whoever signs in with it can take over the profile. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">30,31</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="4330803085312031851" datatype="html">
         <source> Idioma dos e-mails <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select name=&quot;lang&quot; [(ngModel)]=&quot;form.lang&quot;&gt;"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option value=&quot;pt&quot;&gt;"/>Português<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="START_TAG_OPTION_1" ctype="x-option_1" equiv-text="&lt;option value=&quot;en&quot;&gt;"/>English<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="START_TAG_OPTION_2" ctype="x-option_2" equiv-text="&lt;option value=&quot;es&quot;&gt;"/>Español<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select&gt;"/></source>
         <target> Language of the emails <x id="START_TAG_SELECT" ctype="x-select" equiv-text="&lt;select name=&quot;lang&quot; [(ngModel)]=&quot;form.lang&quot;&gt;"/><x id="START_TAG_OPTION" ctype="x-option" equiv-text="&lt;option value=&quot;pt&quot;&gt;"/>Português<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="START_TAG_OPTION_1" ctype="x-option_1" equiv-text="&lt;option value=&quot;en&quot;&gt;"/>English<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="START_TAG_OPTION_2" ctype="x-option_2" equiv-text="&lt;option value=&quot;es&quot;&gt;"/>Español<x id="CLOSE_TAG_OPTION" ctype="x-option" equiv-text="&lt;/option&gt;"/><x id="CLOSE_TAG_SELECT" ctype="x-select" equiv-text="&lt;/select&gt;"/></target>
@@ -5232,38 +5216,6 @@
           <context context-type="linenumber">92,93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="712571621894641906" datatype="html">
-        <source>Há um convite enviado e ainda válido.</source>
-        <target>There is an invite that was sent and is still valid.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">99,100</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7707401778752691565" datatype="html">
-        <source>O convite expirou. Envie outro.</source>
-        <target>The invite expired. Send another one.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">102,103</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4865784086925666948" datatype="html">
-        <source> Salvar e enviar convite </source>
-        <target> Save and send invite </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">126,127</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="588379082181674274" datatype="html">
-        <source>Cancelar convite</source>
-        <target>Cancel invite</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">130,131</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1223576102128275419" datatype="html">
         <source>Apagar perfil</source>
         <target>Delete profile</target>
@@ -5278,22 +5230,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
           <context context-type="linenumber">93</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="359079990187383006" datatype="html">
-        <source>Cancelar o convite? O link enviado deixa de funcionar.</source>
-        <target>Cancel the invite? The link that was sent stops working.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
-          <context context-type="linenumber">125</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7555851379825509157" datatype="html">
-        <source>Não foi possível cancelar o convite.</source>
-        <target>Could not cancel the invite.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
-          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2460349946594309459" datatype="html">
@@ -5328,46 +5264,6 @@
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1156050386388137424" datatype="html">
-        <source> Crie o perfil de um profissional que ainda não tem conta e envie um convite por e-mail. Ele assume o perfil entrando com o e-mail do convite. </source>
-        <target> Create the profile of a professional who does not have an account yet and send an invite by email. They take over the profile by signing in with the email of the invite. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
-          <context context-type="linenumber">5,7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6485853772692553319" datatype="html">
-        <source>Convite enviado <x id="INTERPOLATION" equiv-text="{{ relative(draft.invitedAt) }}"/></source>
-        <target>Invite sent <x id="INTERPOLATION" equiv-text="{{ relative(draft.invitedAt) }}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
-          <context context-type="linenumber">28,29</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1712117691217066484" datatype="html">
-        <source>Convite expirado</source>
-        <target>Invite expired</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
-          <context context-type="linenumber">31,32</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8372853998055285360" datatype="html">
-        <source>Convite ainda não enviado</source>
-        <target>Invite not sent yet</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
-          <context context-type="linenumber">34,35</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8429930523548751434" datatype="html">
-        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>mail<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (status(draft) === &apos;none&apos;) {"/> Enviar convite <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Reenviar convite <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
-        <target><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>mail<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (status(draft) === &apos;none&apos;) {"/> Send invite <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Send invite again <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
-          <context context-type="linenumber">45,51</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="4106912774473439841" datatype="html">
         <source>Nenhum perfil criado ainda.</source>
         <target>No profiles created yet.</target>
@@ -5382,22 +5278,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.ts</context>
           <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="239038508404736296" datatype="html">
-        <source>Convite enviado para <x id="email" equiv-text="draft.form.email"/>.</source>
-        <target>Invite sent to <x id="email" equiv-text="draft.form.email"/>.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.ts</context>
-          <context context-type="linenumber">54</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8396717957409784129" datatype="html">
-        <source>Não foi possível enviar o convite. Tente novamente.</source>
-        <target>Could not send the invite. Try again.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.ts</context>
-          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="206715047889193588" datatype="html">
@@ -5542,6 +5422,182 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/validators.ts</context>
           <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1296971396847292780" datatype="html">
+        <source> E-mail (opcional) <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input name=&quot;email&quot; type=&quot;email&quot; autocomplete=&quot;off&quot; [(ngModel)]=&quot;form.email&quot; /&gt;"/></source>
+        <target> Email (optional) <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input name=&quot;email&quot; type=&quot;email&quot; autocomplete=&quot;off&quot; [(ngModel)]=&quot;form.email&quot; /&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">23,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2764990173201230234" datatype="html">
+        <source> Se preencher, só quem entrar com este e-mail consegue assumir o perfil. Se deixar em branco, quem tiver o link assume. </source>
+        <target> If you fill it in, only whoever signs in with this email can take over the profile. If you leave it blank, whoever has the link can. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8256446474662906376" datatype="html">
+        <source>Há um link gerado e ainda válido.</source>
+        <target>There is a link that was made and is still valid.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">100,101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2638610758351397492" datatype="html">
+        <source>O link expirou. Gere outro.</source>
+        <target>The link expired. Make another one.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">103,104</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3278342918188537212" datatype="html">
+        <source>Link copiado. Cole na conversa para enviar.</source>
+        <target>Link copied. Paste it in the chat to send it.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">114,115</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3607919587165019156" datatype="html">
+        <source>Copie o link e envie.</source>
+        <target>Copy the link and send it.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">116,117</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4820691823779820481" datatype="html">
+        <source>Link do convite</source>
+        <target>Invite link</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">120,121</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3545950931400199329" datatype="html">
+        <source> Este link aparece só agora. Se precisar de outro, gere um novo: o anterior deixa de funcionar. </source>
+        <target> This link only shows now. If you need another one, make a new one: the previous one stops working. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">126,127</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5903950691375040600" datatype="html">
+        <source><x id="START_BLOCK_IF" equiv-text="@if (isNew) {"/> Salvar e gerar link <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Salvar e gerar novo link <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
+        <target><x id="START_BLOCK_IF" equiv-text="@if (isNew) {"/> Save and make link <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Save and make a new link <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">147,153</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5583747069342865717" datatype="html">
+        <source>Cancelar link</source>
+        <target>Cancel link</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">155,156</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8975101658848196994" datatype="html">
+        <source>Cancelar o link? O link enviado deixa de funcionar.</source>
+        <target>Cancel the link? The link that was sent stops working.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5997030254014101464" datatype="html">
+        <source>Não foi possível cancelar o link.</source>
+        <target>Could not cancel the link.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1834215126990091758" datatype="html">
+        <source> Crie o perfil de um profissional que ainda não tem conta e gere um link para enviar a ele (por WhatsApp, Instagram...). Ele assume o perfil abrindo o link. </source>
+        <target> Create the profile of a professional who does not have an account yet and make a link to send them (by WhatsApp, Instagram...). They take over the profile by opening the link. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6341889619132110325" datatype="html">
+        <source>Link de <x id="INTERPOLATION" equiv-text="{{ made.name }}"/> copiado. Cole na conversa para enviar.</source>
+        <target>Link of <x id="INTERPOLATION" equiv-text="{{ made.name }}"/> copied. Paste it in the chat to send it.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8913088052643097733" datatype="html">
+        <source>Link de <x id="INTERPOLATION" equiv-text="{{ made.name }}"/>. Copie e envie.</source>
+        <target>Link of <x id="INTERPOLATION" equiv-text="{{ made.name }}"/>. Copy it and send it.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">21,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3150661052214116256" datatype="html">
+        <source>Link gerado <x id="INTERPOLATION" equiv-text="{{ relative(draft.invitedAt) }}"/></source>
+        <target>Link made <x id="INTERPOLATION" equiv-text="{{ relative(draft.invitedAt) }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">47,48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1070317928497981780" datatype="html">
+        <source>Link expirado</source>
+        <target>Link expired</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">50,51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7583121276226235543" datatype="html">
+        <source>Link ainda não gerado</source>
+        <target>Link not made yet</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4625078720088289317" datatype="html">
+        <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>link<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (status(draft) === &apos;none&apos;) {"/> Gerar e copiar link <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Gerar novo link <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
+        <target><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>link<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (status(draft) === &apos;none&apos;) {"/> Make and copy link <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Make a new link <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
+          <context context-type="linenumber">64,70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3729489469445210104" datatype="html">
+        <source>Não foi possível gerar o link. Tente novamente.</source>
+        <target>Could not make the link. Try again.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="867963041915266974" datatype="html">
+        <source> Montamos o seu perfil no Find Your Beauty. Entre ou crie a sua conta para assumir o perfil. </source>
+        <target> We set up your profile on Find Your Beauty. Sign in or create your account to take over the profile. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
+          <context context-type="linenumber">16,17</context>
         </context-group>
       </trans-unit>
     </body>

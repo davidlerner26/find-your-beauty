@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
 import { ProfessionalDraft, ProfessionalDrafts } from '../../services/professional-drafts';
+import { copyText } from '../../utils/clipboard';
 import { DraftForm, draftProblems, inviteStatus } from '../../utils/drafts';
 import { log } from '../../utils/log';
 import { PATHS } from '../../utils/paths';
@@ -44,8 +45,8 @@ export class AdminDraft {
     const draft = this.draft();
     return draft ? inviteStatus(draft) : 'none';
   });
-  // The e-mail the invite went to: changing it cancels that invite
-  private savedEmail = '';
+  // The link that was just made, shown to be copied by hand when the browser did not copy it
+  protected readonly made = signal<{ url: string; copied: boolean } | null>(null);
 
   constructor() {
     const id = inject(ActivatedRoute).snapshot.paramMap.get('id') ?? '';
@@ -64,7 +65,6 @@ export class AdminDraft {
       }
       this.draft.set(draft);
       this.form = { ...draft.form };
-      this.savedEmail = draft.form.email.toLowerCase();
     } catch (error) {
       log.error('Failed to load the draft', error);
       this.error.set($localize`Não foi possível carregar o perfil.`);
@@ -96,23 +96,25 @@ export class AdminDraft {
     }
   }
 
-  // Saves, and sends the invite when asked
-  protected async save(sendInvite: boolean) {
+  // Saves, and makes the invite link when asked (it is copied and shown here: the admin sends it by hand)
+  protected async save(withLink: boolean) {
     this.submitted.set(true);
     if (draftProblems(this.form).length) return;
 
     this.saving.set(true);
     this.error.set('');
+    this.made.set(null);
     try {
       await this.drafts.save(this.id, this.form, this.isNew);
-      // The link went to the old address: it has to stop working
-      const emailChanged =
-        !this.isNew &&
-        this.draft()?.invited &&
-        this.form.email.trim().toLowerCase() !== this.savedEmail;
-      if (emailChanged) await this.drafts.revokeInvite(this.id);
-      if (sendInvite) await this.drafts.sendInvite(this.id);
-      await this.router.navigateByUrl(PATHS.adminDrafts);
+      if (!withLink) {
+        await this.router.navigateByUrl(PATHS.adminDrafts);
+        return;
+      }
+      const url = await this.drafts.createInviteLink(this.id);
+      this.made.set({ url, copied: await copyText(url) });
+      // From now on it is an existing draft with a link
+      this.isNew = false;
+      this.draft.set(await this.drafts.get(this.id));
     } catch (error) {
       log.error('Failed to save the draft', error);
       this.error.set($localize`Não foi possível salvar. Tente novamente.`);
@@ -121,8 +123,12 @@ export class AdminDraft {
     }
   }
 
+  protected selectAll(event: Event) {
+    (event.target as HTMLInputElement).select();
+  }
+
   protected async revoke() {
-    if (!confirm($localize`Cancelar o convite? O link enviado deixa de funcionar.`)) return;
+    if (!confirm($localize`Cancelar o link? O link enviado deixa de funcionar.`)) return;
     try {
       await this.drafts.revokeInvite(this.id);
       this.draft.update((draft) =>
@@ -130,7 +136,7 @@ export class AdminDraft {
       );
     } catch (error) {
       log.error('Failed to cancel the invite', error);
-      this.error.set($localize`Não foi possível cancelar o convite.`);
+      this.error.set($localize`Não foi possível cancelar o link.`);
     }
   }
 

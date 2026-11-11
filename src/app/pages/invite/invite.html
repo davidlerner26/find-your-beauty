@@ -6,9 +6,16 @@
     <p class="subtitle">{{ invalid() }}</p>
   } @else if (invite(); as invite) {
     <h1 i18n>Olá, {{ invite.name }}</h1>
-    <p i18n class="subtitle">
-      Montamos o seu perfil no Find Your Beauty. Entre com {{ invite.email }} para assumir o perfil.
-    </p>
+    @if (invite.email) {
+      <p i18n class="subtitle">
+        Montamos o seu perfil no Find Your Beauty. Entre com {{ invite.email }} para assumir o
+        perfil.
+      </p>
+    } @else {
+      <p i18n class="subtitle">
+        Montamos o seu perfil no Find Your Beauty. Entre ou crie a sua conta para assumir o perfil.
+      </p>
+    }
 
     @if (auth.user() && matches()) {
       <button i18n type="button" class="primary" [disabled]="working()" (click)="claimNow()">
@@ -29,6 +36,21 @@
         </button>
       } @else {
         <form class="auth" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          @if (!invite.email) {
+            <label class="field" [class.invalid]="showEmailError">
+              <mat-icon class="filled">mail</mat-icon>
+              <input
+                i18n-placeholder
+                type="email"
+                formControlName="email"
+                placeholder="E-mail"
+                autocomplete="email"
+              />
+            </label>
+            @if (showEmailError) {
+              <p i18n class="error">Digite um e-mail válido.</p>
+            }
+          }
           <label class="field" [class.invalid]="showError">
             <mat-icon class="filled">lock</mat-icon>
             <input

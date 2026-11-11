@@ -4,7 +4,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
 import { Auth } from '../../services/auth';
-import { passwordValidator } from '../../utils/form-validators';
+import { emailValidator, passwordValidator } from '../../utils/form-validators';
 import { log } from '../../utils/log';
 import { PATHS } from '../../utils/paths';
 import { authErrorMessage, PASSWORD_RULE } from '../../utils/validators';
@@ -38,13 +38,16 @@ export class Invite {
   protected readonly passwordRule = PASSWORD_RULE;
 
   protected readonly form = inject(NonNullableFormBuilder).group({
+    // Only asked when the invite has no e-mail: then the professional uses her own
+    email: [''],
     password: ['', [Validators.required, passwordValidator]],
   });
 
-  // The signed in account is the one of the invite: it can claim right away
+  // The signed in account can claim right away: it is the one of the invite, or the invite has no e-mail
   protected readonly matches = computed(() => {
+    const invited = this.invite()?.email.toLowerCase();
     const email = this.auth.user()?.email?.toLowerCase();
-    return !!email && email === this.invite()?.email.toLowerCase();
+    return !invited || (!!email && email === invited);
   });
 
   constructor() {
@@ -57,7 +60,11 @@ export class Invite {
   private async load() {
     try {
       await this.auth.whenReady;
-      this.invite.set(await this.auth.inviteInfo(this.draftId, this.token));
+      const invite = await this.auth.inviteInfo(this.draftId, this.token);
+      if (!invite.email) {
+        this.form.controls.email.setValidators([Validators.required, emailValidator]);
+      }
+      this.invite.set(invite);
     } catch (error) {
       log.warn('Invalid invite', error);
       this.invalid.set(
@@ -72,6 +79,11 @@ export class Invite {
   protected get showError() {
     const { password } = this.form.controls;
     return password.invalid && (this.submitted() || password.touched);
+  }
+
+  protected get showEmailError() {
+    const { email } = this.form.controls;
+    return email.invalid && (this.submitted() || email.touched);
   }
 
   private async run(action: () => Promise<void>) {
@@ -100,8 +112,8 @@ export class Invite {
   protected async submit() {
     this.submitted.set(true);
     if (this.form.invalid) return;
-    const email = this.invite()?.email ?? '';
-    const { password } = this.form.getRawValue();
+    const { password, email: typed } = this.form.getRawValue();
+    const email = this.invite()?.email || typed;
     await this.run(async () => {
       if (this.hasAccount()) await this.auth.signInWithInvite(email, password);
       else await this.auth.signUpWithInvite(email, password);

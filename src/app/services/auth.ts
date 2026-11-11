@@ -277,10 +277,11 @@ export class Auth {
   }
 
   // --- An invite to claim a profile an admin made (see ProfessionalDrafts) ---
-  // The link was sent to the invited e-mail, so these accounts skip the e-mail code of the client sign up. The
-  // account only becomes a professional when claimProfessional succeeds.
+  // The admin sends the link by hand, so these accounts skip the e-mail code of the client sign up. The account only
+  // becomes a professional when claimProfessional succeeds.
 
-  // The name, the photo and the e-mail of the invite, or an error when the link is not valid (the message is ready)
+  // The name, the photo and the e-mail of the invite (empty when it has none), or an error when the link is not valid
+  // (the message is ready)
   async inviteInfo(draftId: string, token: string) {
     const { data } = await call<
       { draftId: string; token: string; lang: string },
@@ -300,10 +301,11 @@ export class Auth {
     await this.resolveRole(user);
   }
 
-  // The Google account has to be the one of the invite: another one is removed, as the sign in just created it
+  // The Google account has to be the one of the invite, when it has an e-mail: another one is removed, as the sign in
+  // just created it
   async signInWithGoogleForInvite(invitedEmail: string) {
     const { user } = await signInWithPopup(this.auth, this.googleProvider);
-    if ((user.email ?? '').toLowerCase() !== invitedEmail.toLowerCase()) {
+    if (invitedEmail && (user.email ?? '').toLowerCase() !== invitedEmail.toLowerCase()) {
       await deleteUser(user).catch((error) => {
         log.warn('Failed to remove the account with another e-mail, signing out instead', error);
         return signOut(this.auth);

@@ -20,14 +20,15 @@
         }
 
         <label i18n>
-          E-mail do convite
+          E-mail (opcional)
           <input name="email" type="email" autocomplete="off" [(ngModel)]="form.email" />
         </label>
         @if (problems.includes('email')) {
           <p i18n class="error" role="alert">Digite um e-mail válido.</p>
         }
         <p i18n class="hint muted">
-          O convite vai para este e-mail, e só quem entrar com ele consegue assumir o perfil.
+          Se preencher, só quem entrar com este e-mail consegue assumir o perfil. Se deixar em
+          branco, quem tiver o link assume.
         </p>
 
         <label i18n>
@@ -96,16 +97,36 @@
       @if (!isNew) {
         @switch (status()) {
           @case ('sent') {
-            <p i18n class="hint">Há um convite enviado e ainda válido.</p>
+            <p i18n class="hint">Há um link gerado e ainda válido.</p>
           }
           @case ('expired') {
-            <p i18n class="hint error">O convite expirou. Envie outro.</p>
+            <p i18n class="hint error">O link expirou. Gere outro.</p>
           }
         }
       }
 
       @if (error()) {
         <p class="error" role="alert">{{ error() }}</p>
+      }
+      @if (made(); as made) {
+        <div class="made" role="status">
+          @if (made.copied) {
+            <p i18n>Link copiado. Cole na conversa para enviar.</p>
+          } @else {
+            <p i18n>Copie o link e envie.</p>
+          }
+          <input
+            i18n-aria-label
+            aria-label="Link do convite"
+            readonly
+            [value]="made.url"
+            (focus)="selectAll($event)"
+          />
+          <p i18n class="hint">
+            Este link aparece só agora. Se precisar de outro, gere um novo: o anterior deixa de
+            funcionar.
+          </p>
+        </div>
       }
 
       <div class="actions">
@@ -123,11 +144,15 @@
           [disabled]="saving() || uploading()"
           (click)="save(true)"
         >
-          Salvar e enviar convite
+          @if (isNew) {
+            Salvar e gerar link
+          } @else {
+            Salvar e gerar novo link
+          }
         </button>
         @if (!isNew) {
           @if (draft()?.invited) {
-            <button i18n type="button" class="link" (click)="revoke()">Cancelar convite</button>
+            <button i18n type="button" class="link" (click)="revoke()">Cancelar link</button>
           }
           <button i18n type="button" class="link danger" (click)="remove()">Apagar perfil</button>
         }

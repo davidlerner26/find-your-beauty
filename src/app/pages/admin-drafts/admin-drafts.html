@@ -2,8 +2,8 @@
   <a i18n class="back" [routerLink]="paths.admin">Voltar para a administração</a>
   <h1 i18n>Perfis criados por você</h1>
   <p i18n class="muted">
-    Crie o perfil de um profissional que ainda não tem conta e envie um convite por e-mail. Ele
-    assume o perfil entrando com o e-mail do convite.
+    Crie o perfil de um profissional que ainda não tem conta e gere um link para enviar a ele (por
+    WhatsApp, Instagram...). Ele assume o perfil abrindo o link.
   </p>
   <a i18n class="primary" [routerLink]="paths.adminNewDraft">Criar perfil</a>
 
@@ -13,8 +13,25 @@
     @if (error()) {
       <p class="error" role="alert">{{ error() }}</p>
     }
-    @if (message()) {
-      <p class="success" role="status">{{ message() }}</p>
+    @if (made(); as made) {
+      <div class="success" role="status">
+        @if (made.copied) {
+          <p i18n>Link de {{ made.name }} copiado. Cole na conversa para enviar.</p>
+        } @else {
+          <p i18n>Link de {{ made.name }}. Copie e envie.</p>
+        }
+        <input
+          i18n-aria-label
+          aria-label="Link do convite"
+          readonly
+          [value]="made.url"
+          (focus)="selectAll($event)"
+        />
+        <p i18n class="note">
+          Este link aparece só agora. Se precisar de outro, gere um novo: o anterior deixa de
+          funcionar.
+        </p>
+      </div>
     }
 
     <div class="list">
@@ -22,16 +39,18 @@
         <article class="item">
           <a class="info" [routerLink]="paths.adminDraft(draft.id)">
             <h3>{{ draft.form.name }}</h3>
-            <p class="muted">{{ draft.form.email }}</p>
+            @if (draft.form.email) {
+              <p class="muted">{{ draft.form.email }}</p>
+            }
             @switch (status(draft)) {
               @case ('sent') {
-                <p i18n class="muted">Convite enviado {{ relative(draft.invitedAt) }}</p>
+                <p i18n class="muted">Link gerado {{ relative(draft.invitedAt) }}</p>
               }
               @case ('expired') {
-                <p i18n class="muted warn">Convite expirado</p>
+                <p i18n class="muted warn">Link expirado</p>
               }
               @default {
-                <p i18n class="muted">Convite ainda não enviado</p>
+                <p i18n class="muted">Link ainda não gerado</p>
               }
             }
           </a>
@@ -40,13 +59,13 @@
             type="button"
             class="invite"
             [disabled]="working() === draft.id"
-            (click)="invite(draft)"
+            (click)="makeLink(draft)"
           >
-            <mat-icon>mail</mat-icon>
+            <mat-icon>link</mat-icon>
             @if (status(draft) === 'none') {
-              Enviar convite
+              Gerar e copiar link
             } @else {
-              Reenviar convite
+              Gerar novo link
             }
           </button>
         </article>

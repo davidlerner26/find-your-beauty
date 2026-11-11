@@ -4,12 +4,12 @@ import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 import * as logger from 'firebase-functions/logger';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
-import { asLang, L, Lang, link, resendKey, sendEmail } from './email';
+import { asLang, L, Lang, link } from './email';
 import { clientIp, hit } from './rate-limit';
 
 // A profile made by an admin for a professional who has no account yet lives in professionalDrafts/{draftId}, which
-// only admins read (see firestore.rules): it is never in the catalog. The admin sends an invite by e-mail; the
-// professional opens the link, signs in with the invited address and claims it. Claiming copies the draft to
+// only admins read (see firestore.rules): it is never in the catalog. The admin gets an invite link to send by hand
+// (WhatsApp, Instagram...); the professional opens it, signs in and claims the profile. Claiming copies the draft to
 // professionals/{uid} (the document id is the account uid, which the rest of the app depends on) and deletes it.
 // Nothing can reference a draft (no bookings, messages or reviews), so changing the id costs nothing.
 
@@ -125,6 +125,7 @@ export const profileFromDraft = (
   uid: string,
   draftId: string,
   photos: Map<string, string>,
+  accountEmail: string,
 ) => {
   const swap = (url: unknown) => (typeof url === 'string' ? (photos.get(url) ?? url) : url);
   const profile: Data = {};
@@ -143,7 +144,7 @@ export const profileFromDraft = (
   return {
     ...profile,
     ownerUid: uid,
-    email: cleanEmail(draft['claimEmail']),
+    email: cleanEmail(accountEmail),
     approved: true,
     rejected: false,
     submitted: true,
@@ -190,76 +191,36 @@ const draftIdOf = (value: unknown) => {
   return value;
 };
 
-// An admin sends (or resends) the invite: a new token replaces the old one, so older links stop working
-export const createProfessionalInvite = onCall(
-  { ...PUBLIC, secrets: [resendKey] },
-  async (request) => {
-    if (!request.auth || !(await isAdmin(request.auth.uid))) {
-      throw new HttpsError('permission-denied', 'Only admins send invites');
-    }
-    const draftId = draftIdOf(request.data?.draftId);
-    const ref = db().doc(`${DRAFTS}/${draftId}`);
-    const draft = (await ref.get()).data();
-    if (!draft) throw new HttpsError('not-found', 'Draft not found');
+// An admin makes the invite link of a draft, to send by hand (WhatsApp, Instagram...). Only the hash of the token is
+// saved, so the link is shown once: asking again makes a new token and the previous link stops working.
+export const createProfessionalInvite = onCall(PUBLIC, async (request) => {
+  if (!request.auth || !(await isAdmin(request.auth.uid))) {
+    throw new HttpsError('permission-denied', 'Only admins make invites');
+  }
+  const draftId = draftIdOf(request.data?.draftId);
+  const ref = db().doc(`${DRAFTS}/${draftId}`);
+  const draft = (await ref.get()).data();
+  if (!draft) throw new HttpsError('not-found', 'Draft not found');
+  if (!String(draft['name'] ?? '').trim()) {
+    throw new HttpsError('failed-precondition', 'The draft needs a name');
+  }
+  if (!(await hit(db(), { scope: 'invite', key: draftId, max: 10, windowSeconds: 3600 }))) {
+    throw new HttpsError('resource-exhausted', tooMany('pt'));
+  }
 
-    const email = cleanEmail(draft['claimEmail']);
-    const name = String(draft['name'] ?? '').trim();
-    if (!isEmail(email) || !name) {
-      throw new HttpsError('failed-precondition', 'The draft needs a name and an e-mail');
-    }
-    if (!(await hit(db(), { scope: 'invite', key: draftId, max: 5, windowSeconds: 3600 }))) {
-      throw new HttpsError('resource-exhausted', tooMany('pt'));
-    }
+  const token = newToken();
+  const expiresAt = Date.now() + INVITE_DAYS * 24 * 3600_000;
+  await ref.update({
+    inviteHash: hashToken(draftId, token),
+    inviteExpiresAt: expiresAt,
+    invitedAt: FieldValue.serverTimestamp(),
+  });
+  return { ok: true, expiresAt, url: link(asLang(draft['lang']), `/convite/${draftId}/${token}`) };
+});
 
-    const token = newToken();
-    const expiresAt = Date.now() + INVITE_DAYS * 24 * 3600_000;
-    await ref.update({
-      inviteHash: hashToken(draftId, token),
-      inviteExpiresAt: expiresAt,
-      invitedAt: FieldValue.serverTimestamp(),
-    });
-
-    const lang = asLang(draft['lang']);
-    await sendEmail({
-      to: email,
-      lang,
-      subject: L(lang, {
-        pt: 'Seu perfil no Find Your Beauty está pronto',
-        en: 'Your Find Your Beauty profile is ready',
-        es: 'Tu perfil en Find Your Beauty está listo',
-      }),
-      heading: L(lang, {
-        pt: 'Criamos o seu perfil',
-        en: 'We created your profile',
-        es: 'Creamos tu perfil',
-      }),
-      paragraphs: [
-        L(lang, {
-          pt: `Olá, ${name}! A nossa equipe montou o seu perfil no Find Your Beauty. Para assumir o perfil, entre com este e-mail pelo botão abaixo. Depois é só conferir os dados e ajustar o que quiser.`,
-          en: `Hi, ${name}! Our team set up your profile on Find Your Beauty. To take it over, sign in with this email using the button below. Then check the details and change whatever you like.`,
-          es: `¡Hola, ${name}! Nuestro equipo armó tu perfil en Find Your Beauty. Para asumirlo, entra con este correo usando el botón de abajo. Luego revisa los datos y cambia lo que quieras.`,
-        }),
-        L(lang, {
-          pt: `O link vale por ${INVITE_DAYS} dias. Se você não esperava este e-mail, pode ignorá-lo.`,
-          en: `The link is valid for ${INVITE_DAYS} days. If you were not expecting this email, you can ignore it.`,
-          es: `El enlace vale por ${INVITE_DAYS} días. Si no esperabas este correo, puedes ignorarlo.`,
-        }),
-      ],
-      button: {
-        label: L(lang, {
-          pt: 'Assumir o meu perfil',
-          en: 'Take over my profile',
-          es: 'Asumir mi perfil',
-        }),
-        url: link(lang, `/convite/${draftId}/${token}`),
-      },
-    });
-    return { ok: true, expiresAt: expiresAt };
-  },
-);
-
-// What the invite page shows before the professional signs in. It answers only for a valid token (which was sent
-// to that e-mail), and a wrong guess looks the same as a draft that does not exist.
+// What the invite page shows before the professional signs in. It answers only for a valid token (the link the admin
+// sent), and a wrong guess looks the same as a draft that does not exist. `email` is empty when the draft has none:
+// then any account can claim it.
 export const professionalInviteInfo = onCall(PUBLIC, async (request) => {
   const lang = asLang(request.data?.lang);
   const draftId = draftIdOf(request.data?.draftId);
@@ -308,96 +269,68 @@ const copyPhotos = async (draft: Data, draftId: string, uid: string) => {
   return photos;
 };
 
-// The professional claims the draft with the invite token, signed in with the invited e-mail
-export const claimProfessionalDraft = onCall(
-  { ...PUBLIC, secrets: [resendKey] },
-  async (request) => {
-    const lang = asLang(request.data?.lang);
-    if (!request.auth) {
-      throw new HttpsError(
-        'unauthenticated',
-        L(lang, { pt: 'Entre na sua conta.', en: 'Sign in.', es: 'Inicia sesión.' }),
-      );
-    }
-    const uid = request.auth.uid;
-    const draftId = draftIdOf(request.data?.draftId);
-    if (!(await hit(db(), { scope: 'claim', key: uid, max: 10, windowSeconds: 3600 }))) {
-      throw new HttpsError('resource-exhausted', tooMany(lang));
-    }
+// The professional claims the draft with the invite token, signed in (with the invited e-mail, when the draft has one)
+export const claimProfessionalDraft = onCall(PUBLIC, async (request) => {
+  const lang = asLang(request.data?.lang);
+  if (!request.auth) {
+    throw new HttpsError(
+      'unauthenticated',
+      L(lang, { pt: 'Entre na sua conta.', en: 'Sign in.', es: 'Inicia sesión.' }),
+    );
+  }
+  const uid = request.auth.uid;
+  const draftId = draftIdOf(request.data?.draftId);
+  if (!(await hit(db(), { scope: 'claim', key: uid, max: 10, windowSeconds: 3600 }))) {
+    throw new HttpsError('resource-exhausted', tooMany(lang));
+  }
 
-    const ref = db().doc(`${DRAFTS}/${draftId}`);
-    const draft = (await ref.get()).data();
-    if (inviteState(draft, draftId, request.data?.token) !== 'ok' || !draft)
+  const ref = db().doc(`${DRAFTS}/${draftId}`);
+  const draft = (await ref.get()).data();
+  if (inviteState(draft, draftId, request.data?.token) !== 'ok' || !draft)
+    throw invalidInvite(lang);
+
+  // With an e-mail on the draft only that account can claim it; without one, whoever has the link can
+  const invited = cleanEmail(draft['claimEmail']);
+  const email = cleanEmail((await getAuth().getUser(uid)).email);
+  if (invited && email !== invited) {
+    throw new HttpsError(
+      'permission-denied',
+      L(lang, {
+        pt: `Entre com o e-mail do convite (${invited}).`,
+        en: `Sign in with the email of the invite (${invited}).`,
+        es: `Entra con el correo de la invitación (${invited}).`,
+      }),
+    );
+  }
+
+  const target = db().doc(`professionals/${uid}`);
+  if ((await target.get()).exists) {
+    throw new HttpsError(
+      'already-exists',
+      L(lang, {
+        pt: 'Esta conta já tem um perfil profissional.',
+        en: 'This account already has a professional profile.',
+        es: 'Esta cuenta ya tiene un perfil profesional.',
+      }),
+    );
+  }
+
+  const photos = await copyPhotos(draft, draftId, uid);
+  await db().runTransaction(async (transaction) => {
+    // Read again: two claims at once (or a new invite in between) must not both go through
+    const current = (await transaction.get(ref)).data();
+    if (inviteState(current, draftId, request.data?.token) !== 'ok' || !current) {
       throw invalidInvite(lang);
-
-    // The token was sent to this address, so the account has to be the one of that address
-    const invited = cleanEmail(draft['claimEmail']);
-    const email = cleanEmail((await getAuth().getUser(uid)).email);
-    if (email !== invited) {
-      throw new HttpsError(
-        'permission-denied',
-        L(lang, {
-          pt: `Entre com o e-mail do convite (${invited}).`,
-          en: `Sign in with the email of the invite (${invited}).`,
-          es: `Entra con el correo de la invitación (${invited}).`,
-        }),
-      );
     }
-
-    const target = db().doc(`professionals/${uid}`);
-    if ((await target.get()).exists) {
-      throw new HttpsError(
-        'already-exists',
-        L(lang, {
-          pt: 'Esta conta já tem um perfil profissional.',
-          en: 'This account already has a professional profile.',
-          es: 'Esta cuenta ya tiene un perfil profesional.',
-        }),
-      );
+    if ((await transaction.get(target)).exists) {
+      throw new HttpsError('already-exists', 'This account already has a professional profile.');
     }
-
-    const photos = await copyPhotos(draft, draftId, uid);
-    await db().runTransaction(async (transaction) => {
-      // Read again: two claims at once (or a new invite in between) must not both go through
-      const current = (await transaction.get(ref)).data();
-      if (inviteState(current, draftId, request.data?.token) !== 'ok' || !current) {
-        throw invalidInvite(lang);
-      }
-      if ((await transaction.get(target)).exists) {
-        throw new HttpsError('already-exists', 'This account already has a professional profile.');
-      }
-      transaction.create(target, {
-        ...profileFromDraft(current, uid, draftId, photos),
-        createdAt: FieldValue.serverTimestamp(),
-      });
-      transaction.delete(ref);
+    transaction.create(target, {
+      ...profileFromDraft(current, uid, draftId, photos, email),
+      createdAt: FieldValue.serverTimestamp(),
     });
+    transaction.delete(ref);
+  });
 
-    await sendEmail({
-      to: email,
-      lang,
-      subject: L(lang, {
-        pt: 'Seu perfil está no ar',
-        en: 'Your profile is live',
-        es: 'Tu perfil está en línea',
-      }),
-      heading: L(lang, {
-        pt: 'O perfil agora é seu',
-        en: 'The profile is now yours',
-        es: 'El perfil ahora es tuyo',
-      }),
-      paragraphs: [
-        L(lang, {
-          pt: 'Você assumiu o seu perfil e ele já aparece para os clientes. Confira os serviços, os horários e as fotos quando quiser.',
-          en: 'You took over your profile and it is already visible to clients. Check the services, hours and photos whenever you like.',
-          es: 'Asumiste tu perfil y ya aparece para los clientes. Revisa los servicios, los horarios y las fotos cuando quieras.',
-        }),
-      ],
-      button: {
-        label: L(lang, { pt: 'Abrir o meu perfil', en: 'Open my profile', es: 'Abrir mi perfil' }),
-        url: link(lang, '/pro'),
-      },
-    });
-    return { ok: true };
-  },
-);
+  return { ok: true };
+});

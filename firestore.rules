@@ -60,6 +60,12 @@ service cloud.firestore {
       }
     }
 
+    // Profiles an admin made for professionals who have no account yet. Never public: the professional claims one with
+    // an invite (Cloud Functions), which copies it to professionals/{uid} and deletes it.
+    match /professionalDrafts/{id} {
+      allow read, write: if isAdmin();
+    }
+
     match /users/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;
       // `admin` is informational (the real list is isAdmin() above): nobody can give it to themselves

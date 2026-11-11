@@ -5,7 +5,15 @@ import {
   initializeTestEnvironment,
   RulesTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { doc, serverTimestamp, setDoc, Timestamp, writeBatch } from 'firebase/firestore';
+import {
+  deleteDoc,
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  Timestamp,
+  writeBatch,
+} from 'firebase/firestore';
 import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
 
 const CLIENT = 'client1';
@@ -283,5 +291,38 @@ describe('conversations and messages', () => {
     await assertFails(
       updateDoc(doc(db, 'conversations', conversationId), { participants: [CLIENT, OTHER] }),
     );
+  });
+});
+
+describe('drafts made by an admin', () => {
+  const ADMIN = 'admin1';
+
+  beforeEach(async () => {
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(doc(ctx.firestore(), 'users', ADMIN), { admin: true });
+      await setDoc(doc(ctx.firestore(), 'professionalDrafts', 'd1'), {
+        name: 'Ana',
+        claimEmail: 'ana@example.com',
+      });
+    });
+  });
+
+  it('lets an admin read and write drafts', async () => {
+    const db = env.authenticatedContext(ADMIN).firestore();
+    await assertSucceeds(getDoc(doc(db, 'professionalDrafts', 'd1')));
+    await assertSucceeds(setDoc(doc(db, 'professionalDrafts', 'd2'), { name: 'Bia' }));
+    await assertSucceeds(deleteDoc(doc(db, 'professionalDrafts', 'd1')));
+  });
+
+  it('keeps drafts closed to everyone else, even the professional with that e-mail', async () => {
+    for (const db of [
+      env.authenticatedContext(CLIENT).firestore(),
+      env.authenticatedContext(PRO_UID).firestore(),
+      env.unauthenticatedContext().firestore(),
+    ]) {
+      await assertFails(getDoc(doc(db, 'professionalDrafts', 'd1')));
+      await assertFails(setDoc(doc(db, 'professionalDrafts', 'd3'), { name: 'X' }));
+      await assertFails(deleteDoc(doc(db, 'professionalDrafts', 'd1')));
+    }
   });
 });

@@ -1,6 +1,12 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
+    // An admin has `admin: true` in their users document (the same list as firestore.rules)
+    function isAdmin() {
+      return request.auth != null &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.get('admin', false) == true;
+    }
+
     // Photos of a professional. Anyone can see them, only the owner uploads (images up to 5 MB).
     match /professionals/{uid}/{allPaths=**} {
       allow read: if true;
@@ -8,6 +14,15 @@ service firebase.storage {
         request.resource.size < 5 * 1024 * 1024 &&
         request.resource.contentType.matches('image/.*');
       allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Photos of a profile an admin is making for someone who has no account yet (see professionalDrafts in
+    // firestore.rules). Only admins. The photos are copied to professionals/{uid} when the profile is claimed.
+    match /professionalDrafts/{draftId}/{allPaths=**} {
+      allow read: if isAdmin();
+      allow write: if isAdmin() && request.resource.size < 5 * 1024 * 1024 &&
+        request.resource.contentType.matches('image/.*');
+      allow delete: if isAdmin();
     }
 
     // Files of a conversation: only its two participants (up to 10 MB). Its id is {clientUid}_{professionalId}.

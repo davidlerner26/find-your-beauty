@@ -6,7 +6,7 @@ import {
   RulesTestEnvironment,
 } from '@firebase/rules-unit-testing';
 import { doc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes } from 'firebase/storage';
+import { getBytes, ref, uploadBytes } from 'firebase/storage';
 import { afterAll, beforeAll, describe, it } from 'vitest';
 
 const CLIENT = 'client1';
@@ -25,6 +25,7 @@ beforeAll(async () => {
     await setDoc(doc(ctx.firestore(), 'conversations', conversationId), {
       participants: [CLIENT, PRO_UID],
     });
+    await setDoc(doc(ctx.firestore(), 'users', 'admin1'), { admin: true });
   });
 });
 
@@ -60,5 +61,32 @@ describe('chat files', () => {
   it('denies files over 10 MB and uploads by strangers', async () => {
     await assertFails(upload(CLIENT, 'big.pdf', 'application/pdf', 11 * 1024 * 1024));
     await assertFails(upload('stranger', 'a.pdf', 'application/pdf'));
+  });
+});
+
+describe('photos of a draft made by an admin', () => {
+  const draftPhoto = (uid: string | null) =>
+    ref(
+      (uid ? env.authenticatedContext(uid) : env.unauthenticatedContext()).storage(),
+      'professionalDrafts/d1/profile/1.jpg',
+    );
+  const send = (uid: string, contentType = 'image/jpeg', size = 10) =>
+    uploadBytes(draftPhoto(uid), new Uint8Array(size), { contentType });
+
+  it('lets an admin upload, read and delete them', async () => {
+    await assertSucceeds(send('admin1'));
+    await assertSucceeds(getBytes(draftPhoto('admin1')));
+  });
+
+  it('denies anyone else, signed in or not', async () => {
+    await assertFails(send(CLIENT));
+    await assertFails(send(PRO_UID));
+    await assertFails(getBytes(draftPhoto(null)));
+    await assertFails(getBytes(draftPhoto(CLIENT)));
+  });
+
+  it('denies files that are not images or are over 5 MB, even from an admin', async () => {
+    await assertFails(send('admin1', 'text/html'));
+    await assertFails(send('admin1', 'image/jpeg', 6 * 1024 * 1024));
   });
 });

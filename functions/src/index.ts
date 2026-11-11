@@ -510,6 +510,8 @@ export const onClientCreated = onDocumentCreated(
 export const onProfessionalCreated = onDocumentCreated(
   { document: 'professionals/{uid}', secrets: [resendKey] },
   async (event) => {
+    // A profile claimed from an invite is already approved: claimProfessionalDraft sends its own e-mail
+    if (event.data?.data()?.['claimedFromDraft']) return;
     const to = await emailOf(event.params.uid);
     if (!to) return;
     const lang = asLang(event.data?.data()?.['lang']);
@@ -966,3 +968,6 @@ export const verifyEmailCode = onCall({ ...PUBLIC, secrets: [resendKey] }, async
   await welcomeClient(user.uid, request.data?.lang);
   return { ok: true };
 });
+
+// Profiles made by an admin and claimed by the professional with an invite (see claim.ts)
+export { claimProfessionalDraft, createProfessionalInvite, professionalInviteInfo } from './claim';

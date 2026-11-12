@@ -113,9 +113,9 @@ describe('clientGuard', () => {
     expect(await run(clientGuard)).toBe('/entrar');
   });
 
-  it('sends professionals to the start', async () => {
+  it('sends professionals to their agenda', async () => {
     setup(fakeAuth({ uid: 'p', role: 'professional' }));
-    expect(await run(clientGuard)).toBe('/');
+    expect(await run(clientGuard)).toBe('/pro');
   });
 
   it('lets a client with a complete profile in', async () => {

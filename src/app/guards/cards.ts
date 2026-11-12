@@ -12,6 +12,7 @@ export const cardsGuard: CanActivateFn = async () => {
   if (!inject(PAYMENTS).available) return router.parseUrl(PATHS.home);
   await auth.whenReady;
   if (!auth.user()) return router.parseUrl(PATHS.login);
+  if (auth.role() === 'professional') return router.parseUrl(PATHS.proHome);
   if (auth.role() !== 'client') return router.parseUrl(PATHS.home);
   return true;
 };

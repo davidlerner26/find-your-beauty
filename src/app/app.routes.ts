@@ -15,6 +15,7 @@ const seo = (page: RouteSeo) => ({ seo: page });
 export const routes: Routes = [
   {
     path: '',
+    canActivate: [clientAreaGuard],
     data: seo({
       title: $localize`Maquiagem e cabelo perto de você`,
       path: '/',
@@ -24,6 +25,7 @@ export const routes: Routes = [
   },
   {
     path: 'explore',
+    canActivate: [clientAreaGuard],
     data: seo({
       title: $localize`Mapa de profissionais de beleza`,
       description: $localize`Veja no mapa os profissionais de maquiagem e cabelo mais perto de você.`,
@@ -33,6 +35,7 @@ export const routes: Routes = [
   },
   {
     path: 'profissionais/:id',
+    canActivate: [clientAreaGuard],
     // The page sets its own title when the professional is loaded (see pages/professional)
     data: seo({ title: $localize`Profissional de beleza`, dynamic: true }),
     loadComponent: () =>
@@ -55,6 +58,7 @@ export const routes: Routes = [
   },
   {
     path: 'verificar-email',
+    canActivate: [clientAreaGuard],
     loadComponent: () => import('./pages/verify-email/verify-email').then((m) => m.VerifyEmail),
   },
   {
@@ -69,6 +73,7 @@ export const routes: Routes = [
   },
   {
     path: 'boas-vindas',
+    canActivate: [clientAreaGuard],
     loadComponent: () => import('./pages/onboarding/onboarding').then((m) => m.Onboarding),
   },
   {
@@ -133,6 +138,7 @@ export const routes: Routes = [
   },
   {
     path: 'busca',
+    canActivate: [clientAreaGuard],
     data: seo({
       title: $localize`Buscar profissionais de maquiagem e cabelo`,
       description: $localize`Busque profissionais de maquiagem e cabelo pelo nome, pelo serviço ou pelo preço e agende online.`,

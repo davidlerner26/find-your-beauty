@@ -7,7 +7,7 @@ import { log } from '../utils/log';
 import { PATHS } from '../utils/paths';
 
 // Booking is for signed-in clients with all the profile data filled in:
-// visitors go to the login, professionals back to the start, and a client with missing data to the
+// visitors go to the login, professionals to their agenda, and a client with missing data to the
 // professional's page, which says what is missing
 export const clientGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
   const auth = inject(Auth);
@@ -17,6 +17,7 @@ export const clientGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) 
   await auth.whenReady;
   const user = auth.user();
   if (!user) return router.parseUrl(PATHS.login);
+  if (auth.role() === 'professional') return router.parseUrl(PATHS.proHome);
   if (auth.role() !== 'client') return router.parseUrl(PATHS.home);
 
   try {
@@ -29,9 +30,10 @@ export const clientGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) 
   return true;
 };
 
-// The screens of the client (agenda, messages, notifications, profile) are not for professionals: they go to the
-// same screen of the professional area, given in the `proPath` of the route (the agenda when there is none).
-// Visitors get in: each screen tells them to sign in.
+// Every screen of the client (the start, the map, the search, the page of a professional, the agenda, messages,
+// notifications, profile...) is closed to a signed in professional: she goes to the same screen of the professional
+// area, given in the `proPath` of the route (her agenda when there is none). Visitors and clients get in (each
+// screen tells a visitor to sign in).
 export const clientAreaGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
   const auth = inject(Auth);
   const router = inject(Router);

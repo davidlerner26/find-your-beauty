@@ -10,9 +10,9 @@
     }
     @if (profileState; as state) {
       <!-- Next to the logo. Public: the clients find the profile. Private: they do not (the profile page says what is missing). -->
-      <a
+      <span
         [class]="'visibility ' + state"
-        routerLink="/pro/perfil"
+        role="status"
         [attr.aria-label]="state === 'public' ? publicLabel : privateLabel"
       >
         <mat-icon>{{ state === 'public' ? 'visibility' : 'visibility_off' }}</mat-icon>
@@ -21,7 +21,7 @@
         } @else {
           <span i18n>Privado</span>
         }
-      </a>
+      </span>
     }
     <nav i18n-aria-label aria-label="Principal">
       @for (tab of topTabs; track tab.path) {

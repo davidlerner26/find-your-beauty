@@ -3,19 +3,14 @@
     <h1 i18n>Agenda</h1>
     <!-- On wide screens the state is in the bar on top -->
     @if (profile(); as profile) {
-      <a
-        class="visibility"
-        [class.public]="profile.published"
-        routerLink="/pro/perfil"
-        role="status"
-      >
+      <span class="visibility" [class.public]="profile.published" role="status">
         <mat-icon>{{ profile.published ? 'visibility' : 'visibility_off' }}</mat-icon>
         @if (profile.published) {
           <span i18n>Público</span>
         } @else {
           <span i18n>Privado</span>
         }
-      </a>
+      </span>
     }
   </div>
 

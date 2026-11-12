@@ -8,6 +8,7 @@ import { Messages } from './services/messages';
 import { Notifications } from './services/notifications';
 import { Professionals } from './services/professionals';
 import { Feedback } from './services/feedback';
+import { AppUpdates } from './services/app-updates';
 import { Seo } from './services/seo';
 import { ToastStack } from './components/toast-stack/toast-stack';
 import { environment } from '../environments/environment';
@@ -130,6 +131,8 @@ export class App {
   private readonly lastTab = signal('/perfil');
 
   constructor() {
+    // The new version of the app is put on screen by itself (see services/app-updates.ts)
+    inject(AppUpdates).start();
     const router = inject(Router);
     const icons = inject(MatIconRegistry);
 

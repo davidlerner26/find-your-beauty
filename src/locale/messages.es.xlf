@@ -5624,12 +5624,44 @@
           <context context-type="linenumber">218,220</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1836362189879514748" datatype="html">
-        <source>Perfil público</source>
-        <target>Perfil público</target>
+      <trans-unit id="8562888595919619665" datatype="html">
+        <source>Público</source>
+        <target>Público</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">8,9</context>
+          <context context-type="linenumber">14,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4760056198413288553" datatype="html">
+        <source>Privado</source>
+        <target>Privado</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">33,34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4269721383556323571" datatype="html">
+        <source>Perfil público: os clientes encontram você</source>
+        <target>Perfil público: los clientes te encuentran</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">156</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7666153887506078936" datatype="html">
+        <source>Perfil privado: os clientes não encontram você. Abra o perfil para ver o que falta.</source>
+        <target>Perfil privado: los clientes no te encuentran. Abre el perfil para ver qué falta.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.ts</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
     </body>

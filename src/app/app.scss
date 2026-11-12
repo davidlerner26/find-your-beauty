@@ -169,6 +169,30 @@ $tabs-height: 5rem;
   }
 
   // The professional area takes the blue of the brand: the bar follows
+  // The state of the account of the professional: green when public, red when private (white letters on both)
+  .visibility {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-pill);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    mat-icon {
+      @include icon-size(1.2rem);
+    }
+
+    &.public {
+      background: var(--success);
+    }
+
+    &.private {
+      background: var(--danger-strong);
+    }
+  }
+
   :host-context(.pro-theme) .topbar {
     background: var(--brand-dark);
     box-shadow: none;

@@ -1,12 +1,21 @@
 <div class="agenda">
   <div class="head">
     <h1 i18n>Agenda</h1>
-    @if (profile()?.published) {
-      <!-- The clients can find this profile -->
-      <span class="public" role="status">
-        <mat-icon>public</mat-icon>
-        <span i18n>Perfil público</span>
-      </span>
+    <!-- On wide screens the state is in the bar on top -->
+    @if (profile(); as profile) {
+      <a
+        class="visibility"
+        [class.public]="profile.published"
+        routerLink="/pro/perfil"
+        role="status"
+      >
+        <mat-icon>{{ profile.published ? 'visibility' : 'visibility_off' }}</mat-icon>
+        @if (profile.published) {
+          <span i18n>Público</span>
+        } @else {
+          <span i18n>Privado</span>
+        }
+      </a>
     }
   </div>
 

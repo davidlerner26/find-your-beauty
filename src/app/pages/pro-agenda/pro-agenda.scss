@@ -17,22 +17,30 @@ h1 {
   font-size: 1.5rem;
 }
 
-// "Perfil público": clients can find this profile
-.public {
+// The state of the profile: green when public, red when private. Wide screens show it in the bar on top.
+.visibility {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   padding: 0.35rem 0.9rem;
   border-radius: var(--radius-pill);
-  background: var(--primary-light);
-  color: var(--primary);
+  background: var(--danger-strong);
+  color: #fff;
   font-size: 0.9rem;
   font-weight: 600;
+
+  &.public {
+    background: var(--success);
+  }
 
   mat-icon {
     width: 1.1rem;
     height: 1.1rem;
     font-size: 1.1rem;
+  }
+
+  @include desktop {
+    display: none;
   }
 }
 

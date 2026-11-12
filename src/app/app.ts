@@ -6,6 +6,7 @@ import { filter } from 'rxjs';
 import { Auth } from './services/auth';
 import { Messages } from './services/messages';
 import { Notifications } from './services/notifications';
+import { Professionals } from './services/professionals';
 import { Feedback } from './services/feedback';
 import { Seo } from './services/seo';
 import { Toast } from './components/toast/toast';
@@ -61,6 +62,7 @@ export class App {
   private readonly notifications = inject(Notifications);
   protected readonly feedback = inject(Feedback);
   protected readonly auth = inject(Auth);
+  private readonly professionals = inject(Professionals);
   private readonly seo = inject(Seo);
   private readonly document = inject(DOCUMENT);
 
@@ -141,6 +143,18 @@ export class App {
         this.seo.fromRoute(router.routerState.snapshot.root);
       });
   }
+
+  // The state of the account of a professional, in the bar on top: the clients find the profile (public) or not (private)
+  protected get profileState() {
+    const uid = this.auth.user()?.uid;
+    if (!uid || !isProArea(this.url())) return null;
+    const profile = this.professionals.byId(uid);
+    if (!profile) return null;
+    return profile.published ? 'public' : 'private';
+  }
+
+  protected readonly publicLabel = $localize`Perfil público: os clientes encontram você`;
+  protected readonly privateLabel = $localize`Perfil privado: os clientes não encontram você. Abra o perfil para ver o que falta.`;
 
   protected get tabs() {
     return isProArea(this.url()) ? this.proTabs : this.clientTabs;

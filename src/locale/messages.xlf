@@ -181,7 +181,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">2,4</context>
+          <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5970759306298930698" datatype="html">
@@ -535,7 +535,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7953234945664560269" datatype="html">
@@ -2213,7 +2213,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4286459967004275147" datatype="html">
@@ -2591,18 +2591,18 @@
           <context context-type="linenumber">90,109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3525491260355087326" datatype="html">
-        <source> Criar uma senha </source>
+      <trans-unit id="1274321492406938775" datatype="html">
+        <source>Criar uma senha</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">113,114</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1483857798050119706" datatype="html">
-        <source> Já tenho uma conta </source>
+      <trans-unit id="4888790279315637552" datatype="html">
+        <source>Já tenho uma conta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">115,116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3528799168790508410" datatype="html">
@@ -3096,11 +3096,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">64,65</context>
+          <context context-type="linenumber">73,74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">65,66</context>
+          <context context-type="linenumber">74,75</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
@@ -3122,7 +3122,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">84,85</context>
+          <context context-type="linenumber">93,94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9123566555526559197" datatype="html">
@@ -3140,7 +3140,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">94,95</context>
+          <context context-type="linenumber">103,104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7261672028112784063" datatype="html">
@@ -3329,46 +3329,53 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1836362189879514748" datatype="html">
+        <source>Perfil público</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
+          <context context-type="linenumber">8,9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="581352304024147958" datatype="html">
         <source> Seu perfil não está publicado, então os clientes não encontram você. Abra o perfil, complete os dados e marque para mostrar. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">6,7</context>
+          <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7245263017859923420" datatype="html">
         <source>No seu endereço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="576881057876166792" datatype="html">
         <source> Recusar </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8811122272631372449" datatype="html">
         <source> Aceitar </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5706592912813908821" datatype="html">
         <source>Solicitações</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">76,77</context>
+          <context context-type="linenumber">85,86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9090869419168507931" datatype="html">
         <source>Nenhum agendamento confirmado.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">89,91</context>
+          <context context-type="linenumber">98,100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9218880752388706214" datatype="html">

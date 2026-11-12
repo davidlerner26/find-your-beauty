@@ -1,5 +1,14 @@
 <div class="agenda">
-  <h1 i18n>Agenda</h1>
+  <div class="head">
+    <h1 i18n>Agenda</h1>
+    @if (profile()?.published) {
+      <!-- The clients can find this profile -->
+      <span class="public" role="status">
+        <mat-icon>public</mat-icon>
+        <span i18n>Perfil público</span>
+      </span>
+    }
+  </div>
 
   @if (profile() && !profile()!.published) {
     <a i18n class="notice" routerLink="/pro/perfil">

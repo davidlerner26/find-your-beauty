@@ -5338,22 +5338,6 @@
           <context context-type="linenumber">68,87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3525491260355087326" datatype="html">
-        <source> Criar uma senha </source>
-        <target> Create a password </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
-          <context context-type="linenumber">92</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1483857798050119706" datatype="html">
-        <source> Já tenho uma conta </source>
-        <target> I already have an account </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
-          <context context-type="linenumber">96</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3528799168790508410" datatype="html">
         <source>Este convite não vale mais. Peça um novo convite.</source>
         <target>This invite is no longer valid. Ask for a new one.</target>
@@ -5638,6 +5622,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
           <context context-type="linenumber">218,220</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1836362189879514748" datatype="html">
+        <source>Perfil público</source>
+        <target>Public profile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
+          <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
     </body>

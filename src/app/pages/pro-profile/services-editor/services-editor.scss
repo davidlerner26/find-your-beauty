@@ -6,6 +6,17 @@
   grid-column: 1 / -1;
 }
 
+.list {
+  display: grid;
+  // As many cards as fit in a line, up to three (a card is at least 22rem wide, and at least a third of the line)
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, max(22rem, calc((100% - 2rem) / 3))), 1fr)
+  );
+  align-items: start;
+  gap: 1rem;
+}
+
 .service {
   display: grid;
   gap: 0.75rem;

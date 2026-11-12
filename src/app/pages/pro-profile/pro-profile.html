@@ -21,8 +21,12 @@
   @if (!profile()) {
     <app-spinner />
   } @else {
-    <form (ngSubmit)="save()" (focusout)="autoSave()">
-      <section>
+    <form
+      (ngSubmit)="save()"
+      (focusout)="autoSave()"
+      [class.no-instagram]="!(instagramService.connectEnabled || profile()?.instagramConnected)"
+    >
+      <section class="s-dados">
         <h2 i18n>Dados</h2>
         <label i18n>Nome<input name="name" [(ngModel)]="name" /></label>
         <label i18n>
@@ -55,7 +59,20 @@
             />
           </span>
         </label>
-        <h3 i18n>Foto</h3>
+        <label i18n>
+          Sobre você
+          <textarea
+            i18n-placeholder
+            name="about"
+            rows="5"
+            placeholder="Conte sobre o seu trabalho"
+            [(ngModel)]="about"
+          ></textarea>
+        </label>
+      </section>
+
+      <section class="s-foto">
+        <h2 i18n>Foto</h2>
         <p i18n class="hint muted">
           Aparece nos cards, no topo da sua página e redonda nas mensagens.
         </p>
@@ -84,22 +101,11 @@
         @if (image) {
           <app-photo-positioner [src]="image" [(position)]="imagePosition" />
         }
-
-        <label i18n>
-          Sobre você
-          <textarea
-            i18n-placeholder
-            name="about"
-            rows="5"
-            placeholder="Conte sobre o seu trabalho"
-            [(ngModel)]="about"
-          ></textarea>
-        </label>
       </section>
 
       <!-- Off in production until Meta grants advanced access: only the connected professionals keep it -->
       @if (instagramService.connectEnabled || profile()?.instagramConnected) {
-        <section>
+        <section class="s-instagram">
           <h2>Instagram</h2>
           @if (profile()?.instagramConnected) {
             <p i18n class="hint muted">
@@ -172,7 +178,7 @@
         </section>
       }
 
-      <section>
+      <section class="s-galeria">
         <div class="head">
           <h2 i18n>Galeria</h2>
           <label i18n class="link upload-link">
@@ -213,7 +219,7 @@
         </div>
       </section>
 
-      <section>
+      <section class="s-local">
         <h2 i18n>Localização</h2>
         <p i18n class="hint muted">Onde você atende? Pode escolher os dois.</p>
         <div i18n-aria-label class="modes" role="group" aria-label="Onde você atende">

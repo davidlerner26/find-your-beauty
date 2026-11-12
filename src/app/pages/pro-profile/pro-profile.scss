@@ -167,22 +167,76 @@ h1 {
 }
 
 // ----- Wide screens (web). Nothing above this line changes: phones and tablets keep their layout.
+// The whole width of the screen, in rows of six columns:
+//   Dados | Localização
+//   Foto | Galeria | Instagram
+//   Serviços (as many cards in a line as fit)
+//   Horários de atendimento | Dias bloqueados
 @include desktop {
   .profile {
-    max-width: 64rem;
+    max-width: none;
     padding: 3rem 2.5rem 4rem;
   }
 
-  // The sections side by side; the long ones (services, hours, visibility) use the whole width
   form {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 0 3rem;
     align-items: start;
   }
 
-  form > .wide,
+  // The order of the screen of a phone is not the one of the wide screen
+  .s-dados {
+    grid-column: span 3;
+    order: 1;
+  }
+
+  .s-local {
+    grid-column: span 3;
+    order: 2;
+  }
+
+  .s-foto,
+  .s-galeria,
+  .s-instagram {
+    grid-column: span 2;
+  }
+
+  .s-foto {
+    order: 3;
+  }
+
+  .s-galeria {
+    order: 4;
+  }
+
+  .s-instagram {
+    order: 5;
+  }
+
+  // Without the Instagram section the photo and the gallery share the line
+  form.no-instagram {
+    .s-foto,
+    .s-galeria {
+      grid-column: span 3;
+    }
+  }
+
+  app-services-editor {
+    order: 6;
+  }
+
+  app-availability-editor {
+    order: 7;
+  }
+
+  form > section.wide,
   form > button {
     grid-column: 1 / -1;
+    order: 8;
+  }
+
+  form > button {
+    order: 9;
   }
 }

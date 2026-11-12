@@ -15,6 +15,13 @@
   gap: 1rem;
 }
 
+// A form inside the column (the invite page has its own `.auth` around it, which must not be nested)
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 h1 {
   font-size: 1.75rem;
 }

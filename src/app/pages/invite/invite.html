@@ -35,7 +35,7 @@
           Sair desta conta
         </button>
       } @else {
-        <form class="auth" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <form class="stack" [formGroup]="form" (ngSubmit)="submit()" novalidate>
           @if (!invite.email) {
             <label class="field" [class.invalid]="showEmailError">
               <mat-icon class="filled">mail</mat-icon>

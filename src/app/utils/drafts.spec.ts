@@ -1,13 +1,19 @@
-import { draftFields, draftProblems, DraftForm, inviteStatus, instagramUsername } from './drafts';
+import {
+  draftFields,
+  draftMissing,
+  draftProblems,
+  draftToForm,
+  emptyDraftForm,
+  inviteStatus,
+  instagramUsername,
+} from './drafts';
 
-const form: DraftForm = {
+const form = {
+  ...emptyDraftForm(),
   name: ' Ana Souza ',
   email: ' Ana@Example.com ',
-  phone: '',
-  lang: 'pt',
   instagram: '@ana.makeup',
   about: 'Primeiro.\n\nSegundo.',
-  image: '',
 };
 
 describe('inviteStatus', () => {
@@ -41,14 +47,73 @@ describe('instagramUsername', () => {
 
 describe('draftFields', () => {
   it('cleans what was typed', () => {
-    expect(draftFields(form)).toEqual({
+    expect(draftFields(form)).toMatchObject({
       name: 'Ana Souza',
       claimEmail: 'ana@example.com',
-      phone: '',
-      lang: 'pt',
+      cpf: '',
       instagram: 'ana.makeup',
       about: ['Primeiro.', 'Segundo.'],
-      image: '',
+      services: [],
+      tags: [],
+      complete: false,
     });
+  });
+
+  it('keeps only a valid CPF, and no address for a home-only professional', () => {
+    expect(draftFields({ ...form, cpf: '529.982.247-25' }).cpf).toBe('529.982.247-25');
+    expect(draftFields({ ...form, cpf: '111.111.111-11' }).cpf).toBe('');
+    const home = draftFields({
+      ...form,
+      serviceMode: 'home',
+      address: 'Rua A, 1',
+      position: { lat: 1, lng: 2 },
+    });
+    expect(home).toMatchObject({ address: '', position: { lat: 0, lng: 0 } });
+  });
+});
+
+describe('draftProblems of the other fields', () => {
+  it('rejects an invalid CPF and hours that close before they open', () => {
+    expect(draftProblems({ ...form, cpf: '123' })).toEqual(['cpf']);
+    const hours = emptyDraftForm();
+    const day = Object.values(hours.availability.weekly).find((d) => d.enabled);
+    if (day) day.end = day.start;
+    expect(draftProblems({ ...form, availability: hours.availability })).toEqual(['hours']);
+  });
+});
+
+describe('draftToForm', () => {
+  it('reads what draftFields wrote', () => {
+    const saved = {
+      ...draftFields({
+        ...form,
+        cpf: '529.982.247-25',
+        serviceMode: 'studio',
+        address: 'Rua A, 1',
+        position: { lat: 1, lng: 2 },
+        gallery: ['g1'],
+      }),
+    };
+    const back = draftToForm(saved);
+    expect(back).toMatchObject({
+      name: 'Ana Souza',
+      email: 'ana@example.com',
+      cpf: '529.982.247-25',
+      serviceMode: 'studio',
+      address: 'Rua A, 1',
+      addressConfirmed: true,
+      gallery: ['g1'],
+      about: 'Primeiro.\n\nSegundo.',
+    });
+  });
+
+  it('starts empty for a document without the new fields', () => {
+    expect(draftToForm({ name: 'Ana' })).toMatchObject({
+      name: 'Ana',
+      serviceMode: null,
+      addressConfirmed: false,
+      services: [],
+    });
+    expect(draftMissing(draftToForm({ name: 'Ana' }))).toContain('CPF');
   });
 });

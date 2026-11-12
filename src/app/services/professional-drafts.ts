@@ -12,10 +12,8 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
-import { asLang, COLLECTIONS } from '../../../shared/domain';
-import { DEFAULT_AVAILABILITY } from '../models/professional';
-import { DraftForm, draftFields } from '../utils/drafts';
-import { aboutToParagraphs, paragraphsToAbout } from '../pages/pro-profile/profile-form';
+import { COLLECTIONS } from '../../../shared/domain';
+import { DraftForm, draftFields, draftToForm } from '../utils/drafts';
 import { db, functions } from './firebase';
 import { Photos } from './photos';
 import { Auth } from './auth';
@@ -64,13 +62,6 @@ export class ProfessionalDrafts {
 
     return setDoc(ref, {
       ...draftFields(form),
-      // The rest of a professional profile, empty: the professional completes it after claiming
-      address: '',
-      tags: [],
-      services: [],
-      gallery: [],
-      position: { lat: 0, lng: 0 },
-      availability: DEFAULT_AVAILABILITY,
       createdBy: this.auth.user()?.uid ?? '',
       createdAt: serverTimestamp(),
     });
@@ -95,33 +86,24 @@ export class ProfessionalDrafts {
     });
   }
 
-  uploadPhoto(id: string, file: File) {
-    return this.photos.upload(id, 'profile', file, 'professionalDrafts');
+  uploadPhoto(id: string, folder: 'profile' | 'gallery' | 'services', file: File) {
+    return this.photos.upload(id, folder, file, 'professionalDrafts');
   }
 
   removePhoto(url: string) {
     return this.photos.remove(url);
   }
 
-  async remove(id: string, image: string) {
+  async remove(id: string, urls: string[]) {
     await deleteDoc(doc(db, COLLECTIONS.professionalDrafts, id));
-    if (image) await this.photos.remove(image);
+    await Promise.all(urls.map((url) => this.photos.remove(url)));
   }
 
   private fromData(id: string, data: Record<string, unknown>): ProfessionalDraft {
-    const about = Array.isArray(data['about']) ? (data['about'] as string[]) : [];
     const expires = data['inviteExpiresAt'];
     return {
       id,
-      form: {
-        name: String(data['name'] ?? ''),
-        email: String(data['claimEmail'] ?? ''),
-        phone: String(data['phone'] ?? ''),
-        lang: asLang(data['lang']),
-        instagram: String(data['instagram'] ?? ''),
-        about: paragraphsToAbout(aboutToParagraphs(about.join('\n\n'))),
-        image: String(data['image'] ?? ''),
-      },
+      form: draftToForm(data),
       invited: typeof data['inviteHash'] === 'string',
       invitedAt: toDate(data['invitedAt']),
       inviteExpiresAt: typeof expires === 'number' ? expires : null,

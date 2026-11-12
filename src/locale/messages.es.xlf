@@ -5170,36 +5170,6 @@
           <context context-type="linenumber">39,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="555636527814354237" datatype="html">
-        <source> Instagram <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
-            name=&quot;instagram&quot;
-            type=&quot;text&quot;
-            autocomplete=&quot;off&quot;
-            i18n-placeholder
-            placeholder=&quot;@usuario&quot;
-            [(ngModel)]=&quot;form.instagram&quot;
-          /&gt;"/></source>
-        <target> Instagram <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
-            name=&quot;instagram&quot;
-            type=&quot;text&quot;
-            autocomplete=&quot;off&quot;
-            i18n-placeholder
-            placeholder=&quot;@usuario&quot;
-            [(ngModel)]=&quot;form.instagram&quot;
-          /&gt;"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">48,57</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8194820964908825299" datatype="html">
-        <source>@usuario</source>
-        <target>@usuario</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">54,55</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5344997540069341660" datatype="html">
         <source> Sobre <x id="START_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;textarea name=&quot;about&quot; rows=&quot;5&quot; maxlength=&quot;1500&quot; [(ngModel)]=&quot;form.about&quot;&gt;"/><x id="CLOSE_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;/textarea&gt;"/></source>
         <target> Acerca de <x id="START_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;textarea name=&quot;about&quot; rows=&quot;5&quot; maxlength=&quot;1500&quot; [(ngModel)]=&quot;form.about&quot;&gt;"/><x id="CLOSE_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;/textarea&gt;"/></target>
@@ -5208,28 +5178,12 @@
           <context context-type="linenumber">60,64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6191984909108942164" datatype="html">
-        <source> Serviços, horários, endereço e CPF ficam para o profissional completar depois de assumir o perfil. </source>
-        <target> Los servicios, los horarios, la dirección y el CPF quedan para que el profesional los complete después de asumir el perfil. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">92,93</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1223576102128275419" datatype="html">
         <source>Apagar perfil</source>
         <target>Eliminar perfil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
           <context context-type="linenumber">132,133</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4265108079609334554" datatype="html">
-        <source>Não foi possível enviar a foto.</source>
-        <target>No fue posible subir la foto.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.ts</context>
-          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2460349946594309459" datatype="html">
@@ -5598,6 +5552,108 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/invite/invite.html</context>
           <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6583851254060633247" datatype="html">
+        <source>Aparece nos cards, no topo da página e redonda nas mensagens.</source>
+        <target>Aparece en las tarjetas, en la parte superior de la página y redonda en los mensajes.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">73,74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10603552008253061" datatype="html">
+        <source> Só o link: conectar o Instagram para importar as fotos exige o login dela. Depois de assumir o perfil, ela mesma pode conectar. </source>
+        <target>Solo el enlace: conectar Instagram para importar las fotos requiere su propio inicio de sesión. Después de asumir el perfil, ella misma puede conectarlo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">122,123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2443045494555590046" datatype="html">
+        <source>https://instagram.com/usuario</source>
+        <target>https://instagram.com/usuario</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">117,118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8473163757572493024" datatype="html">
+        <source> Mostre o trabalho dela: as fotos aparecem na galeria do perfil. </source>
+        <target>Muestra su trabajo: las fotos aparecen en la galería del perfil.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">162</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2131600027547680972" datatype="html">
+        <source>Onde ela atende? Pode escolher os dois.</source>
+        <target>¿Dónde atiende? Puedes elegir los dos.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">170,171</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2462920535719168820" datatype="html">
+        <source>Onde ela atende</source>
+        <target>Dónde atiende</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">171,172</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8546252436089562433" datatype="html">
+        <source> Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios. </source>
+        <target>Completa todos los campos obligatorios de los servicios o elimina los que estén vacíos.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">205,206</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8805765425532055716" datatype="html">
+        <source> O horário de fechamento precisa ser depois do de abertura. </source>
+        <target>El horario de cierre debe ser posterior al de apertura.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">212,213</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1479122141764920947" datatype="html">
+        <source>O perfil está completo: aparece aos clientes assim que ela assumir.</source>
+        <target>El perfil está completo: aparece a los clientes en cuanto ella lo asuma.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">222,223</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4710815615391367244" datatype="html">
+        <source> Link do Instagram <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+            name=&quot;instagram&quot;
+            type=&quot;text&quot;
+            autocomplete=&quot;off&quot;
+            i18n-placeholder
+            placeholder=&quot;https://instagram.com/usuario&quot;
+            [(ngModel)]=&quot;form.instagram&quot;
+          /&gt;"/></source>
+        <target> Enlace de Instagram <x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+            name=&quot;instagram&quot;
+            type=&quot;text&quot;
+            autocomplete=&quot;off&quot;
+            i18n-placeholder
+            placeholder=&quot;https://instagram.com/usuario&quot;
+            [(ngModel)]=&quot;form.instagram&quot;
+          /&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">111,120</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="588120541985109768" datatype="html">
+        <source> Falta para o perfil aparecer aos clientes assim que ela assumir: <x id="INTERPOLATION" equiv-text="{{ missingText }}"/>. Ela também pode completar depois. </source>
+        <target> Falta para que el perfil aparezca a los clientes en cuanto ella lo asuma: <x id="INTERPOLATION" equiv-text="{{ missingText }}"/>. Ella también puede completarlo después. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">218,220</context>
         </context-group>
       </trans-unit>
     </body>

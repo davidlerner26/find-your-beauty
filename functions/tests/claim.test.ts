@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   claimedPhotoPath,
+  cpfOf,
   hashToken,
   inviteState,
   newToken,
@@ -86,6 +87,14 @@ describe('photos', () => {
   });
 });
 
+describe('cpfOf', () => {
+  it('only takes a CPF written the way the form saves it', () => {
+    expect(cpfOf({ cpf: '529.982.247-25' })).toBe('529.982.247-25');
+    expect(cpfOf({ cpf: '52998224725' })).toBe('');
+    expect(cpfOf({})).toBe('');
+  });
+});
+
 describe('profileFromDraft', () => {
   const photos = new Map([[draft.image, 'NEW-PROFILE']]);
   const profile = profileFromDraft(draft, 'u1', 'd1', photos, ' Ana@Example.com ');
@@ -98,7 +107,7 @@ describe('profileFromDraft', () => {
       rejected: false,
       submitted: true,
       admin: false,
-      // Hidden until the professional completes it
+      // Hidden until the professional completes it (the draft is not marked complete)
       published: false,
       visible: true,
       rating: 0,
@@ -114,6 +123,27 @@ describe('profileFromDraft', () => {
     expect(profile).not.toHaveProperty('inviteExpiresAt');
     expect(profile).not.toHaveProperty('claimEmail');
     expect(profile).not.toHaveProperty('createdBy');
+  });
+
+  it('keeps the CPF and the flag of the admin out of the public profile', () => {
+    const complete = profileFromDraft(
+      { ...draft, cpf: '529.982.247-25', complete: true },
+      'u1',
+      'd1',
+      photos,
+      'a@b.c',
+    );
+    expect(complete).not.toHaveProperty('cpf');
+    expect(complete).not.toHaveProperty('complete');
+  });
+
+  it('is public right away only when the admin filled everything', () => {
+    expect(
+      profileFromDraft({ ...draft, complete: true }, 'u1', 'd1', photos, 'a@b.c'),
+    ).toMatchObject({ published: true });
+    expect(
+      profileFromDraft({ ...draft, complete: false }, 'u1', 'd1', photos, 'a@b.c'),
+    ).toMatchObject({ published: false });
   });
 
   it('swaps the copied photos and keeps the others', () => {

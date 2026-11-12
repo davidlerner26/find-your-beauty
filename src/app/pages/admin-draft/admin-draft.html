@@ -32,8 +32,32 @@
         </p>
 
         <label i18n>
+          CPF
+          <input
+            name="cpf"
+            inputmode="numeric"
+            maxlength="14"
+            autocomplete="off"
+            placeholder="000.000.000-00"
+            [value]="form.cpf"
+            (input)="onCpfInput($event)"
+          />
+        </label>
+        @if (problems.includes('cpf')) {
+          <p i18n class="error" role="alert">Digite um CPF válido.</p>
+        }
+
+        <label i18n>
           Celular
-          <input name="phone" type="tel" maxlength="20" [(ngModel)]="form.phone" />
+          <input
+            name="phone"
+            type="tel"
+            inputmode="numeric"
+            maxlength="20"
+            autocomplete="off"
+            [value]="form.phone"
+            (input)="onPhoneInput($event)"
+          />
         </label>
 
         <label i18n>
@@ -45,24 +69,8 @@
           </select>
         </label>
 
-        <label i18n>
-          Instagram
-          <input
-            name="instagram"
-            type="text"
-            autocomplete="off"
-            i18n-placeholder
-            placeholder="@usuario"
-            [(ngModel)]="form.instagram"
-          />
-        </label>
-
-        <label i18n>
-          Sobre
-          <textarea name="about" rows="5" maxlength="1500" [(ngModel)]="form.about"></textarea>
-        </label>
-
         <h3 i18n>Foto</h3>
+        <p i18n class="hint muted">Aparece nos cards, no topo da página e redonda nas mensagens.</p>
         <div class="photo">
           @if (form.image) {
             <img class="preview" [src]="form.image" alt="" />
@@ -87,12 +95,132 @@
             />
           </label>
         </div>
+        @if (form.image) {
+          <app-photo-positioner [src]="form.image" [(position)]="form.imagePosition" />
+        }
+
+        <label i18n>
+          Sobre
+          <textarea name="about" rows="5" maxlength="1500" [(ngModel)]="form.about"></textarea>
+        </label>
       </section>
 
-      <p i18n class="hint muted">
-        Serviços, horários, endereço e CPF ficam para o profissional completar depois de assumir o
-        perfil.
-      </p>
+      <section>
+        <h2>Instagram</h2>
+        <label i18n>
+          Link do Instagram
+          <input
+            name="instagram"
+            type="text"
+            autocomplete="off"
+            i18n-placeholder
+            placeholder="https://instagram.com/usuario"
+            [(ngModel)]="form.instagram"
+          />
+        </label>
+        <p i18n class="hint muted">
+          Só o link: conectar o Instagram para importar as fotos exige o login dela. Depois de
+          assumir o perfil, ela mesma pode conectar.
+        </p>
+      </section>
+
+      <section>
+        <div class="head">
+          <h2 i18n>Galeria</h2>
+          <label i18n class="link upload-link">
+            @if (uploadingGallery()) {
+              <app-spinner [small]="true" />
+            } @else {
+              + Adicionar fotos
+            }
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              hidden
+              [disabled]="uploadingGallery()"
+              #galleryFile
+              (change)="uploadGalleryPhotos(galleryFile)"
+            />
+          </label>
+        </div>
+        <div class="gallery">
+          @for (photo of form.gallery; track photo) {
+            <div class="thumb">
+              <img i18n-alt [src]="photo" alt="Foto da galeria" />
+              <button
+                i18n-aria-label
+                type="button"
+                aria-label="Remover foto"
+                (click)="removeGalleryPhoto(photo)"
+              >
+                ✕
+              </button>
+            </div>
+          } @empty {
+            <p i18n class="hint muted">
+              Mostre o trabalho dela: as fotos aparecem na galeria do perfil.
+            </p>
+          }
+        </div>
+      </section>
+
+      <section>
+        <h2 i18n>Localização</h2>
+        <p i18n class="hint muted">Onde ela atende? Pode escolher os dois.</p>
+        <div i18n-aria-label class="modes" role="group" aria-label="Onde ela atende">
+          @for (place of servicePlaces; track place.key) {
+            <button
+              type="button"
+              class="mode"
+              [class.active]="hasPlace(place.key)"
+              [attr.aria-pressed]="hasPlace(place.key)"
+              (click)="togglePlace(place.key)"
+            >
+              {{ place.label }}
+            </button>
+          }
+        </div>
+
+        @if (form.serviceMode && needsAddress) {
+          <app-address-field
+            [(address)]="form.address"
+            [(position)]="form.position"
+            [(confirmed)]="form.addressConfirmed"
+          />
+        }
+      </section>
+
+      <app-services-editor
+        class="wide"
+        [(services)]="form.services"
+        [tried]="submitted()"
+        [uid]="id"
+        root="professionalDrafts"
+        (photosRemoved)="discardPhotos($event)"
+        (uploadFailed)="showUploadError($event)"
+      />
+      @if (problems.includes('services')) {
+        <p i18n class="error" role="alert">
+          Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.
+        </p>
+      }
+
+      <app-availability-editor class="wide" [availability]="form.availability" />
+      @if (problems.includes('hours')) {
+        <p i18n class="error" role="alert">
+          O horário de fechamento precisa ser depois do de abertura.
+        </p>
+      }
+
+      @if (missingText) {
+        <p i18n class="hint muted">
+          Falta para o perfil aparecer aos clientes assim que ela assumir: {{ missingText }}. Ela
+          também pode completar depois.
+        </p>
+      } @else {
+        <p i18n class="hint">O perfil está completo: aparece aos clientes assim que ela assumir.</p>
+      }
 
       @if (!isNew) {
         @switch (status()) {

@@ -150,15 +150,21 @@ export const profileFromDraft = (
     submitted: true,
     admin: false,
     visible: true,
-    // Not public yet: the draft has no CPF or hours and may lack services. The professional completes the profile and
-    // saving it publishes it, like any other (`published` is computed from `visible` and a complete profile).
-    published: false,
+    // A draft the admin filled completely (`complete`, worked out by the admin's form with the same rules as the
+    // profile form) goes public now; otherwise the professional completes it and saving it publishes it, like any other.
+    published: draft['complete'] === true,
     rating: 0,
     reviewsCount: '0',
     views: '0',
     claimedFromDraft: draftId,
   };
 };
+
+// The CPF the admin typed (only a valid one is saved in the draft, with the dots and the dash)
+export const cpfOf = (draft: Data) =>
+  typeof draft['cpf'] === 'string' && /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(draft['cpf'])
+    ? draft['cpf']
+    : '';
 
 // --- Callables ---
 
@@ -329,6 +335,9 @@ export const claimProfessionalDraft = onCall(PUBLIC, async (request) => {
       ...profileFromDraft(current, uid, draftId, photos, email),
       createdAt: FieldValue.serverTimestamp(),
     });
+    // The CPF is private: it is moved from the draft to the document only the owner and the admins read
+    const cpf = cpfOf(current);
+    if (cpf) transaction.set(db().doc(`professionals/${uid}/private/identity`), { cpf });
     transaction.delete(ref);
   });
 

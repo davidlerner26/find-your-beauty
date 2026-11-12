@@ -33,6 +33,8 @@ export class ServicesEditor {
   readonly tried = input(false);
   // The account that owns the uploaded photos
   readonly uid = input.required<string>();
+  // Where the photos go: a profile an admin makes keeps them in professionalDrafts until it is claimed
+  readonly root = input<'professionals' | 'professionalDrafts'>('professionals');
 
   // Something worth saving changed (the form saves a draft)
   readonly changed = output<void>();
@@ -117,7 +119,7 @@ export class ServicesEditor {
     this.uploadingService.set(service.id);
     try {
       const urls = await Promise.all(
-        files.map((file) => this.photos.upload(this.uid(), 'services', file)),
+        files.map((file) => this.photos.upload(this.uid(), 'services', file, this.root())),
       );
       service.photos = [...service.photos, ...urls];
       this.changed.emit();

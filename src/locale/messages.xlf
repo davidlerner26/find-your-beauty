@@ -46,33 +46,33 @@
           <context context-type="linenumber">66,68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6333053818705726495" datatype="html">
-        <source>Principal</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/app.html</context>
-          <context context-type="linenumber">11,12</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8562888595919619665" datatype="html">
         <source>Público</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.html</context>
-          <context context-type="linenumber">31,32</context>
+          <context context-type="linenumber">20,21</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">14,15</context>
+          <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4760056198413288553" datatype="html">
         <source>Privado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.html</context>
-          <context context-type="linenumber">33,34</context>
+          <context context-type="linenumber">22,23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">16,17</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6333053818705726495" datatype="html">
+        <source>Principal</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">26,27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="600376029726528115" datatype="html">
@@ -168,11 +168,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">90</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/photo-positioner/photo-positioner.html</context>
@@ -195,11 +195,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">84</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
@@ -214,7 +214,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">172</context>
+          <context context-type="linenumber">175</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/inbox/inbox.html</context>
@@ -233,11 +233,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">119</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.html</context>
@@ -273,28 +273,28 @@
         <source>Início</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1569481148547411434" datatype="html">
         <source>Explorar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4269721383556323571" datatype="html">
         <source>Perfil público: os clientes encontram você</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7666153887506078936" datatype="html">
         <source>Perfil privado: os clientes não encontram você. Abra o perfil para ver o que falta.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1701556820106855407" datatype="html">
@@ -571,7 +571,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7953234945664560269" datatype="html">
@@ -1537,7 +1537,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">58,59</context>
+          <context context-type="linenumber">10,11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">110,111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8257633570286229939" datatype="html">
@@ -1555,7 +1559,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5161873380699521587" datatype="html">
@@ -1566,7 +1570,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8408597066119262454" datatype="html">
@@ -1577,7 +1581,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">5,6</context>
+          <context context-type="linenumber">51,52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7509189471679896532" datatype="html">
@@ -1738,67 +1742,137 @@
         <source>Administração</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">2,3</context>
+          <context context-type="linenumber">2,4</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.html</context>
           <context context-type="linenumber">206,208</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="206715047889193588" datatype="html">
-        <source>Perfis criados por você, sem conta</source>
+      <trans-unit id="4360351327676000154" datatype="html">
+        <source>Visão geral</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">4,5</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1746846788643026209" datatype="html">
+        <source>Profissionais públicos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6495587614125831189" datatype="html">
+        <source>de <x id="INTERPOLATION" equiv-text="{{ o.professionals }}"/> aprovados</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6518249916395713702" datatype="html">
+        <source>Profissionais privados</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6404860314376002668" datatype="html">
+        <source>ocultos ou incompletos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7259293366746318117" datatype="html">
+        <source>Perfis sem conta</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2354911850540559072" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ o.invites }}"/> com link ativo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="464407958269518977" datatype="html">
+        <source>Atalhos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5578409604660604954" datatype="html">
+        <source>Criar perfil sem conta</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6343338186691801474" datatype="html">
+        <source>Monte o perfil e gere o link para o profissional assumir.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2405736173383456037" datatype="html">
+        <source>Remove a conta com tudo: Firestore, Storage, Stripe e login.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6169193590285652171" datatype="html">
         <source><x id="START_BLOCK_IF" equiv-text="@if (professional.phone) {"/> <x id="INTERPOLATION" equiv-text="{{ professional.phone }}"/> <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Sem celular <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">14,20</context>
+          <context context-type="linenumber">67,73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="720605690411230372" datatype="html">
         <source>Cadastro: <x id="INTERPOLATION" equiv-text="{{ relative(professional.createdAt) }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">21,23</context>
+          <context context-type="linenumber">74,76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5407916200645843323" datatype="html">
         <source>Ver perfil completo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">23,24</context>
+          <context context-type="linenumber">76,77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="800816798723405056" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>check<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Aprovar </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">33,35</context>
+          <context context-type="linenumber">86,88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="56994949961957613" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>close<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Negar </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">43,45</context>
+          <context context-type="linenumber">96,98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3424087837202554303" datatype="html">
         <source>Nenhum cadastro aguardando aprovação.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">64,65</context>
+          <context context-type="linenumber">115,116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1670473098472756261" datatype="html">
         <source>Não foi possível carregar os cadastros.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="679830495035783242" datatype="html">
@@ -2411,7 +2485,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4286459967004275147" datatype="html">
@@ -3283,11 +3357,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">82,83</context>
+          <context context-type="linenumber">77,78</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">83,84</context>
+          <context context-type="linenumber">78,79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
@@ -3309,7 +3383,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">102,103</context>
+          <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9123566555526559197" datatype="html">
@@ -3327,7 +3401,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">112,113</context>
+          <context context-type="linenumber">107,108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7261672028112784063" datatype="html">
@@ -3520,42 +3594,42 @@
         <source> Seu perfil não está publicado, então os clientes não encontram você. Abra o perfil, complete os dados e marque para mostrar. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">24,25</context>
+          <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7245263017859923420" datatype="html">
         <source>No seu endereço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="576881057876166792" datatype="html">
         <source> Recusar </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8811122272631372449" datatype="html">
         <source> Aceitar </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5706592912813908821" datatype="html">
         <source>Solicitações</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">94,95</context>
+          <context context-type="linenumber">89,90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9090869419168507931" datatype="html">
         <source>Nenhum agendamento confirmado.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">107,109</context>
+          <context context-type="linenumber">102,104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9218880752388706214" datatype="html">

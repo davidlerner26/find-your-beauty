@@ -5210,14 +5210,6 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="206715047889193588" datatype="html">
-        <source>Perfis criados por você, sem conta</source>
-        <target>Perfiles que creaste, sin cuenta</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">3,5</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7157689774366887163" datatype="html">
         <source>Convite indisponível</source>
         <target>Invitación no disponible</target>
@@ -5822,6 +5814,94 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
           <context context-type="linenumber">68,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4360351327676000154" datatype="html">
+        <source>Visão geral</source>
+        <target>Resumen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1746846788643026209" datatype="html">
+        <source>Profissionais públicos</source>
+        <target>Profesionales públicos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6495587614125831189" datatype="html">
+        <source>de <x id="INTERPOLATION" equiv-text="{{ o.professionals }}"/> aprovados</source>
+        <target>de <x id="INTERPOLATION" equiv-text="{{ o.professionals }}"/> aprobados</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">17,18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6518249916395713702" datatype="html">
+        <source>Profissionais privados</source>
+        <target>Profesionales privados</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6404860314376002668" datatype="html">
+        <source>ocultos ou incompletos</source>
+        <target>ocultos o incompletos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">24,25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7259293366746318117" datatype="html">
+        <source>Perfis sem conta</source>
+        <target>Perfiles sin cuenta</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2354911850540559072" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ o.invites }}"/> com link ativo</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ o.invites }}"/> con enlace activo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="464407958269518977" datatype="html">
+        <source>Atalhos</source>
+        <target>Atajos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5578409604660604954" datatype="html">
+        <source>Criar perfil sem conta</source>
+        <target>Crear un perfil sin cuenta</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6343338186691801474" datatype="html">
+        <source>Monte o perfil e gere o link para o profissional assumir.</source>
+        <target>Arma el perfil y genera el enlace para que el profesional lo asuma.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2405736173383456037" datatype="html">
+        <source>Remove a conta com tudo: Firestore, Storage, Stripe e login.</source>
+        <target>Elimina la cuenta con todo: Firestore, Storage, Stripe y acceso.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
     </body>

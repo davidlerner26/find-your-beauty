@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   collection,
   doc,
@@ -10,7 +10,9 @@ import {
   where,
 } from 'firebase/firestore';
 import { professionalConverter } from '../models/converters';
+import { Overview, overviewOf } from '../utils/admin-overview';
 import { db } from './firebase';
+import { ProfessionalDrafts } from './professional-drafts';
 import { COLLECTIONS } from '../../../shared/domain';
 
 export type PendingProfessional = {
@@ -26,6 +28,20 @@ export type PendingProfessional = {
 // A denied one keeps `approved: false` and gets `rejected: true`.
 @Injectable({ providedIn: 'root' })
 export class Admin {
+  private readonly drafts = inject(ProfessionalDrafts);
+
+  // The numbers of the dashboard: the professionals (public) and the profiles made by an admin
+  async overview(): Promise<Overview> {
+    const [professionals, drafts] = await Promise.all([
+      getDocs(collection(db, COLLECTIONS.professionals)),
+      this.drafts.list(),
+    ]);
+    return overviewOf(
+      professionals.docs.map((d) => d.data()),
+      drafts,
+    );
+  }
+
   // Everyone who is not approved: waiting (oldest first) and denied
   async pending() {
     const snapshot = await getDocs(

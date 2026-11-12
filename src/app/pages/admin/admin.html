@@ -1,9 +1,62 @@
 <div class="admin">
   <h1 i18n>Administração</h1>
-  <div class="links">
-    <a i18n class="drafts-link" routerLink="/admin/perfis">Perfis criados por você, sem conta</a>
-    <a i18n class="drafts-link danger" routerLink="/admin/usuarios">Apagar um usuário</a>
-  </div>
+
+  <section class="cards" aria-labelledby="overview-title">
+    <h2 i18n id="overview-title">Visão geral</h2>
+    <div class="stats">
+      <a class="stat" [class.attention]="(overview()?.pending ?? 0) > 0" href="#aprovacoes">
+        <span class="icon"><mat-icon>pending_actions</mat-icon></span>
+        <span class="number">{{ overview()?.pending ?? '–' }}</span>
+        <span i18n class="label">Aguardando aprovação</span>
+      </a>
+      <div class="stat">
+        <span class="icon"><mat-icon>visibility</mat-icon></span>
+        <span class="number">{{ overview()?.published ?? '–' }}</span>
+        <span i18n class="label">Profissionais públicos</span>
+        @if (overview(); as o) {
+          <span i18n class="hint">de {{ o.professionals }} aprovados</span>
+        }
+      </div>
+      <div class="stat">
+        <span class="icon"><mat-icon>visibility_off</mat-icon></span>
+        <span class="number">{{ overview()?.hidden ?? '–' }}</span>
+        <span i18n class="label">Profissionais privados</span>
+        <span i18n class="hint">ocultos ou incompletos</span>
+      </div>
+      <a class="stat" routerLink="/admin/perfis">
+        <span class="icon"><mat-icon>person_add</mat-icon></span>
+        <span class="number">{{ overview()?.drafts ?? '–' }}</span>
+        <span i18n class="label">Perfis sem conta</span>
+        @if (overview(); as o) {
+          <span i18n class="hint">{{ o.invites }} com link ativo</span>
+        }
+      </a>
+    </div>
+  </section>
+
+  <section class="cards" aria-labelledby="shortcuts-title">
+    <h2 i18n id="shortcuts-title">Atalhos</h2>
+    <div class="shortcuts">
+      <a class="shortcut" routerLink="/admin/perfis/novo">
+        <span class="icon"><mat-icon>add</mat-icon></span>
+        <span class="text">
+          <strong i18n>Criar perfil sem conta</strong>
+          <span i18n class="muted">Monte o perfil e gere o link para o profissional assumir.</span>
+        </span>
+        <mat-icon class="chevron">chevron_right</mat-icon>
+      </a>
+      <a class="shortcut danger" routerLink="/admin/usuarios">
+        <span class="icon"><mat-icon>person_remove</mat-icon></span>
+        <span class="text">
+          <strong i18n>Apagar um usuário</strong>
+          <span i18n class="muted"
+            >Remove a conta com tudo: Firestore, Storage, Stripe e login.</span
+          >
+        </span>
+        <mat-icon class="chevron">chevron_right</mat-icon>
+      </a>
+    </div>
+  </section>
 
   <ng-template #card let-professional>
     <article class="item">
@@ -54,9 +107,7 @@
       <p class="error" role="alert">{{ error() }}</p>
     }
 
-    @if (waiting().length) {
-      <h2 i18n>Aguardando aprovação</h2>
-    }
+    <h2 i18n id="aprovacoes">Aguardando aprovação</h2>
     <div class="list">
       @for (professional of waiting(); track professional.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: professional }" />

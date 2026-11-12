@@ -4,6 +4,7 @@ import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Spinner } from '../../components/spinner/spinner';
 import { Admin as AdminService, PendingProfessional } from '../../services/admin';
+import { Overview } from '../../utils/admin-overview';
 import { formatRelative } from '../../utils/format-date';
 import { log } from '../../utils/log';
 
@@ -19,6 +20,8 @@ export class Admin {
   private readonly all = signal<PendingProfessional[]>([]);
   protected readonly waiting = this.all.asReadonly();
   protected readonly loading = signal(true);
+  // The cards with the numbers (they show up when they are ready; the list below does not wait for them)
+  protected readonly overview = signal<Overview | null>(null);
   protected readonly error = signal('');
   // Id of the professional being answered
   protected readonly working = signal<string | null>(null);
@@ -31,6 +34,10 @@ export class Admin {
   private async load() {
     this.loading.set(true);
     this.error.set('');
+    this.admin
+      .overview()
+      .then((overview) => this.overview.set(overview))
+      .catch((error) => log.error('Failed to load the numbers of the dashboard', error));
     try {
       this.all.set(await this.admin.pending());
     } catch (error) {
@@ -49,16 +56,23 @@ export class Admin {
     try {
       if (approve) {
         await this.admin.approve(professional.id);
-        this.all.update((list) => list.filter((item) => item.id !== professional.id));
       } else {
         await this.admin.reject(professional.id);
-        this.all.update((list) => list.filter((item) => item.id !== professional.id));
       }
+      this.all.update((list) => list.filter((item) => item.id !== professional.id));
+      this.refreshOverview();
     } catch (error) {
       log.error('Failed to answer', error);
       this.error.set($localize`Não foi possível concluir. Tente novamente.`);
     } finally {
       this.working.set(null);
     }
+  }
+
+  private refreshOverview() {
+    this.admin
+      .overview()
+      .then((overview) => this.overview.set(overview))
+      .catch((error) => log.error('Failed to refresh the numbers of the dashboard', error));
   }
 }

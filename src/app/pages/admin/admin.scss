@@ -116,19 +116,113 @@ h2 {
   }
 }
 
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  margin-bottom: 1rem;
+.cards {
+  margin-bottom: 1.5rem;
 }
 
-.drafts-link {
-  display: inline-block;
+// The numbers: one card each, side by side as far as the screen allows
+.stats,
+.shortcuts {
+  display: grid;
+  gap: 1rem;
+}
+
+.stats {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
+
+.shortcuts {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.stat,
+.shortcut {
+  display: grid;
+  padding: 1.25rem;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+  color: inherit;
+}
+
+a.stat,
+a.shortcut {
+  transition: box-shadow 0.15s;
+
+  &:hover {
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+  }
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--primary-light);
   color: var(--primary);
-  font-weight: 700;
+
+  mat-icon {
+    @include icon-size(1.3rem);
+  }
+}
+
+.stat {
+  gap: 0.15rem;
+  justify-items: start;
+
+  .icon {
+    margin-bottom: 0.6rem;
+  }
+
+  .number {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label {
+    font-weight: 600;
+  }
+
+  .hint {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  // Someone is waiting for an answer
+  &.attention {
+    background: var(--warning-bg);
+    color: var(--warning);
+
+    .icon {
+      background: #fff;
+      color: var(--warning);
+    }
+  }
+}
+
+.shortcut {
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+
+  .text {
+    display: grid;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .chevron {
+    color: var(--muted);
+  }
 
   &.danger {
-    color: var(--danger);
+    .icon {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
   }
 }

@@ -5656,6 +5656,14 @@
           <context context-type="linenumber">475</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8616973428367164428" datatype="html">
+        <source>Abrir no Instagram</source>
+        <target>Abrir en Instagram</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">122,123</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -113,6 +113,22 @@
               {{ profile()?.instagramPhotos?.length ?? 0 }} fotos aparecem no seu perfil. Elas são
               atualizadas todas as noites.
             </p>
+            @if (profile()?.instagramPhotos?.length) {
+              <!-- The photos that show on the profile: they come from Instagram, so there is nothing to edit here -->
+              <div class="gallery">
+                @for (photo of profile()?.instagramPhotos; track photo.id) {
+                  <a
+                    i18n-aria-label
+                    aria-label="Abrir no Instagram"
+                    [href]="photo.permalink"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <img [src]="photo.url" alt="" loading="lazy" />
+                  </a>
+                }
+              </div>
+            }
             <div class="block">
               <button
                 i18n

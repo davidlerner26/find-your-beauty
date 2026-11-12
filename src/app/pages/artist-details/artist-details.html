@@ -56,19 +56,21 @@
           <mat-icon [class.filled]="favorites.has(artist.id)">favorite</mat-icon>
         </button>
       }
-      <a
-        i18n-aria-label
-        class="round"
-        [routerLink]="floating() ? null : '/explore'"
-        [queryParams]="{ focus: artist.id }"
-        [attr.role]="floating() ? 'button' : null"
-        [attr.tabindex]="floating() ? 0 : null"
-        aria-label="Ver no mapa"
-        (click)="onMapButton()"
-        (keydown.enter)="onMapButton()"
-      >
-        <mat-icon class="filled">map</mat-icon>
-      </a>
+      @if (hasLocation(artist)) {
+        <a
+          i18n-aria-label
+          class="round"
+          [routerLink]="floating() ? null : '/explore'"
+          [queryParams]="{ focus: artist.id }"
+          [attr.role]="floating() ? 'button' : null"
+          [attr.tabindex]="floating() ? 0 : null"
+          aria-label="Ver no mapa"
+          (click)="onMapButton()"
+          (keydown.enter)="onMapButton()"
+        >
+          <mat-icon class="filled">map</mat-icon>
+        </a>
+      }
     </div>
   </div>
 

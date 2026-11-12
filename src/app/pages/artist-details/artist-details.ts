@@ -25,6 +25,7 @@ import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import {
   formatDuration,
+  hasLocation,
   Professional,
   Review,
   Service,
@@ -285,6 +286,9 @@ export class ArtistDetails {
       this.savingReview.set(false);
     }
   }
+
+  // Home-only professionals have no address: there is nothing to find on the map
+  protected readonly hasLocation = hasLocation;
 
   // The photos of the cover: the gallery, or the profile photo when there is no gallery
   protected heroPhotos(artist: Professional) {

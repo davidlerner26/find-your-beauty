@@ -3,7 +3,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, signal, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Toast } from '../../components/toast/toast';
 import { Spinner } from '../../components/spinner/spinner';
 import { Booking, BookingStatus } from '../../models/booking';
 import { Auth } from '../../services/auth';
@@ -36,7 +35,6 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
     PricePipe,
     RouterLink,
     Spinner,
-    Toast,
     NgTemplateOutlet,
     MatIconModule,
   ],
@@ -55,7 +53,6 @@ export class MyBookings {
   // The address that was just copied (its button shows a check for a moment) and the message about it
   protected readonly isOpen = isOpen;
   protected readonly copiedId = signal('');
-  protected readonly toast = signal('');
 
   // Still going to happen: waiting for an answer or confirmed
   protected readonly upcoming = computed(() =>
@@ -84,10 +81,9 @@ export class MyBookings {
   protected async copyAddress(booking: Booking, address: string) {
     await copyText(address);
     this.copiedId.set(booking.id ?? '');
-    this.toast.set($localize`Endereço copiado`);
+    this.feedback.show($localize`Endereço copiado`, 2000);
     setTimeout(() => {
       this.copiedId.set('');
-      this.toast.set('');
     }, 2000);
   }
 

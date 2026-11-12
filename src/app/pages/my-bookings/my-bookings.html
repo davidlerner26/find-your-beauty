@@ -1,6 +1,3 @@
-@if (toast()) {
-  <app-toast [text]="toast()" (dismiss)="toast.set('')" />
-}
 <div class="agenda">
   @if (!auth.ready() || bookings.mineLoading()) {
     <app-spinner />

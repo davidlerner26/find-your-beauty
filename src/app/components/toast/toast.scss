@@ -1,13 +1,6 @@
 @use '../../../styles/patterns' as *;
 @use '../../../styles/breakpoints' as *;
 .toast {
-  position: fixed;
-  z-index: 30;
-  top: calc(0.75rem + env(safe-area-inset-top));
-  left: 1rem;
-  right: 1rem;
-  max-width: 28rem;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -59,16 +52,8 @@
   }
 }
 
-// Wide screens: on the bottom right corner of the screen
 @include desktop {
   .toast {
-    top: auto;
-    left: auto;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 26rem;
-    max-width: calc(100vw - 3rem);
-    margin: 0;
     animation-name: toast-in-bottom;
   }
 }

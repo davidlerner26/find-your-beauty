@@ -9,7 +9,7 @@ import { Notifications } from './services/notifications';
 import { Professionals } from './services/professionals';
 import { Feedback } from './services/feedback';
 import { Seo } from './services/seo';
-import { Toast } from './components/toast/toast';
+import { ToastStack } from './components/toast-stack/toast-stack';
 import { environment } from '../environments/environment';
 
 // `badge`: the dot for new messages; `news`: the tab is the one of the notifications (the dot is for the new ones)
@@ -53,7 +53,7 @@ const AUTH_SCREENS = [
 
 @Component({
   selector: 'app-root',
-  imports: [Toast, RouterOutlet, RouterLink, MatIconModule],
+  imports: [ToastStack, RouterOutlet, RouterLink, MatIconModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

@@ -1,0 +1,34 @@
+@use '../../../styles/breakpoints' as *;
+
+// On top of the screen, the newest at the bottom of the pile. The toasts have no position of their own.
+:host {
+  position: fixed;
+  z-index: 30;
+  top: calc(0.75rem + env(safe-area-inset-top));
+  left: 1rem;
+  right: 1rem;
+  max-width: 28rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  // Only the messages take clicks: the screen below stays usable
+  pointer-events: none;
+}
+
+:host > * {
+  pointer-events: auto;
+}
+
+// Wide screens: on the bottom right corner of the screen
+@include desktop {
+  :host {
+    top: auto;
+    left: auto;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 26rem;
+    max-width: calc(100vw - 3rem);
+    margin: 0;
+  }
+}

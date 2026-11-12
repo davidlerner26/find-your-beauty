@@ -21,7 +21,6 @@ import { ServiceSheet } from '../../components/service-sheet/service-sheet';
 import { copyText } from '../../utils/clipboard';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { PhotoViewer } from '../../components/photo-viewer/photo-viewer';
-import { Toast } from '../../components/toast/toast';
 import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import {
@@ -57,7 +56,6 @@ import { PATHS } from '../../utils/paths';
     CatalogPipe,
     Clamped,
     ServiceSheet,
-    Toast,
     ReviewsLabelPipe,
     ViewsLabelPipe,
     FormsModule,
@@ -165,16 +163,13 @@ export class ArtistDetails {
 
   // The address was just copied (the button shows a check for a moment)
   protected readonly copied = signal(false);
-  // A message that floats on top for a moment
-  protected readonly toast = signal('');
 
   protected async copyAddress(address: string) {
     await copyText(address);
     this.copied.set(true);
-    this.toast.set($localize`Endereço copiado`);
+    this.feedback.show($localize`Endereço copiado`, 2000);
     setTimeout(() => {
       this.copied.set(false);
-      this.toast.set('');
     }, 2000);
   }
 

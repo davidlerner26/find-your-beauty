@@ -1,7 +1,6 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, effect, input, signal, inject } from '@angular/core';
+import { Component, computed, DoCheck, effect, input, signal, inject } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
-import { Toast } from '../../components/toast/toast';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
@@ -46,14 +45,13 @@ import { PATHS } from '../../utils/paths';
     AvailabilityEditor,
     ServicesEditor,
     Spinner,
-    Toast,
     FormsModule,
     MatIconModule,
   ],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
 })
-export class ProProfile {
+export class ProProfile implements DoCheck {
   private readonly auth = inject(Auth);
   private readonly accounts = inject(ProfessionalAccounts);
   private readonly professionals = inject(Professionals);
@@ -95,9 +93,6 @@ export class ProProfile {
 
   protected readonly visible = signal(true);
   protected readonly saving = signal(false);
-  protected readonly message = signal('');
-  // A new one each time a message is shown, so the floating message starts over
-  protected messageId = 0;
   // The address only counts once a suggestion was chosen (see the address field)
   protected readonly addressConfirmed = signal(false);
   // The profile photo and the gallery have their own loading
@@ -121,14 +116,6 @@ export class ProProfile {
         return;
       this.reloadedList = true;
       void this.professionals.load();
-    });
-
-    // The message of what is missing goes away by itself after a few seconds (the X closes it sooner)
-    effect((onCleanup) => {
-      const text = this.missingText;
-      if (!this.profile() || !this.missing.length || this.message()) return;
-      const timer = setTimeout(() => this.dismissedText.set(text), 5500);
-      onCleanup(() => clearTimeout(timer));
     });
 
     // Fills the form once, when the profile document arrives
@@ -198,8 +185,16 @@ export class ProProfile {
     });
   }
 
-  // The floating message that was tapped away (it shows again when its text changes)
-  protected readonly dismissedText = signal('');
+  // What is missing is told once each time the list changes (the toast goes away by itself, or with the X)
+  private lastMissing = '';
+
+  ngDoCheck() {
+    const text = this.profile() && this.missing.length ? this.missingText : '';
+    if (text === this.lastMissing) return;
+    this.lastMissing = text;
+    // After this check: the messages are drawn by the root of the app, which was already checked
+    if (text) queueMicrotask(() => this.feedback.show(text, 5500));
+  }
 
   protected get missingText() {
     return `Para ${this.signup() ? 'enviar o cadastro' : 'publicar'} falta: ${this.missing.join(', ')}.`;
@@ -214,14 +209,9 @@ export class ProProfile {
     return this.weekdays.filter(({ key }) => invalid.includes(key));
   }
 
-  // Shows the feedback at the top of the page and brings it into view
+  // Shows the feedback: it stacks with the ones that are still showing
   private show(text: string, milliseconds = 5500) {
-    const id = ++this.messageId;
-    this.message.set(text);
-    // The message of what is missing doesn't pop up again behind it, until the list changes
-    this.dismissedText.set(this.missingText);
-    // Floats on top and goes away by itself, like the message of what is missing
-    setTimeout(() => this.messageId === id && this.message.set(''), milliseconds);
+    this.feedback.show(text, milliseconds);
   }
 
   protected async uploadProfilePhoto(input: HTMLInputElement) {
@@ -230,7 +220,6 @@ export class ProProfile {
     if (!file) return;
 
     this.uploading.set(true);
-    this.message.set('');
     try {
       this.image = await this.photos.upload(this.uid(), 'profile', file);
       // A new photo starts centered
@@ -248,7 +237,6 @@ export class ProProfile {
     if (!files.length) return;
 
     this.uploadingGallery.set(true);
-    this.message.set('');
     try {
       const urls = await Promise.all(
         files.map((file) => this.photos.upload(this.uid(), 'gallery', file)),
@@ -411,7 +399,6 @@ export class ProProfile {
     }
 
     this.saving.set(true);
-    this.message.set('');
 
     const services = this.completeServices();
     // Clients only see profiles that are visible and complete

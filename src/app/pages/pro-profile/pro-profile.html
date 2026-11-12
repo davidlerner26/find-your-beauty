@@ -1,15 +1,3 @@
-@if (message()) {
-  <!-- Feedback of an action: floats on top (bottom right on wide screens), goes away by itself or with the X -->
-  <app-toast [text]="message()" (dismiss)="message.set('')" />
-} @else if (profile() && missing.length) {
-  <!-- What is missing. A new text makes a new element, which shows again and goes away by itself. -->
-  @for (text of [missingText]; track text) {
-    @if (dismissedText() !== text) {
-      <app-toast [text]="text" (dismiss)="dismissedText.set(text)" />
-    }
-  }
-}
-
 <div class="profile">
   <h1 i18n>
     @if (signup()) {

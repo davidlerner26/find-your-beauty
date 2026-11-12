@@ -5920,6 +5920,14 @@
           <context context-type="linenumber">68,69</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1932600803438558064" datatype="html">
+        <source> Sobre (opcional) <x id="START_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;textarea name=&quot;about&quot; rows=&quot;5&quot; maxlength=&quot;1500&quot; [(ngModel)]=&quot;form.about&quot;&gt;"/><x id="CLOSE_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;/textarea&gt;"/></source>
+        <target> Acerca de (opcional) <x id="START_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;textarea name=&quot;about&quot; rows=&quot;5&quot; maxlength=&quot;1500&quot; [(ngModel)]=&quot;form.about&quot;&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
+          <context context-type="linenumber">73,77</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

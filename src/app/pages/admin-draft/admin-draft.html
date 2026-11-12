@@ -69,6 +69,11 @@
           </select>
         </label>
 
+        <label i18n>
+          Sobre (opcional)
+          <textarea name="about" rows="5" maxlength="1500" [(ngModel)]="form.about"></textarea>
+        </label>
+
         <h3 i18n>Foto</h3>
         <p i18n class="hint muted">Aparece nos cards, no topo da página e redonda nas mensagens.</p>
         <div class="photo">

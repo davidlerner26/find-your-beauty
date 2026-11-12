@@ -20,7 +20,6 @@ import { log } from '../../utils/log';
 import { PATHS } from '../../utils/paths';
 import { formatPhone } from '../../utils/phone';
 import { AddressField } from '../pro-profile/address-field/address-field';
-import { AvailabilityEditor } from '../pro-profile/availability-editor/availability-editor';
 import { ServicesEditor } from '../pro-profile/services-editor/services-editor';
 
 // Makes or edits a profile for a professional who has no account yet. It has everything of the sign up of a
@@ -35,7 +34,6 @@ import { ServicesEditor } from '../pro-profile/services-editor/services-editor';
     MatIconModule,
     PhotoPositioner,
     AddressField,
-    AvailabilityEditor,
     ServicesEditor,
   ],
   templateUrl: './admin-draft.html',

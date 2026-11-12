@@ -73,12 +73,8 @@ describe('draftFields', () => {
 });
 
 describe('draftProblems of the other fields', () => {
-  it('rejects an invalid CPF and hours that close before they open', () => {
+  it('rejects an invalid CPF', () => {
     expect(draftProblems({ ...form, cpf: '123' })).toEqual(['cpf']);
-    const hours = emptyDraftForm();
-    const day = Object.values(hours.availability.weekly).find((d) => d.enabled);
-    if (day) day.end = day.start;
-    expect(draftProblems({ ...form, availability: hours.availability })).toEqual(['hours']);
   });
 });
 

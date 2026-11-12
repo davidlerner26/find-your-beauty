@@ -36,6 +36,9 @@ export class ServicesEditor {
   // Where the photos go: a profile an admin makes keeps them in professionalDrafts until it is claimed
   readonly root = input<'professionals' | 'professionalDrafts'>('professionals');
 
+  // Only the basics of a service (category, name, price, duration): no prices by day and time, photos or description
+  readonly simple = input(false);
+
   // Something worth saving changed (the form saves a draft)
   readonly changed = output<void>();
   // Photos that are no longer used: the form deletes them from the storage once the profile is saved

@@ -98,11 +98,6 @@
         @if (form.image) {
           <app-photo-positioner [src]="form.image" [(position)]="form.imagePosition" />
         }
-
-        <label i18n>
-          Sobre
-          <textarea name="about" rows="5" maxlength="1500" [(ngModel)]="form.about"></textarea>
-        </label>
       </section>
 
       <section>
@@ -197,19 +192,13 @@
         [tried]="submitted()"
         [uid]="id"
         root="professionalDrafts"
+        [simple]="true"
         (photosRemoved)="discardPhotos($event)"
         (uploadFailed)="showUploadError($event)"
       />
       @if (problems.includes('services')) {
         <p i18n class="error" role="alert">
           Preencha todos os campos obrigatórios dos serviços ou remova os que estiverem vazios.
-        </p>
-      }
-
-      <app-availability-editor class="wide" [availability]="form.availability" />
-      @if (problems.includes('hours')) {
-        <p i18n class="error" role="alert">
-          O horário de fechamento precisa ser depois do de abertura.
         </p>
       }
 

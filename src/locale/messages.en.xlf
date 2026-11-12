@@ -5170,14 +5170,6 @@
           <context context-type="linenumber">39,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5344997540069341660" datatype="html">
-        <source> Sobre <x id="START_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;textarea name=&quot;about&quot; rows=&quot;5&quot; maxlength=&quot;1500&quot; [(ngModel)]=&quot;form.about&quot;&gt;"/><x id="CLOSE_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;/textarea&gt;"/></source>
-        <target> About <x id="START_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;textarea name=&quot;about&quot; rows=&quot;5&quot; maxlength=&quot;1500&quot; [(ngModel)]=&quot;form.about&quot;&gt;"/><x id="CLOSE_TAG_TEXTAREA" ctype="x-textarea" equiv-text="&lt;/textarea&gt;"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">60,64</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1223576102128275419" datatype="html">
         <source>Apagar perfil</source>
         <target>Delete profile</target>
@@ -5608,14 +5600,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
           <context context-type="linenumber">205,206</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8805765425532055716" datatype="html">
-        <source> O horário de fechamento precisa ser depois do de abertura. </source>
-        <target>The closing time must be after the opening time.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-draft/admin-draft.html</context>
-          <context context-type="linenumber">212,213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1479122141764920947" datatype="html">

@@ -8,7 +8,6 @@ import {
 } from '../models/professional';
 import {
   aboutToParagraphs,
-  invalidDayKeys,
   missingFields,
   paragraphsToAbout,
   toAvailabilityDraft,
@@ -19,7 +18,6 @@ import {
   toService,
   toServiceDraft,
 } from '../pages/pro-profile/service-draft';
-import { WEEKDAYS } from '../pages/pro-profile/weekdays';
 import { formatCpf, isValidCpf } from './cpf';
 import { isValidEmail } from './validators';
 
@@ -96,7 +94,7 @@ export const inviteStatus = (
   return draft.inviteExpiresAt !== null && now > draft.inviteExpiresAt ? 'expired' : 'sent';
 };
 
-// What is wrong before the draft can be saved. The rest (CPF, services, hours...) may be left for later: the draft
+// What is wrong before the draft can be saved. The rest (CPF, services...) may be left for later: the draft
 // is saved as it is, and `draftMissing` says what is left.
 export const draftProblems = (form: DraftForm) => {
   const problems: string[] = [];
@@ -105,14 +103,6 @@ export const draftProblems = (form: DraftForm) => {
   if (form.email.trim() && !isValidEmail(form.email.trim())) problems.push('email');
   if (form.cpf.trim() && !isValidCpf(form.cpf)) problems.push('cpf');
   if (!form.services.every(isServiceComplete)) problems.push('services');
-  if (
-    invalidDayKeys(
-      form.availability,
-      WEEKDAYS.map(({ key }) => key),
-    ).length
-  ) {
-    problems.push('hours');
-  }
   return problems;
 };
 

@@ -262,7 +262,7 @@
         <source>Página não encontrada</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.routes.ts</context>
-          <context context-type="linenumber">223</context>
+          <context context-type="linenumber">228</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/not-found/not-found.ts</context>
@@ -1115,6 +1115,10 @@
           <context context-type="sourcefile">src/app/pages/admin-drafts/admin-drafts.html</context>
           <context context-type="linenumber">2,3</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">2,3</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="1536220475912167256" datatype="html">
         <source>Perfis criados por você</source>
@@ -1533,7 +1537,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">55,56</context>
+          <context context-type="linenumber">58,59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8257633570286229939" datatype="html">
@@ -1565,6 +1569,171 @@
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8408597066119262454" datatype="html">
+        <source>Apagar um usuário</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8628195821246238211" datatype="html">
+        <source> Procure a conta pelo e-mail, pelo nome ou pelo id. Apagar remove tudo dela: o perfil, os agendamentos, as conversas, as avaliações, os favoritos, as fotos e o login. Não dá para desfazer. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1673735280167019377" datatype="html">
+        <source>Buscar usuário</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5183318932586533175" datatype="html">
+        <source>E-mail, nome ou id</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8713073708350341933" datatype="html">
+        <source>Buscar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/home/home.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/search/search.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5337872421278283976" datatype="html">
+        <source>Nenhum usuário encontrado.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4517036178942903044" datatype="html">
+        <source>Profissional</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7544005586832612256" datatype="html">
+        <source>Cliente</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6825167534465765041" datatype="html">
+        <source>Sem perfil</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5041354590769758251" datatype="html">
+        <source>Admin</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3368615864011565929" datatype="html">
+        <source> Contas de admin não são apagadas aqui. Tire o admin primeiro. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7368908909686115507" datatype="html">
+        <source>Apagar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7568745014601789852" datatype="html">
+        <source> Isso apaga <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tudo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/> de <x id="INTERPOLATION" equiv-text="{{ account.name || account.email }}"/>: Firestore, Storage e login. Para confirmar, digite <x id="START_TAG_STRONG_1" ctype="x-strong_1" equiv-text="&lt;strong class=&quot;word&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ confirmationText(account) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/>. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">68,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2761514239633714002" datatype="html">
+        <source>Confirmar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">75,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2333160479395987138" datatype="html">
+        <source> Voltar </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="624494041168214378" datatype="html">
+        <source>Apagando...</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7067524620566949871" datatype="html">
+        <source>Apagar tudo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">94,95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7437449545904913965" datatype="html">
+        <source>Não foi possível buscar os usuários.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8822814358730695926" datatype="html">
+        <source>Usuário apagado: <x id="name" equiv-text="account.name || account.email"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5372587178381536416" datatype="html">
+        <source>Este usuário tem um agendamento com pagamento em aberto. Cancele o agendamento antes de apagar.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7390025941509420882" datatype="html">
+        <source>Não foi possível apagar o usuário. Tente novamente.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7838782808323636192" datatype="html">
         <source>Administração</source>
         <context-group purpose="location">
@@ -1580,49 +1749,49 @@
         <source>Perfis criados por você, sem conta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">3,5</context>
+          <context context-type="linenumber">4,5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6169193590285652171" datatype="html">
         <source><x id="START_BLOCK_IF" equiv-text="@if (professional.phone) {"/> <x id="INTERPOLATION" equiv-text="{{ professional.phone }}"/> <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Sem celular <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">11,17</context>
+          <context context-type="linenumber">14,20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="720605690411230372" datatype="html">
         <source>Cadastro: <x id="INTERPOLATION" equiv-text="{{ relative(professional.createdAt) }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">18,20</context>
+          <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5407916200645843323" datatype="html">
         <source>Ver perfil completo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">20,21</context>
+          <context context-type="linenumber">23,24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="800816798723405056" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>check<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Aprovar </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">30,32</context>
+          <context context-type="linenumber">33,35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="56994949961957613" datatype="html">
         <source><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>close<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/> Negar </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">40,42</context>
+          <context context-type="linenumber">43,45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3424087837202554303" datatype="html">
         <source>Nenhum cadastro aguardando aprovação.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
-          <context context-type="linenumber">61,62</context>
+          <context context-type="linenumber">64,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1670473098472756261" datatype="html">
@@ -2223,13 +2392,6 @@
           <context context-type="linenumber">11,13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4517036178942903044" datatype="html">
-        <source>Profissional</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
-          <context context-type="linenumber">23,24</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="6170019178516226599" datatype="html">
         <source>Duração</source>
         <context-group purpose="location">
@@ -2416,17 +2578,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/home/home.html</context>
           <context context-type="linenumber">15,16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8713073708350341933" datatype="html">
-        <source>Buscar</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/home/home.html</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2731332019790497338" datatype="html">

@@ -167,6 +167,11 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     loadComponent: () => import('./pages/admin-draft/admin-draft').then((m) => m.AdminDraft),
   },
+  {
+    path: 'admin/usuarios',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./pages/admin-users/admin-users').then((m) => m.AdminUsers),
+  },
   // The link of the e-mail that invites a professional to claim a profile an admin made
   {
     path: 'convite/:draftId/:token',

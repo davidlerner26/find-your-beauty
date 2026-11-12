@@ -5664,6 +5664,166 @@
           <context context-type="linenumber">122,123</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8408597066119262454" datatype="html">
+        <source>Apagar um usuário</source>
+        <target>Eliminar un usuario</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
+          <context context-type="linenumber">5,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8628195821246238211" datatype="html">
+        <source> Procure a conta pelo e-mail, pelo nome ou pelo id. Apagar remove tudo dela: o perfil, os agendamentos, as conversas, as avaliações, os favoritos, as fotos e o login. Não dá para desfazer. </source>
+        <target> Busca la cuenta por correo, nombre o id. Eliminar quita todo: el perfil, las reservas, las conversaciones, las valoraciones, los favoritos, las fotos y el acceso. No se puede deshacer. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1673735280167019377" datatype="html">
+        <source>Buscar usuário</source>
+        <target>Buscar usuario</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">13,14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5183318932586533175" datatype="html">
+        <source>E-mail, nome ou id</source>
+        <target>Correo, nombre o id</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5337872421278283976" datatype="html">
+        <source>Nenhum usuário encontrado.</source>
+        <target>No se encontró ningún usuario.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7544005586832612256" datatype="html">
+        <source>Cliente</source>
+        <target>Cliente</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">45,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6825167534465765041" datatype="html">
+        <source>Sem perfil</source>
+        <target>Sin perfil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5041354590769758251" datatype="html">
+        <source>Admin</source>
+        <target>Admin</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3368615864011565929" datatype="html">
+        <source> Contas de admin não são apagadas aqui. Tire o admin primeiro. </source>
+        <target> Las cuentas de admin no se eliminan aquí. Quita primero el admin. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7368908909686115507" datatype="html">
+        <source>Apagar</source>
+        <target>Eliminar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">61,62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2761514239633714002" datatype="html">
+        <source>Confirmar</source>
+        <target>Confirmar</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">75,76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2333160479395987138" datatype="html">
+        <source> Voltar </source>
+        <target> Volver </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="624494041168214378" datatype="html">
+        <source>Apagando...</source>
+        <target>Eliminando...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">92,93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7067524620566949871" datatype="html">
+        <source>Apagar tudo</source>
+        <target>Eliminar todo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">94,95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7437449545904913965" datatype="html">
+        <source>Não foi possível buscar os usuários.</source>
+        <target>No se pudo buscar a los usuarios.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5372587178381536416" datatype="html">
+        <source>Este usuário tem um agendamento com pagamento em aberto. Cancele o agendamento antes de apagar.</source>
+        <target>Este usuario tiene una reserva con un pago abierto. Cancela la reserva antes de eliminar.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7390025941509420882" datatype="html">
+        <source>Não foi possível apagar o usuário. Tente novamente.</source>
+        <target>No se pudo eliminar al usuario. Inténtalo de nuevo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7568745014601789852" datatype="html">
+        <source> Isso apaga <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tudo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/> de <x id="INTERPOLATION" equiv-text="{{ account.name || account.email }}"/>: Firestore, Storage e login. Para confirmar, digite <x id="START_TAG_STRONG_1" ctype="x-strong_1" equiv-text="&lt;strong class=&quot;word&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ confirmationText(account) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/>. </source>
+        <target> Esto elimina <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>todo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/> de <x id="INTERPOLATION" equiv-text="{{ account.name || account.email }}"/>: Firestore, Storage y acceso. Para confirmar, escribe <x id="START_TAG_STRONG_1" ctype="x-strong_1" equiv-text="&lt;strong class=&quot;word&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ confirmationText(account) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/>. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">68,73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8822814358730695926" datatype="html">
+        <source>Usuário apagado: <x id="name" equiv-text="account.name || account.email"/></source>
+        <target>Usuario eliminado: <x id="name" equiv-text="account.name || account.email"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -10,6 +10,7 @@ export const PATHS = {
   admin: '/admin',
   // Profiles an admin makes for professionals who have no account yet, and the invite page they receive
   adminDrafts: '/admin/perfis',
+  adminUsers: '/admin/usuarios',
   adminDraft: (id: string) => `/admin/perfis/${id}`,
   adminNewDraft: '/admin/perfis/novo',
   invite: (draftId: string, token: string) => `/convite/${draftId}/${token}`,

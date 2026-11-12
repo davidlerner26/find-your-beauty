@@ -790,6 +790,8 @@ export const onReviewWritten = onDocumentWritten(
   'professionals/{professionalId}/reviews/{clientUid}',
   async (event) => {
     const ref = db.doc(`professionals/${event.params.professionalId}`);
+    // The professional itself was deleted (an admin deleted the account): nothing to keep in sync
+    if (!(await ref.get()).exists) return;
     const reviews = await ref.collection('reviews').get();
     const total = reviews.docs.reduce((sum, review) => sum + (review.data()['stars'] as number), 0);
     const rating = reviews.size ? Math.round((total / reviews.size) * 10) / 10 : 0;
@@ -971,3 +973,6 @@ export const verifyEmailCode = onCall({ ...PUBLIC, secrets: [resendKey] }, async
 
 // Profiles made by an admin and claimed by the professional with an invite (see claim.ts)
 export { claimProfessionalDraft, createProfessionalInvite, professionalInviteInfo } from './claim';
+
+// Accounts, for the admins: search and delete (see accounts.ts)
+export { deleteAccount, searchAccounts } from './accounts';

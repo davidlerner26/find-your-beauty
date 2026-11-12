@@ -1,0 +1,104 @@
+<div class="users">
+  <a i18n class="back" [routerLink]="paths.admin">Voltar para a administração</a>
+  <h1 i18n>Apagar um usuário</h1>
+  <p i18n class="muted">
+    Procure a conta pelo e-mail, pelo nome ou pelo id. Apagar remove tudo dela: o perfil, os
+    agendamentos, as conversas, as avaliações, os favoritos, as fotos e o login. Não dá para
+    desfazer.
+  </p>
+
+  <form class="search" (ngSubmit)="search()">
+    <input
+      i18n-aria-label
+      aria-label="Buscar usuário"
+      i18n-placeholder
+      placeholder="E-mail, nome ou id"
+      name="query"
+      autocomplete="off"
+      [(ngModel)]="query"
+    />
+    <button i18n type="submit" class="primary" [disabled]="searching()">Buscar</button>
+  </form>
+
+  @if (error()) {
+    <p class="error" role="alert">{{ error() }}</p>
+  }
+
+  @if (searching()) {
+    <app-spinner />
+  } @else if (searched() && !list().length) {
+    <p i18n class="muted">Nenhum usuário encontrado.</p>
+  } @else {
+    <ul class="list">
+      @for (account of list(); track account.uid) {
+        <li class="item" [class.open]="selected()?.uid === account.uid">
+          <div class="row">
+            <div class="info">
+              <h3>{{ account.name || account.email || account.uid }}</h3>
+              <p class="muted">{{ account.email }}</p>
+              <p class="tags">
+                @switch (account.role) {
+                  @case ('professional') {
+                    <span i18n class="tag">Profissional</span>
+                  }
+                  @case ('client') {
+                    <span i18n class="tag">Cliente</span>
+                  }
+                  @default {
+                    <span i18n class="tag">Sem perfil</span>
+                  }
+                }
+                @if (account.admin) {
+                  <span i18n class="tag admin">Admin</span>
+                }
+              </p>
+            </div>
+            @if (account.admin) {
+              <p i18n class="muted small">
+                Contas de admin não são apagadas aqui. Tire o admin primeiro.
+              </p>
+            } @else {
+              <button i18n type="button" class="danger" (click)="choose(account)">Apagar</button>
+            }
+          </div>
+
+          @if (selected()?.uid === account.uid) {
+            <form class="confirm" (ngSubmit)="remove()">
+              <p i18n>
+                Isso apaga <strong>tudo</strong> de {{ account.name || account.email }}: Firestore,
+                Storage e login. Para confirmar, digite
+                <strong class="word">{{ confirmationText(account) }}</strong
+                >.
+              </p>
+              <input
+                i18n-aria-label
+                aria-label="Confirmar"
+                name="typed"
+                autocomplete="off"
+                [(ngModel)]="typed"
+              />
+              <div class="buttons">
+                <button
+                  i18n
+                  type="button"
+                  class="secondary"
+                  [disabled]="deleting()"
+                  (click)="selected.set(null)"
+                >
+                  Voltar
+                </button>
+                <button type="submit" class="danger solid" [disabled]="!confirmed || deleting()">
+                  @if (deleting()) {
+                    <span i18n>Apagando...</span>
+                  } @else {
+                    <span i18n>Apagar tudo</span>
+                  }
+                </button>
+              </div>
+            </form>
+          }
+        </li>
+      }
+    </ul>
+  }
+</div>

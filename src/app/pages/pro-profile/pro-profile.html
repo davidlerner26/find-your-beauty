@@ -274,19 +274,20 @@
         }
       </section>
 
-      <button i18n type="submit" class="primary" [disabled]="saving()">
-        @if (saving() && signup()) {
-          Enviando...
-        } @else if (saving()) {
-          Salvando...
-        } @else if (signup()) {
-          Enviar cadastro
-        } @else {
-          Salvar perfil
-        }
-      </button>
+      <div class="actions">
+        <button i18n type="submit" class="primary" [disabled]="saving()">
+          @if (saving() && signup()) {
+            Enviando...
+          } @else if (saving()) {
+            Salvando...
+          } @else if (signup()) {
+            Enviar cadastro
+          } @else {
+            Salvar perfil
+          }
+        </button>
+        <button i18n type="button" class="signout" (click)="signOut()">Sair</button>
+      </div>
     </form>
-
-    <button i18n type="button" class="signout" (click)="signOut()">Sair</button>
   }
 </div>

@@ -230,13 +230,34 @@ h1 {
     order: 7;
   }
 
-  form > section.wide,
-  form > button {
+  form > section.wide {
     grid-column: 1 / -1;
     order: 8;
   }
 
-  form > button {
+  // The first row (dados and localização) and the buttons have room on the sides, like a column of a form
+  $row-gap: clamp(1rem, 6vw, 8rem);
+
+  .s-dados {
+    margin-left: $row-gap;
+  }
+
+  .s-local {
+    margin-right: $row-gap;
+  }
+
+  // "Salvar perfil" and "Sair" side by side
+  .actions {
+    grid-column: 1 / -1;
     order: 9;
+    display: flex;
+    gap: 1rem;
+    margin: 1rem $row-gap 0;
+
+    .primary,
+    .signout {
+      flex: 1;
+      margin-top: 0;
+    }
   }
 }

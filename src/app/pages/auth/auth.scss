@@ -231,9 +231,15 @@ h1 {
   text-align: center;
   margin-top: 0.5rem;
 
-  a {
+  a,
+  button {
+    padding: 0;
+    border: 0;
+    background: none;
     color: var(--primary);
+    font: inherit;
     font-weight: 600;
+    cursor: pointer;
   }
 }
 

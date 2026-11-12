@@ -110,13 +110,9 @@
 
         <p class="switch">
           @if (hasAccount()) {
-            <button i18n type="button" class="link-btn" (click)="hasAccount.set(false)">
-              Criar uma senha
-            </button>
+            <button i18n type="button" (click)="hasAccount.set(false)">Criar uma senha</button>
           } @else {
-            <button i18n type="button" class="link-btn" (click)="hasAccount.set(true)">
-              Já tenho uma conta
-            </button>
+            <button i18n type="button" (click)="hasAccount.set(true)">Já tenho uma conta</button>
           }
         </p>
       }

@@ -3,6 +3,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
 import * as logger from 'firebase-functions/logger';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
+import { payments, paymentsOn, stripeKey } from './payments-api';
 
 // Accounts, for the admins: a search over the accounts of Firebase Authentication (the clients' data is closed by the
 // Firestore rules, so the admin page cannot read it) and the deletion of an account with everything it has: Firestore,
@@ -134,7 +135,7 @@ const docsOf = async (queries: FirebaseFirestore.Query[]) => {
 
 // Deletes an account and everything that belongs to it. Firestore and Storage first, Authentication last: when
 // something fails halfway, the account is still in the search and the deletion can be tried again.
-export const deleteAccount = onCall(PUBLIC, async (request) => {
+export const deleteAccount = onCall({ ...PUBLIC, secrets: [stripeKey] }, async (request) => {
   const adminUid = await requireAdmin(request.auth?.uid);
   const uid = uidOf(request.data?.uid);
 
@@ -176,6 +177,9 @@ export const deleteAccount = onCall(PUBLIC, async (request) => {
     db().collection('conversations').where('clientUid', '==', uid),
     db().collection('conversations').where('professionalId', '==', uid),
   ]);
+
+  // The customer of Stripe goes first: when Stripe fails nothing was deleted yet, and the admin can try again
+  if (paymentsOn()) await payments().deleteCustomer(uid);
 
   // The slots this account took on the agenda of other professionals (its own agenda goes with its document)
   const slots = bookingData.flatMap((booking) =>

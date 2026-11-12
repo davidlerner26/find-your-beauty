@@ -5676,14 +5676,6 @@
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8628195821246238211" datatype="html">
-        <source> Procure a conta pelo e-mail, pelo nome ou pelo id. Apagar remove tudo dela: o perfil, os agendamentos, as conversas, as avaliações, os favoritos, as fotos e o login. Não dá para desfazer. </source>
-        <target> Find the account by e-mail, name or id. Deleting removes everything: the profile, bookings, conversations, reviews, favorites, photos and the login. It cannot be undone. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
-          <context context-type="linenumber">5,7</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1673735280167019377" datatype="html">
         <source>Buscar usuário</source>
         <target>Search user</target>
@@ -5804,24 +5796,32 @@
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7568745014601789852" datatype="html">
-        <source> Isso apaga <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tudo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
-                &gt;"/> de <x id="INTERPOLATION" equiv-text="{{ account.name || account.email }}"/>: Firestore, Storage e login. Para confirmar, digite <x id="START_TAG_STRONG_1" ctype="x-strong_1" equiv-text="&lt;strong class=&quot;word&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ confirmationText(account) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
-                &gt;"/>. </source>
-        <target> This deletes <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>everything<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
-                &gt;"/> of <x id="INTERPOLATION" equiv-text="{{ account.name || account.email }}"/>: Firestore, Storage and login. To confirm, type <x id="START_TAG_STRONG_1" ctype="x-strong_1" equiv-text="&lt;strong class=&quot;word&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ confirmationText(account) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
-                &gt;"/>. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
-          <context context-type="linenumber">68,73</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="8822814358730695926" datatype="html">
         <source>Usuário apagado: <x id="name" equiv-text="account.name || account.email"/></source>
         <target>User deleted: <x id="name" equiv-text="account.name || account.email"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-users/admin-users.ts</context>
           <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7509189471679896532" datatype="html">
+        <source> Procure a conta pelo e-mail, pelo nome ou pelo id. Apagar remove tudo dela: o perfil, os agendamentos, as conversas, as avaliações, os favoritos, as fotos, o cliente da Stripe e o login. Não dá para desfazer. </source>
+        <target> Find the account by e-mail, name or id. Deleting removes everything: the profile, bookings, conversations, reviews, favorites, photos, the Stripe customer and the login. It cannot be undone. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="206127106708298151" datatype="html">
+        <source> Isso apaga <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>tudo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/> de <x id="INTERPOLATION" equiv-text="{{ account.name || account.email }}"/>: Firestore, Storage, Stripe e login. Para confirmar, digite <x id="START_TAG_STRONG_1" ctype="x-strong_1" equiv-text="&lt;strong class=&quot;word&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ confirmationText(account) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/>. </source>
+        <target> This deletes <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>everything<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/> of <x id="INTERPOLATION" equiv-text="{{ account.name || account.email }}"/>: Firestore, Storage, Stripe and login. To confirm, type <x id="START_TAG_STRONG_1" ctype="x-strong_1" equiv-text="&lt;strong class=&quot;word&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ confirmationText(account) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong
+                &gt;"/>. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-users/admin-users.html</context>
+          <context context-type="linenumber">68,73</context>
         </context-group>
       </trans-unit>
     </body>

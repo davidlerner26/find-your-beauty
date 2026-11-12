@@ -97,6 +97,31 @@ describe('customers and cards', () => {
   });
 });
 
+describe('deleteCustomer', () => {
+  it('deletes the Stripe customer of the account', async () => {
+    const customer = await payments.customerFor('u1', profile);
+    expect(await payments.deleteCustomer('u1')).toBe(true);
+    expect(fake.deletedCustomers).toEqual([customer]);
+  });
+
+  it('does nothing for an account that never had a customer', async () => {
+    expect(await payments.deleteCustomer('nobody')).toBe(false);
+    expect(fake.deletedCustomers).toEqual([]);
+  });
+
+  it('is not a failure when the customer is already gone', async () => {
+    await payments.customerFor('u1', profile);
+    await payments.deleteCustomer('u1');
+    expect(await payments.deleteCustomer('u1')).toBe(true);
+  });
+
+  it('lets any other failure through, so the account is not deleted half way', async () => {
+    await payments.customerFor('u1', profile);
+    fake.state.failNext = new Error('Stripe is down');
+    expect(await rejection(payments.deleteCustomer('u1'))).toBeInstanceOf(Error);
+  });
+});
+
 describe('authorize', () => {
   const request = (paymentMethodId: string, total = 100, attemptId = 'a1') => ({
     paymentMethodId,

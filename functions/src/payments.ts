@@ -26,6 +26,7 @@ export interface StripeLike {
       params: { email?: string; name?: string; metadata: Record<string, string> },
       options?: { idempotencyKey?: string },
     ): Promise<{ id: string }>;
+    del(id: string): Promise<unknown>;
   };
   setupIntents: {
     create(params: {
@@ -121,6 +122,21 @@ export class Payments {
     );
     await ref.set({ customerId: customer.id }, { merge: true });
     return customer.id;
+  }
+
+  // The customer of Stripe goes away with the account (its saved cards with it). Nothing to do for a user that never
+  // had one; a customer that is already gone is not a failure. Any other failure stops the deletion of the account.
+  async deleteCustomer(uid: string) {
+    const customer = (await this.db.doc(`users/${uid}/private/stripe`).get()).data()?.[
+      'customerId'
+    ] as string | undefined;
+    if (!customer) return false;
+    try {
+      await this.stripe.customers.del(customer);
+    } catch (error) {
+      if ((error as { code?: string }).code !== 'resource_missing') throw error;
+    }
+    return true;
   }
 
   // The secret that the browser needs to show the card form of Stripe and save the card. The card number is

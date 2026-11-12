@@ -7,6 +7,7 @@ export const fakeStripe = () => {
   const intents = new Map<string, PaymentIntent>();
   const refunded: string[] = [];
   const calls = { customerCreate: 0, intentCreate: 0 };
+  const deletedCustomers: string[] = [];
   const state = { failNext: null as Error | null, counter: 0 };
   const memo = new Map<string, unknown>();
 
@@ -28,6 +29,13 @@ export const fakeStripe = () => {
     customers: {
       create: async (_params, options) =>
         once(options?.idempotencyKey, () => ({ id: `cus_${++calls.customerCreate}` })),
+      del: async (id) => {
+        if (deletedCustomers.includes(id)) {
+          throw Object.assign(new Error(`No such customer: ${id}`), { code: 'resource_missing' });
+        }
+        failIfAsked();
+        deletedCustomers.push(id);
+      },
     },
     setupIntents: { create: async () => ({ client_secret: 'seti_secret_123' }) },
     paymentMethods: {
@@ -106,5 +114,5 @@ export const fakeStripe = () => {
     return id;
   };
 
-  return { stripe, addCard, intents, methods, refunded, calls, state };
+  return { stripe, addCard, intents, methods, refunded, calls, state, deletedCustomers };
 };

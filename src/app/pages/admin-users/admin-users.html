@@ -3,8 +3,8 @@
   <h1 i18n>Apagar um usuário</h1>
   <p i18n class="muted">
     Procure a conta pelo e-mail, pelo nome ou pelo id. Apagar remove tudo dela: o perfil, os
-    agendamentos, as conversas, as avaliações, os favoritos, as fotos e o login. Não dá para
-    desfazer.
+    agendamentos, as conversas, as avaliações, os favoritos, as fotos, o cliente da Stripe e o
+    login. Não dá para desfazer.
   </p>
 
   <form class="search" (ngSubmit)="search()">
@@ -66,7 +66,7 @@
             <form class="confirm" (ngSubmit)="remove()">
               <p i18n>
                 Isso apaga <strong>tudo</strong> de {{ account.name || account.email }}: Firestore,
-                Storage e login. Para confirmar, digite
+                Storage, Stripe e login. Para confirmar, digite
                 <strong class="word">{{ confirmationText(account) }}</strong
                 >.
               </p>

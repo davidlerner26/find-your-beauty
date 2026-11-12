@@ -34,7 +34,12 @@ describe('callable functions', () => {
       const shared =
         /^\s*options\s*,\s*$/.test(options) &&
         /options:\s*CallableOptions\s*=\s*\{[^}]*invoker:\s*'public'/.test(file);
-      expect(/invoker:\s*'public'|\.\.\.PUBLIC/.test(options) || shared, name).toBe(true);
+      // Or it is the `PUBLIC` constant of the file ({ region, invoker: 'public' })
+      const constant =
+        /^\s*PUBLIC\s*,\s*$/.test(options) && /PUBLIC\s*=\s*\{[^}]*invoker:\s*'public'/.test(file);
+      expect(/invoker:\s*'public'|\.\.\.PUBLIC/.test(options) || shared || constant, name).toBe(
+        true,
+      );
     }
   });
 });

@@ -8,19 +8,8 @@
       <!-- Test environment: between the logo and the menu -->
       <span i18n class="env-tag">Ambiente de teste</span>
     }
-    <nav i18n-aria-label aria-label="Principal">
-      @for (tab of topTabs; track tab.path) {
-        <a [routerLink]="tab.path" [class.active]="isActive(tab)">
-          <mat-icon [class.filled]="isActive(tab)">{{ tab.icon }}</mat-icon>
-          {{ tab.label }}
-          @if (hasNews(tab, false)) {
-            <span class="badge"></span>
-          }
-        </a>
-      }
-    </nav>
     @if (profileState; as state) {
-      <!-- Public: the clients find the profile. Private: they do not (the profile page says what is missing). -->
+      <!-- Next to the logo. Public: the clients find the profile. Private: they do not (the profile page says what is missing). -->
       <a
         [class]="'visibility ' + state"
         routerLink="/pro/perfil"
@@ -34,6 +23,17 @@
         }
       </a>
     }
+    <nav i18n-aria-label aria-label="Principal">
+      @for (tab of topTabs; track tab.path) {
+        <a [routerLink]="tab.path" [class.active]="isActive(tab)">
+          <mat-icon [class.filled]="isActive(tab)">{{ tab.icon }}</mat-icon>
+          {{ tab.label }}
+          @if (hasNews(tab, false)) {
+            <span class="badge"></span>
+          }
+        </a>
+      }
+    </nav>
     @if (!auth.user()) {
       <a i18n class="signin" routerLink="/entrar">Entrar</a>
     }

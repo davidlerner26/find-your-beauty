@@ -171,6 +171,7 @@ $tabs-height: 5rem;
   // The professional area takes the blue of the brand: the bar follows
   // The state of the account of the professional: green when public, red when private (white letters on both)
   .visibility {
+    flex: none;
     display: flex;
     align-items: center;
     gap: 0.4rem;

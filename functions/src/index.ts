@@ -976,3 +976,6 @@ export { claimProfessionalDraft, createProfessionalInvite, professionalInviteInf
 
 // Accounts, for the admins: search and delete (see accounts.ts)
 export { deleteAccount, searchAccounts } from './accounts';
+
+// What arrives at the address of the site is copied to a personal e-mail (see inbound.ts)
+export { forwardInboundEmail } from './inbound';

@@ -76,3 +76,16 @@ Ficam em arquivos `.env` carregados pelo Firebase:
 - `functions/.env.dev` (vai para o git, sem segredos): `APP_URL=https://dev.findyourbeauty.com.br`, `ENV_NAME=dev`, `INSTAGRAM_APP_ID=` (vazio, sem app de teste na Meta). Nos deploys de teste ele sobrescreve o `.env`.
 
 Os segredos (`RESEND_API_KEY`, `INSTAGRAM_APP_SECRET`) são por projeto e nunca ficam no código.
+
+## E-mails que chegam em contato@
+
+O Resend guarda o que chega no endereço do site (aba _Emails > Receiving_), mas não encaminha sozinho. A função `forwardInboundEmail` (`functions/src/inbound.ts`) recebe o webhook `email.received`, lê o e-mail (com os anexos) e manda uma cópia para um e-mail pessoal. Responder à cópia responde a quem escreveu.
+
+Só existe na produção, onde o domínio recebe e-mail. Para ligar:
+
+1. `firebase functions:secrets:set INBOUND_FORWARD_TO --project default` (o e-mail que recebe as cópias).
+2. Publicar: `firebase deploy --project default --only functions:forwardInboundEmail`.
+3. No painel do Resend, _Webhooks > Add Webhook_: a URL da função, evento `email.received`. Copiar o _Signing Secret_ (`whsec_...`).
+4. `firebase functions:secrets:set RESEND_WEBHOOK_SECRET --project default` (o signing secret) e publicar a função de novo, para ela usar o valor.
+
+A chave `RESEND_API_KEY` precisa ter permissão para ler e-mails recebidos (acesso total), não só para enviar.

@@ -9,6 +9,8 @@ import { defineSecret, defineString } from 'firebase-functions/params';
 // address of a domain verified in Resend. Without one, the test sender only delivers to the owner of the Resend account.
 export const resendKey = defineSecret('RESEND_API_KEY');
 const from = defineString('RESEND_FROM', { default: 'Find Your Beauty <onboarding@resend.dev>' });
+// The sender of the e-mails the site sends (also used to forward what arrives at the address of the site)
+export const fromAddress = () => from.value();
 // Where the links of the e-mails open
 export const appUrl = defineString('APP_URL', { default: 'https://findyourbeauty.com.br' });
 // "dev" in the test environment: its e-mails say so in the subject. Empty in production.

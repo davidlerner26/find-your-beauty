@@ -69,6 +69,15 @@ h1 {
   }
 }
 
+// "Conectando o seu Instagram...": the small loading, in the line of the section
+.connecting {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  color: var(--muted);
+}
+
 // The same button as "Desconectar", in the color of the app instead of red
 .refresh {
   margin-top: 1rem;

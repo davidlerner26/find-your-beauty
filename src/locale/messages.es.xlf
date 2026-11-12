@@ -2342,22 +2342,6 @@
           <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4057166825574261577" datatype="html">
-        <source>Não foi possível conectar</source>
-        <target>No se pudo conectar</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-instagram/pro-instagram.ts</context>
-          <context context-type="linenumber">14,15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3141683936003267608" datatype="html">
-        <source>Voltar ao perfil</source>
-        <target>Volver al perfil</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-instagram/pro-instagram.ts</context>
-          <context context-type="linenumber">16,17</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="6141840675802838325" datatype="html">
         <source>Conectando o seu Instagram...</source>
         <target>Conectando tu Instagram...</target>
@@ -5662,6 +5646,14 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.ts</context>
           <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1126826790392326925" datatype="html">
+        <source>Instagram conectado: @<x id="username" equiv-text="username"/>.</source>
+        <target>Instagram conectado: @<x id="username" equiv-text="username"/>.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.ts</context>
+          <context context-type="linenumber">475</context>
         </context-group>
       </trans-unit>
     </body>

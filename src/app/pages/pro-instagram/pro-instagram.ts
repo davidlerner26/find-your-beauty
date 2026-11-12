@@ -1,42 +1,16 @@
-import { Component, input, signal, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { Spinner } from '../../components/spinner/spinner';
+import { Component, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 import { Auth } from '../../services/auth';
-import { Instagram } from '../../services/instagram';
-import { Professionals } from '../../services/professionals';
-import { log } from '../../utils/log';
 import { PATHS } from '../../utils/paths';
 
-// Where Instagram sends the professional back (?code=... or ?error=...)
+// Where Instagram sends the professional back (?code=... or ?error=...). It has no screen of its own: the answer goes
+// on to the profile (or to the second step of the sign up), which shows a small "connecting" in its Instagram section
+// and finishes the connection there, like the loading of the gallery.
 @Component({
   selector: 'app-pro-instagram',
-  imports: [RouterLink, Spinner],
-  template: `
-    <div class="page">
-      @if (error()) {
-        <h1 i18n>Não foi possível conectar</h1>
-        <p>{{ error() }}</p>
-        <a i18n [routerLink]="back()">Voltar ao perfil</a>
-      } @else {
-        <app-spinner />
-        <p i18n>Conectando o seu Instagram...</p>
-      }
-    </div>
-  `,
-  styles: `
-    .page {
-      max-width: 28rem;
-      margin: 0 auto;
-      padding: 4rem 1.5rem;
-      text-align: center;
-      display: grid;
-      gap: 1rem;
-    }
-  `,
+  template: '',
 })
 export class ProInstagram {
-  private readonly instagram = inject(Instagram);
-  private readonly professionals = inject(Professionals);
   private readonly router = inject(Router);
   private readonly auth = inject(Auth);
 
@@ -44,36 +18,17 @@ export class ProInstagram {
   readonly state = input<string>();
   readonly error_description = input<string>();
 
-  protected readonly error = signal('');
-  protected readonly back = () =>
-    this.auth.signupIncomplete() ? PATHS.proSignup : PATHS.proProfile;
-
   constructor() {
     // Inputs are set after the constructor
-    queueMicrotask(() => this.finish());
-  }
-
-  private async finish() {
-    const code = this.code();
-    if (!code) {
-      this.error.set(this.error_description() || $localize`O acesso não foi autorizado.`);
-      return;
-    }
-
-    try {
-      await this.instagram.finish(code, this.state());
-      await this.professionals.load();
-      // Back to the sign up when it is not finished yet
-      this.router.navigateByUrl(this.auth.signupIncomplete() ? PATHS.proSignup : PATHS.proProfile);
-    } catch (error) {
-      log.error('Failed to connect Instagram', error);
-      const message = (error as { message?: string }).message ?? '';
-      this.error.set(
-        message === 'invalid-state'
-          ? $localize`A conexão expirou. Tente conectar de novo.`
-          : message.replace(/^.*?Instagram:/, 'Instagram:') ||
-              $localize`Tente novamente em instantes.`,
-      );
-    }
+    queueMicrotask(() =>
+      this.router.navigate([this.auth.signupIncomplete() ? PATHS.proSignup : PATHS.proProfile], {
+        queryParams: {
+          code: this.code(),
+          state: this.state(),
+          error_description: this.error_description(),
+        },
+        replaceUrl: true,
+      }),
+    );
   }
 }

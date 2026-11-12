@@ -2,7 +2,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, DoCheck, effect, input, signal, inject } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import {
@@ -56,6 +56,7 @@ export class ProProfile implements DoCheck {
   private readonly accounts = inject(ProfessionalAccounts);
   private readonly professionals = inject(Professionals);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly photos = inject(Photos);
   protected readonly instagramService = inject(Instagram);
   private readonly feedback = inject(Feedback);
@@ -104,6 +105,19 @@ export class ProProfile implements DoCheck {
   protected readonly profile = computed(() => this.professionals.byId(this.uid()));
 
   constructor() {
+    // Back from Instagram (see pages/pro-instagram): the connection is finished here, with a small loading in the
+    // Instagram section instead of a screen of its own
+    const params = this.route.snapshot.queryParamMap;
+    if (params.has('code') || params.has('error_description')) {
+      queueMicrotask(() =>
+        this.finishInstagram(
+          params.get('code'),
+          params.get('state') ?? undefined,
+          params.get('error_description'),
+        ),
+      );
+    }
+
     // The profile document may have been created after the list of professionals was loaded (first step of the
     // sign up, with e-mail or Google): the list is read again, once, when the profile is not in it
     effect(() => {
@@ -442,6 +456,36 @@ export class ProProfile implements DoCheck {
   }
 
   protected readonly instagramBusy = signal(false);
+
+  private async finishInstagram(
+    code: string | null,
+    state: string | undefined,
+    errorDescription: string | null,
+  ) {
+    // The code is not kept in the address (it works once, and a reload must not try it again)
+    void this.router.navigate([], { queryParams: {}, replaceUrl: true });
+    this.instagramBusy.set(true);
+    try {
+      if (!code) {
+        this.show(errorDescription || $localize`O acesso não foi autorizado.`);
+        return;
+      }
+      const { username } = await this.instagramService.finish(code, state);
+      await this.professionals.load();
+      this.show($localize`Instagram conectado: @${username}:username:.`);
+    } catch (error) {
+      log.error('Failed to connect Instagram', error);
+      const message = (error as { message?: string }).message ?? '';
+      this.show(
+        message === 'invalid-state'
+          ? $localize`A conexão expirou. Tente conectar de novo.`
+          : message.replace(/^.*?Instagram:/, 'Instagram:') ||
+              $localize`Tente novamente em instantes.`,
+      );
+    } finally {
+      this.instagramBusy.set(false);
+    }
+  }
 
   // Leaves the site for Instagram: what was typed is saved first, so nothing is lost on the way back
   protected async connectInstagram() {

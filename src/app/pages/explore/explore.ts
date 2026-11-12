@@ -26,8 +26,10 @@ import { LocationPrompt } from '../../components/location-prompt/location-prompt
 import { UserLocation } from '../../services/user-location';
 import {
   hasLocation,
+  categoryOfService,
   SERVICE_NAMES,
   ServiceCategory,
+  servicePartsOf,
   shortLocationLabel,
 } from '../../models/professional';
 import { distanceKm, formatDistance } from '../../utils/geo';
@@ -238,8 +240,14 @@ export class Explore implements OnInit {
     const names = new Set<string>();
     for (const salon of this.professionals.published()) {
       if (!hasLocation(salon)) continue;
-      for (const service of salon.services)
+      for (const service of salon.services) {
         if (categories.includes(service.category)) names.add(service.name);
+        // The halves of a combo are services of makeup and of hair too
+        for (const part of servicePartsOf(service.name)) {
+          if (part !== service.name && categories.includes(categoryOfService(part)))
+            names.add(part);
+        }
+      }
     }
     return [...names].sort((a, b) => a.localeCompare(b, INTL_LOCALE));
   });
@@ -267,7 +275,10 @@ export class Explore implements OnInit {
         // A service chosen under the chips: only who offers one of them
         .filter(
           (salon) =>
-            !services.length || salon.services.some((service) => services.includes(service.name)),
+            !services.length ||
+            salon.services.some((service) =>
+              servicePartsOf(service.name).some((part) => services.includes(part)),
+            ),
         )
         // Home-only professionals have no place on the map
         .filter((salon) => hasLocation(salon))

@@ -28,7 +28,9 @@ const CATALOG: Record<string, string> = {
   'Cronograma capilar': $localize`Cronograma capilar`,
 };
 
-export const catalogLabel = (name: string) => CATALOG[name] ?? name;
+// A combo ("Maquiagem de noiva + Penteado de noiva", or the category "Maquiagem + Cabelo") is shown half by half
+export const catalogLabel = (name: string): string =>
+  CATALOG[name] ?? (name.includes(' + ') ? name.split(' + ').map(catalogLabel).join(' + ') : name);
 
 // "Corte feminino" -> "Women's haircut". A list is joined with " . ", like the tags of the cards.
 @Pipe({ name: 'catalog' })

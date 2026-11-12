@@ -28,6 +28,7 @@ import {
   Professional,
   Review,
   Service,
+  COMBO_CATEGORY,
   ServiceCategory,
 } from '../../models/professional';
 import { Auth } from '../../services/auth';
@@ -115,6 +116,10 @@ export class ArtistDetails {
     {
       name: 'Cabelo',
       icon: 'content_cut',
+    },
+    {
+      name: COMBO_CATEGORY,
+      icon: 'auto_awesome',
     },
   ];
   // Only the categories that the professional has services in

@@ -46,22 +46,58 @@
             />
           </label>
         </div>
-        <!-- Names come from the chosen category, so it stays disabled until one is picked -->
-        <label>
-          <span i18n class="field-label">Nome do serviço *</span>
-          <select
-            [name]="'sname' + i"
-            [disabled]="!service.category"
-            [class.invalid]="fieldInvalid(!service.name.trim())"
-            [class.empty]="!service.name"
-            [(ngModel)]="service.name"
-          >
-            <option i18n value="" disabled>Selecione</option>
-            @for (name of serviceNames(service); track name) {
-              <option [value]="name">{{ name | catalog }}</option>
-            }
-          </select>
-        </label>
+        @if (service.category === combo) {
+          <!-- A combo joins a makeup service and a hair service -->
+          <div class="row combo">
+            <label>
+              <span i18n class="field-label">Serviço de maquiagem *</span>
+              <select
+                [name]="'smakeup' + i"
+                [class.invalid]="fieldInvalid(!comboParts(service.name)[0])"
+                [class.empty]="!comboParts(service.name)[0]"
+                [ngModel]="comboParts(service.name)[0]"
+                (ngModelChange)="setComboPart(service, 'makeup', $event)"
+              >
+                <option i18n value="" disabled>Selecione</option>
+                @for (name of makeupNames; track name) {
+                  <option [value]="name">{{ name | catalog }}</option>
+                }
+              </select>
+            </label>
+            <label>
+              <span i18n class="field-label">Serviço de cabelo *</span>
+              <select
+                [name]="'shair' + i"
+                [class.invalid]="fieldInvalid(!comboParts(service.name)[1])"
+                [class.empty]="!comboParts(service.name)[1]"
+                [ngModel]="comboParts(service.name)[1]"
+                (ngModelChange)="setComboPart(service, 'hair', $event)"
+              >
+                <option i18n value="" disabled>Selecione</option>
+                @for (name of hairNames; track name) {
+                  <option [value]="name">{{ name | catalog }}</option>
+                }
+              </select>
+            </label>
+          </div>
+        } @else {
+          <!-- Names come from the chosen category, so it stays disabled until one is picked -->
+          <label>
+            <span i18n class="field-label">Nome do serviço *</span>
+            <select
+              [name]="'sname' + i"
+              [disabled]="!service.category"
+              [class.invalid]="fieldInvalid(!service.name.trim())"
+              [class.empty]="!service.name"
+              [(ngModel)]="service.name"
+            >
+              <option i18n value="" disabled>Selecione</option>
+              @for (name of serviceNames(service); track name) {
+                <option [value]="name">{{ name | catalog }}</option>
+              }
+            </select>
+          </label>
+        }
         @if (!simple()) {
           <!-- Another price for some days of the week and times -->
           <div class="rules">

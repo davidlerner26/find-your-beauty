@@ -9,7 +9,11 @@ export type Review = {
   createdAt: Date | null;
 };
 
-export type ServiceCategory = 'Maquiagem' | 'Cabelo';
+// The third category joins a makeup service and a hair service in one ("Maquiagem de noiva + Penteado de noiva"). The
+// service is saved with both names, and the professional shows up in the filters of both categories (see `tagsOf`).
+export const COMBO_CATEGORY = 'Maquiagem + Cabelo';
+
+export type ServiceCategory = 'Maquiagem' | 'Cabelo' | typeof COMBO_CATEGORY;
 
 // Services a professional can pick, by category
 export const SERVICE_NAMES: Record<ServiceCategory, string[]> = {
@@ -36,7 +40,45 @@ export const SERVICE_NAMES: Record<ServiceCategory, string[]> = {
     'Babyliss',
     'Triondas',
   ],
+  // The names of a combo are made of the two lists above (see comboName)
+  [COMBO_CATEGORY]: [],
 };
+
+// "Maquiagem de noiva + Penteado de noiva" <-> its two services. A half that was not chosen yet is empty.
+export const COMBO_SEPARATOR = ' + ';
+
+export const comboName = (makeup: string, hair: string) =>
+  makeup || hair ? `${makeup}${COMBO_SEPARATOR}${hair}` : '';
+
+export const comboParts = (name: string): [makeup: string, hair: string] => {
+  const index = name.indexOf(COMBO_SEPARATOR);
+  return index < 0
+    ? ['', '']
+    : [name.slice(0, index).trim(), name.slice(index + COMBO_SEPARATOR.length).trim()];
+};
+
+// The simple services behind a name: the two halves of a combo, or the name itself
+export const servicePartsOf = (name: string) =>
+  name.includes(COMBO_SEPARATOR) ? comboParts(name).filter(Boolean) : [name];
+
+// The category of a simple service of the catalog ('' for a name that is not in it)
+export const categoryOfService = (name: string): ServiceCategory | '' =>
+  (['Maquiagem', 'Cabelo'] as const).find((category) => SERVICE_NAMES[category].includes(name)) ??
+  '';
+
+// The tags of a professional (what the filters and the cards use): the categories of the services, and a combo
+// counts for makeup and for hair
+export const tagsOf = (services: { category: ServiceCategory | '' }[]) => [
+  ...new Set(
+    services.flatMap((service) =>
+      service.category === COMBO_CATEGORY
+        ? ['Maquiagem', 'Cabelo']
+        : service.category
+          ? [service.category]
+          : [],
+    ),
+  ),
+];
 
 // A different price for a service on some days of the week, in a time range ("HH:mm", the end is not included)
 export type PriceRule = { days: number[]; start: string; end: string; price: number };

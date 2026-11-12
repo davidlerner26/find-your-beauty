@@ -1,7 +1,12 @@
 import { Component, inject, input, model, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Spinner } from '../../../components/spinner/spinner';
-import { ServiceCategory } from '../../../models/professional';
+import {
+  COMBO_CATEGORY,
+  comboParts,
+  SERVICE_NAMES,
+  ServiceCategory,
+} from '../../../models/professional';
 import { Photos } from '../../../services/photos';
 import { CatalogPipe } from '../../../utils/catalog.pipe';
 import { maskDuration, parseDuration } from '../../../utils/duration';
@@ -14,6 +19,7 @@ import {
   ServiceDraft,
   serviceNamesOf,
   setCategory,
+  setComboPart,
   toggleRuleDay,
 } from '../service-draft';
 
@@ -45,7 +51,13 @@ export class ServicesEditor {
   readonly photosRemoved = output<string[]>();
   readonly uploadFailed = output<unknown>();
 
-  protected readonly categories: ServiceCategory[] = ['Maquiagem', 'Cabelo'];
+  protected readonly categories: ServiceCategory[] = ['Maquiagem', 'Cabelo', COMBO_CATEGORY];
+  protected readonly combo = COMBO_CATEGORY;
+  // The two lists a combo is made of, and its two halves
+  protected readonly makeupNames = SERVICE_NAMES.Maquiagem;
+  protected readonly hairNames = SERVICE_NAMES.Cabelo;
+  protected readonly comboParts = comboParts;
+  protected readonly setComboPart = setComboPart;
   protected readonly parseDuration = parseDuration;
   protected readonly parseMoney = parseMoney;
   protected readonly serviceNames = serviceNamesOf;

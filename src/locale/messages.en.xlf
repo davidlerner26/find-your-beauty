@@ -5904,6 +5904,22 @@
           <context context-type="linenumber">53,54</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3170615344201032849" datatype="html">
+        <source>Serviço de maquiagem *</source>
+        <target>Makeup service *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
+          <context context-type="linenumber">53,54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2256501685281598114" datatype="html">
+        <source>Serviço de cabelo *</source>
+        <target>Hair service *</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
+          <context context-type="linenumber">68,69</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -30,5 +30,14 @@ const NAMES: Record<string, { en: string; es: string }> = {
   Cabelo: { en: 'Hair', es: 'Cabello' },
 };
 
-export const serviceName = (name: string, lang: Lang) =>
-  lang === 'pt' ? name : (NAMES[name]?.[lang] ?? name);
+// A combo ("Maquiagem de noiva + Penteado de noiva") is named half by half
+export const serviceName = (name: string, lang: Lang): string =>
+  lang === 'pt'
+    ? name
+    : (NAMES[name]?.[lang] ??
+      (name.includes(' + ')
+        ? name
+            .split(' + ')
+            .map((part) => serviceName(part, lang))
+            .join(' + ')
+        : name));

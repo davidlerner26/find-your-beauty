@@ -44,6 +44,11 @@
     }
   }
 
+  // A combo: the makeup service and the hair service, side by side
+  .row.combo {
+    grid-template-columns: 1fr 1fr;
+  }
+
   input,
   select,
   textarea {

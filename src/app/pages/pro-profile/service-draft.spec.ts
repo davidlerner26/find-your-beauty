@@ -1,4 +1,4 @@
-import { Service } from '../../models/professional';
+import { COMBO_CATEGORY, Service } from '../../models/professional';
 import {
   isRuleComplete,
   isServiceComplete,
@@ -8,6 +8,7 @@ import {
   ServiceDraft,
   serviceNamesOf,
   setCategory,
+  setComboPart,
   toggleRuleDay,
   toService,
   toServiceDraft,
@@ -167,5 +168,48 @@ describe('toggleRuleDay', () => {
     expect(rule.days).toEqual([5, 0]);
     toggleRuleDay(rule, 5);
     expect(rule.days).toEqual([0]);
+  });
+});
+
+describe('a combo of makeup and hair', () => {
+  const combo = (name: string) => complete({ category: COMBO_CATEGORY, name });
+
+  it('is complete only with both halves', () => {
+    expect(isServiceComplete(combo('Maquiagem de noiva + Penteado de noiva'))).toBe(true);
+    expect(isServiceComplete(combo('Maquiagem de noiva + '))).toBe(false);
+    expect(isServiceComplete(combo(' + Escova'))).toBe(false);
+    expect(isServiceComplete(combo(''))).toBe(false);
+  });
+
+  it('is named by its two halves, chosen one at a time', () => {
+    const service = complete({ category: COMBO_CATEGORY, name: '' });
+    setComboPart(service, 'makeup', 'Maquiagem social');
+    expect(service.name).toBe('Maquiagem social + ');
+    setComboPart(service, 'hair', 'Escova');
+    expect(service.name).toBe('Maquiagem social + Escova');
+    setComboPart(service, 'makeup', 'Maquiagem de noiva');
+    expect(service.name).toBe('Maquiagem de noiva + Escova');
+  });
+
+  it('keeps what was chosen as one half when the category becomes a combo', () => {
+    const makeup = complete({ category: 'Maquiagem', name: 'Maquiagem social' });
+    setCategory(makeup, COMBO_CATEGORY);
+    expect(makeup.name).toBe('Maquiagem social + ');
+
+    const hair = complete({ category: 'Cabelo', name: 'Escova' });
+    setCategory(hair, COMBO_CATEGORY);
+    expect(hair.name).toBe(' + Escova');
+  });
+
+  it('clears the combo name when the category goes back to makeup or hair', () => {
+    const service = combo('Maquiagem social + Escova');
+    setCategory(service, 'Cabelo');
+    expect(service.name).toBe('');
+  });
+
+  it('has no names of its own to pick from', () => {
+    expect(serviceNamesOf({ category: COMBO_CATEGORY, name: 'Maquiagem social + Escova' })).toEqual(
+      [],
+    );
   });
 });

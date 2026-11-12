@@ -12,6 +12,7 @@ import {
   DEFAULT_AVAILABILITY,
   Service,
   SERVICE_PLACES,
+  tagsOf,
   ServiceMode,
 } from '../../models/professional';
 import { Auth } from '../../services/auth';
@@ -341,7 +342,7 @@ export class ProProfile implements DoCheck {
           }),
       about: aboutToParagraphs(this.about),
       services,
-      tags: [...new Set(services.map((service) => service.category))],
+      tags: tagsOf(services),
       gallery: this.gallery,
       ...(keepHours
         ? {}

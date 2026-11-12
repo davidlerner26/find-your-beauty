@@ -1,17 +1,11 @@
 @if (message()) {
-  <!-- Feedback of an action: floats on top, goes away by itself or when tapped -->
-  @for (id of [messageId]; track id) {
-    <button type="button" class="missing" aria-live="polite" (click)="message.set('')">
-      {{ message() }}
-    </button>
-  }
+  <!-- Feedback of an action: floats on top (bottom right on wide screens), goes away by itself or with the X -->
+  <app-toast [text]="message()" (dismiss)="message.set('')" />
 } @else if (profile() && missing.length) {
-  <!-- Floats at the top, so it is in view without scrolling. A new text makes a new element, which shows again and fades out by itself. -->
+  <!-- What is missing. A new text makes a new element, which shows again and goes away by itself. -->
   @for (text of [missingText]; track text) {
     @if (dismissedText() !== text) {
-      <button type="button" class="missing" aria-live="polite" (click)="dismissedText.set(text)">
-        {{ text }}
-      </button>
+      <app-toast [text]="text" (dismiss)="dismissedText.set(text)" />
     }
   }
 }

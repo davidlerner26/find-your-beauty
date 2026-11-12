@@ -1,6 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, input, signal, inject } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
+import { Toast } from '../../components/toast/toast';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
@@ -45,6 +46,7 @@ import { PATHS } from '../../utils/paths';
     AvailabilityEditor,
     ServicesEditor,
     Spinner,
+    Toast,
     FormsModule,
     MatIconModule,
   ],
@@ -119,6 +121,14 @@ export class ProProfile {
         return;
       this.reloadedList = true;
       void this.professionals.load();
+    });
+
+    // The message of what is missing goes away by itself after a few seconds (the X closes it sooner)
+    effect((onCleanup) => {
+      const text = this.missingText;
+      if (!this.profile() || !this.missing.length || this.message()) return;
+      const timer = setTimeout(() => this.dismissedText.set(text), 5500);
+      onCleanup(() => clearTimeout(timer));
     });
 
     // Fills the form once, when the profile document arrives

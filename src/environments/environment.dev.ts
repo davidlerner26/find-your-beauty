@@ -20,6 +20,8 @@ export const environment = {
     featuredProfessionals: true,
     // A simulated payment screen comes before the booking is created: nothing is charged
     checkout: true,
+    // The Pro subscription of the professionals, with Stripe in test mode (see docs/assinatura-pro.md)
+    proSubscription: true,
   },
   // The same key of production works when the referrers of the key include dev.findyourbeauty.com.br
   googleMapsApiKey: 'AIzaSyB41b9p2_dNiCulzT_jafIeindOFuDcI-I',

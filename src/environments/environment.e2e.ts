@@ -13,6 +13,7 @@ export const environment = {
     instagramConnect: true,
     featuredProfessionals: true,
     checkout: true,
+    proSubscription: true,
   },
   googleMapsApiKey: '',
   instagramAppId: '',

@@ -25,3 +25,10 @@ export const checkoutEnabled = () => {
     return isCheckoutEnabled(environment, null);
   }
 };
+
+// The Pro subscription of the professionals (the page to subscribe, the badge, the priority and the featured
+// section). A feature of the environment: production has it off until the owner decides to bring it there.
+export const isProSubscriptionEnabled = (env: { features: { proSubscription: boolean } }) =>
+  env.features.proSubscription;
+
+export const proSubscriptionEnabled = () => isProSubscriptionEnabled(environment);

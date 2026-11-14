@@ -1,5 +1,5 @@
 import { environment } from '../../environments/environment';
-import { CHECKOUT_OVERRIDE_KEY, isCheckoutEnabled } from './features';
+import { CHECKOUT_OVERRIDE_KEY, isCheckoutEnabled, isProSubscriptionEnabled } from './features';
 
 const storage = (value: string | null) => ({ getItem: () => value });
 const env = (name: string, checkout: boolean) => ({ name, features: { checkout } });
@@ -24,6 +24,13 @@ describe('isCheckoutEnabled', () => {
   });
 });
 
+describe('isProSubscriptionEnabled', () => {
+  it('follows the flag of the environment', () => {
+    expect(isProSubscriptionEnabled({ features: { proSubscription: true } })).toBe(true);
+    expect(isProSubscriptionEnabled({ features: { proSubscription: false } })).toBe(false);
+  });
+});
+
 // environment.ts is the production file: the dev and e2e builds replace it with their own
 describe('the production environment', () => {
   it('books straight away: the payment screen stays off until it is decided to bring it', () => {
@@ -34,5 +41,11 @@ describe('the production environment', () => {
   it('has no payments: no Stripe, no saved cards, and the booking carries no hold', () => {
     expect(environment.payments.provider).toBe('off');
     expect(environment.payments.stripePublishableKey).toBe('');
+  });
+
+  // The Pro subscription is only in the test environment until the owner says to bring it to production
+  // (docs/assinatura-pro.md). Changing this is the go-live: change it together with the checklist of that document.
+  it('has no Pro subscription: no page to subscribe, no badge, no featured section', () => {
+    expect(environment.features.proSubscription).toBe(false);
   });
 });

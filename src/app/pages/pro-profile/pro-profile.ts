@@ -40,10 +40,12 @@ import { WEEKDAYS } from './weekdays';
 import { log } from '../../utils/log';
 import {
   aboutToParagraphs,
+  hasPlace as placeOn,
   invalidDayKeys,
   missingFields,
   paragraphsToAbout,
   toAvailabilityDraft,
+  togglePlace as toggleServicePlace,
 } from './profile-form';
 import { isServiceComplete, ServiceDraft, toService, toServiceDraft } from './service-draft';
 import { PATHS } from '../../utils/paths';
@@ -188,15 +190,12 @@ export class ProProfile implements DoCheck {
   }
 
   protected hasPlace(place: 'studio' | 'home') {
-    const mode = this.serviceMode();
-    return mode === place || mode === 'both';
+    return placeOn(this.serviceMode(), place);
   }
 
-  // Each place is switched on or off on its own; both on is 'both'
+  // Each place is switched on or off on its own (both on is 'both'), but one always stays on
   protected togglePlace(place: 'studio' | 'home') {
-    const studio = this.hasPlace('studio') !== (place === 'studio');
-    const home = this.hasPlace('home') !== (place === 'home');
-    this.serviceMode.set(studio && home ? 'both' : studio ? 'studio' : home ? 'home' : null);
+    this.serviceMode.set(toggleServicePlace(this.serviceMode(), place));
   }
 
   // Only home-only professionals work without an address

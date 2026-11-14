@@ -1,4 +1,9 @@
-import { Availability, DateRange, DEFAULT_AVAILABILITY } from '../../models/professional';
+import {
+  Availability,
+  DateRange,
+  DEFAULT_AVAILABILITY,
+  ServiceMode,
+} from '../../models/professional';
 import { isValidCpf } from '../../utils/cpf';
 import { INTL_LOCALE } from '../../utils/locale';
 import { toMinutes } from '../../utils/slots';
@@ -81,4 +86,16 @@ export const missingFields = (draft: ProfileDraft) => {
     missing.push($localize`pelo menos 1 serviço completo`);
   }
   return missing;
+};
+
+// Where the professional works: each place is switched on or off on its own (both on is 'both'), but one of them always
+// stays on: the last one that is on can't be switched off. Nothing chosen yet (null) takes the first one that is touched.
+export const hasPlace = (mode: ServiceMode | null, place: 'studio' | 'home') =>
+  mode === place || mode === 'both';
+
+export const togglePlace = (mode: ServiceMode | null, place: 'studio' | 'home'): ServiceMode => {
+  const studio = hasPlace(mode, 'studio') !== (place === 'studio');
+  const home = hasPlace(mode, 'home') !== (place === 'home');
+  if (!studio && !home) return mode ?? place;
+  return studio && home ? 'both' : studio ? 'studio' : 'home';
 };

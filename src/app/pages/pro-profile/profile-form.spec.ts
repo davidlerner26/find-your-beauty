@@ -8,6 +8,7 @@ import {
   ProfileDraft,
   rangeLabel,
   toAvailabilityDraft,
+  togglePlace,
 } from './profile-form';
 import { toServiceDraft } from './service-draft';
 
@@ -181,5 +182,27 @@ describe('missingFields', () => {
     expect(missingFields({ ...ready, services: [{ ...service, price: '0,00' }, service] })).toEqual(
       [],
     );
+  });
+});
+
+describe('togglePlace', () => {
+  it('takes the first place that is touched when nothing was chosen', () => {
+    expect(togglePlace(null, 'studio')).toBe('studio');
+    expect(togglePlace(null, 'home')).toBe('home');
+  });
+
+  it('adds the other place: both', () => {
+    expect(togglePlace('studio', 'home')).toBe('both');
+    expect(togglePlace('home', 'studio')).toBe('both');
+  });
+
+  it('switches one of the two off', () => {
+    expect(togglePlace('both', 'studio')).toBe('home');
+    expect(togglePlace('both', 'home')).toBe('studio');
+  });
+
+  it('never switches the last place off: one always stays', () => {
+    expect(togglePlace('studio', 'studio')).toBe('studio');
+    expect(togglePlace('home', 'home')).toBe('home');
   });
 });

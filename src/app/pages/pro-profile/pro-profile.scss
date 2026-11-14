@@ -193,8 +193,12 @@ h1 {
   font: inherit;
   cursor: pointer;
 
+  // Selected, as in the app: the color of the area (white on the blue of the professional area) with letters in the
+  // color of the background
   &.active {
-    @include selected;
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--on-primary);
   }
 }
 

@@ -136,7 +136,7 @@
         @for (service of row.services; track service.name) {
           <a
             class="service"
-            routerLink="/explore"
+            routerLink="/explorar"
             [queryParams]="{ service: service.name, categories: activeInterests().join(',') }"
           >
             <span class="service-icon">

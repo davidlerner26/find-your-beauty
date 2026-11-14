@@ -490,7 +490,7 @@ const welcomeClient = async (uid: string, language?: unknown) => {
         en: 'Find professionals',
         es: 'Encontrar profesionales',
       }),
-      url: link(lang, '/explore'),
+      url: link(lang, '/explorar'),
     },
   });
 };

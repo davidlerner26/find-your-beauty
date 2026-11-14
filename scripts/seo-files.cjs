@@ -11,7 +11,7 @@ const SITE_URL = process.env.SITE_URL || 'https://findyourbeauty.com.br';
 const DIST = path.join(__dirname, '..', 'dist', 'find-your-beauty', 'browser');
 
 // Pages that are for search engines (the languages other than Portuguese are left out by a header, see netlify.toml)
-const PAGES = ['/', '/explore', '/busca', '/termos', '/privacidade'];
+const PAGES = ['/', '/explorar', '/busca', '/termos', '/privacidade'];
 
 // Screens of the accounts and of the booking: nothing in them to find
 const PRIVATE = [

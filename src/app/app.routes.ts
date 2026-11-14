@@ -24,15 +24,17 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home/home').then((m) => m.Home),
   },
   {
-    path: 'explore',
+    path: 'explorar',
     canActivate: [clientAreaGuard],
     data: seo({
       title: $localize`Mapa de profissionais de beleza`,
       description: $localize`Veja no mapa os profissionais de maquiagem e cabelo mais perto de você.`,
-      path: '/explore',
+      path: '/explorar',
     }),
     loadComponent: () => import('./pages/explore/explore').then((m) => m.Explore),
   },
+  // The old address of the map (links, bookmarks, e-mails already sent): the query is kept
+  { path: 'explore', redirectTo: 'explorar', pathMatch: 'full' },
   {
     path: 'profissionais/:id',
     canActivate: [clientAreaGuard],

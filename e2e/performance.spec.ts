@@ -23,7 +23,7 @@ test.describe('images', () => {
   });
 
   test('no image of the screens is left to block the first paint', async ({ page }) => {
-    for (const path of ['/', '/busca', '/explore']) {
+    for (const path of ['/', '/busca', '/explorar']) {
       await page.goto(path);
       await page.waitForTimeout(500);
       const blocking = await page.$$eval('img', (images) =>

@@ -30,7 +30,7 @@ const isProArea = (url: string) => url === '/pro' || url.startsWith('/pro/');
 // Screens that show the bottom tab bar (the others, like details and chat, are full screen)
 const TAB_SCREENS = [
   '/',
-  '/explore',
+  '/explorar',
   '/agenda',
   '/mensagens',
   '/notificacoes',
@@ -77,8 +77,8 @@ export class App {
     },
     {
       label: $localize`Explorar`,
-      path: '/explore',
-      match: ['/explore'],
+      path: '/explorar',
+      match: ['/explorar'],
       icon: 'explore',
     },
     {
@@ -195,7 +195,7 @@ export class App {
 
   // Screens that use the whole width on wide screens (the others stay in the centered column)
   protected get fullWidth() {
-    return this.url() === '/explore' || AUTH_SCREENS.includes(this.url());
+    return this.url() === '/explorar' || AUTH_SCREENS.includes(this.url());
   }
 
   // The dot of new things. The bar of the phone has one tab for the messages and the notifications, so it lights up

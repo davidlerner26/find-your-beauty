@@ -8,7 +8,7 @@ describe('routes', () => {
 
   it.each([
     '',
-    'explore',
+    'explorar',
     'busca',
     'profissionais/:id',
     'boas-vindas',
@@ -30,5 +30,13 @@ describe('routes', () => {
     ['cadastro', clientEntryGuard],
   ])('keeps professionals out of /%s', (path, guard) => {
     expect(guardsOf(path)).toContain(guard);
+  });
+});
+
+describe('the old address of the map', () => {
+  it('sends /explore to /explorar', () => {
+    const old = routes.find((route) => route.path === 'explore');
+    expect(old?.redirectTo).toBe('explorar');
+    expect(old?.pathMatch).toBe('full');
   });
 });

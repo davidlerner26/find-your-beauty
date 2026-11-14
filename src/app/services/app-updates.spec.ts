@@ -87,13 +87,13 @@ describe('AppUpdates', () => {
   it('loads it on the next navigation, at the address that was going to open', () => {
     setup();
     ready();
-    routerEvents.next(new NavigationStart(1, '/explore'));
-    expect(assign).toHaveBeenCalledWith('/explore');
+    routerEvents.next(new NavigationStart(1, '/explorar'));
+    expect(assign).toHaveBeenCalledWith('/explorar');
   });
 
   it('does not touch the navigation when there is nothing new', () => {
     setup();
-    routerEvents.next(new NavigationStart(1, '/explore'));
+    routerEvents.next(new NavigationStart(1, '/explorar'));
     expect(assign).not.toHaveBeenCalled();
   });
 

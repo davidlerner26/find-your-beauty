@@ -1,7 +1,7 @@
 // The addresses of the screens, as they are written in app.routes.ts. Use these instead of writing the text again.
 export const PATHS = {
   home: '/',
-  explore: '/explore',
+  explore: '/explorar',
   search: '/busca',
   login: '/entrar',
   signup: '/cadastro',

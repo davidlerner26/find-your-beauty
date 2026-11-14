@@ -8,6 +8,12 @@ test.beforeAll(async () => {
 });
 
 test.describe('visitor', () => {
+  test('the old address of the map goes to /explorar, with its query', async ({ page }) => {
+    await page.goto('/explore?service=Maquiagem');
+
+    await expect(page).toHaveURL('/explorar?service=Maquiagem');
+  });
+
   test('sees the home and a professional page', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { name: 'Categorias' })).toBeVisible();

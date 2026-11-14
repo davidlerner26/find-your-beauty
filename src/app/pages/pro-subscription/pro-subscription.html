@@ -1,0 +1,100 @@
+<div class="page">
+  <button i18n-aria-label type="button" class="back" aria-label="Voltar" (click)="goBack()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+  <h1 i18n>Assinatura Pro</h1>
+
+  @if (activating()) {
+    <p i18n class="message" role="status">
+      Pagamento recebido. Estamos ativando o seu Pro: isso leva alguns segundos.
+    </p>
+  }
+
+  @if (loading()) {
+    <app-spinner />
+  } @else {
+    <section class="plan" [class.on]="state() === 'active' || state() === 'cancelling'">
+      @switch (state()) {
+        @case ('active') {
+          <p i18n class="status">Pro ativo</p>
+          <p class="muted"><ng-container i18n>Renova em</ng-container> {{ endDate() }}.</p>
+        }
+        @case ('cancelling') {
+          <p i18n class="status">Pro ativo até o fim do período</p>
+          <p class="muted">
+            <ng-container i18n>A assinatura foi cancelada e termina em</ng-container>
+            {{ endDate() }}.
+          </p>
+        }
+        @case ('past_due') {
+          <p i18n class="status warning">A última cobrança falhou</p>
+          <p i18n class="muted">
+            Atualize o cartão para manter o Pro. Tentaremos cobrar de novo nos próximos dias.
+          </p>
+        }
+        @case ('ended') {
+          <p i18n class="status off">A assinatura terminou</p>
+          <p i18n class="muted">
+            Seu perfil e a sua agenda continuam funcionando. Você pode assinar de novo quando
+            quiser.
+          </p>
+        }
+        @default {
+          <p i18n class="status off">Você ainda não é Pro</p>
+          <p i18n class="muted">Assine para ganhar mais visibilidade para o seu perfil.</p>
+        }
+      }
+
+      @if (state() === 'none' || state() === 'ended') {
+        <button type="button" class="primary" [disabled]="busy()" (click)="subscribe()">
+          @if (busy()) {
+            <app-spinner [small]="true" />
+          } @else {
+            <ng-container i18n>Assinar Pro</ng-container>
+          }
+        </button>
+      } @else {
+        <button type="button" class="primary" [disabled]="busy()" (click)="manage()">
+          @if (busy()) {
+            <app-spinner [small]="true" />
+          } @else {
+            <ng-container i18n>Gerenciar assinatura</ng-container>
+          }
+        </button>
+        <p i18n class="muted small">
+          No portal você troca o cartão, vê as faturas e cancela quando quiser.
+        </p>
+      }
+    </section>
+
+    <section class="benefits">
+      <h2 i18n>O que o Pro dá ao seu perfil</h2>
+      <ul>
+        <li>
+          <mat-icon>star</mat-icon>
+          <div>
+            <strong i18n>Profissionais em destaque</strong>
+            <span i18n>Seu perfil pode aparecer em destaque na página inicial.</span>
+          </div>
+        </li>
+        <li>
+          <mat-icon>verified</mat-icon>
+          <div>
+            <strong i18n>Selo Pro</strong>
+            <span i18n>Um selo nos cards e na página do seu perfil.</span>
+          </div>
+        </li>
+        <li>
+          <mat-icon>travel_explore</mat-icon>
+          <div>
+            <strong i18n>Prioridade na busca e no mapa</strong>
+            <span i18n>Você aparece antes nas buscas e o seu pin se destaca no mapa.</span>
+          </div>
+        </li>
+      </ul>
+      <p i18n class="muted small">
+        O que você já tem hoje continua gratuito. Quem procura um profissional nunca paga nada.
+      </p>
+    </section>
+  }
+</div>

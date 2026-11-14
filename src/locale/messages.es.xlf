@@ -5928,6 +5928,222 @@
           <context context-type="linenumber">73,77</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2135753578511817671" datatype="html">
+        <source>Assinatura Pro</source>
+        <target>Suscripción Pro</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.routes.ts</context>
+          <context context-type="linenumber">228</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">25,26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5104014519210577986" datatype="html">
+        <source>Seu plano Pro está ativo</source>
+        <target>Tu plan Pro está activo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8984213509459126871" datatype="html">
+        <source>Mais visibilidade para o seu perfil</source>
+        <target>Más visibilidad para tu perfil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3632799981998972537" datatype="html">
+        <source> Pagamento recebido. Estamos ativando o seu Pro: isso leva alguns segundos. </source>
+        <target>Pago recibido. Estamos activando tu Pro: tarda unos segundos.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2197857226440792405" datatype="html">
+        <source>Pro ativo</source>
+        <target>Pro activo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4792953174726005911" datatype="html">
+        <source>Renova em</source>
+        <target>Se renueva el</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1682217730965887369" datatype="html">
+        <source>Pro ativo até o fim do período</source>
+        <target>Pro activo hasta el final del período</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">23,24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5493760008882711041" datatype="html">
+        <source>A assinatura foi cancelada e termina em</source>
+        <target>La suscripción fue cancelada y termina el</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4051774137881001065" datatype="html">
+        <source>A última cobrança falhou</source>
+        <target>El último cobro falló</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7354604229414231042" datatype="html">
+        <source> Atualize o cartão para manter o Pro. Tentaremos cobrar de novo nos próximos dias. </source>
+        <target>Actualiza la tarjeta para mantener Pro. Intentaremos cobrar de nuevo en los próximos días.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8923224514092680332" datatype="html">
+        <source>A assinatura terminou</source>
+        <target>La suscripción terminó</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">36,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5184992398679162713" datatype="html">
+        <source> Seu perfil e a sua agenda continuam funcionando. Você pode assinar de novo quando quiser. </source>
+        <target>Tu perfil y tu agenda siguen funcionando. Puedes suscribirte de nuevo cuando quieras.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="426511391826372688" datatype="html">
+        <source>Você ainda não é Pro</source>
+        <target>Aún no eres Pro</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">43,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7211959315233381528" datatype="html">
+        <source>Assine para ganhar mais visibilidade para o seu perfil.</source>
+        <target>Suscríbete para dar más visibilidad a tu perfil.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">44,45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4104867638742314343" datatype="html">
+        <source>Assinar Pro</source>
+        <target>Suscribirse a Pro</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2016254676190684800" datatype="html">
+        <source>Gerenciar assinatura</source>
+        <target>Gestionar suscripción</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1012129951770641651" datatype="html">
+        <source> No portal você troca o cartão, vê as faturas e cancela quando quiser. </source>
+        <target>En el portal cambias la tarjeta, ves las facturas y cancelas cuando quieras.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">65,66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3997967230910431834" datatype="html">
+        <source>O que o Pro dá ao seu perfil</source>
+        <target>Lo que Pro le da a tu perfil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">71,72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8411350696101235468" datatype="html">
+        <source>Seu perfil pode aparecer em destaque na página inicial.</source>
+        <target>Tu perfil puede aparecer destacado en la página de inicio.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">77,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9140333915697215359" datatype="html">
+        <source>Selo Pro</source>
+        <target>Sello Pro</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">83,84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1397150809794844854" datatype="html">
+        <source>Um selo nos cards e na página do seu perfil.</source>
+        <target>Un sello en las tarjetas y en la página de tu perfil.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">84,85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6546962044731150746" datatype="html">
+        <source>Prioridade na busca e no mapa</source>
+        <target>Prioridad en la búsqueda y en el mapa</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">90,91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3608338298672941629" datatype="html">
+        <source>Você aparece antes nas buscas e o seu pin se destaca no mapa.</source>
+        <target>Apareces primero en las búsquedas y tu pin se destaca en el mapa.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">91,92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="92015805985076655" datatype="html">
+        <source> O que você já tem hoje continua gratuito. Quem procura um profissional nunca paga nada. </source>
+        <target>Lo que ya tienes hoy sigue siendo gratis. Quien busca un profesional nunca paga nada.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">96,97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7727109487713066060" datatype="html">
+        <source>Não foi possível carregar a assinatura. Tente de novo.</source>
+        <target>No se pudo cargar la suscripción. Inténtalo de nuevo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9110157515192732238" datatype="html">
+        <source>Não foi possível abrir a página de pagamento. Tente de novo.</source>
+        <target>No se pudo abrir la página de pago. Inténtalo de nuevo.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -2,7 +2,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, DoCheck, effect, input, signal, inject } from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { formatCpf, isValidCpf } from '../../utils/cpf';
 import { formatPhone } from '../../utils/phone';
 import {
@@ -14,6 +14,7 @@ import {
   SERVICE_PLACES,
   tagsOf,
   ServiceMode,
+  isPro,
 } from '../../models/professional';
 import { Auth } from '../../services/auth';
 import { ProfessionalAccounts } from '../../services/professional-accounts';
@@ -37,6 +38,7 @@ import {
 } from './profile-form';
 import { isServiceComplete, ServiceDraft, toService, toServiceDraft } from './service-draft';
 import { PATHS } from '../../utils/paths';
+import { proSubscriptionEnabled } from '../../utils/features';
 
 @Component({
   selector: 'app-pro-profile',
@@ -48,6 +50,7 @@ import { PATHS } from '../../utils/paths';
     Spinner,
     FormsModule,
     MatIconModule,
+    RouterLink,
   ],
   templateUrl: './pro-profile.html',
   styleUrl: './pro-profile.scss',
@@ -104,6 +107,14 @@ export class ProProfile implements DoCheck {
 
   protected readonly uid = computed(() => this.auth.user()?.uid ?? '');
   protected readonly profile = computed(() => this.professionals.byId(this.uid()));
+
+  // The link to the Pro subscription (only where the subscription exists)
+  protected readonly proEnabled = proSubscriptionEnabled();
+  protected readonly proPath = PATHS.proSubscription;
+  protected readonly isPro = computed(() => {
+    const profile = this.profile();
+    return !!profile && isPro(profile);
+  });
 
   constructor() {
     // Back from Instagram (see pages/pro-instagram): the connection is finished here, with a small loading in the

@@ -18,6 +18,21 @@
     </p>
   }
 
+  @if (proEnabled && !signup() && profile()) {
+    <a class="pro-link" [routerLink]="proPath">
+      <mat-icon class="filled">workspace_premium</mat-icon>
+      <span class="pro-text">
+        <strong i18n>Assinatura Pro</strong>
+        @if (isPro()) {
+          <span i18n>Seu plano Pro está ativo</span>
+        } @else {
+          <span i18n>Mais visibilidade para o seu perfil</span>
+        }
+      </span>
+      <mat-icon>chevron_right</mat-icon>
+    </a>
+  }
+
   @if (!profile()) {
     <app-spinner />
   } @else {

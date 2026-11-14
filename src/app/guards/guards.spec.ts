@@ -10,7 +10,7 @@ import { Auth } from '../services/auth';
 import { Users } from '../services/users';
 import { adminGuard } from './admin';
 import { clientAreaGuard, clientEntryGuard, clientGuard } from './client';
-import { proEntryGuard, proGuard, proInstagramGuard } from './pro';
+import { proEntryGuard, proGuard, proInstagramGuard, proSubscriptionGuard } from './pro';
 
 type Role = 'client' | 'professional' | null;
 
@@ -77,6 +77,24 @@ describe('proGuard', () => {
   it('sends an unfinished sign up back to its second step', async () => {
     setup(fakeAuth({ uid: 'p', signupIncomplete: true }));
     expect(await run(proGuard)).toBe('/pro/cadastro');
+  });
+});
+
+// The unit tests run with the production environment file, where the subscription is off
+describe('proSubscriptionGuard', () => {
+  it('sends a professional back to the profile while the subscription is off', async () => {
+    setup(fakeAuth({ uid: 'p', role: 'professional' }));
+    expect(await run(proSubscriptionGuard)).toBe('/pro/perfil');
+  });
+
+  it('sends visitors to the professional login', async () => {
+    setup(fakeAuth({}));
+    expect(await run(proSubscriptionGuard)).toBe('/pro/entrar');
+  });
+
+  it('sends clients to the start', async () => {
+    setup(fakeAuth({ uid: 'c', role: 'client' }));
+    expect(await run(proSubscriptionGuard)).toBe('/');
   });
 });
 

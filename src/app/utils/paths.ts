@@ -19,6 +19,8 @@ export const PATHS = {
   proLogin: '/pro/entrar',
   proSignup: '/pro/cadastro',
   proProfile: '/pro/perfil',
+  // The Pro subscription of the professional (see docs/assinatura-pro.md)
+  proSubscription: '/pro/assinatura',
   proMessages: '/pro/mensagens',
   proNotifications: '/pro/notificacoes',
   // The page of a professional (on the map screen), and its booking screen

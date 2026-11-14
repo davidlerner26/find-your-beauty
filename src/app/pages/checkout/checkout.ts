@@ -14,6 +14,7 @@ import { INTL_LOCALE } from '../../utils/locale';
 import { log } from '../../utils/log';
 import { cardBrandLabel, paymentErrorMessage } from '../../utils/payment-errors';
 import { PATHS } from '../../utils/paths';
+import { CardBrand } from '../../components/card-brand/card-brand';
 import { PricePipe } from '../../utils/price.pipe';
 import { bookingErrorMessage } from '../booking/booking-request';
 
@@ -25,7 +26,7 @@ const SIMULATED_PAYMENT_MS = 1200;
 // then creates the booking. Until the Stripe key is filled in, the payment is only simulated.
 @Component({
   selector: 'app-checkout',
-  imports: [MatIconModule, PricePipe, RouterLink],
+  imports: [CardBrand, MatIconModule, PricePipe, RouterLink],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss',
 })

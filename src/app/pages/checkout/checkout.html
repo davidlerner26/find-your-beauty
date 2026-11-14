@@ -50,7 +50,7 @@
 
       @if (!withCards) {
         <div class="method">
-          <span class="brand" aria-hidden="true"><i></i><i></i></span>
+          <app-card-brand brand="visa" />
           <div>
             <strong>{{ holder() }}</strong>
             <span i18n class="muted">Cartão de teste •••• 4242</span>
@@ -66,7 +66,7 @@
           i18n-aria-label
           aria-label="Trocar o cartão"
         >
-          <span class="brand" aria-hidden="true"><i></i><i></i></span>
+          <app-card-brand [brand]="card.brand" />
           <div>
             <strong>{{ brandLabel(card.brand) }} •••• {{ card.last4 }}</strong>
             <span i18n class="muted">Vence {{ card.expMonth }}/{{ card.expYear }}</span>

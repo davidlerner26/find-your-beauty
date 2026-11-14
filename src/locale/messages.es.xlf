@@ -6196,6 +6196,54 @@
           <context context-type="linenumber">246,247</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8886298056821676165" datatype="html">
+        <source> Adicionar preço por dia e horário </source>
+        <target>Añadir un precio por día y horario</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
+          <context context-type="linenumber">182</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7029441028578868691" datatype="html">
+        <source> Remover serviço </source>
+        <target>Quitar servicio</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
+          <context context-type="linenumber">241,242</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3923396797008509746" datatype="html">
+        <source>Adicionar serviço</source>
+        <target>Añadir servicio</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
+          <context context-type="linenumber">248,249</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8279234739076682147" datatype="html">
+        <source><x id="START_BLOCK_IF" equiv-text="@if (uploadingService() === service.id) {"/><x id="START_TAG_APP_SPINNER" ctype="x-app_spinner" equiv-text="&lt;app-spinner [small]=&quot;true&quot; /&gt;"/><x id="CLOSE_TAG_APP_SPINNER" ctype="x-app_spinner" equiv-text="&lt;app-spinner [small]=&quot;true&quot; /&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Adicionar fotos <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+                  type=&quot;file&quot;
+                  accept=&quot;image/*&quot;
+                  multiple
+                  hidden
+                  [disabled]=&quot;uploadingService() !== null&quot;
+                  #serviceFile
+                  (change)=&quot;uploadServicePhotos(service, serviceFile)&quot;
+                /&gt;"/></source>
+        <target><x id="START_BLOCK_IF" equiv-text="@if (uploadingService() === service.id) {"/><x id="START_TAG_APP_SPINNER" ctype="x-app_spinner" equiv-text="&lt;app-spinner [small]=&quot;true&quot; /&gt;"/><x id="CLOSE_TAG_APP_SPINNER" ctype="x-app_spinner" equiv-text="&lt;app-spinner [small]=&quot;true&quot; /&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Añadir fotos <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+                  type=&quot;file&quot;
+                  accept=&quot;image/*&quot;
+                  multiple
+                  hidden
+                  [disabled]=&quot;uploadingService() !== null&quot;
+                  #serviceFile
+                  (change)=&quot;uploadServicePhotos(service, serviceFile)&quot;
+                /&gt;"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
+          <context context-type="linenumber">196,210</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -169,3 +169,124 @@
     justify-content: space-between;
   }
 }
+
+// ----- Phones and tablets: the card of a service as in the app. The category alone on its line, then the price and the
+// duration side by side; the description, the prices by day and time and the photos in the order of the app; the actions
+// are buttons of the whole width.
+@media (max-width: 1023.98px) {
+  .service {
+    gap: 0.65rem;
+    padding: 0.9rem;
+    border: 1px solid var(--line, transparent);
+    border-radius: 14px;
+
+    // The order of the app: the category alone on its line, the name (or the two parts of a combo), then the price and the
+    // duration side by side, the description, the prices by day and time, the photos and "Remover serviço". The rows of
+    // fields dissolve into the grid of the card so that each field can take its place.
+    grid-template-columns: 1fr 1fr;
+
+    > * {
+      grid-column: 1 / -1;
+    }
+
+    .row {
+      display: contents;
+    }
+
+    .row:not(.combo) > label:first-child {
+      grid-column: 1 / -1;
+      order: 0;
+    }
+
+    .row:not(.combo) > label:not(:first-child) {
+      grid-column: auto;
+      order: 2;
+    }
+
+    .row.combo > label {
+      grid-column: 1 / -1;
+      order: 1;
+    }
+
+    > label {
+      order: 1;
+    }
+
+    // The label of a field: the strong text of the app, not a small grey one
+    .field-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    > label.description {
+      order: 3;
+    }
+
+    .rules {
+      order: 4;
+    }
+
+    .service-photos {
+      order: 5;
+    }
+
+    button.remove {
+      order: 6;
+    }
+
+    // The buttons of the card: a pill of the whole width with a border, like the outline buttons of the app
+    .link,
+    .upload-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 3.5rem;
+      padding: 0 1.4rem;
+      border: 1.5px solid var(--primary);
+      border-radius: var(--radius-pill);
+      background: transparent;
+      color: var(--primary);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    // The label, the photos and then the button, as in the app
+    .service-photos .head {
+      display: contents;
+    }
+
+    .service-photos .field-label {
+      order: 0;
+    }
+
+    .service-photos .gallery {
+      order: 1;
+    }
+
+    .service-photos .upload-link {
+      order: 2;
+    }
+
+    // "Remover serviço": white with a red border, like the "danger" button of the app
+    button.remove {
+      justify-self: stretch;
+      min-height: 3.5rem;
+      margin-top: 0.5rem;
+      border: 1.5px solid var(--danger-strong);
+      border-radius: var(--radius-pill);
+      background: #fff;
+      color: var(--danger-strong);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+  }
+
+  .add {
+    min-height: 3.5rem;
+    border: 1.5px solid var(--primary);
+    border-radius: var(--radius-pill);
+  }
+}

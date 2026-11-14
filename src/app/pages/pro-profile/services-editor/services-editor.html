@@ -179,7 +179,7 @@
               </div>
             }
             <button i18n type="button" class="link" (click)="addRule(service)">
-              + Preço por dia e horário
+              Adicionar preço por dia e horário
             </button>
             @if (!service.priceRules.length) {
               <p i18n class="hint muted">
@@ -196,7 +196,7 @@
                 @if (uploadingService() === service.id) {
                   <app-spinner [small]="true" />
                 } @else {
-                  + Adicionar fotos
+                  Adicionar fotos
                 }
                 <input
                   type="file"
@@ -227,7 +227,7 @@
               </div>
             }
           </div>
-          <label>
+          <label class="description">
             <span i18n class="field-label">Descrição</span>
             <textarea
               [name]="'sdesc' + i"
@@ -237,12 +237,14 @@
             ></textarea>
           </label>
         }
-        <button i18n type="button" class="remove" (click)="removeService(service)">Remover</button>
+        <button i18n type="button" class="remove" (click)="removeService(service)">
+          Remover serviço
+        </button>
       </div>
     } @empty {
       <p i18n class="muted">Nenhum serviço ainda.</p>
     }
     <!-- Always right after the last card: the next place of the grid -->
-    <button i18n type="button" class="add" (click)="addService()">+ Adicionar serviço</button>
+    <button i18n type="button" class="add" (click)="addService()">Adicionar serviço</button>
   </div>
 </section>

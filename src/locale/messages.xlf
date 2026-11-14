@@ -907,10 +907,6 @@
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
           <context context-type="linenumber">216,230</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">196,210</context>
-        </context-group>
       </trans-unit>
       <trans-unit id="2601672152144473188" datatype="html">
         <source>Foto da galeria</source>
@@ -4386,8 +4382,8 @@
           <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7944746150307739190" datatype="html">
-        <source> + Preço por dia e horário </source>
+      <trans-unit id="8886298056821676165" datatype="html">
+        <source> Adicionar preço por dia e horário </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
           <context context-type="linenumber">182</context>
@@ -4407,6 +4403,21 @@
           <context context-type="linenumber">194,195</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8279234739076682147" datatype="html">
+        <source><x id="START_BLOCK_IF" equiv-text="@if (uploadingService() === service.id) {"/><x id="START_TAG_APP_SPINNER" ctype="x-app_spinner" equiv-text="&lt;app-spinner [small]=&quot;true&quot; /&gt;"/><x id="CLOSE_TAG_APP_SPINNER" ctype="x-app_spinner" equiv-text="&lt;app-spinner [small]=&quot;true&quot; /&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Adicionar fotos <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/><x id="TAG_INPUT" ctype="x-input" equiv-text="&lt;input
+                  type=&quot;file&quot;
+                  accept=&quot;image/*&quot;
+                  multiple
+                  hidden
+                  [disabled]=&quot;uploadingService() !== null&quot;
+                  #serviceFile
+                  (change)=&quot;uploadServicePhotos(service, serviceFile)&quot;
+                /&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
+          <context context-type="linenumber">196,210</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2866259737560051525" datatype="html">
         <source>Foto do serviço</source>
         <context-group purpose="location">
@@ -4421,25 +4432,25 @@
           <context context-type="linenumber">231,232</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4860999273696670525" datatype="html">
-        <source>Remover</source>
+      <trans-unit id="7029441028578868691" datatype="html">
+        <source> Remover serviço </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">240,241</context>
+          <context context-type="linenumber">241,242</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1592252650157294709" datatype="html">
         <source>Nenhum serviço ainda.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">243,245</context>
+          <context context-type="linenumber">245,247</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8114802344301020033" datatype="html">
-        <source>+ Adicionar serviço</source>
+      <trans-unit id="3923396797008509746" datatype="html">
+        <source>Adicionar serviço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">246,247</context>
+          <context context-type="linenumber">248,249</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7909834918901815344" datatype="html">

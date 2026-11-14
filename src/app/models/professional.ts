@@ -210,6 +210,8 @@ export type Professional = {
   published?: boolean;
   // The Pro subscription is active (set only by the Cloud Functions, from Stripe: nobody else can write it)
   pro?: boolean;
+  // When the paid period ends (a Firestore Timestamp: only `toMillis` is used)
+  proUntil?: { toMillis(): number } | null;
   availability?: Availability;
 };
 

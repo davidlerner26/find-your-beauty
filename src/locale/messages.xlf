@@ -600,11 +600,11 @@
         <source>Atendimento a domicílio</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/professional.ts</context>
-          <context context-type="linenumber">239</context>
+          <context context-type="linenumber">241</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/models/professional.ts</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">247</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/booking/booking.html</context>
@@ -882,7 +882,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">159,160</context>
+          <context context-type="linenumber">166,167</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/pro-profile.html</context>
@@ -1282,11 +1282,18 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6554460928120842013" datatype="html">
+        <source>Plano</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1236061678414703716" datatype="html">
         <source>Contato</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">55,56</context>
+          <context context-type="linenumber">62,63</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/legal/privacy.ts</context>
@@ -1301,7 +1308,7 @@
         <source>E-mail</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">58,59</context>
+          <context context-type="linenumber">65,66</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/forgot-password/forgot-password.html</context>
@@ -1328,7 +1335,7 @@
         <source>Celular</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">62,63</context>
+          <context context-type="linenumber">69,70</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.html</context>
@@ -1343,7 +1350,7 @@
         <source>CPF</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.html</context>
@@ -1358,7 +1365,7 @@
         <source>Instagram</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">70,71</context>
+          <context context-type="linenumber">77,78</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/legal/privacy.ts</context>
@@ -1369,7 +1376,7 @@
         <source>Atendimento</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">82,83</context>
+          <context context-type="linenumber">89,90</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
@@ -1380,14 +1387,14 @@
         <source><x id="START_BLOCK_IF" equiv-text="@if (p.serviceMode === &apos;home&apos;) {"/> A domicílio <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (p.serviceMode === &apos;both&apos;) {"/> No endereço e a domicílio <x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> No endereço <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">84,92</context>
+          <context context-type="linenumber">91,99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7175743608890729232" datatype="html">
         <source>Endereço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">95,96</context>
+          <context context-type="linenumber">102,103</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/profile/profile.html</context>
@@ -1402,7 +1409,7 @@
         <source>Sobre</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">103,104</context>
+          <context context-type="linenumber">110,111</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.html</context>
@@ -1413,14 +1420,14 @@
         <source>Não preenchido.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">107,108</context>
+          <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2659389714592172771" datatype="html">
         <source>Serviços</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">112,113</context>
+          <context context-type="linenumber">119,120</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/checkout/checkout.html</context>
@@ -1439,35 +1446,35 @@
         <source>Nenhum serviço cadastrado.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">136,137</context>
+          <context context-type="linenumber">143,144</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4973586927277739220" datatype="html">
         <source>Horários</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">141,142</context>
+          <context context-type="linenumber">148,149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4180366954389942470" datatype="html">
         <source><x id="START_BLOCK_IF" equiv-text="@if (item.day.enabled) {"/> <x id="INTERPOLATION" equiv-text="{{ item.day.start }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ item.day.end }}"/> <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Fechado <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">147,153</context>
+          <context context-type="linenumber">154,160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2834907318746933530" datatype="html">
         <source>Nenhuma foto.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">171,172</context>
+          <context context-type="linenumber">178,179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5134519185093650006" datatype="html">
         <source>Profissional não encontrado.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
-          <context context-type="linenumber">184,186</context>
+          <context context-type="linenumber">191,193</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/artist-details/artist-details.html</context>
@@ -1482,7 +1489,7 @@
         <source>Domingo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/weekdays.ts</context>
@@ -1493,7 +1500,7 @@
         <source>Segunda</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/weekdays.ts</context>
@@ -1504,7 +1511,7 @@
         <source>Terça</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/weekdays.ts</context>
@@ -1515,7 +1522,7 @@
         <source>Quarta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/weekdays.ts</context>
@@ -1526,7 +1533,7 @@
         <source>Quinta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/weekdays.ts</context>
@@ -1537,7 +1544,7 @@
         <source>Sexta</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/weekdays.ts</context>
@@ -1548,7 +1555,7 @@
         <source>Sábado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/weekdays.ts</context>
@@ -1559,14 +1566,14 @@
         <source>Negado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2767412899656600903" datatype="html">
         <source>Aguardando aprovação</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.html</context>
@@ -1581,14 +1588,39 @@
         <source>Aprovado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8447570688439069061" datatype="html">
+        <source>Gratuito</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2197857226440792405" datatype="html">
+        <source>Pro ativo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1855072422740754572" datatype="html">
+        <source>Pro ativo até <x id="date" equiv-text="date"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8940801839372169284" datatype="html">
         <source>Negar o cadastro de <x id="name" equiv-text="professional.name"/>?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
@@ -1599,7 +1631,7 @@
         <source>Não foi possível concluir. Tente novamente.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">108</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/admin/admin.ts</context>
@@ -4481,13 +4513,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
           <context context-type="linenumber">9,10</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2197857226440792405" datatype="html">
-        <source>Pro ativo</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-subscription/pro-subscription.html</context>
-          <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4792953174726005911" datatype="html">

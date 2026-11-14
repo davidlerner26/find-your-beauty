@@ -5,9 +5,11 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { PhotoViewer } from '../../components/photo-viewer/photo-viewer';
 import { Spinner } from '../../components/spinner/spinner';
-import { formatDuration, Professional } from '../../models/professional';
+import { formatDuration, isPro, Professional } from '../../models/professional';
 import { Admin } from '../../services/admin';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { proSubscriptionEnabled } from '../../utils/features';
+import { INTL_LOCALE } from '../../utils/locale';
 import { instagramUrl } from '../../utils/instagram';
 import { PricePipe } from '../../utils/price.pipe';
 import { ruleLabel } from '../../utils/pricing';
@@ -70,6 +72,22 @@ export class AdminProfessional {
       return professional.rejected ? $localize`Negado` : $localize`Aguardando aprovação`;
     return $localize`Aprovado`;
   });
+
+  // The plan of the professional (only where the Pro subscription exists). The data of Stripe is private: the admin
+  // sees what the public profile says.
+  protected readonly proEnabled = proSubscriptionEnabled();
+
+  protected planLabel(professional: Professional) {
+    if (!isPro(professional)) return $localize`Gratuito`;
+    const until = professional.proUntil?.toMillis();
+    if (!until) return $localize`Pro ativo`;
+    const date = new Date(until).toLocaleDateString(INTL_LOCALE, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    return $localize`Pro ativo até ${date}:date:`;
+  }
 
   protected goBack() {
     this.location.back();

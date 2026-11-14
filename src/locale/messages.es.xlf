@@ -6152,6 +6152,30 @@
           <context context-type="linenumber">12,13</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6554460928120842013" datatype="html">
+        <source>Plano</source>
+        <target>Plan</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8447570688439069061" datatype="html">
+        <source>Gratuito</source>
+        <target>Gratuito</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1855072422740754572" datatype="html">
+        <source>Pro ativo até <x id="date" equiv-text="date"/></source>
+        <target>Pro activo hasta <x id="date" equiv-text="date"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/admin-professional/admin-professional.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

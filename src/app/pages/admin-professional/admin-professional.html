@@ -51,6 +51,13 @@
       </div>
     }
 
+    @if (proEnabled) {
+      <section class="card">
+        <h3 i18n>Plano</h3>
+        <p>{{ planLabel(p) }}</p>
+      </section>
+    }
+
     <section class="card">
       <h3 i18n>Contato</h3>
       <dl>

@@ -24,6 +24,8 @@ com cupom, respostas rápidas no chat, resumo semanal por e-mail, suporte priori
    **Stripe Checkout** (página da própria Stripe, o cartão nunca passa por nós) no modo assinatura.
 2. A Stripe avisa o webhook `stripeWebhook` (assinado: a Function confere a assinatura). A Function grava os dados da
    Stripe em `professionals/{uid}/private/billing` (que nenhuma regra abre) e liga `pro: true` no documento público.
+   Eventos fora de ordem ou repetidos não estragam nada. Chegam e-mails (pt/en/es) quando o Pro começa, quando uma
+   renovação falha (`past_due`) e quando termina. A tela da assinatura lê o estado pela Function `getProStatus`.
 3. **Gerenciar assinatura** abre o **portal de cobrança** da Stripe (trocar cartão, ver faturas, cancelar).
 4. `pro` fica ligado enquanto a assinatura está `active`, `trialing` ou `past_due` (cobrança que falhou: segue até o
    fim do período já pago) e, depois de cancelada, até o fim do período pago. A Function diária `reconcileProDaily`
@@ -50,8 +52,7 @@ chave em produção sem querer.
 1. Na Stripe, **Modo de teste** ligado: criar o produto "Find Your Beauty Pro" com um preço recorrente mensal em BRL
    e copiar o id do preço (`price_...`) para `PRO_PRICE_ID` em `functions/.env.dev`.
 2. **Desenvolvedores → Webhooks**: adicionar o endereço da Function `stripeWebhook` do projeto de teste, com os eventos
-   `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted` e
-   `invoice.payment_failed`. Copiar o segredo do webhook (`whsec_...`).
+   `checkout.session.completed`, `customer.subscription.updated` e `customer.subscription.deleted`. Copiar o segredo do webhook (`whsec_...`).
 3. Guardar o segredo no projeto de teste (o comando pede o valor sem mostrá-lo):
    ```
    firebase functions:secrets:set STRIPE_WEBHOOK_SECRET --project dev

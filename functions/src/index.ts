@@ -809,6 +809,15 @@ export {
   removeCard,
 } from './payments-api';
 
+// The Pro subscription of the professionals (see subscription.ts and docs/assinatura-pro.md)
+export {
+  createProCheckout,
+  createProPortal,
+  getProStatus,
+  reconcileProDaily,
+  stripeWebhook,
+} from './subscription-api';
+
 // Instagram integration (see instagram.ts)
 export {
   connectInstagram,

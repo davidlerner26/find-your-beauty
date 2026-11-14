@@ -4,6 +4,7 @@ import { getStorage } from 'firebase-admin/storage';
 import * as logger from 'firebase-functions/logger';
 import { HttpsError, onCall } from 'firebase-functions/v2/https';
 import { payments, paymentsOn, stripeKey } from './payments-api';
+import { subscriptions, subscriptionsOn } from './subscription-api';
 
 // Accounts, for the admins: a search over the accounts of Firebase Authentication (the clients' data is closed by the
 // Firestore rules, so the admin page cannot read it) and the deletion of an account with everything it has: Firestore,
@@ -180,6 +181,8 @@ export const deleteAccount = onCall({ ...PUBLIC, secrets: [stripeKey] }, async (
 
   // The customer of Stripe goes first: when Stripe fails nothing was deleted yet, and the admin can try again
   if (paymentsOn()) await payments().deleteCustomer(uid);
+  // The Pro subscription of a professional goes too (it would keep charging an account that no longer exists)
+  if (subscriptionsOn()) await subscriptions().deleteAccount(uid);
 
   // The slots this account took on the agenda of other professionals (its own agenda goes with its document)
   const slots = bookingData.flatMap((booking) =>

@@ -1,8 +1,5 @@
 <section>
-  <div class="head">
-    <h2 i18n>Serviços</h2>
-    <button i18n type="button" class="link" (click)="addService()">+ Adicionar</button>
-  </div>
+  <h2 i18n>Serviços</h2>
 
   <div class="list">
     @for (service of services(); track service.id; let i = $index) {
@@ -245,5 +242,7 @@
     } @empty {
       <p i18n class="muted">Nenhum serviço ainda.</p>
     }
+    <!-- Always right after the last card: the next place of the grid -->
+    <button i18n type="button" class="add" (click)="addService()">+ Adicionar serviço</button>
   </div>
 </section>

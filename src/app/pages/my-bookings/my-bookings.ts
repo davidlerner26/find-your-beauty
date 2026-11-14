@@ -10,6 +10,7 @@ import { Bookings } from '../../services/bookings';
 import { Professionals } from '../../services/professionals';
 import { Feedback } from '../../services/feedback';
 import { copyText } from '../../utils/clipboard';
+import { FocusPipe } from '../../utils/focus.pipe';
 import { ProfessionalLink } from '../../utils/professional-link.directive';
 import { T } from '../../utils/texts';
 import { formatClock } from '../../utils/format-date';
@@ -32,6 +33,7 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
   selector: 'app-my-bookings',
   imports: [
     AddressPipe,
+    FocusPipe,
     CatalogPipe,
     PricePipe,
     ProfessionalLink,
@@ -66,6 +68,15 @@ export class MyBookings {
       .filter((booking) => isClosed(booking.status))
       .reverse(),
   );
+
+  // The photo of the professional (none while the catalog is loading or when the profile has no photo)
+  protected imageOf(booking: Booking) {
+    return this.professionals.byId(booking.professionalId)?.image || null;
+  }
+
+  protected positionOf(booking: Booking) {
+    return this.professionals.byId(booking.professionalId)?.imagePosition;
+  }
 
   // Where the appointment is: the address of the professional (nothing for home visits)
   protected addressOf(booking: Booking) {

@@ -11,30 +11,54 @@
     <ng-template #card let-booking>
       <article class="booking">
         <div class="booking-head">
-          <div>
-            <h3>
-              <a [appProfessionalLink]="booking.professionalId">{{ booking.professionalName }}</a>
-            </h3>
-            <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
-            @if (atHome(booking)) {
-              <p class="muted address place-home">
-                <mat-icon>home</mat-icon> <ng-container i18n>Atendimento a domicílio</ng-container>
-              </p>
-            } @else if (addressOf(booking); as address) {
-              <p class="muted address">
-                {{ address | address }}
-                <!-- Right after the last word of the address, even when it breaks into lines -->
-                <button
-                  type="button"
-                  class="copy"
-                  [attr.aria-label]="t.copyAddress(copiedId() === booking.id)"
-                  [title]="t.copyAddress(copiedId() === booking.id)"
-                  (click)="copyAddress(booking, address)"
-                >
-                  <mat-icon>{{ copiedId() === booking.id ? 'check' : 'content_copy' }}</mat-icon>
-                </button>
-              </p>
-            }
+          <div class="who">
+            <!-- The photo of the professional, beside the name and the date (as in the chat) -->
+            <a
+              class="avatar-link"
+              [appProfessionalLink]="booking.professionalId"
+              tabindex="-1"
+              aria-hidden="true"
+            >
+              @if (imageOf(booking); as image) {
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  class="avatar"
+                  referrerpolicy="no-referrer"
+                  alt=""
+                  [src]="image"
+                  [style.object-position]="positionOf(booking) | focus"
+                />
+              } @else {
+                <span class="avatar initial">{{ booking.professionalName[0] }}</span>
+              }
+            </a>
+            <div class="info">
+              <h3>
+                <a [appProfessionalLink]="booking.professionalId">{{ booking.professionalName }}</a>
+              </h3>
+              <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
+              @if (atHome(booking)) {
+                <p class="muted address place-home">
+                  <mat-icon>home</mat-icon>
+                  <ng-container i18n>Atendimento a domicílio</ng-container>
+                </p>
+              } @else if (addressOf(booking); as address) {
+                <p class="muted address">
+                  {{ address | address }}
+                  <!-- Right after the last word of the address, even when it breaks into lines -->
+                  <button
+                    type="button"
+                    class="copy"
+                    [attr.aria-label]="t.copyAddress(copiedId() === booking.id)"
+                    [title]="t.copyAddress(copiedId() === booking.id)"
+                    (click)="copyAddress(booking, address)"
+                  >
+                    <mat-icon>{{ copiedId() === booking.id ? 'check' : 'content_copy' }}</mat-icon>
+                  </button>
+                </p>
+              }
+            </div>
           </div>
           <span class="status" [class]="booking.status">{{ label(booking) }}</span>
         </div>

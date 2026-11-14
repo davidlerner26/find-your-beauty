@@ -267,15 +267,12 @@ h1 {
     order: 8;
   }
 
-  // The first row (dados and localização) and the buttons have room on the sides, like a column of a form
-  $row-gap: clamp(1rem, 6vw, 8rem);
-
-  .s-dados {
-    margin-left: $row-gap;
-  }
-
-  .s-local {
-    margin-right: $row-gap;
+  // The link to the Pro subscription is on top of the first column: as wide as the fields of "Dados" (three columns of
+  // six with a gap of 3rem between them are half of the form minus half a gap)
+  .s-pro {
+    grid-column: 1 / -1;
+    order: 0;
+    width: calc(50% - 1.5rem);
   }
 
   // "Salvar perfil" and "Sair" side by side
@@ -284,7 +281,7 @@ h1 {
     order: 9;
     display: flex;
     gap: 1rem;
-    margin: 1rem $row-gap 0;
+    margin: 1rem 0 0;
 
     .primary,
     .signout {

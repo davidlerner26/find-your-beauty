@@ -27,7 +27,7 @@ test.describe('professional with Instagram connected', () => {
       })),
     });
 
-    await page.goto(`/profissionais/${PRO.uid}`);
+    await page.goto(`/explorar/${PRO.uid}`);
 
     // The cover keeps the gallery the professional uploaded (two photos in the seed)...
     await expect(page.locator('.hero-photos img')).toHaveCount(2);

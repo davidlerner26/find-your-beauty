@@ -18,16 +18,16 @@ describe('Seo', () => {
     seo.set({
       title: 'Ana Teste · Maquiagem',
       description: 'Maquiadora no Rio.',
-      path: '/profissionais/ana',
+      path: '/explorar/ana',
     });
 
     expect(document.title).toBe('Ana Teste · Maquiagem | Find Your Beauty');
     expect(meta('name="description"')).toBe('Maquiadora no Rio.');
     expect(meta('property="og:title"')).toBe('Ana Teste · Maquiagem | Find Your Beauty');
-    expect(meta('property="og:url"')).toBe('https://findyourbeauty.com.br/profissionais/ana');
+    expect(meta('property="og:url"')).toBe('https://findyourbeauty.com.br/explorar/ana');
     expect(meta('name="twitter:card"')).toBe('summary_large_image');
     expect(document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href).toBe(
-      'https://findyourbeauty.com.br/profissionais/ana',
+      'https://findyourbeauty.com.br/explorar/ana',
     );
   });
 

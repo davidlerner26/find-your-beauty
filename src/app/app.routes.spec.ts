@@ -10,7 +10,7 @@ describe('routes', () => {
     '',
     'explorar',
     'busca',
-    'profissionais/:id',
+    'explorar/:id',
     'boas-vindas',
     'verificar-email',
     'mensagens',
@@ -33,10 +33,13 @@ describe('routes', () => {
   });
 });
 
-describe('the old address of the map', () => {
-  it('sends /explore to /explorar', () => {
-    const old = routes.find((route) => route.path === 'explore');
-    expect(old?.redirectTo).toBe('explorar');
+describe('the old addresses', () => {
+  it.each([
+    ['explore', 'explorar'],
+    ['profissionais/:id', 'explorar/:id'],
+  ])('sends /%s to /%s', (from, to) => {
+    const old = routes.find((route) => route.path === from);
+    expect(old?.redirectTo).toBe(to);
     expect(old?.pathMatch).toBe('full');
   });
 });

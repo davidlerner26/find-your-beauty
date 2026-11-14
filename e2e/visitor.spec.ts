@@ -18,7 +18,7 @@ test.describe('visitor', () => {
     await page.goto('/');
     await expect(page.getByRole('heading', { name: 'Categorias' })).toBeVisible();
 
-    await page.goto(`/profissionais/${PRO.uid}`);
+    await page.goto(`/explorar/${PRO.uid}`);
     await expect(page.getByRole('heading', { name: PRO.name }).first()).toBeVisible();
     await expect(page.getByText(PRO.service).first()).toBeVisible();
   });
@@ -56,7 +56,7 @@ test.describe('visitor', () => {
   });
 
   test('is told on the professional page that signing in is needed to book', async ({ page }) => {
-    await page.goto(`/profissionais/${PRO.uid}`);
+    await page.goto(`/explorar/${PRO.uid}`);
     const notice = page.getByRole('link', { name: 'Entre na sua conta para agendar.' });
     await expect(notice).toBeVisible();
     // The button to book is never enabled for a visitor, even with a service chosen

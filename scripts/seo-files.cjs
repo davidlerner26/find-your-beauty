@@ -49,7 +49,7 @@ const buildSitemap = (siteUrl, professionalIds, today) => {
   const urls = [
     ...PAGES.map((page) => ({ loc: `${siteUrl}${page}`, priority: page === '/' ? '1.0' : '0.5' })),
     ...professionalIds.map((id) => ({
-      loc: `${siteUrl}/profissionais/${encodeURIComponent(id)}`,
+      loc: `${siteUrl}/explorar/${encodeURIComponent(id)}`,
       priority: '0.8',
     })),
   ];

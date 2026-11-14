@@ -125,7 +125,7 @@ describe('clientGuard', () => {
 
   it('sends a client with missing data to the page of the professional', async () => {
     setup(fakeAuth({ uid: 'c', role: 'client' }), { get: async () => null } as never);
-    expect(await run(clientGuard)).toBe('/profissionais/pro1');
+    expect(await run(clientGuard)).toBe('/explorar/pro1');
   });
 
   it('lets the client in when the profile cannot be read (the booking checks again)', async () => {

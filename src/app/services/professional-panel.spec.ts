@@ -18,7 +18,7 @@ describe('ProfessionalPanel', () => {
     panel.open('ana');
 
     expect(panel.openId()).toBe('ana');
-    expect(location.path()).toBe('/profissionais/ana');
+    expect(location.path()).toBe('/explorar/ana');
   });
 
   it('closes by taking the address bar back to the screen underneath', () => {
@@ -47,7 +47,7 @@ describe('ProfessionalPanel', () => {
 
     panel.open('bia');
     expect(panel.openId()).toBe('bia');
-    expect(location.path()).toBe('/profissionais/bia');
+    expect(location.path()).toBe('/explorar/bia');
 
     location.back();
     expect(panel.openId()).toBeNull();

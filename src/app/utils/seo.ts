@@ -9,7 +9,7 @@ export type SeoPage = {
   description?: string;
   // An address, or a path of the site; data URLs are ignored
   image?: string;
-  // The path of the canonical address, without the query ("/profissionais/abc"). Default: the current path.
+  // The path of the canonical address, without the query ("/explorar/abc"). Default: the current path.
   path?: string;
   noindex?: boolean;
   jsonLd?: object;

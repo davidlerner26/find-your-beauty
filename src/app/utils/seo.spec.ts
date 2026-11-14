@@ -81,10 +81,10 @@ describe('professionalTitle', () => {
 
 describe('professionalJsonLd', () => {
   it('describes the business with address, position, rating, prices and Instagram', () => {
-    const data = professionalJsonLd(
-      ana,
-      'https://findyourbeauty.com.br/profissionais/ana',
-    ) as Record<string, unknown>;
+    const data = professionalJsonLd(ana, 'https://findyourbeauty.com.br/explorar/ana') as Record<
+      string,
+      unknown
+    >;
     expect(data['@type']).toBe('HealthAndBeautyBusiness');
     expect(data['address']).toMatchObject({
       streetAddress: 'Rua das Flores, 100',

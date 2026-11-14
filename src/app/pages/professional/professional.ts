@@ -7,7 +7,7 @@ import { professionalJsonLd, professionalTitle, SITE_NAME, truncate } from '../.
 import { ArtistDetails } from '../artist-details/artist-details';
 import { Explore } from '../explore/explore';
 
-// The page of a professional (/profissionais/:id). On phones it is a screen of its own; on wide screens it is a card
+// The page of a professional (/explorar/:id). On phones it is a screen of its own; on wide screens it is a card
 // on top of the map. A professional with no place on the map has no pin: the page is a screen of its own there too.
 @Component({
   selector: 'app-professional',
@@ -45,7 +45,7 @@ export class ProfessionalPage {
     effect(() => {
       if (this.professionals.status() === 'loading') return;
       const artist = this.professionals.byId(this.id());
-      const path = `/profissionais/${this.id()}`;
+      const path = `/explorar/${this.id()}`;
       if (!artist || artist.published === false) {
         this.seo.set({ title: $localize`Profissional não encontrado`, path, noindex: true });
         return;

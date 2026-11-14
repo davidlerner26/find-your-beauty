@@ -19,6 +19,17 @@
 # Every route of a language is served by the index.csr.html of that language, the empty shell of the app. The pages that
 # are prerendered (the home, the terms and the privacy policy) are files of their own, and a file wins over a redirect.
 # (the order matters: the first match wins)
+# The old addresses (search engines and links keep working): the map and the page of a professional
+[[redirects]]
+  from = "/explore"
+  to = "/explorar"
+  status = 301
+
+[[redirects]]
+  from = "/profissionais/:id"
+  to = "/explorar/:id"
+  status = 301
+
 [[redirects]]
   from = "/en/*"
   to = "/en/index.csr.html"

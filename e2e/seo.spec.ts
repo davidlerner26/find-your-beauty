@@ -35,14 +35,14 @@ test.describe('what a search engine reads', () => {
   test('the cards of the home are links a crawler can follow', async ({ page }) => {
     await page.goto('/');
     // The name on the card is an <a href>, not only a click on the card
-    const link = page.locator(`a[href="/profissionais/${PRO.uid}"]`).first();
+    const link = page.locator(`a[href="/explorar/${PRO.uid}"]`).first();
     await expect(link).toHaveText(PRO.name);
   });
 
   test('a professional has its own title, description, canonical address and structured data', async ({
     page,
   }) => {
-    await page.goto(`/profissionais/${PRO.uid}`);
+    await page.goto(`/explorar/${PRO.uid}`);
     await expect(page).toHaveTitle(`${PRO.name} · Maquiagem em Botafogo | Find Your Beauty`);
     await expect(meta(page, 'name=description')).toHaveAttribute(
       'content',
@@ -50,7 +50,7 @@ test.describe('what a search engine reads', () => {
     );
     await expect(page.locator('link[rel=canonical]')).toHaveAttribute(
       'href',
-      `https://findyourbeauty.com.br/profissionais/${PRO.uid}`,
+      `https://findyourbeauty.com.br/explorar/${PRO.uid}`,
     );
     await expect.poll(async () => (await jsonLd(page))?.['@type']).toBe('HealthAndBeautyBusiness');
     const data = await jsonLd(page);
@@ -60,7 +60,7 @@ test.describe('what a search engine reads', () => {
   });
 
   test('a professional who does not exist is kept out', async ({ page }) => {
-    await page.goto('/profissionais/ninguem');
+    await page.goto('/explorar/ninguem');
     await expect(page).toHaveTitle('Profissional não encontrado | Find Your Beauty');
     await expect(meta(page, 'name=robots')).toHaveAttribute('content', 'noindex, nofollow');
   });

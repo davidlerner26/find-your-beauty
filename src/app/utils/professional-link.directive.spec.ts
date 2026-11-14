@@ -49,11 +49,11 @@ const click = (link: HTMLElement, init: MouseEventInit = {}) => {
 describe('appProfessionalLink', () => {
   it('keeps the address in the href, with the part of the page', () => {
     const { fixture, link } = setup(true);
-    expect(link.getAttribute('href')).toBe('/profissionais/ana');
+    expect(link.getAttribute('href')).toBe('/explorar/ana');
 
     fixture.componentInstance.fragment.set('avaliacoes');
     fixture.detectChanges();
-    expect(link.getAttribute('href')).toBe('/profissionais/ana#avaliacoes');
+    expect(link.getAttribute('href')).toBe('/explorar/ana#avaliacoes');
   });
 
   it('opens the panel for a home-only professional on a wide screen', () => {
@@ -72,7 +72,7 @@ describe('appProfessionalLink', () => {
     click(link);
 
     expect(panel.openId()).toBeNull();
-    expect(navigate).toHaveBeenCalledWith('/profissionais/ana');
+    expect(navigate).toHaveBeenCalledWith('/explorar/ana');
   });
 
   it('goes to the page for a professional with a place, over the map', () => {
@@ -83,7 +83,7 @@ describe('appProfessionalLink', () => {
     click(link);
 
     expect(panel.openId()).toBeNull();
-    expect(navigate).toHaveBeenCalledWith('/profissionais/bia');
+    expect(navigate).toHaveBeenCalledWith('/explorar/bia');
   });
 
   it('leaves a click with Ctrl or Cmd to the browser (new tab)', () => {

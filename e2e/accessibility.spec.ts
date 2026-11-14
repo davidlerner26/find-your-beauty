@@ -25,7 +25,7 @@ test.describe('visitor screens', () => {
   for (const [name, path] of [
     ['home', '/'],
     ['search', '/busca'],
-    ['professional page', `/profissionais/${PRO.uid}`],
+    ['professional page', `/explorar/${PRO.uid}`],
     ['login', '/entrar'],
     ['signup', '/cadastro'],
     ['forgot password', '/esqueci-senha'],

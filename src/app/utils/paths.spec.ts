@@ -24,11 +24,10 @@ describe('PATHS', () => {
   });
 
   it('builds the paths of a professional the way the routes declare them', () => {
-    expect(declared.has('/profissionais/:id')).toBe(true);
+    expect(declared.has('/explorar/:id')).toBe(true);
     expect(declared.has('/profissionais/:id/agendar')).toBe(true);
-    expect(PATHS.professional('p1')).toBe('/profissionais/p1');
+    expect(PATHS.professional('p1')).toBe('/explorar/p1');
     expect(PATHS.booking('p1')).toBe('/profissionais/p1/agendar');
-    expect(PATHS.professionals).toBe('/profissionais');
     expect(declared.has('/profissionais/:id/pagamento')).toBe(true);
     expect(PATHS.checkout('p1')).toBe('/profissionais/p1/pagamento');
   });

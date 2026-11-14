@@ -185,6 +185,7 @@ export class Explore implements OnInit {
       this.restored = true;
       // The index follows the order of the list (by distance), so it is kept up to date; the map only goes there once
       this.selected.set(index);
+      this.revealCard(id, index);
       if (this.centeredFor !== 'focus:' + id) {
         this.centeredFor = 'focus:' + id;
         this.center.set({ ...this.visibleSalons[index].position });
@@ -200,6 +201,7 @@ export class Explore implements OnInit {
       lastSelectedId = id;
       this.restored = true;
       this.selected.set(index);
+      this.revealCard(id, index);
       if (this.centeredFor !== 'open:' + id) {
         this.centeredFor = 'open:' + id;
         this.center.set({ ...this.visibleSalons[index].position });
@@ -402,7 +404,7 @@ export class Explore implements OnInit {
     this.showCard(index, 'smooth');
   }
 
-  // The professional whose page is a card over the map (wide screens: the route /profissionais/:id)
+  // The professional whose page is a card over the map (wide screens: the route /explorar/:id)
   readonly openId = input<string>();
   // Coming from the map button of a professional page (?focus=id): the map goes to her pin
   readonly focus = input<string>();
@@ -433,7 +435,7 @@ export class Explore implements OnInit {
     // Wide screens: the page of the professional is a card over the map
     if (window.matchMedia('(min-width: 1024px)').matches) {
       lastSelectedId = id;
-      this.router.navigate([PATHS.professionals, id]);
+      this.router.navigate([PATHS.professional(id)]);
       return;
     }
     if (index >= 0 && index !== this.selected()) {
@@ -441,14 +443,29 @@ export class Explore implements OnInit {
       return;
     }
     lastSelectedId = id;
-    this.router.navigate([PATHS.professionals, id]);
+    this.router.navigate([PATHS.professional(id)]);
   }
 
-  // Brings the salon's card into view in the carousel
+  // Brings the salon's card into view: in the carousel on phones, in the middle of the list on wide screens
   private showCard(index: number, behavior: ScrollBehavior) {
+    const wide = window.matchMedia('(min-width: 1024px)').matches;
     this.host.nativeElement
       .querySelectorAll('.results .offer')
-      [index]?.scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
+      [index]?.scrollIntoView({ behavior, inline: 'center', block: wide ? 'center' : 'nearest' });
+  }
+
+  // The professional of the page (or of the map button) is selected in the list, which is scrolled to show it in
+  // the middle. The index changes when the order of the list does (the position of the user arrives), so the list
+  // follows it; a professional the user already moved away from is not brought back for nothing.
+  private revealedFor: string | null = null;
+  private revealedAt = -1;
+
+  private revealCard(id: string, index: number) {
+    if (this.revealedFor === id && this.revealedAt === index) return;
+    this.revealedFor = id;
+    this.revealedAt = index;
+    // The cards are drawn after this effect runs
+    setTimeout(() => this.showCard(index, 'auto'), 0);
   }
 
   protected markerIcon(index: number) {

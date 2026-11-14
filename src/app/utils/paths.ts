@@ -21,9 +21,8 @@ export const PATHS = {
   proProfile: '/pro/perfil',
   proMessages: '/pro/mensagens',
   proNotifications: '/pro/notificacoes',
-  // The page of a professional, and its booking screen
-  professionals: '/profissionais',
-  professional: (id: string) => `/profissionais/${id}`,
+  // The page of a professional (on the map screen), and its booking screen
+  professional: (id: string) => `/explorar/${id}`,
   booking: (id: string) => `/profissionais/${id}/agendar`,
   // The cards of the client (test environment)
   cards: '/cartoes',

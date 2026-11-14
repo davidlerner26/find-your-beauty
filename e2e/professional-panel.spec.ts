@@ -16,7 +16,7 @@ test.describe('page of a professional on a wide screen', () => {
     const panel = page.getByRole('dialog', { name: PRO_HOME.name });
     await expect(panel).toBeVisible();
     await expect(panel.getByText('Atendimento a domicílio')).toBeVisible();
-    await expect(page).toHaveURL(`/profissionais/${PRO_HOME.uid}`);
+    await expect(page).toHaveURL(`/explorar/${PRO_HOME.uid}`);
     // The home stays underneath and there is no map
     await expect(page.getByRole('heading', { name: 'Categorias' })).toBeVisible();
     // The panel takes space of its own: the screen ends where it begins, nothing is covered
@@ -42,7 +42,7 @@ test.describe('page of a professional on a wide screen', () => {
   });
 
   test('a link opened by address is a page of its own, with no map', async ({ page }) => {
-    await page.goto(`/profissionais/${PRO_HOME.uid}`);
+    await page.goto(`/explorar/${PRO_HOME.uid}`);
 
     await expect(page.getByRole('heading', { name: PRO_HOME.name }).first()).toBeVisible();
     await expect(page.locator('app-explore')).toHaveCount(0);
@@ -52,7 +52,7 @@ test.describe('page of a professional on a wide screen', () => {
     await page.goto('/');
     await page.getByRole('link', { name: PRO.name }).first().click();
 
-    await expect(page).toHaveURL(`/profissionais/${PRO.uid}`);
+    await expect(page).toHaveURL(`/explorar/${PRO.uid}`);
     await expect(page.locator('app-explore')).toHaveCount(1);
     await expect(page.getByRole('button', { name: 'Ver no mapa' })).toBeVisible();
   });

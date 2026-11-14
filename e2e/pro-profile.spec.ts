@@ -39,7 +39,7 @@ test.describe('professional profile', () => {
     await expect(page.locator('input[name=cpf]')).toHaveValue('529.982.247-25');
 
     // The public page shows the new name
-    await page.goto(`/profissionais/${PRO.uid}`);
+    await page.goto(`/explorar/${PRO.uid}`);
     await expect(page.getByRole('heading', { name: 'Ana Souza Editada' }).first()).toBeVisible();
   });
 
@@ -50,7 +50,7 @@ test.describe('professional profile', () => {
     await page.goto('/pro/perfil');
     await expect(page.locator('input[name=instagram]')).toHaveCount(0);
 
-    await page.goto(`/profissionais/${PRO.uid}`);
+    await page.goto(`/explorar/${PRO.uid}`);
     await expect(page.locator('a.instagram')).toHaveAttribute(
       'href',
       'https://instagram.com/ana.makeup',

@@ -5,7 +5,7 @@ import { pay } from './payments';
 // Opens the booking form of the professional's service and picks the 15th of the next month: always in the
 // future, and the same day for every test (the days that are enabled change while the page loads)
 export async function openFirstFreeDay(page: Page) {
-  await page.goto(`/profissionais/${PRO.uid}`);
+  await page.goto(`/explorar/${PRO.uid}`);
   await page.getByRole('button', { name: `Adicionar ${PRO.service}` }).click();
   await page.getByRole('button', { name: 'Agendar' }).click();
   await expect(page).toHaveURL(/\/agendar(\?|$)/);

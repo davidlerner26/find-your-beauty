@@ -16,7 +16,7 @@ test('a client signs in and books on a phone', async ({ page }) => {
 });
 
 test('nothing spills out of the screen sideways', async ({ page }) => {
-  for (const path of ['/', '/busca', `/profissionais/${PRO.uid}`, '/entrar']) {
+  for (const path of ['/', '/busca', `/explorar/${PRO.uid}`, '/entrar']) {
     await page.goto(path);
     // The Firestore listeners keep the network busy, so wait for the content instead
     await expect(page.locator('h1, h2').first()).toBeVisible();

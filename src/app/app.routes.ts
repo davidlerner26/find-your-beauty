@@ -36,13 +36,15 @@ export const routes: Routes = [
   // The old address of the map (links, bookmarks, e-mails already sent): the query is kept
   { path: 'explore', redirectTo: 'explorar', pathMatch: 'full' },
   {
-    path: 'profissionais/:id',
+    path: 'explorar/:id',
     canActivate: [clientAreaGuard],
     // The page sets its own title when the professional is loaded (see pages/professional)
     data: seo({ title: $localize`Profissional de beleza`, dynamic: true }),
     loadComponent: () =>
       import('./pages/professional/professional').then((m) => m.ProfessionalPage),
   },
+  // The old address of the page of a professional
+  { path: 'profissionais/:id', redirectTo: 'explorar/:id', pathMatch: 'full' },
   {
     path: 'profissionais/:id/agendar',
     canActivate: [clientGuard],

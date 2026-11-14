@@ -11,7 +11,7 @@ test.describe('images', () => {
   test('the pictures of the professional page: the first loads at once, the rest wait', async ({
     page,
   }) => {
-    await page.goto(`/profissionais/${PRO.uid}`);
+    await page.goto(`/explorar/${PRO.uid}`);
     const hero = page.locator('.hero-photos img');
     await expect(hero.first()).toBeVisible();
     await expect(hero.first()).toHaveAttribute('loading', 'eager');

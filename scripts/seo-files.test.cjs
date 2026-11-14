@@ -18,8 +18,8 @@ test('the sitemap lists the fixed pages and the professionals, with the characte
   const xml = buildSitemap('https://findyourbeauty.com.br', ['ana', 'a&b'], '2026-11-03');
   assert.match(xml, /<loc>https:\/\/findyourbeauty\.com\.br\/<\/loc>/);
   assert.match(xml, /<loc>https:\/\/findyourbeauty\.com\.br\/termos<\/loc>/);
-  assert.match(xml, /<loc>https:\/\/findyourbeauty\.com\.br\/profissionais\/ana<\/loc>/);
-  assert.match(xml, /profissionais\/a%26b</);
+  assert.match(xml, /<loc>https:\/\/findyourbeauty\.com\.br\/explorar\/ana<\/loc>/);
+  assert.match(xml, /explorar\/a%26b</);
   assert.match(xml, /<lastmod>2026-11-03<\/lastmod>/);
   assert.doesNotMatch(xml, /\/agenda|\/pro\//);
 });

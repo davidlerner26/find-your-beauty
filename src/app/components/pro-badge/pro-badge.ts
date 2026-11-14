@@ -10,7 +10,7 @@ import { proSubscriptionEnabled } from '../../utils/features';
   template: `
     @if (enabled && pro()) {
       <span i18n-title class="pro-badge" title="Assinante Pro">
-        <mat-icon class="filled" aria-hidden="true">workspace_premium</mat-icon>
+        <mat-icon class="filled" aria-hidden="true">star</mat-icon>
         <span>Pro</span>
       </span>
     }

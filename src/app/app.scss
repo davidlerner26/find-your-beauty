@@ -76,6 +76,17 @@ $tabs-height: 5rem;
 @include desktop {
   $topbar-height: 4.5rem;
 
+  // The screen takes what the panel of a professional leaves (the panel takes space: it is not on top of the screen)
+  .shell {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .screen {
+    flex: 1;
+    min-width: 0;
+  }
+
   .topbar {
     position: sticky;
     top: 0;

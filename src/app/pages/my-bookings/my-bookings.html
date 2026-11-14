@@ -13,9 +13,7 @@
         <div class="booking-head">
           <div>
             <h3>
-              <a [routerLink]="['/profissionais', booking.professionalId]">{{
-                booking.professionalName
-              }}</a>
+              <a [appProfessionalLink]="booking.professionalId">{{ booking.professionalName }}</a>
             </h3>
             <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
             @if (atHome(booking)) {
@@ -86,7 +84,7 @@
             <a
               i18n
               class="chat"
-              [routerLink]="['/profissionais', booking.professionalId]"
+              [appProfessionalLink]="booking.professionalId"
               fragment="avaliacoes"
               >Avaliar</a
             >

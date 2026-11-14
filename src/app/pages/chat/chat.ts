@@ -1,6 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, input, signal, inject } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { ProfessionalLink } from '../../utils/professional-link.directive';
 import { Spinner } from '../../components/spinner/spinner';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +19,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 // `id` is the professional id for clients and the conversation id in the professional area
 @Component({
   selector: 'app-chat',
-  imports: [FocusPipe, Spinner, FormsModule, RouterLink, MatIconModule],
+  imports: [FocusPipe, Spinner, FormsModule, ProfessionalLink, RouterLink, MatIconModule],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
@@ -59,7 +60,7 @@ export class Chat {
             name: conversation.clientName,
             image: conversation.clientImage ?? null,
             position: undefined,
-            link: null,
+            professionalId: null,
           }
         : null;
     }
@@ -69,7 +70,7 @@ export class Chat {
           name: professional.name,
           image: professional.image,
           position: professional.imagePosition,
-          link: ['/profissionais', professional.id],
+          professionalId: professional.id,
         }
       : null;
   });

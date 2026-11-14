@@ -40,8 +40,12 @@
   </header>
 }
 
-<div class="screen" [class.with-tabs]="showTabs" [class.wide]="fullWidth">
-  <router-outlet />
+<!-- The screen and, beside it on wide screens, the page of a professional that has no place on the map -->
+<div class="shell" [class.with-topbar]="showTopbar">
+  <div class="screen" [class.with-tabs]="showTabs" [class.wide]="fullWidth">
+    <router-outlet />
+  </div>
+  <app-professional-panel />
 </div>
 
 @if (showTabs) {
@@ -59,8 +63,6 @@
     }
   </nav>
 }
-
-<app-professional-panel />
 
 <app-toast-stack />
 

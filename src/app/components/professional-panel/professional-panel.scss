@@ -1,27 +1,23 @@
-// Only wide screens open it (see opensInPanel): under the bar of the tabs, on the right
+// Beside the screen, not on top of it (the screen gets narrower while it is open). Only wide screens open it (see
+// opensInPanel). It stays in view while the screen scrolls and scrolls on its own.
+:host {
+  display: contents;
+}
+
 .panel {
-  position: fixed;
-  z-index: 30;
-  top: 5.5rem;
-  right: 1.5rem;
-  bottom: 1.5rem;
+  position: sticky;
+  top: 0;
+  flex: none;
+  align-self: flex-start;
   width: 28rem;
+  height: 100vh;
   overflow-y: auto;
-  border-radius: 20px;
   background: #fff;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-  animation: panel-in 0.2s ease-out;
+  border-left: 1px solid var(--border-soft, #ececf1);
 }
 
-@keyframes panel-in {
-  from {
-    opacity: 0;
-    transform: translateX(1.5rem);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .panel {
-    animation: none;
-  }
+// Under the bar of the tabs, when the screen has one
+:host-context(.with-topbar) .panel {
+  top: 4.5rem;
+  height: calc(100vh - 4.5rem);
 }

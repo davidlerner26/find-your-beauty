@@ -19,6 +19,10 @@ test.describe('page of a professional on a wide screen', () => {
     await expect(page).toHaveURL(`/profissionais/${PRO_HOME.uid}`);
     // The home stays underneath and there is no map
     await expect(page.getByRole('heading', { name: 'Categorias' })).toBeVisible();
+    // The panel takes space of its own: the screen ends where it begins, nothing is covered
+    const screen = await page.locator('.screen').boundingBox();
+    const side = await panel.boundingBox();
+    expect(screen!.x + screen!.width).toBeLessThanOrEqual(side!.x + 1);
     await expect(page.locator('app-explore')).toHaveCount(0);
 
     await panel.getByRole('button', { name: 'Voltar' }).click();

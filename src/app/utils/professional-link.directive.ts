@@ -16,7 +16,11 @@ import { opensInPanel, WIDE_SCREEN_QUERY } from './professional-panel';
   },
 })
 export class ProfessionalLink {
-  readonly id = input.required<string>({ alias: 'appProfessionalLink' });
+  // null: nothing to open (a link with no address, like `routerLink` with null)
+  readonly id = input.required<string | null>({ alias: 'appProfessionalLink' });
+
+  // A part of the page to go to (`#avaliacoes`)
+  readonly fragment = input<string>();
 
   private readonly router = inject(Router);
   private readonly panel = inject(ProfessionalPanel);
@@ -24,9 +28,16 @@ export class ProfessionalLink {
 
   protected readonly isAnchor =
     inject<ElementRef<HTMLElement>>(ElementRef).nativeElement.tagName === 'A';
-  protected readonly href = computed(() => PATHS.professional(this.id()));
+  protected readonly href = computed(() => {
+    const id = this.id();
+    const fragment = this.fragment();
+    return id ? PATHS.professional(id) + (fragment ? `#${fragment}` : '') : null;
+  });
 
   protected open(event: MouseEvent) {
+    const id = this.id();
+    const href = this.href();
+    if (!id || !href) return;
     // A link inside a card that is a link too: the inner one already took the click
     if (event.defaultPrevented) return;
     // A modified click (new tab, new window) is the browser's
@@ -34,10 +45,13 @@ export class ProfessionalLink {
     event.preventDefault();
 
     const wide = window.matchMedia(WIDE_SCREEN_QUERY).matches;
-    if (opensInPanel(this.professionals.byId(this.id()), wide)) {
-      this.panel.open(this.id());
+    if (opensInPanel(this.professionals.byId(id), wide)) {
+      this.panel.open(id);
+      const fragment = this.fragment();
+      // The panel is drawn in the next turn: then the part of the page is there to be shown
+      if (fragment) setTimeout(() => document.getElementById(fragment)?.scrollIntoView(), 0);
     } else {
-      void this.router.navigateByUrl(this.href());
+      void this.router.navigateByUrl(href);
     }
   }
 }

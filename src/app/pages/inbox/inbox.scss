@@ -22,6 +22,17 @@
     color: var(--muted);
     position: relative;
 
+    // The dot of the accent color, like the one on the icons of the bottom bar
+    .news {
+      display: inline-block;
+      width: 0.55rem;
+      height: 0.55rem;
+      margin-left: 0.3rem;
+      vertical-align: top;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
     &.active {
       color: var(--primary);
       font-weight: 600;

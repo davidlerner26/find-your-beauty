@@ -40,7 +40,7 @@ type Row = Conversation & {
 export class Inbox {
   protected readonly auth = inject(Auth);
   protected readonly notifications = inject(Notifications);
-  private readonly messages = inject(Messages);
+  protected readonly messages = inject(Messages);
   private readonly professionals = inject(Professionals);
   private readonly router = inject(Router);
 

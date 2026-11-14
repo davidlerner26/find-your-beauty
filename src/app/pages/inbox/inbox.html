@@ -70,12 +70,19 @@
     }
   </h1>
   <div class="tabs">
-    <a i18n [routerLink]="base() + '/mensagens'" [class.active]="tab() === 'mensagens'"
-      >Mensagens</a
-    >
-    <a i18n [routerLink]="base() + '/notificacoes'" [class.active]="tab() === 'notificacoes'"
-      >Notificações</a
-    >
+    <!-- A dot says there is news in the other tab, which can't be seen from this one -->
+    <a [routerLink]="base() + '/mensagens'" [class.active]="tab() === 'mensagens'">
+      <span i18n>Mensagens</span>
+      @if (messages.unreadTotal() > 0) {
+        <span i18n-aria-label class="news" role="img" aria-label="Há novidades"></span>
+      }
+    </a>
+    <a [routerLink]="base() + '/notificacoes'" [class.active]="tab() === 'notificacoes'">
+      <span i18n>Notificações</span>
+      @if (notifications.unreadTotal() > 0) {
+        <span i18n-aria-label class="news" role="img" aria-label="Há novidades"></span>
+      }
+    </a>
   </div>
 </ng-template>
 

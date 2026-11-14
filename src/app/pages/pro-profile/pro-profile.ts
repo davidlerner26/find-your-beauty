@@ -1,5 +1,14 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, computed, DoCheck, effect, input, signal, inject } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  computed,
+  DoCheck,
+  effect,
+  input,
+  signal,
+  inject,
+} from '@angular/core';
 import { Spinner } from '../../components/spinner/spinner';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -64,6 +73,7 @@ export class ProProfile implements DoCheck {
   private readonly photos = inject(Photos);
   protected readonly instagramService = inject(Instagram);
   private readonly feedback = inject(Feedback);
+  private readonly changes = inject(ChangeDetectorRef);
 
   // Second step of the sign up: the same form, but the profile has to be complete to be sent
   readonly signup = input(false);
@@ -104,6 +114,8 @@ export class ProProfile implements DoCheck {
   protected readonly uploading = signal(false);
   protected readonly uploadingGallery = signal(false);
   private filled = false;
+  // The CPF is read apart from the profile: until it came (or failed) the form is not complete, and nothing is missing yet
+  private cpfLoaded = false;
 
   protected readonly uid = computed(() => this.auth.user()?.uid ?? '');
   protected readonly profile = computed(() => this.professionals.byId(this.uid()));
@@ -215,7 +227,9 @@ export class ProProfile implements DoCheck {
   private lastMissing = '';
 
   ngDoCheck() {
-    const text = this.profile() && this.missing.length ? this.missingText : '';
+    // Not while the form is still being filled (from the profile and the CPF): what is empty then is not missing
+    const loaded = this.filled && this.cpfLoaded;
+    const text = loaded && this.profile() && this.missing.length ? this.missingText : '';
     if (text === this.lastMissing) return;
     this.lastMissing = text;
     // After this check: the messages are drawn by the root of the app, which was already checked
@@ -301,6 +315,10 @@ export class ProProfile implements DoCheck {
       if (!this.cpf) this.cpf = formatCpf(this.savedCpf);
     } catch (error) {
       log.error('Failed to load the CPF', error);
+    } finally {
+      this.cpfLoaded = true;
+      // A plain field does not schedule a check: ngDoCheck has to run again to tell what is missing
+      this.changes.markForCheck();
     }
   }
 

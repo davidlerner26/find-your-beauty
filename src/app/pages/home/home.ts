@@ -12,6 +12,7 @@ import { Spinner } from '../../components/spinner/spinner';
 import {
   hasLocation,
   ImagePosition,
+  isPro,
   shortLocationLabel,
   Professional,
   SERVICE_ICONS,
@@ -23,6 +24,9 @@ import { distanceKm, formatDistance } from '../../utils/geo';
 import { T } from '../../utils/texts';
 import { environment } from '../../../environments/environment';
 import { CatalogPipe } from '../../utils/catalog.pipe';
+import { featuredPro, newSeed } from '../../utils/featured';
+import { proSubscriptionEnabled } from '../../utils/features';
+import { ProBadge } from '../../components/pro-badge/pro-badge';
 import { log } from '../../utils/log';
 import { SiteFooter } from '../../components/site-footer/site-footer';
 
@@ -42,6 +46,8 @@ type Salon = {
   reviews: string;
   distance: string | null;
   distanceKm: number | null;
+  // An active Pro subscription (the badge only shows where the subscription exists)
+  pro: boolean;
 };
 
 @Component({
@@ -53,6 +59,7 @@ type Salon = {
     ReviewsLabelPipe,
     FocusPipe,
     RouterLink,
+    ProBadge,
     ProfessionalLink,
     Spinner,
     MatIconModule,
@@ -67,8 +74,12 @@ export class Home {
   protected readonly favorites = inject(Favorites);
 
   protected readonly t = T;
-  // The section of featured professionals is only shown in the test environment for now
-  protected readonly showFeatured = environment.features.featuredProfessionals;
+  // The section of featured professionals is only shown in the test environment for now. Where the Pro subscription
+  // exists it has the subscribers, in a rotation; without it, the best rated.
+  private readonly proOn = proSubscriptionEnabled();
+  protected readonly showFeatured = this.proOn || environment.features.featuredProfessionals;
+  // Taken once per visit: the order of the subscribers does not move while the page is open
+  private readonly seed = newSeed();
   protected readonly firstName = computed(
     () => this.auth.user()?.displayName?.trim().split(/\s+/)[0] || $localize`visitante`,
   );
@@ -78,7 +89,9 @@ export class Home {
   );
 
   protected readonly featuredSalons = computed(() =>
-    [...this.salons()].sort((a, b) => b.rating - a.rating).slice(0, 8),
+    this.proOn
+      ? featuredPro(this.salons(), this.seed)
+      : [...this.salons()].sort((a, b) => b.rating - a.rating).slice(0, 8),
   );
 
   // The professionals the client hearted
@@ -153,6 +166,7 @@ export class Home {
       tagList: professional.tags,
       distance: km === null ? null : formatDistance(km),
       distanceKm: km,
+      pro: isPro(professional),
     };
   }
 

@@ -21,7 +21,8 @@
       @for (salon of visibleSalons; track salon.name; let i = $index) {
         <map-marker
           [position]="salon.position"
-          [icon]="markerIcon(i)"
+          [icon]="markerIcon(i, salon.pro)"
+          [options]="salon.pro && proOn ? proMarker : {}"
           (mapClick)="onPin(i, salon.id)"
         />
       }
@@ -214,7 +215,7 @@
     </div>
     <div class="offer-info">
       <p class="tags">{{ salon.tags | catalog }}</p>
-      <h3>{{ salon.name }}</h3>
+      <h3>{{ salon.name }} <app-pro-badge [pro]="salon.pro" /></h3>
       <p class="muted">{{ salon.address }}</p>
       <p class="rating">
         <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{

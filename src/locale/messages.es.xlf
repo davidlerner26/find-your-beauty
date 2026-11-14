@@ -6144,6 +6144,14 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2919971988003640320" datatype="html">
+        <source>Assinante Pro</source>
+        <target>Suscriptor Pro</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/pro-badge/pro-badge.ts</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

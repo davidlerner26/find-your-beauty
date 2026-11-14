@@ -40,7 +40,7 @@
   }
 
   <!-- Featured professionals: only in the test environment for now (environment.features) -->
-  @if (showFeatured) {
+  @if (showFeatured && featuredSalons().length) {
     <section>
       <div class="section-head">
         <h2 i18n>Profissionais em destaque</h2>
@@ -98,6 +98,7 @@
             <p class="tags">{{ salon.tagList | catalog }}</p>
             <h3>
               <a class="name" [appProfessionalLink]="salon.id">{{ salon.name }}</a>
+              <app-pro-badge [pro]="salon.pro" />
             </h3>
             <p class="muted">{{ salon.address }}</p>
             <p class="rating">
@@ -209,6 +210,7 @@
             <p class="tags">{{ offer.tagList | catalog }}</p>
             <h3>
               <a class="name" [appProfessionalLink]="offer.id">{{ offer.name }}</a>
+              <app-pro-badge [pro]="offer.pro" />
             </h3>
             <p class="muted">{{ offer.address }}</p>
             <p class="rating">

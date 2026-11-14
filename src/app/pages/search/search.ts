@@ -14,6 +14,7 @@ import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
+import { ProBadge } from '../../components/pro-badge/pro-badge';
 import { Filters, MAX_KM, noFilters, SortKey } from './search-filter';
 import { SearchStore } from './search.store';
 import { DialogFocus } from '../../utils/dialog.directive';
@@ -22,6 +23,7 @@ import { DialogFocus } from '../../utils/dialog.directive';
   selector: 'app-search',
   imports: [
     DialogFocus,
+    ProBadge,
     CarouselArrows,
     CatalogPipe,
     ReviewsLabelPipe,

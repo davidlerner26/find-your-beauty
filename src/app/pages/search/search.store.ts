@@ -2,6 +2,7 @@ import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { Professionals } from '../../services/professionals';
 import { UserLocation } from '../../services/user-location';
+import { proSubscriptionEnabled } from '../../utils/features';
 import {
   countFilters,
   Filters,
@@ -63,7 +64,13 @@ export const SearchStore = signalStore(
         activeFilterCount,
         searching: computed(() => !!term().trim() || activeFilterCount() > 0),
         results: computed(() =>
-          search(professionals.published(), term(), applied(), userPosition()),
+          search(
+            professionals.published(),
+            term(),
+            applied(),
+            userPosition(),
+            proSubscriptionEnabled(),
+          ),
         ),
         suggestions: computed(() => suggestions(professionals.published(), userPosition())),
       };

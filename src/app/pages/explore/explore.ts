@@ -38,6 +38,8 @@ import { INTL_LOCALE } from '../../utils/locale';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
+import { proSubscriptionEnabled } from '../../utils/features';
+import { ProBadge } from '../../components/pro-badge/pro-badge';
 import { PATHS } from '../../utils/paths';
 import { DialogFocus } from '../../utils/dialog.directive';
 
@@ -54,6 +56,7 @@ let lastSelectedId: string | null = null;
   selector: 'app-explore',
   imports: [
     DialogFocus,
+    ProBadge,
     ArtistDetails,
     CarouselArrows,
     ChipsRow,
@@ -468,8 +471,13 @@ export class Explore implements OnInit {
     setTimeout(() => this.showCard(index, 'auto'), 0);
   }
 
-  protected markerIcon(index: number) {
-    return pin(index === this.selected() ? '#a87558' : '#46586d');
+  // Where the Pro subscription exists, the pin of a subscriber has its own color (gold) and is drawn above the others
+  protected readonly proOn = proSubscriptionEnabled();
+  protected readonly proMarker: google.maps.MarkerOptions = { zIndex: 10 };
+
+  protected markerIcon(index: number, pro = false) {
+    if (index === this.selected()) return pin('#a87558');
+    return pin(this.proOn && pro ? '#d19a1f' : '#46586d');
   }
 
   // Button: asks for the position (the browser prompt only shows if it wasn't decided yet)

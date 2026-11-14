@@ -186,6 +186,35 @@ describe('search', () => {
     expect(names(search(all, '', noFilters(), null))).toEqual(['Ana', 'Bia', 'Cris']);
   });
 
+  it('puts the Pro subscribers first when no order was chosen, where the subscription exists', () => {
+    const subscribers = [ana, { ...bia, pro: true }, cris];
+
+    expect(names(search(subscribers, '', noFilters(), null, true))).toEqual(['Bia', 'Ana', 'Cris']);
+    // Without the subscription in the environment, nothing changes
+    expect(names(search(subscribers, '', noFilters(), null))).toEqual(['Ana', 'Bia', 'Cris']);
+  });
+
+  it('keeps the catalog order among subscribers (and among the others)', () => {
+    const subscribers = [ana, { ...bia, pro: true }, { ...cris, pro: true }];
+
+    expect(names(search(subscribers, '', noFilters(), null, true))).toEqual(['Bia', 'Cris', 'Ana']);
+  });
+
+  it('respects an order the client chose: Pro does not jump the queue of a sort', () => {
+    const subscribers = [{ ...ana, pro: true }, bia, cris];
+
+    expect(names(search(subscribers, '', filters({ sort: 'rating' }), null, true))).toEqual([
+      'Cris',
+      'Ana',
+      'Bia',
+    ]);
+  });
+
+  it('carries the subscription to the card', () => {
+    expect(toCard({ ...ana, pro: true }, null).pro).toBe(true);
+    expect(toCard(ana, null).pro).toBe(false);
+  });
+
   it('filters by text, ignoring accents and case', () => {
     expect(names(search(all, '  ESCOVA ', noFilters(), null))).toEqual(['Bia']);
     expect(names(search(all, 'nada disso', noFilters(), null))).toEqual([]);

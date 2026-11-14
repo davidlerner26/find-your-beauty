@@ -19,6 +19,7 @@ import { PricePipe } from '../../utils/price.pipe';
 import { Spinner } from '../../components/spinner/spinner';
 import { ServiceSheet } from '../../components/service-sheet/service-sheet';
 import { copyText } from '../../utils/clipboard';
+import { ProBadge } from '../../components/pro-badge/pro-badge';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { PhotoViewer } from '../../components/photo-viewer/photo-viewer';
 import { Location } from '@angular/common';
@@ -53,6 +54,7 @@ import { PATHS } from '../../utils/paths';
   selector: 'app-artist-details',
   imports: [
     AddressPipe,
+    ProBadge,
     CarouselArrows,
     PhotoViewer,
     CatalogPipe,

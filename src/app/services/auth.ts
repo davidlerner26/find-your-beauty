@@ -48,7 +48,12 @@ export class Auth {
   private readonly auth = firebaseAuth;
   private readonly users = inject(Users);
   private readonly professionalAccounts = inject(ProfessionalAccounts);
-  private readonly googleProvider = new GoogleAuthProvider();
+  // Google always asks which account to use (without this it signs in with the one that is already open, if there is one)
+  private readonly googleProvider = (() => {
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    return provider;
+  })();
   private roleRequest = 0;
   private markReady!: () => void;
 

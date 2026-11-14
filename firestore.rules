@@ -14,11 +14,13 @@ service cloud.firestore {
       allow read: if true;
       // New accounts start waiting for approval
       allow create: if request.auth != null && request.auth.uid == id && request.resource.data.approved == false &&
-        request.resource.data.get('admin', false) == false;
-      // The owner edits the profile but can't change the approval; admins can change anything
+        request.resource.data.get('admin', false) == false &&
+        // The Pro subscription is only written by the Cloud Functions (from Stripe)
+        request.resource.data.get('pro', false) == false && request.resource.data.get('proUntil', null) == null;
+      // The owner edits the profile but can't change the approval or the Pro subscription; admins can change anything
       // (a denied sign up can be sent again: the owner may only turn `rejected` from true to false)
       allow update: if (request.auth != null && request.auth.uid == id &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['approved', 'admin']) &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['approved', 'admin', 'pro', 'proUntil']) &&
         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['rejected']) ||
           (resource.data.get('rejected', false) == true && request.resource.data.rejected == false))) || isAdmin();
 

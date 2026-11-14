@@ -12,6 +12,7 @@ import {
   serverTimestamp,
   setDoc,
   Timestamp,
+  updateDoc,
   writeBatch,
 } from 'firebase/firestore';
 import { afterAll, beforeAll, beforeEach, describe, it } from 'vitest';
@@ -324,5 +325,68 @@ describe('drafts made by an admin', () => {
       await assertFails(setDoc(doc(db, 'professionalDrafts', 'd3'), { name: 'X' }));
       await assertFails(deleteDoc(doc(db, 'professionalDrafts', 'd1')));
     }
+  });
+});
+
+describe('the Pro subscription of a professional', () => {
+  const owner = () => env.authenticatedContext(PRO_UID).firestore();
+  const profile = () => doc(owner(), 'professionals', PRO_ID);
+
+  it('lets the owner edit the rest of the profile', async () => {
+    await assertSucceeds(updateDoc(profile(), { about: ['Maquiadora'] }));
+  });
+
+  it('denies the owner turning Pro on, or setting how long it lasts', async () => {
+    await assertFails(updateDoc(profile(), { pro: true }));
+    await assertFails(
+      updateDoc(profile(), { proUntil: Timestamp.fromDate(new Date('2099-01-01')) }),
+    );
+    await assertFails(updateDoc(profile(), { about: ['x'], pro: true }));
+  });
+
+  it('denies the owner turning Pro off by hand too: only the functions write it', async () => {
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await updateDoc(doc(ctx.firestore(), 'professionals', PRO_ID), { pro: true });
+    });
+
+    await assertFails(updateDoc(profile(), { pro: false }));
+  });
+
+  it('lets a profile that is Pro be saved while the value stays what it is', async () => {
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await updateDoc(doc(ctx.firestore(), 'professionals', PRO_ID), { pro: true });
+    });
+
+    await assertSucceeds(updateDoc(profile(), { pro: true, about: ['Maquiadora'] }));
+  });
+
+  it('denies a new account that starts as Pro', async () => {
+    const fresh = (data: Record<string, unknown>) =>
+      setDoc(doc(env.authenticatedContext('newUid').firestore(), 'professionals', 'newUid'), {
+        approved: false,
+        ...data,
+      });
+
+    await assertFails(fresh({ pro: true }));
+    await assertFails(fresh({ proUntil: Timestamp.fromDate(new Date('2099-01-01')) }));
+    await assertSucceeds(fresh({}));
+  });
+
+  it('keeps the data of Stripe closed: not even the owner reads or writes it', async () => {
+    const billing = doc(owner(), 'professionals', PRO_ID, 'private', 'billing');
+
+    await assertFails(getDoc(billing));
+    await assertFails(setDoc(billing, { status: 'active' }));
+    await assertFails(
+      getDoc(
+        doc(
+          env.unauthenticatedContext().firestore(),
+          'professionals',
+          PRO_ID,
+          'private',
+          'billing',
+        ),
+      ),
+    );
   });
 });

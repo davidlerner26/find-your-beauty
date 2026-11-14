@@ -1,0 +1,27 @@
+// Only wide screens open it (see opensInPanel): under the bar of the tabs, on the right
+.panel {
+  position: fixed;
+  z-index: 30;
+  top: 5.5rem;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  width: 28rem;
+  overflow-y: auto;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  animation: panel-in 0.2s ease-out;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}

@@ -2,6 +2,7 @@ import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { ProfessionalLink } from '../../utils/professional-link.directive';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { Component, computed, signal, inject } from '@angular/core';
 import { Favorites } from '../../services/favorites';
@@ -52,6 +53,7 @@ type Salon = {
     ReviewsLabelPipe,
     FocusPipe,
     RouterLink,
+    ProfessionalLink,
     Spinner,
     MatIconModule,
   ],

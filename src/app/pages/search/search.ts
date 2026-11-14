@@ -1,11 +1,11 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component, computed, effect, ElementRef, input, signal, inject } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
+import { ProfessionalLink } from '../../utils/professional-link.directive';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { PricePipe } from '../../utils/price.pipe';
 import { Location, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { Favorites } from '../../services/favorites';
 import { Professionals } from '../../services/professionals';
 import { CalendarDay as Day, monthDays, startOfDay, startOfMonth } from '../../utils/calendar';
@@ -28,7 +28,7 @@ import { DialogFocus } from '../../utils/dialog.directive';
     PricePipe,
     FocusPipe,
     FormsModule,
-    RouterLink,
+    ProfessionalLink,
     NgTemplateOutlet,
     MatIconModule,
   ],

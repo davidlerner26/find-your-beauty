@@ -34,6 +34,7 @@ beforeEach(async () => {
   subs = new Subscriptions(fake.stripe, db, {
     priceId: 'price_pro',
     appUrl: 'https://dev.findyourbeauty.com.br',
+    signup: true,
   });
   await db.doc('professionals/p1').set({ name: 'Ana', approved: true, pro: false });
 });
@@ -101,13 +102,43 @@ describe('subscribing', () => {
   });
 
   it('refuses when there is no price configured', async () => {
-    const without = new Subscriptions(fake.stripe, db, { priceId: '', appUrl: 'https://x.test' });
+    const without = new Subscriptions(fake.stripe, db, {
+      priceId: '',
+      appUrl: 'https://x.test',
+      signup: true,
+    });
 
     const error = await rejection(without.checkout('p1', profile));
 
     expect(error).toBeInstanceOf(SubscriptionError);
     expect((error as SubscriptionError).code).toBe('no-price');
     expect(fake.calls.checkout).toBe(0);
+  });
+
+  it('refuses a new subscription while it is not open, and creates nothing at Stripe', async () => {
+    const closed = new Subscriptions(fake.stripe, db, {
+      priceId: 'price_pro',
+      appUrl: 'https://x.test',
+      signup: false,
+    });
+
+    const error = await rejection(closed.checkout('p1', profile));
+
+    expect((error as SubscriptionError).code).toBe('signup-closed');
+    expect(fake.calls.checkout).toBe(0);
+    expect(fake.calls.customerCreate).toBe(0);
+  });
+
+  it('keeps the portal and the state open while new subscriptions are closed: who subscribes can still manage it', async () => {
+    const closed = new Subscriptions(fake.stripe, db, {
+      priceId: 'price_pro',
+      appUrl: 'https://x.test',
+      signup: false,
+    });
+    await subs.customerFor('p1', profile);
+
+    expect((await closed.portal('p1')).url).toContain('https://billing.stripe.test/');
+    expect(await closed.statusOf('p1')).toEqual({ subscribed: false });
   });
 
   it('does not let who already subscribes subscribe twice', async () => {

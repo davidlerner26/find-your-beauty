@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Auth } from '../services/auth';
-import { proSubscriptionEnabled } from '../utils/features';
+import { proSignupEnabled } from '../utils/features';
 import { PATHS } from '../utils/paths';
 
 // Is the visitor a professional? `true`, or where to send them
@@ -19,14 +19,14 @@ const proAccess = async () => {
 // Only professional accounts get into /pro
 export const proGuard: CanActivateFn = () => proAccess();
 
-// The page of the Pro subscription: a professional, and only where the subscription exists (the test environment for
-// now: in production the address does not exist, it goes back to the profile)
+// The page of the Pro subscription: a professional, and only where it is open to subscribe (the test environment for now:
+// in production the address does not exist, it goes back to the profile)
 export const proSubscriptionGuard: CanActivateFn = async () => {
   // `inject` only works before the first `await`
   const router = inject(Router);
   const access = await proAccess();
   if (access !== true) return access;
-  return proSubscriptionEnabled() || router.parseUrl(PATHS.proProfile);
+  return proSignupEnabled() || router.parseUrl(PATHS.proProfile);
 };
 
 // The login and the sign up of the professional area are for visitors (and for a sign up that is still going):

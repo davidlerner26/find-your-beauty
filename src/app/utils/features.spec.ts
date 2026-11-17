@@ -1,5 +1,10 @@
 import { environment } from '../../environments/environment';
-import { CHECKOUT_OVERRIDE_KEY, isCheckoutEnabled, isProSubscriptionEnabled } from './features';
+import {
+  CHECKOUT_OVERRIDE_KEY,
+  isCheckoutEnabled,
+  isProSignupEnabled,
+  isProSubscriptionEnabled,
+} from './features';
 
 const storage = (value: string | null) => ({ getItem: () => value });
 const env = (name: string, checkout: boolean) => ({ name, features: { checkout } });
@@ -24,6 +29,13 @@ describe('isCheckoutEnabled', () => {
   });
 });
 
+describe('isProSignupEnabled', () => {
+  it('follows the flag of the environment', () => {
+    expect(isProSignupEnabled({ features: { proSubscriptionSignup: true } })).toBe(true);
+    expect(isProSignupEnabled({ features: { proSubscriptionSignup: false } })).toBe(false);
+  });
+});
+
 describe('isProSubscriptionEnabled', () => {
   it('follows the flag of the environment', () => {
     expect(isProSubscriptionEnabled({ features: { proSubscription: true } })).toBe(true);
@@ -43,9 +55,12 @@ describe('the production environment', () => {
     expect(environment.payments.stripePublishableKey).toBe('');
   });
 
-  // The Pro subscription is only in the test environment until the owner says to bring it to production
-  // (docs/assinatura-pro.md). Changing this is the go-live: change it together with the checklist of that document.
-  it('has no Pro subscription: no page to subscribe, no badge, no featured section', () => {
-    expect(environment.features.proSubscription).toBe(false);
+  // The Pro plan is ready in production (the badge, the priority, the featured section: nothing shows while nobody
+  // subscribes), but nobody can subscribe until the owner says to open it (docs/assinatura-pro.md). Opening it is the
+  // go-live: change `proSubscriptionSignup` together with the checklist of that document (and SUBSCRIPTIONS_SIGNUP of the
+  // functions).
+  it('is ready for the Pro plan, but does not let anyone subscribe: no card, no page to subscribe', () => {
+    expect(environment.features.proSubscription).toBe(true);
+    expect(environment.features.proSubscriptionSignup).toBe(false);
   });
 });

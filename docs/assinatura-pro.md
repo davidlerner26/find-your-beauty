@@ -35,17 +35,25 @@ com cupom, respostas rápidas no chat, resumo semanal por e-mail, suporte priori
 O preço **não está no código**: é o `PRO_PRICE_ID` (um _Price_ recorrente em BRL criado na Stripe). Para mensal e
 anual, são dois _Prices_.
 
-## Trava de segurança (por que a produção não muda)
+## Trava de segurança (duas chaves)
 
-| Onde                                   | Teste (dev) | Produção         |
-| -------------------------------------- | ----------- | ---------------- |
-| `environment.features.proSubscription` | `true`      | `false`          |
-| `functions/.env` `SUBSCRIPTIONS`       | `on`        | `off` (o padrão) |
-| Stripe                                 | modo teste  | nada configurado |
+O plano tem duas partes, cada uma com a sua chave. Assim a produção fica **pronta** sem deixar ninguém assinar:
 
-Com a chave do app desligada, nada do Pro aparece (página, selo, prioridade, destaque). Com `SUBSCRIPTIONS=off`, as
-Functions respondem "não disponível" e o webhook responde 404. Um teste (`features.spec.ts`) falha se alguém ligar a
-chave em produção sem querer.
+| Parte                                                                                   | Chave no app (`environment`) | Chave nas Functions (`functions/.env`) |
+| --------------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------- |
+| O plano: selo, destaque, prioridade no mapa e na busca, plano no admin, webhook, portal | `proSubscription`            | `SUBSCRIPTIONS`                        |
+| A porta de entrada: o card no perfil, a página `/pro/assinatura` e o pagamento          | `proSubscriptionSignup`      | `SUBSCRIPTIONS_SIGNUP`                 |
+
+| Onde                                             | Teste (dev) | Produção hoje                                     |
+| ------------------------------------------------ | ----------- | ------------------------------------------------- |
+| `proSubscription` / `SUBSCRIPTIONS`              | ligado      | **ligado** (nada aparece enquanto ninguém assina) |
+| `proSubscriptionSignup` / `SUBSCRIPTIONS_SIGNUP` | ligado      | **desligado** (ninguém consegue assinar)          |
+| Stripe                                           | modo teste  | modo real (conta ativada), ainda sem produto      |
+
+Com a porta fechada: o card some do perfil, o endereço `/pro/assinatura` volta para o perfil e a Function que cria o pagamento
+responde "não disponível". O agendamento do cliente continua sem pagamento (`checkout: false`, `PAYMENTS=off`): isso não muda.
+Dois testes (`features.spec.ts` do site e `environment.spec.ts` do app) falham se alguém ligar `proSubscriptionSignup` em
+produção sem querer.
 
 ## Configurar o teste (uma vez)
 
@@ -63,16 +71,27 @@ chave em produção sem querer.
 
 Cartão de teste: `4242 4242 4242 4242`, qualquer data futura e qualquer CVC.
 
-## Ir para produção (só quando o dono mandar)
+## Ir para produção
 
-Nada disto foi feito. Ordem:
+O código já está pronto. Falta só a configuração da Stripe e dos segredos, e depois **abrir a porta**. Nada disto foi feito.
 
-1. Na Stripe em **modo real**: o produto e o preço Pro, o portal de cobrança e o webhook apontando para a Function de
-   **produção**.
-2. Segredos em produção: `STRIPE_SECRET_KEY` (a chave real, hoje há um texto qualquer porque não é usada) e
+**Preparar (pode ser feito antes, sem abrir a assinatura)**
+
+1. Na Stripe em **modo real**: o produto e o preço mensal Pro, o portal de cobrança e, depois do passo 3, o webhook apontando
+   para a Function de **produção**. O que existe no modo de teste não existe no real.
+2. Segredos em produção: `STRIPE_SECRET_KEY` (a chave real; hoje há um texto qualquer porque não era usada) e
    `STRIPE_WEBHOOK_SECRET`. O Firebase exige os dois para publicar as Functions.
-3. `functions/.env`: `SUBSCRIPTIONS=on` e `PRO_PRICE_ID` com o preço real.
-4. `src/environments/environment.ts`: `proSubscription: true` e o teste de `features.spec.ts` junto.
-5. Publicar: o **app primeiro** (merge de `develop` em `main`), depois as regras e as Functions
+3. A ordem tem uma armadilha: o endereço do webhook só existe depois de publicar as Functions, mas o Firebase exige o segredo
+   para publicar. Então: guarde um valor provisório em `STRIPE_WEBHOOK_SECRET`, publique, crie o webhook na Stripe com o
+   endereço da `stripeWebhook`, guarde o segredo real (`whsec_...`) e republique só a `stripeWebhook`.
+4. `functions/.env` (arquivo local, não vai para o git): `PRO_PRICE_ID=` com o preço do modo real. `SUBSCRIPTIONS=on` e
+   `SUBSCRIPTIONS_SIGNUP=off` já estão lá.
+5. Publicar na ordem: o **app primeiro** (merge de `develop` em `main`), depois as regras e as Functions
    (`firebase deploy --project default`).
-6. Testar com uma assinatura real pequena e cancelar em seguida.
+
+**Abrir a assinatura (o interruptor final)**
+
+6. `src/environments/environment.ts`: `proSubscriptionSignup: true`, e o teste de `features.spec.ts` junto. No app,
+   `src/config/environment.ts` (`proSubscriptionSignup` da produção) e o teste de `environment.spec.ts`.
+7. `functions/.env`: `SUBSCRIPTIONS_SIGNUP=on` e republicar as Functions.
+8. Testar com uma assinatura real pequena e cancelar em seguida.

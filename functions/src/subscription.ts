@@ -59,7 +59,9 @@ export interface BillingStripeLike {
 
 // What is wrong with a request, in a way that the callables turn into an answer for the browser
 export class SubscriptionError extends Error {
-  constructor(readonly code: 'already-subscribed' | 'no-subscription' | 'no-price') {
+  constructor(
+    readonly code: 'already-subscribed' | 'no-subscription' | 'no-price' | 'signup-closed',
+  ) {
     super(code);
   }
 }
@@ -95,7 +97,9 @@ export class Subscriptions {
   constructor(
     private readonly stripe: BillingStripeLike,
     private readonly db: Firestore,
-    private readonly config: { priceId: string; appUrl: string },
+    // `signup`: new subscriptions are open. The rest (the portal, the state, the webhook) works either way, for who already
+    // subscribes.
+    private readonly config: { priceId: string; appUrl: string; signup: boolean },
   ) {}
 
   // Where the data of Stripe is kept: only the Cloud Functions read it (no rule opens `private`)
@@ -124,6 +128,7 @@ export class Subscriptions {
 
   // The page of Stripe where she subscribes. The card number is typed there: it never reaches us.
   async checkout(uid: string, profile: { email?: string | null; name?: string | null }) {
+    if (!this.config.signup) throw new SubscriptionError('signup-closed');
     if (!this.config.priceId) throw new SubscriptionError('no-price');
     const status = (await this.billing(uid).get()).data()?.['status'] as string | undefined;
     if (status && isProNow(status, null, Date.now()))

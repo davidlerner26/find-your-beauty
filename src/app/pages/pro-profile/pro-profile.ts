@@ -49,7 +49,7 @@ import {
 } from './profile-form';
 import { isServiceComplete, ServiceDraft, toService, toServiceDraft } from './service-draft';
 import { PATHS } from '../../utils/paths';
-import { proSubscriptionEnabled } from '../../utils/features';
+import { proSignupEnabled } from '../../utils/features';
 
 @Component({
   selector: 'app-pro-profile',
@@ -122,8 +122,8 @@ export class ProProfile implements DoCheck {
   protected readonly uid = computed(() => this.auth.user()?.uid ?? '');
   protected readonly profile = computed(() => this.professionals.byId(this.uid()));
 
-  // The link to the Pro subscription (only where the subscription exists)
-  protected readonly proEnabled = proSubscriptionEnabled();
+  // The link to the Pro subscription (only where it is open to subscribe)
+  protected readonly proEnabled = proSignupEnabled();
   protected readonly proPath = PATHS.proSubscription;
   protected readonly isPro = computed(() => {
     const profile = this.profile();

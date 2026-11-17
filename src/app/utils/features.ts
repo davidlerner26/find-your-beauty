@@ -32,3 +32,10 @@ export const isProSubscriptionEnabled = (env: { features: { proSubscription: boo
   env.features.proSubscription;
 
 export const proSubscriptionEnabled = () => isProSubscriptionEnabled(environment);
+
+// The way to subscribe (the card on the profile and the page of the subscription). It can be closed while the rest of the
+// Pro plan is on: production has it closed until the owner says to open the subscription.
+export const isProSignupEnabled = (env: { features: { proSubscriptionSignup: boolean } }) =>
+  env.features.proSubscriptionSignup;
+
+export const proSignupEnabled = () => isProSignupEnabled(environment);

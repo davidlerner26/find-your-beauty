@@ -27,6 +27,11 @@ export const webhookSecret = defineSecret('STRIPE_WEBHOOK_SECRET');
 
 export const subscriptionsOn = () => mode.value() === 'on';
 
+// Is it open to subscribe? The plan can be on (badge, portal, webhook) while new subscriptions are closed: production has it
+// closed until the owner says to open it. It goes with `proSubscriptionSignup` of the app (src/environments).
+const signupMode = defineString('SUBSCRIPTIONS_SIGNUP', { default: 'off' });
+const signupOn = () => signupMode.value() === 'on';
+
 // Looked up when used: the app is started by index.ts after this file is loaded
 const db = () => getFirestore();
 
@@ -39,7 +44,7 @@ export const subscriptions = () =>
   (cached ??= new Subscriptions(
     new Stripe(stripeKey.value()) as unknown as BillingStripeLike,
     db(),
-    { priceId: proPriceId.value(), appUrl: appUrl.value() },
+    { priceId: proPriceId.value(), appUrl: appUrl.value(), signup: signupOn() },
   ));
 
 const requireProfessional = async (request: CallableRequest) => {
@@ -241,6 +246,7 @@ export const reconcileProDaily = onSchedule(
     const off = await new Subscriptions({} as BillingStripeLike, db(), {
       priceId: '',
       appUrl: appUrl.value(),
+      signup: false,
     }).reconcile();
     if (off.length) logger.info('Pro turned off by the nightly job', { count: off.length });
   },

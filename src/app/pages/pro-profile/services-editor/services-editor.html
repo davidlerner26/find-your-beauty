@@ -116,16 +116,15 @@
                 </div>
                 <div class="rule-fields">
                   <div class="rule-time">
-                    <label>
+                    <div class="time-field">
                       <span i18n class="field-label">Das</span>
-                      <input
-                        type="time"
-                        [name]="'rstart' + i + '-' + r"
+                      <app-time-field
+                        [label]="startLabel"
+                        [value]="rule.start === dayStart ? '' : rule.start"
                         [disabled]="rule.start === dayStart"
-                        [ngModel]="rule.start === dayStart ? '' : rule.start"
-                        (ngModelChange)="rule.start = $event"
+                        (valueChange)="setRuleTime(rule, 'start', $event)"
                       />
-                    </label>
+                    </div>
                     <label i18n class="check">
                       <input
                         type="checkbox"
@@ -137,16 +136,15 @@
                     </label>
                   </div>
                   <div class="rule-time">
-                    <label>
+                    <div class="time-field">
                       <span i18n class="field-label">Até</span>
-                      <input
-                        type="time"
-                        [name]="'rend' + i + '-' + r"
+                      <app-time-field
+                        [label]="endLabel"
+                        [value]="rule.end === dayEnd ? '' : rule.end"
                         [disabled]="rule.end === dayEnd"
-                        [ngModel]="rule.end === dayEnd ? '' : rule.end"
-                        (ngModelChange)="rule.end = $event"
+                        (valueChange)="setRuleTime(rule, 'end', $event)"
                       />
-                    </label>
+                    </div>
                     <label i18n class="check">
                       <input
                         type="checkbox"

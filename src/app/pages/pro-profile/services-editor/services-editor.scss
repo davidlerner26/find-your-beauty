@@ -153,6 +153,12 @@
     gap: 0.4rem;
   }
 
+  // The time of a rule: its name and the field that opens the picker
+  .time-field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
   .check {
     font-size: 0.85rem;
   }

@@ -13,21 +13,13 @@
             {{ day.label }}
           </label>
           @if (availability().weekly[day.key].enabled) {
-            <div class="times">
-              <input
-                type="time"
-                [attr.aria-label]="t.opensAt(day.label)"
-                [name]="'start' + day.key"
-                [(ngModel)]="availability().weekly[day.key].start"
-              />
-              <span i18n>às</span>
-              <input
-                type="time"
-                [attr.aria-label]="t.closesAt(day.label)"
-                [name]="'end' + day.key"
-                [(ngModel)]="availability().weekly[day.key].end"
-              />
-            </div>
+            <app-time-range-field
+              class="times"
+              [label]="day.label"
+              [start]="availability().weekly[day.key].start"
+              [end]="availability().weekly[day.key].end"
+              (timesChange)="setTimes(day.key, $event)"
+            />
           } @else {
             <span i18n class="muted">Folga</span>
           }

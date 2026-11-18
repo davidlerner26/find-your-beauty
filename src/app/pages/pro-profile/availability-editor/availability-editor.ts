@@ -1,6 +1,7 @@
 import { Component, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Availability, DateRange } from '../../../models/professional';
+import { TimeRangeField } from '../../../components/time-picker/time-range-field';
 import { toDateKey } from '../../../utils/slots';
 import {
   DateRangePicker,
@@ -14,7 +15,7 @@ import { T } from '../../../utils/texts';
 // The form hands over its hours and the editor changes them in place; it is told when to save.
 @Component({
   selector: 'app-availability-editor',
-  imports: [DateRangePicker, FormsModule],
+  imports: [DateRangePicker, FormsModule, TimeRangeField],
   templateUrl: './availability-editor.html',
   styleUrl: './availability-editor.scss',
 })
@@ -35,6 +36,14 @@ export class AvailabilityEditor {
       this.availability(),
       this.weekdays.map(({ key }) => key),
     );
+  }
+
+  // The opening and the closing of a day were chosen in the picker (it does not move the focus, so the form is told to save)
+  protected setTimes(day: string, times: { start: string; end: string }) {
+    const config = this.availability().weekly[day];
+    config.start = times.start;
+    config.end = times.end;
+    this.changed.emit();
   }
 
   protected blockPending() {

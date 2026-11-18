@@ -574,6 +574,79 @@
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7753031043787056434" datatype="html">
+        <source>às</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-range-field.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-range-field.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7461017995191074948" datatype="html">
+        <source>Abertura</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-range-field.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8493270102832467341" datatype="html">
+        <source>Fechamento</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-range-field.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6402951927316857780" datatype="html">
+        <source>Cancelar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-sheet.ts</context>
+          <context context-type="linenumber">32,33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.html</context>
+          <context context-type="linenumber">99,100</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.html</context>
+          <context context-type="linenumber">100,101</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
+          <context context-type="linenumber">77,78</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
+          <context context-type="linenumber">78,79</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/search/search.html</context>
+          <context context-type="linenumber">182,183</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4384126484482822546" datatype="html">
+        <source>Pronto</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-sheet.ts</context>
+          <context context-type="linenumber">57,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4550363912694193808" datatype="html">
+        <source>Hora</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-sheet.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4577772584542971997" datatype="html">
+        <source>Minutos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-sheet.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3043352631756014361" datatype="html">
         <source>No meu endereço</source>
         <context-group purpose="location">
@@ -931,7 +1004,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">220,221</context>
+          <context context-type="linenumber">218,219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8473163757572493024" datatype="html">
@@ -3421,29 +3494,6 @@
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6402951927316857780" datatype="html">
-        <source>Cancelar</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.html</context>
-          <context context-type="linenumber">99,100</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/my-bookings/my-bookings.html</context>
-          <context context-type="linenumber">100,101</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">77,78</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-agenda/pro-agenda.html</context>
-          <context context-type="linenumber">78,79</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/search/search.html</context>
-          <context context-type="linenumber">182,183</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="2994342140292353357" datatype="html">
         <source>Avaliar</source>
         <context-group purpose="location">
@@ -3843,67 +3893,60 @@
           <context context-type="linenumber">3,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7753031043787056434" datatype="html">
-        <source>às</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">23,24</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5151902817300316040" datatype="html">
         <source>Folga</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">32,33</context>
+          <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4191340583188277002" datatype="html">
         <source> O fechamento precisa ser depois da abertura em: <x id="INTERPOLATION" equiv-text="{{ invalidDays.length }}"/> dia(s). </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">39,42</context>
+          <context context-type="linenumber">31,34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2429930034196871759" datatype="html">
         <source>Dias bloqueados</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">45,46</context>
+          <context context-type="linenumber">37,38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1225790492734725993" datatype="html">
         <source> Clique no dia que quer bloquear. Para um período, clique também no último dia. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">47,48</context>
+          <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1013014767133141461" datatype="html">
         <source> Selecionado: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ rangeLabel(start, pending().end) }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">56,59</context>
+          <context context-type="linenumber">48,51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7569889981847594264" datatype="html">
         <source> Bloquear período </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">66,67</context>
+          <context context-type="linenumber">58,59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2630031684986304245" datatype="html">
         <source>Desbloquear período</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">76,77</context>
+          <context context-type="linenumber">68,69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5192431501912590918" datatype="html">
         <source>Nenhum período bloqueado. Use para férias e folgas.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/availability-editor/availability-editor.html</context>
-          <context context-type="linenumber">83,84</context>
+          <context context-type="linenumber">75,76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4945538821353670814" datatype="html">
@@ -4339,14 +4382,14 @@
                       /&gt;"/> Início do dia </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">131,136</context>
+          <context context-type="linenumber">130,135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3766086869789207808" datatype="html">
         <source>Até</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">141,142</context>
+          <context context-type="linenumber">140,141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2314288366197403778" datatype="html">
@@ -4358,49 +4401,49 @@
                       /&gt;"/> Fim do dia </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">152,157</context>
+          <context context-type="linenumber">150,155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7838914599395119687" datatype="html">
         <source>Preço (R$)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">161,162</context>
+          <context context-type="linenumber">159,160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7059768368143937521" datatype="html">
         <source> Escolha os dias, um horário de início antes do fim e o preço. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
       <trans-unit id="812363076773060252" datatype="html">
         <source> Remover </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8886298056821676165" datatype="html">
         <source> Adicionar preço por dia e horário </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">182</context>
+          <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8469455344054945723" datatype="html">
         <source> Ex: aos sábados o serviço custa mais. O preço vale pelo horário de início do atendimento. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">186,187</context>
+          <context context-type="linenumber">184,185</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5534008308902684655" datatype="html">
         <source>Fotos do serviço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">194,195</context>
+          <context context-type="linenumber">192,193</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8279234739076682147" datatype="html">
@@ -4415,49 +4458,49 @@
                 /&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">196,210</context>
+          <context context-type="linenumber">194,208</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2866259737560051525" datatype="html">
         <source>Foto do serviço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">216,217</context>
+          <context context-type="linenumber">214,215</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5269978570089659028" datatype="html">
         <source>Descrição</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">231,232</context>
+          <context context-type="linenumber">229,230</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7029441028578868691" datatype="html">
         <source> Remover serviço </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">241,242</context>
+          <context context-type="linenumber">239,240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1592252650157294709" datatype="html">
         <source>Nenhum serviço ainda.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">245,247</context>
+          <context context-type="linenumber">243,245</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3923396797008509746" datatype="html">
         <source>Adicionar serviço</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.html</context>
-          <context context-type="linenumber">248,249</context>
+          <context context-type="linenumber">246,247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7909834918901815344" datatype="html">
         <source>Seg</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">71</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -4468,7 +4511,7 @@
         <source>Ter</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -4479,7 +4522,7 @@
         <source>Qua</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">73</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -4490,7 +4533,7 @@
         <source>Qui</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -4501,7 +4544,7 @@
         <source>Sex</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">75</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -4512,7 +4555,7 @@
         <source>Sáb</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">76</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
@@ -4523,11 +4566,25 @@
         <source>Dom</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">77</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/utils/pricing.ts</context>
           <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6156375000791302760" datatype="html">
+        <source>A partir das</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3766017618745880393" datatype="html">
+        <source>Até as</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
+          <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3632799981998972537" datatype="html">

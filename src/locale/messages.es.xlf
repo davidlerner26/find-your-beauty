@@ -6244,6 +6244,62 @@
           <context context-type="linenumber">196,210</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7461017995191074948" datatype="html">
+        <source>Abertura</source>
+        <target>Apertura</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-range-field.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8493270102832467341" datatype="html">
+        <source>Fechamento</source>
+        <target>Cierre</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-range-field.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4384126484482822546" datatype="html">
+        <source>Pronto</source>
+        <target>Listo</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-sheet.ts</context>
+          <context context-type="linenumber">57,58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4550363912694193808" datatype="html">
+        <source>Hora</source>
+        <target>Hora</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-sheet.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4577772584542971997" datatype="html">
+        <source>Minutos</source>
+        <target>Minutos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/components/time-picker/time-sheet.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6156375000791302760" datatype="html">
+        <source>A partir das</source>
+        <target>A partir de las</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3766017618745880393" datatype="html">
+        <source>Até as</source>
+        <target>Hasta las</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/pro-profile/services-editor/services-editor.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

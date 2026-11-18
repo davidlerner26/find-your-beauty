@@ -1,0 +1,50 @@
+// Five values high, the chosen one in the middle. The text is dark on the white sheet in both themes (the professional area
+// is blue, the sheet is not).
+$item: 2.75rem;
+
+:host {
+  display: block;
+}
+
+.wheel {
+  width: 5.5rem;
+  height: $item * 5;
+  padding: ($item * 2) 0;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  // The list moves by itself in the sheet: a drag must not scroll the page behind it
+  overscroll-behavior: contain;
+  outline: 0;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:focus-visible {
+    border-radius: 12px;
+    outline: 2px solid var(--brand);
+    outline-offset: -2px;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: $item;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--gray);
+  font: inherit;
+  font-size: 1.4rem;
+  scroll-snap-align: center;
+  cursor: pointer;
+
+  &.on {
+    color: var(--ink);
+    font-weight: 700;
+  }
+}

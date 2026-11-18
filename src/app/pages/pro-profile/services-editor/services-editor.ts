@@ -1,6 +1,7 @@
 import { Component, inject, input, model, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Spinner } from '../../../components/spinner/spinner';
+import { TimeField } from '../../../components/time-picker/time-field';
 import {
   COMBO_CATEGORY,
   comboParts,
@@ -27,7 +28,7 @@ import {
 // It edits the drafts the form hands it; saving is up to the form (it is told when something changed).
 @Component({
   selector: 'app-services-editor',
-  imports: [CatalogPipe, Spinner, FormsModule],
+  imports: [CatalogPipe, Spinner, FormsModule, TimeField],
   templateUrl: './services-editor.html',
   styleUrl: './services-editor.scss',
 })
@@ -96,6 +97,16 @@ export class ServicesEditor {
   protected addRule(service: ServiceDraft) {
     service.priceRules = [...service.priceRules, newRuleDraft()];
   }
+
+  // The time of a rule was chosen in the picker (it does not move the focus, so the form is told to save)
+  protected setRuleTime(rule: PriceRuleDraft, edge: 'start' | 'end', time: string) {
+    rule[edge] = time;
+    this.changed.emit();
+  }
+
+  // The names of the two times of a rule, for the picker
+  protected readonly startLabel = $localize`A partir das`;
+  protected readonly endLabel = $localize`Até as`;
 
   protected removeRule(service: ServiceDraft, rule: PriceRuleDraft) {
     service.priceRules = service.priceRules.filter((r) => r !== rule);

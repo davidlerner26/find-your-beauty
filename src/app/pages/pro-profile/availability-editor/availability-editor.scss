@@ -45,28 +45,10 @@
     }
   }
 
-  // The two times in one white field, with the "às" between them (on a phone it drops below the day name)
+  // The opening and the closing in one white field with a clock (it opens the picker); on a phone it drops below the day name
   .times {
     flex: 1 1 13rem;
     min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 2.75rem;
-    padding: 0 0.75rem;
-    border-radius: 14px;
-    background: #fff;
-    color: var(--brand);
-
-    input {
-      flex: 1;
-      min-width: 0;
-      width: 0;
-      padding: 0.5rem 0;
-      background: transparent;
-      color: var(--brand);
-      text-align: center;
-    }
   }
 
   // A day off, on the right

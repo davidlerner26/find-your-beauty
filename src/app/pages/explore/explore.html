@@ -209,8 +209,8 @@
       @if (salon.photos.length > 1) {
         <app-carousel-arrows [target]="photosEl" />
         <div class="dots" aria-hidden="true">
-          @for (photo of salon.photos; track photo; let n = $index) {
-            <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
+          @for (dot of dotsOf(salon.photos.length, photoIndex()[salon.id] ?? 0); track dot.index) {
+            <span [class.on]="dot.on" [class.small]="dot.small"></span>
           }
         </div>
       }
@@ -230,7 +230,9 @@
     </div>
     <div class="offer-info">
       <p class="tags">{{ salon.tags | catalog }}</p>
-      <h3>{{ salon.name }} <app-pro-badge [pro]="salon.pro" /></h3>
+      <h3>
+        <span class="name-text">{{ salon.name }}</span> <app-pro-badge [pro]="salon.pro" />
+      </h3>
       <p class="muted">{{ salon.address }}</p>
       <p class="rating">
         <mat-icon class="star filled">star</mat-icon> <strong>{{ salon.rating }}</strong> ({{

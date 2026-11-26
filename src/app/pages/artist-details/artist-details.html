@@ -37,8 +37,8 @@
     @if (heroPhotos(artist).length > 1) {
       <app-carousel-arrows [target]="heroPhotosEl" />
       <div class="dots" aria-hidden="true">
-        @for (photo of heroPhotos(artist); track photo; let i = $index) {
-          <span [class.on]="i === heroIndex()"></span>
+        @for (dot of dotsOf(heroPhotos(artist).length, heroIndex()); track dot.index) {
+          <span [class.on]="dot.on" [class.small]="dot.small"></span>
         }
       </div>
     }

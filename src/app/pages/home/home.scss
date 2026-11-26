@@ -208,6 +208,11 @@ a {
     &.on {
       background: #fff;
     }
+
+    // An edge of the window when there are more photos beyond it
+    &.small {
+      transform: scale(0.6);
+    }
   }
 }
 
@@ -458,4 +463,32 @@ a {
 .name {
   color: inherit;
   text-decoration: none;
+}
+
+// ----- Phones and tablets: the tags, the name and the address of a card take one line each (a long one ends in "..."), so the
+// cards have the same height whatever the text. The Pro badge beside the name is never cut.
+@media (max-width: 1023.98px) {
+  .offer-info .tags,
+  .offer-info .muted,
+  .card .tags,
+  .card .muted {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .offer-info h3,
+  .card h3 {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .offer-info h3 .name,
+  .card h3 .name {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }

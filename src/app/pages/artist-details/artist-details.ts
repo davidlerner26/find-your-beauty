@@ -45,6 +45,7 @@ import { Clamped } from '../../utils/clamped.directive';
 import { ruleLabel } from '../../utils/pricing';
 import { instagramUrl } from '../../utils/instagram';
 import { formatRelative } from '../../utils/format-date';
+import { dotsWindow } from '../../utils/photo-dots';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
@@ -85,6 +86,7 @@ export class ArtistDetails {
   private readonly feedback = inject(Feedback);
 
   protected readonly t = T;
+  protected readonly dotsOf = dotsWindow;
   readonly id = input.required<string>();
   // Shown floating over another screen (the map): going back closes it instead of leaving the screen
   readonly floating = input(false);

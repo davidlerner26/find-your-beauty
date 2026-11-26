@@ -89,8 +89,11 @@
               @if (salon.photos.length > 1) {
                 <app-carousel-arrows [target]="photosEl" />
                 <div class="dots" aria-hidden="true">
-                  @for (photo of salon.photos; track photo; let n = $index) {
-                    <span [class.on]="n === (photoIndex()[salon.id] ?? 0)"></span>
+                  @for (
+                    dot of dotsOf(salon.photos.length, photoIndex()[salon.id] ?? 0);
+                    track dot.index
+                  ) {
+                    <span [class.on]="dot.on" [class.small]="dot.small"></span>
                   }
                 </div>
               }
@@ -187,8 +190,11 @@
             @if (offer.photos.length > 1) {
               <app-carousel-arrows [target]="photosEl" />
               <div class="dots" aria-hidden="true">
-                @for (photo of offer.photos; track photo; let n = $index) {
-                  <span [class.on]="n === (photoIndex()['near-' + offer.id] ?? 0)"></span>
+                @for (
+                  dot of dotsOf(offer.photos.length, photoIndex()['near-' + offer.id] ?? 0);
+                  track dot.index
+                ) {
+                  <span [class.on]="dot.on" [class.small]="dot.small"></span>
                 }
               </div>
             }

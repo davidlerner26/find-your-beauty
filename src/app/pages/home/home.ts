@@ -21,6 +21,7 @@ import {
 } from '../../models/professional';
 import { Professionals } from '../../services/professionals';
 import { distanceKm, formatDistance } from '../../utils/geo';
+import { dotsWindow } from '../../utils/photo-dots';
 import { T } from '../../utils/texts';
 import { environment } from '../../../environments/environment';
 import { CatalogPipe } from '../../utils/catalog.pipe';
@@ -77,6 +78,7 @@ export class Home {
   protected readonly favorites = inject(Favorites);
 
   protected readonly t = T;
+  protected readonly dotsOf = dotsWindow;
   // The section of featured professionals is only shown in the test environment for now. Where the Pro subscription
   // exists it has the subscribers, in a rotation; without it, the best rated.
   private readonly proOn = proSubscriptionEnabled();

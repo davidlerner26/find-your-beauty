@@ -35,6 +35,7 @@ import {
 import { distanceKm, formatDistance } from '../../utils/geo';
 import { environment } from '../../../environments/environment';
 import { INTL_LOCALE } from '../../utils/locale';
+import { dotsWindow } from '../../utils/photo-dots';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
@@ -84,6 +85,7 @@ export class Explore implements OnInit {
   private readonly feedback = inject(Feedback);
 
   protected readonly t = T;
+  protected readonly dotsOf = dotsWindow;
   protected readonly hasKey = !!environment.googleMapsApiKey;
   protected readonly loaded = signal(false);
 

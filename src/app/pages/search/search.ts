@@ -11,6 +11,7 @@ import { Professionals } from '../../services/professionals';
 import { CalendarDay as Day, monthDays, startOfDay, startOfMonth } from '../../utils/calendar';
 import { INTL_LOCALE } from '../../utils/locale';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
+import { dotsWindow } from '../../utils/photo-dots';
 import { T } from '../../utils/texts';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { log } from '../../utils/log';
@@ -46,6 +47,7 @@ export class Search {
   protected readonly favorites = inject(Favorites);
 
   protected readonly t = T;
+  protected readonly dotsOf = dotsWindow;
   // A text to search for, from the link of a service on the home (?q=Escova)
   readonly q = input<string>();
 

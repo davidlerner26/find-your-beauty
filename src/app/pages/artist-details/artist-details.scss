@@ -65,6 +65,11 @@ a {
     &.on {
       background: #fff;
     }
+
+    // An edge of the window when there are more photos beyond it
+    &.small {
+      transform: scale(0.6);
+    }
   }
 }
 

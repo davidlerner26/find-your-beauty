@@ -141,15 +141,17 @@
       @if (item.photos.length > 1) {
         <app-carousel-arrows [target]="photosEl" />
         <div class="dots" aria-hidden="true">
-          @for (photo of item.photos; track photo; let n = $index) {
-            <span [class.on]="n === (photoIndex()[item.id] ?? 0)"></span>
+          @for (dot of dotsOf(item.photos.length, photoIndex()[item.id] ?? 0); track dot.index) {
+            <span [class.on]="dot.on" [class.small]="dot.small"></span>
           }
         </div>
       }
     </div>
     <div class="result-info">
       <p class="tags">{{ item.tags | catalog }}</p>
-      <h3>{{ item.name }} <app-pro-badge [pro]="item.pro" /></h3>
+      <h3>
+        <span class="name-text">{{ item.name }}</span> <app-pro-badge [pro]="item.pro" />
+      </h3>
       <p class="muted address">{{ item.address }}</p>
       @if (item.minPrice !== null && item.minPrice !== undefined) {
         <p i18n class="from-price">A partir de {{ item.minPrice | price }}</p>

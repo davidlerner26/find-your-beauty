@@ -278,10 +278,18 @@ describe('search', () => {
 });
 
 describe('suggestions', () => {
-  it('gives the best rated first, up to the count, without touching the list', () => {
+  it('gives everybody, the best rated first, without touching the list', () => {
     const list = [1, 5, 3, 4, 2, 4.5].map((rating) => pro({ name: `R${rating}`, rating }));
-    expect(names(suggestions(list, null))).toEqual(['R5', 'R4.5', 'R4', 'R3', 'R2']);
+    expect(names(suggestions(list, null))).toEqual(['R5', 'R4.5', 'R4', 'R3', 'R2', 'R1']);
     expect(names(list)[0]).toBe('R1');
+  });
+
+  it('includes who only goes to the home, and can be cut with a count', () => {
+    const home = pro({ name: 'Domicilio', serviceMode: 'home', address: '', rating: 5 });
+    const list = [pro({ name: 'Studio', rating: 4 }), home];
+
+    expect(names(suggestions(list, null))).toEqual(['Domicilio', 'Studio']);
+    expect(names(suggestions(list, null, 1))).toEqual(['Domicilio']);
   });
 });
 

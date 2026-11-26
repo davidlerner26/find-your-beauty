@@ -39,3 +39,15 @@ test.describe('"Profissionais próximos" on the home', () => {
     await expect(section.getByText(PRO.name)).toBeVisible();
   });
 });
+
+test.describe('/busca before searching', () => {
+  test('lists everybody, with the ones that only go to the home too', async ({ page }) => {
+    await page.goto('/busca');
+
+    const list = page.locator('a.result');
+    // Ana, the five extras and Bia: not only five
+    await expect(list).toHaveCount(EXTRA + 2);
+    await expect(list.filter({ hasText: PRO_HOME.name })).toHaveCount(1);
+    await expect(page.getByRole('heading', { name: 'Profissionais', exact: true })).toBeVisible();
+  });
+});

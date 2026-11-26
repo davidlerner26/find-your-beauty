@@ -2831,7 +2831,7 @@
         <source>visitante</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/home/home.ts</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3477276292482988120" datatype="html">
@@ -5051,15 +5051,15 @@
           <context context-type="linenumber">87,88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7119553026173997140" datatype="html">
-        <source>Sugestões para você</source>
+      <trans-unit id="2722256100683565789" datatype="html">
+        <source>Profissionais</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
           <context context-type="linenumber">95,96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1012514213482633577" datatype="html">
-        <source>Ainda não há profissionais para sugerir.</source>
+      <trans-unit id="985445350899537123" datatype="html">
+        <source>Ainda não há profissionais.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/search/search.html</context>
           <context context-type="linenumber">100,101</context>

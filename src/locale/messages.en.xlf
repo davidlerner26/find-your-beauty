@@ -6300,6 +6300,22 @@
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2722256100683565789" datatype="html">
+        <source>Profissionais</source>
+        <target>Professionals</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/search/search.html</context>
+          <context context-type="linenumber">95,96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="985445350899537123" datatype="html">
+        <source>Ainda não há profissionais.</source>
+        <target>There are no professionals yet.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/search/search.html</context>
+          <context context-type="linenumber">100,101</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

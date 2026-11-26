@@ -172,8 +172,8 @@ export const search = (
   });
 };
 
-// What is shown before searching: the best rated
-export const suggestions = (professionals: Professional[], user: Point | null, count = 5) =>
+// What is shown before searching: everybody, the best rated first (`count` can cut the list; by default it is not cut)
+export const suggestions = (professionals: Professional[], user: Point | null, count = Infinity) =>
   [...professionals]
     .sort((a, b) => b.rating - a.rating)
     .slice(0, count)

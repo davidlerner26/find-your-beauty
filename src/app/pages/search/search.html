@@ -92,12 +92,12 @@
       </div>
     }
 
-    <h2 i18n>Sugestões para você</h2>
+    <h2 i18n>Profissionais</h2>
     <div class="list">
       @for (item of suggestions(); track item.id) {
         <ng-container *ngTemplateOutlet="card; context: { $implicit: item }" />
       } @empty {
-        <p i18n class="empty muted">Ainda não há profissionais para sugerir.</p>
+        <p i18n class="empty muted">Ainda não há profissionais.</p>
       }
     </div>
   }

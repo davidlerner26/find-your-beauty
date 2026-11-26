@@ -174,7 +174,7 @@
     class="offer"
     tabindex="0"
     [attr.aria-label]="salon.name"
-    [class.selected]="index === selected()"
+    [class.selected]="salon.id === selectedId"
     (click)="openSalon(index, salon.id)"
     (keydown.enter)="onCardKey($event, index, salon.id)"
   >

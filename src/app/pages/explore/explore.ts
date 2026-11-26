@@ -477,6 +477,12 @@ export class Explore implements OnInit {
     else void this.locateMe();
   }
 
+  // The id of the selected professional (none: null). The cards of the list are marked by it, not by their position: the list
+  // of the button has no position of its own, and "no one selected" (-1) must not be the position of any card.
+  protected get selectedId() {
+    return this.visibleSalons[this.selected()]?.id ?? null;
+  }
+
   // The selected professional only goes to the client's home
   protected get atHome() {
     const salon = this.visibleSalons[this.selected()];

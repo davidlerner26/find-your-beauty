@@ -48,3 +48,17 @@ test.describe('the screen of the map', () => {
     await expect(status).toHaveCount(0);
   });
 });
+
+test.describe('the cards of the list', () => {
+  test.use({ viewport: { width: 390, height: 800 } });
+
+  test('none is selected until one is chosen', async ({ page }) => {
+    await page.goto('/explorar');
+    await page.getByRole('button', { name: 'Agora não' }).click();
+    await page.getByRole('button', { name: 'Lista' }).click();
+
+    const cards = page.locator('.sheet .offer');
+    await expect(cards).toHaveCount(2);
+    await expect(page.locator('.sheet .offer.selected')).toHaveCount(0);
+  });
+});

@@ -25,6 +25,7 @@ import { T } from '../../utils/texts';
 import { environment } from '../../../environments/environment';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { featuredPro, newSeed } from '../../utils/featured';
+import { nearbyOrder } from '../../utils/nearby';
 import { proSubscriptionEnabled } from '../../utils/features';
 import { ProBadge } from '../../components/pro-badge/pro-badge';
 import { log } from '../../utils/log';
@@ -46,6 +47,8 @@ type Salon = {
   reviews: string;
   distance: string | null;
   distanceKm: number | null;
+  // Has an address (on the map). The ones that only go to the client's home do not.
+  located: boolean;
   // An active Pro subscription (the badge only shows where the subscription exists)
   pro: boolean;
 };
@@ -112,18 +115,19 @@ export class Home {
     });
   }
 
+  // Everybody, not only the closest ones: first who has an address (the closest first), then who only goes to the client's
+  // home (the best rating first)
   protected readonly nearbyOffers = computed(() =>
-    [...this.salons()]
-      // With every chip selected nothing is filtered out, even professionals with other tags
-      .filter((salon) => {
+    nearbyOrder(
+      this.salons().filter((salon) => {
+        // With every chip selected nothing is filtered out, even professionals with other tags
         const active = this.activeInterests();
         return (
           active.length === this.interests.length ||
           salon.tagList.some((tag) => active.includes(tag))
         );
-      })
-      .sort((a, b) => (a.distanceKm ?? Infinity) - (b.distanceKm ?? Infinity))
-      .slice(0, 3),
+      }),
+    ),
   );
 
   // Photo being shown in each featured card
@@ -166,6 +170,7 @@ export class Home {
       tagList: professional.tags,
       distance: km === null ? null : formatDistance(km),
       distanceKm: km,
+      located: hasLocation(professional),
       pro: isPro(professional),
     };
   }

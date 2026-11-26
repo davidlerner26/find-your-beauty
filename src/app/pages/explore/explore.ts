@@ -186,12 +186,12 @@ export class Explore implements OnInit {
       if (index < 0) return;
       lastSelectedId = id;
       this.restored = true;
-      // The index follows the order of the list (by distance), so it is kept up to date; the map only goes there once
+      // The index follows the order of the list (by rating), so it is kept up to date; the map only goes there once
       this.selected.set(index);
       this.revealCard(id, index);
       if (this.centeredFor !== 'focus:' + id) {
         this.centeredFor = 'focus:' + id;
-        this.center.set({ ...this.visibleSalons[index].position });
+        this.centerOnSalon(index);
       }
     });
 
@@ -207,7 +207,7 @@ export class Explore implements OnInit {
       this.revealCard(id, index);
       if (this.centeredFor !== 'open:' + id) {
         this.centeredFor = 'open:' + id;
-        this.center.set({ ...this.visibleSalons[index].position });
+        this.centerOnSalon(index);
       }
     });
 
@@ -229,7 +229,7 @@ export class Explore implements OnInit {
       if (index < 0) return;
       this.restored = true;
       this.selected.set(index);
-      this.center.set(this.visibleSalons[index].position);
+      this.centerOnSalon(index);
       setTimeout(() => this.showCard(index, 'auto'), 0);
     });
   }
@@ -239,12 +239,12 @@ export class Explore implements OnInit {
     this.loader.load().then(() => this.loaded.set(true));
   }
 
-  // The services offered by the professionals on the map, in the chosen categories
+  // The services offered by the professionals of the list (the ones with an address and the ones that go to the home), in the
+  // chosen categories
   protected readonly serviceTags = computed(() => {
     const categories = this.activeFilters();
     const names = new Set<string>();
     for (const salon of this.professionals.published()) {
-      if (!hasLocation(salon)) continue;
       for (const service of salon.services) {
         if (categories.includes(service.category)) names.add(service.name);
         // The halves of a combo are services of makeup and of hair too
@@ -285,22 +285,26 @@ export class Explore implements OnInit {
               servicePartsOf(service.name).some((part) => services.includes(part)),
             ),
         )
-        // Home-only professionals have no place on the map
-        .filter((salon) => hasLocation(salon))
-        .map((salon) => ({
-          ...salon,
-          address: shortLocationLabel(salon),
-          // Work photos (the profile photo when there is no gallery)
-          photos: salon.gallery.length ? salon.gallery : [salon.image],
-          distance: user ? formatDistance(distanceKm(user, salon.position)) : null,
-          km: user ? distanceKm(user, salon.position) : null,
-        }))
-        // Closest first, in the carousel, on the map markers and in the list (the same order everywhere)
-        .sort((a, b) => (a.km ?? Infinity) - (b.km ?? Infinity))
+        // Everybody is in the list. The ones that only go to the home have no place: no pin on the map, no distance.
+        .map((salon) => {
+          const located = hasLocation(salon);
+          return {
+            ...salon,
+            located,
+            address: shortLocationLabel(salon),
+            // Work photos (the profile photo when there is no gallery)
+            photos: salon.gallery.length ? salon.gallery : [salon.image],
+            distance: user && located ? formatDistance(distanceKm(user, salon.position)) : null,
+            km: user && located ? distanceKm(user, salon.position) : null,
+          };
+        })
+        // The best rating first, in the carousel and in the list (the same order everywhere)
+        .sort((a, b) => b.rating - a.rating)
     );
   }
 
-  // The list of the round button shows the same professionals, in the same order, as the carousel
+  // The list of the round button shows the same professionals, in the same order, as the carousel (the pins are only for the
+  // ones with an address)
   protected get nearbySalons() {
     return this.visibleSalons;
   }
@@ -403,7 +407,7 @@ export class Explore implements OnInit {
   protected selectSalon(index: number) {
     this.selected.set(index);
     lastSelectedId = this.visibleSalons[index].id;
-    this.center.set(this.visibleSalons[index].position);
+    this.centerOnSalon(index);
     this.showCard(index, 'smooth');
   }
 
@@ -416,8 +420,8 @@ export class Explore implements OnInit {
   // Closing the card goes back to the map
   // Takes the map to the pin of the professional (a new object, so it moves even if the map was dragged away)
   protected centerOn(id: string) {
-    const salon = this.visibleSalons.find((item) => item.id === id);
-    if (salon) this.center.set({ ...salon.position });
+    const index = this.visibleSalons.findIndex((item) => item.id === id);
+    if (index >= 0) this.centerOnSalon(index);
   }
 
   protected closeFloating(event?: Event) {
@@ -455,6 +459,54 @@ export class Explore implements OnInit {
     this.host.nativeElement
       .querySelectorAll('.results .offer')
       [index]?.scrollIntoView({ behavior, inline: 'center', block: wide ? 'center' : 'nearest' });
+  }
+
+  // Takes the map to a professional. One that only goes to the client's home has nothing to find on the map: the map goes to
+  // where the client is, and a small house appears over the location (see `atHome`). Without the position, it is asked for.
+  private centerOnSalon(index: number) {
+    const salon = this.visibleSalons[index];
+    if (!salon) return;
+    if (salon.located) {
+      this.center.set({ ...salon.position });
+      return;
+    }
+    const user = this.userLocation.position();
+    if (user) this.center.set({ ...user });
+    else void this.locateMe();
+  }
+
+  // The selected professional only goes to the client's home
+  protected get atHome() {
+    const salon = this.visibleSalons[this.selected()];
+    return !!salon && !salon.located;
+  }
+
+  // One key per selected professional that goes to the home: a new selection makes the house appear again
+  protected get houseKeys() {
+    return this.atHome ? [this.visibleSalons[this.selected()].id] : [];
+  }
+
+  // The house over the location of the client: its base is a little above the dot of the location
+  protected readonly houseIcon: google.maps.Icon = {
+    url:
+      'data:image/svg+xml;utf8,' +
+      encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="#a87558" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>',
+      ),
+    scaledSize: { width: 44, height: 44, equals: () => false } as google.maps.Size,
+    anchor: { x: 22, y: 62, equals: () => false } as google.maps.Point,
+  };
+
+  private houseMarkerOptions?: google.maps.MarkerOptions;
+
+  // The house drops onto the map (the animation of the marker). The object is made once: a new one at every check would play
+  // the animation again.
+  protected houseOptions() {
+    return (this.houseMarkerOptions ??= {
+      clickable: false,
+      zIndex: 3,
+      animation: google.maps.Animation.DROP,
+    });
   }
 
   // The professional of the page (or of the map button) is selected in the list, which is scrolled to show it in

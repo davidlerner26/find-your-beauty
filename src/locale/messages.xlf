@@ -2678,36 +2678,43 @@
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="235146805819609233" datatype="html">
+        <source> Atende a domicílio: o mapa mostra a sua localização. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8958244733565382247" datatype="html">
         <source> Defina <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>googleMapsApiKey<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> em <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>src/environments/environment.ts<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> para carregar o mapa. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
-          <context context-type="linenumber">4,7</context>
+          <context context-type="linenumber">9,12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1802619862731601881" datatype="html">
         <source>Lista</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2220582142926183968" datatype="html">
         <source>Minha localização</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
-          <context context-type="linenumber">79,80</context>
+          <context context-type="linenumber">92,93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7481503918854297318" datatype="html">
         <source>Profissionais próximos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
-          <context context-type="linenumber">112,113</context>
+          <context context-type="linenumber">125,126</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
-          <context context-type="linenumber">132,133</context>
+          <context context-type="linenumber">145,146</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/home/home.html</context>
@@ -2718,21 +2725,21 @@
         <source>Fechar a lista</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
-          <context context-type="linenumber">122,123</context>
+          <context context-type="linenumber">135,136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8640762154456448655" datatype="html">
         <source>Nenhum profissional encontrado.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
-          <context context-type="linenumber">149,150</context>
+          <context context-type="linenumber">162,163</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2833333733949063350" datatype="html">
         <source>Não foi possível obter a sua localização. Permita o acesso no navegador.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/explore/explore.ts</context>
-          <context context-type="linenumber">490</context>
+          <context context-type="linenumber">542</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7895406230410226456" datatype="html">
@@ -4745,21 +4752,21 @@
         <source>Profissional não encontrado</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/professional/professional.ts</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6607499310350745129" datatype="html">
         <source> em <x id="place" equiv-text="place"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/professional/professional.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5616752158752818445" datatype="html">
         <source>Agende <x id="service" equiv-text="category ?? SITE_NAME"/> com <x id="name" equiv-text="artist.name"/> pelo Find Your Beauty.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/pages/professional/professional.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1016389177530675692" datatype="html">

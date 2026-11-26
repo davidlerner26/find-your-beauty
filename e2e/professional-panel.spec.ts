@@ -41,11 +41,15 @@ test.describe('page of a professional on a wide screen', () => {
     await expect(page).toHaveURL('/');
   });
 
-  test('a link opened by address is a page of its own, with no map', async ({ page }) => {
+  test('a link opened by address is the screen of the map with her card, as for any professional', async ({
+    page,
+  }) => {
     await page.goto(`/explorar/${PRO_HOME.uid}`);
 
+    await expect(page.locator('app-explore')).toHaveCount(1);
     await expect(page.getByRole('heading', { name: PRO_HOME.name }).first()).toBeVisible();
-    await expect(page.locator('app-explore')).toHaveCount(0);
+    // Who only goes to the home has no pin: the map goes to where the client is
+    await expect(page.getByRole('status').filter({ hasText: 'Atende a domicílio' })).toHaveCount(1);
   });
 
   test('a professional with a place still opens over the map', async ({ page }) => {

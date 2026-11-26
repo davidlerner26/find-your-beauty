@@ -1,4 +1,9 @@
 <div class="explore">
+  @if (atHome) {
+    <p i18n class="visually-hidden" role="status">
+      Atende a domicílio: o mapa mostra a sua localização.
+    </p>
+  }
   @if (!hasKey) {
     <p i18n class="notice">
       Defina <code>googleMapsApiKey</code> em <code>src/environments/environment.ts</code> para
@@ -18,13 +23,21 @@
         <map-circle [center]="position" [radius]="210" [options]="ringOptions" />
         <map-marker [position]="position" [options]="dotOptions" />
       }
+      @for (key of houseKeys; track key) {
+        @if (userPosition(); as position) {
+          <map-marker [position]="position" [icon]="houseIcon" [options]="houseOptions()" />
+        }
+      }
       @for (salon of visibleSalons; track salon.name; let i = $index) {
-        <map-marker
-          [position]="salon.position"
-          [icon]="markerIcon(i, salon.pro)"
-          [options]="salon.pro && proOn ? proMarker : {}"
-          (mapClick)="onPin(i, salon.id)"
-        />
+        <!-- The pin is for who has an address; who only goes to the home has none -->
+        @if (salon.located) {
+          <map-marker
+            [position]="salon.position"
+            [icon]="markerIcon(i, salon.pro)"
+            [options]="salon.pro && proOn ? proMarker : {}"
+            (mapClick)="onPin(i, salon.id)"
+          />
+        }
       }
     </google-map>
   }

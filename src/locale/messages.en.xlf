@@ -6316,6 +6316,14 @@
           <context context-type="linenumber">100,101</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="235146805819609233" datatype="html">
+        <source> Atende a domicílio: o mapa mostra a sua localização. </source>
+        <target>Goes to the client's home: the map shows your location.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/explore/explore.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

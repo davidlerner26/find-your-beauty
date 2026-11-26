@@ -486,7 +486,7 @@ export class Explore implements OnInit {
     return this.atHome ? [this.visibleSalons[this.selected()].id] : [];
   }
 
-  // The house over the location of the client: its base is a little above the dot of the location
+  // The house on the location of the client, in the middle of the soft area (in the place of the ring and the dot)
   protected readonly houseIcon: google.maps.Icon = {
     url:
       'data:image/svg+xml;utf8,' +
@@ -494,7 +494,7 @@ export class Explore implements OnInit {
         '<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="#a87558" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>',
       ),
     scaledSize: { width: 44, height: 44, equals: () => false } as google.maps.Size,
-    anchor: { x: 22, y: 62, equals: () => false } as google.maps.Point,
+    anchor: { x: 22, y: 22, equals: () => false } as google.maps.Point,
   };
 
   private houseMarkerOptions?: google.maps.MarkerOptions;

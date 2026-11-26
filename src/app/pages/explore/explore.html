@@ -20,12 +20,14 @@
     >
       @if (userPosition(); as position) {
         <map-circle [center]="position" [radius]="350" [options]="circleOptions" />
-        <map-circle [center]="position" [radius]="210" [options]="ringOptions" />
-        <map-marker [position]="position" [options]="dotOptions" />
-      }
-      @for (key of houseKeys; track key) {
-        @if (userPosition(); as position) {
-          <map-marker [position]="position" [icon]="houseIcon" [options]="houseOptions()" />
+        <!-- Where the client is: a ring and a dot. When who only goes to the home is selected, a house takes their place. -->
+        @if (atHome) {
+          @for (key of houseKeys; track key) {
+            <map-marker [position]="position" [icon]="houseIcon" [options]="houseOptions()" />
+          }
+        } @else {
+          <map-circle [center]="position" [radius]="210" [options]="ringOptions" />
+          <map-marker [position]="position" [options]="dotOptions" />
         }
       }
       @for (salon of visibleSalons; track salon.name; let i = $index) {

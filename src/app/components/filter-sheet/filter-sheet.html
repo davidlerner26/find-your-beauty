@@ -1,0 +1,168 @@
+<div class="backdrop" role="presentation" (click)="cancelled.emit()"></div>
+<div
+  i18n-aria-label
+  class="sheet"
+  [class.side]="side()"
+  role="dialog"
+  appDialog
+  (escape)="cancelled.emit()"
+  aria-label="Filtros"
+>
+  <div class="handle"></div>
+  <div class="sheet-head">
+    <button i18n type="button" class="link" (click)="cancelled.emit()">Cancelar</button>
+    <strong i18n>Filtros</strong>
+    <button i18n type="button" class="reset" (click)="resetDraft()">Redefinir</button>
+  </div>
+
+  <div class="sheet-body">
+    <h2 i18n>Ordenar por</h2>
+    <div class="chips">
+      @for (option of sortOptions; track option.key) {
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="draft.sort === option.key"
+          [disabled]="option.key === 'distance' && !userPosition()"
+          (click)="setSort(option.key)"
+        >
+          {{ option.label }}
+        </button>
+      }
+    </div>
+    @if (!userPosition()) {
+      <p i18n class="muted range-label">Permita a localização para ordenar por distância.</p>
+    }
+
+    <h2 i18n>Bairro</h2>
+    <select
+      i18n-aria-label
+      class="neighborhood"
+      name="neighborhood"
+      aria-label="Bairro"
+      [(ngModel)]="draft.neighborhood"
+    >
+      <option i18n [ngValue]="null">Todos os bairros do Rio de Janeiro</option>
+      @for (name of neighborhoods(); track name) {
+        <option [ngValue]="name">{{ name }}</option>
+      }
+    </select>
+
+    <h2 i18n>Disponível em</h2>
+    <div class="month">
+      <button
+        i18n-aria-label
+        type="button"
+        aria-label="Mês anterior"
+        [disabled]="isCurrentMonth()"
+        (click)="changeMonth(-1)"
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <strong>{{ monthLabel() }}</strong>
+      <button i18n-aria-label type="button" aria-label="Próximo mês" (click)="changeMonth(1)">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+    <div class="days">
+      @for (day of days(); track day.number) {
+        <button
+          type="button"
+          class="day"
+          [class.selected]="isDraftDay(day)"
+          [class.today]="isToday(day)"
+          [disabled]="day.disabled"
+          (click)="pickDay(day)"
+        >
+          <span>{{ day.weekday }}</span>
+          <strong>{{ day.number }}</strong>
+        </button>
+      }
+    </div>
+
+    <h2 i18n>Serviço</h2>
+    <div class="chips">
+      @for (tag of tags(); track tag) {
+        <button
+          type="button"
+          class="filter-chip"
+          [class.active]="draft.tags.includes(tag)"
+          (click)="toggleTag(tag)"
+        >
+          {{ tag | catalog }}
+        </button>
+      }
+    </div>
+
+    <h2 i18n>Atendimento</h2>
+    <div class="chips">
+      <button
+        i18n
+        type="button"
+        class="filter-chip"
+        [class.active]="draft.home"
+        [attr.aria-pressed]="draft.home"
+        (click)="draft.home = !draft.home"
+      >
+        A domicílio
+      </button>
+      <button
+        i18n
+        type="button"
+        class="filter-chip"
+        [class.active]="draft.studio"
+        [attr.aria-pressed]="draft.studio"
+        (click)="draft.studio = !draft.studio"
+      >
+        No estúdio
+      </button>
+    </div>
+
+    <h2 i18n>Avaliação</h2>
+    <div class="rating-filter">
+      <div class="stars">
+        @for (star of stars; track star) {
+          <button
+            type="button"
+            [class.on]="star <= draft.minRating"
+            [attr.aria-label]="t.stars(star)"
+            (click)="setRating(star)"
+          >
+            <mat-icon class="filled">star</mat-icon>
+          </button>
+        }
+      </div>
+      <span i18n class="rating-label">
+        @if (draft.minRating) {
+          {{ draft.minRating }} estrelas ou mais
+        } @else {
+          Qualquer nota
+        }
+      </span>
+    </div>
+
+    <h2 i18n>Distância</h2>
+    <input
+      class="range"
+      type="range"
+      min="1"
+      [max]="maxKm"
+      name="distance"
+      [disabled]="!userPosition()"
+      [(ngModel)]="draft.maxKm"
+    />
+    <p i18n class="muted range-label">
+      @if (!userPosition()) {
+        Permita a localização para filtrar por distância.
+      } @else {
+        @if (draft.maxKm >= maxKm) {
+          Sem limite
+        } @else {
+          Até {{ draft.maxKm }} km
+        }
+      }
+    </p>
+  </div>
+
+  <button i18n type="button" class="show" (click)="showResults()">Mostrar resultados</button>
+</div>

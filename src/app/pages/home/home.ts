@@ -2,7 +2,6 @@ import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { FocusPipe } from '../../utils/focus.pipe';
-import { ProfessionalLink } from '../../utils/professional-link.directive';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { Component, computed, signal, inject } from '@angular/core';
 import { Favorites } from '../../services/favorites';
@@ -26,6 +25,9 @@ import { T } from '../../utils/texts';
 import { environment } from '../../../environments/environment';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { featuredPro, newSeed } from '../../utils/featured';
+import { PATHS } from '../../utils/paths';
+import { wideScreen } from '../../utils/professional-panel';
+import { ProfessionalLink } from '../../utils/professional-link.directive';
 import { nearbyOrder } from '../../utils/nearby';
 import { proSubscriptionEnabled } from '../../utils/features';
 import { ProBadge } from '../../components/pro-badge/pro-badge';
@@ -78,6 +80,9 @@ export class Home {
   protected readonly favorites = inject(Favorites);
 
   protected readonly t = T;
+  // "Buscar profissionais": on a wide screen it leads to the map (its filters are in a card), on a phone to the search screen
+  private readonly wide = wideScreen();
+  protected readonly searchPath = computed(() => (this.wide() ? PATHS.explore : PATHS.search));
   protected readonly dotsOf = dotsWindow;
   // The section of featured professionals is only shown in the test environment for now. Where the Pro subscription
   // exists it has the subscribers, in a rotation; without it, the best rated.

@@ -1,5 +1,14 @@
 import { ArtistDetails } from '../artist-details/artist-details';
 import { ChipsRow } from '../../components/chips-row/chips-row';
+import { FilterSheet } from '../../components/filter-sheet/filter-sheet';
+import {
+  countFilters,
+  Filters,
+  neighborhoodsWith,
+  noFilters,
+  search,
+} from '../search/search-filter';
+import { wideScreen } from '../../utils/professional-panel';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -57,6 +66,7 @@ let lastSelectedId: string | null = null;
   selector: 'app-explore',
   imports: [
     DialogFocus,
+    FilterSheet,
     ProBadge,
     ArtistDetails,
     CarouselArrows,
@@ -138,6 +148,29 @@ export class Explore implements OnInit {
   // The services under the chips of the categories: none chosen means every service
   protected readonly activeServices = signal<string[]>([]);
   protected readonly selected = signal(-1);
+
+  // ----- Wide screens: the filters are in a card on the right (the same as the search), opened by a button. On phones the chips
+  // above the list stay.
+  protected readonly wide = wideScreen();
+  protected readonly filterOpen = signal(false);
+  protected readonly applied = signal<Filters>(noFilters());
+  // A service that came from the home page (?service=...) is searched in the name and the services of the professionals; it can
+  // be dismissed
+  protected readonly term = signal('');
+  protected readonly filterCount = computed(() => countFilters(this.applied()));
+  protected readonly allTags = computed(() => [
+    ...new Set(this.professionals.published().flatMap((professional) => professional.tags)),
+  ]);
+  protected readonly neighborhoods = computed(() =>
+    neighborhoodsWith(this.professionals.published().map((professional) => professional.address)),
+  );
+
+  protected applyFilters(filters: Filters) {
+    this.applied.set(filters);
+    this.selected.set(-1);
+    this.filterOpen.set(false);
+  }
+
   private restored = false;
   private chipShown = false;
   // The professional the map already went to (the effects below run again when the position of the user arrives or
@@ -160,6 +193,10 @@ export class Explore implements OnInit {
       if (chosen.length) this.activeFilters.set(chosen);
       else if (category) this.activeFilters.set([category]);
       this.activeServices.set([service]);
+      // On a wide screen there are no chips: the same choice goes to the filters
+      this.term.set(service);
+      const tags = chosen.length ? chosen : category ? [category] : [];
+      if (tags.length < this.filters.length) this.applied.update((all) => ({ ...all, tags }));
     });
 
     // The chip of the service that came from the home page is brought into view, once the chips are there
@@ -177,7 +214,10 @@ export class Explore implements OnInit {
 
     effect(() => {
       const tag = this.tag();
-      if (tag && this.filters.includes(tag)) this.activeFilters.set([tag]);
+      if (tag && this.filters.includes(tag)) {
+        this.activeFilters.set([tag]);
+        this.applied.update((all) => ({ ...all, tags: [tag] }));
+      }
     });
 
     // The map button of a professional page: selects her pin and goes there
@@ -267,42 +307,50 @@ export class Explore implements OnInit {
   }
 
   protected get visibleSalons() {
+    const wide = this.wide();
     const active = this.activeFilters();
     const services = this.activeServices().filter((name) => this.serviceTags().includes(name));
     const user = this.userPosition();
 
-    return (
-      this.professionals
-        .published()
-        // With every chip selected nothing is filtered out, even professionals with other tags
-        .filter(
-          (salon) =>
-            active.length === this.filters.length || salon.tags.some((tag) => active.includes(tag)),
-        )
-        // A service chosen under the chips: only who offers one of them
-        .filter(
-          (salon) =>
-            !services.length ||
-            salon.services.some((service) =>
-              servicePartsOf(service.name).some((part) => services.includes(part)),
-            ),
-        )
-        // Everybody is in the list. The ones that only go to the home have no place: no pin on the map, no distance.
-        .map((salon) => {
-          const located = hasLocation(salon);
-          return {
-            ...salon,
-            located,
-            address: shortLocationLabel(salon),
-            // Work photos (the profile photo when there is no gallery)
-            photos: salon.gallery.length ? salon.gallery : [salon.image],
-            distance: user && located ? formatDistance(distanceKm(user, salon.position)) : null,
-            km: user && located ? distanceKm(user, salon.position) : null,
-          };
-        })
-        // The best rating first, in the carousel and in the list (the same order everywhere)
-        .sort((a, b) => b.rating - a.rating)
-    );
+    // The chips are for phones (on a wide screen the filters are the ones of the card)
+    const chosen = this.professionals
+      .published()
+      // With every chip selected nothing is filtered out, even professionals with other tags
+      .filter(
+        (salon) =>
+          wide ||
+          active.length === this.filters.length ||
+          salon.tags.some((tag) => active.includes(tag)),
+      )
+      // A service chosen under the chips: only who offers one of them
+      .filter(
+        (salon) =>
+          wide ||
+          !services.length ||
+          salon.services.some((service) =>
+            servicePartsOf(service.name).some((part) => services.includes(part)),
+          ),
+      );
+
+    // The filters of the search (day, neighborhood, place, rating, distance, order...). Without an order chosen: the best rating.
+    const filters = wide ? this.applied() : noFilters();
+    const found = search(chosen, wide ? this.term() : '', filters, user);
+    const ordered = filters.sort ? found : [...found].sort((a, b) => b.rating - a.rating);
+
+    // Everybody that passes is in the list. The ones that only go to the home have no place: no pin on the map, no distance.
+    return ordered.map((card) => {
+      const salon = this.professionals.byId(card.id)!;
+      const located = hasLocation(salon);
+      return {
+        ...salon,
+        located,
+        address: shortLocationLabel(salon),
+        // Work photos (the profile photo when there is no gallery)
+        photos: salon.gallery.length ? salon.gallery : [salon.image],
+        distance: user && located ? formatDistance(distanceKm(user, salon.position)) : null,
+        km: user && located ? distanceKm(user, salon.position) : null,
+      };
+    });
   }
 
   // The list of the round button shows the same professionals, in the same order, as the carousel (the pins are only for the

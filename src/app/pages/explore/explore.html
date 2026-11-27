@@ -44,36 +44,68 @@
     </google-map>
   }
 
-  <div class="filters">
-    <div class="filter-row">
-      @for (filter of filters; track filter) {
+  @if (!wide()) {
+    <div class="filters">
+      <div class="filter-row">
+        @for (filter of filters; track filter) {
+          <button
+            type="button"
+            class="filter"
+            [class.active]="activeFilters().includes(filter)"
+            (click)="toggleFilter(filter)"
+          >
+            {{ filter | catalog }}
+          </button>
+        }
+      </div>
+      <!-- Under the chips: the services of the professionals on the map. On wide screens the row has a limit of
+         width and arrows to the sides. -->
+      @if (serviceTags().length) {
+        <app-chips-row class="tags-box">
+          @for (name of serviceTags(); track name) {
+            <button
+              type="button"
+              class="filter small"
+              [class.active]="activeServices().includes(name)"
+              (click)="toggleService(name)"
+            >
+              {{ name | catalog }}
+            </button>
+          }
+        </app-chips-row>
+      }
+    </div>
+  } @else {
+    <!-- Wide screens: one button opens the filters of the search, as a card on the right -->
+    <div class="filter-corner">
+      <button
+        i18n-aria-label
+        type="button"
+        class="filter-open"
+        aria-label="Filtros"
+        aria-haspopup="dialog"
+        (click)="filterOpen.set(true)"
+      >
+        <mat-icon>filter_list</mat-icon>
+        <span i18n>Filtros</span>
+        @if (filterCount() > 0) {
+          <span class="count">{{ filterCount() }}</span>
+        }
+      </button>
+      @if (term(); as service) {
+        <!-- A service that came from the home page: shown, so it can be dismissed -->
         <button
+          i18n-aria-label
           type="button"
-          class="filter"
-          [class.active]="activeFilters().includes(filter)"
-          (click)="toggleFilter(filter)"
+          class="term"
+          aria-label="Remover o filtro de serviço"
+          (click)="term.set('')"
         >
-          {{ filter | catalog }}
+          {{ service | catalog }} ✕
         </button>
       }
     </div>
-    <!-- Under the chips: the services of the professionals on the map. On wide screens the row has a limit of
-         width and arrows to the sides. -->
-    @if (serviceTags().length) {
-      <app-chips-row class="tags-box">
-        @for (name of serviceTags(); track name) {
-          <button
-            type="button"
-            class="filter small"
-            [class.active]="activeServices().includes(name)"
-            (click)="toggleService(name)"
-          >
-            {{ name | catalog }}
-          </button>
-        }
-      </app-chips-row>
-    }
-  </div>
+  }
 
   <!-- Above the cards: the round buttons of the map and the carousel -->
   <div class="bottom">
@@ -254,6 +286,18 @@
       (locate)="centerOn(id)"
     />
   </div>
+}
+
+@if (filterOpen()) {
+  <app-filter-sheet
+    [side]="true"
+    [filters]="applied()"
+    [tags]="allTags()"
+    [neighborhoods]="neighborhoods()"
+    [userPosition]="userPosition()"
+    (applied)="applyFilters($event)"
+    (cancelled)="filterOpen.set(false)"
+  />
 }
 
 <app-location-prompt />

@@ -1,0 +1,260 @@
+@use '../../../styles/patterns' as *;
+@use '../../../styles/breakpoints' as *;
+
+:host {
+  display: contents;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+h2 {
+  font-size: 1.15rem;
+  margin: 1.75rem 0 1rem;
+}
+
+.link {
+  border: 0;
+  background: none;
+  color: var(--primary);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+// ----- filter sheet
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.sheet {
+  position: fixed;
+  z-index: 21;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 40rem;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 1.5rem 1.5rem;
+  border-radius: 28px 28px 0 0;
+  background: #fff;
+}
+
+.handle {
+  width: 3rem;
+  height: 0.3rem;
+  margin: 0 auto 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--border);
+}
+
+.sheet-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reset {
+  border: 0;
+  background: none;
+  color: var(--danger);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.sheet-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+}
+
+.month {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: capitalize;
+
+  button {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--primary);
+    cursor: pointer;
+
+    &:disabled {
+      color: var(--disabled);
+      cursor: default;
+    }
+  }
+}
+
+.days {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding: 1rem 0 0.5rem;
+}
+
+.day {
+  flex: none;
+  width: 3.5rem;
+  height: 5rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  text-transform: capitalize;
+  cursor: pointer;
+
+  strong {
+    font-size: 1.35rem;
+  }
+
+  // Today: a ring around it, so it is easy to find in the strip
+  &.today {
+    box-shadow: inset 0 0 0 2px var(--primary);
+  }
+
+  &.selected {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  &:disabled {
+    color: #b5b5b5;
+    cursor: default;
+  }
+}
+
+.filter-chip {
+  padding: 0.6rem 1.4rem;
+  border: 1.5px solid #c9c9d1;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &.active {
+    @include selected;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.rating-filter {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.stars button {
+  border: 0;
+  background: none;
+  color: var(--border);
+  font-size: 2rem;
+  cursor: pointer;
+
+  &.on {
+    color: var(--accent);
+  }
+}
+
+.rating-label {
+  color: var(--primary);
+}
+
+.range {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.range-label {
+  margin-top: 0.4rem;
+}
+
+.show {
+  height: 3.5rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: #fff;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
+// Neighborhood: a dropdown with the neighborhoods of Rio de Janeiro
+.neighborhood {
+  width: 100%;
+  padding: 0.85rem 3rem 0.85rem 1.1rem;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none'%3E%3Cpath d='M1.5 1.75 7 7.25l5.5-5.5' stroke='%2346586d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.25rem center;
+  background-size: 0.9rem;
+  appearance: none;
+  -webkit-appearance: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+// ----- Wide screens (web)
+@include desktop {
+  // The filters are a window in the middle of the page, not a sheet from the bottom
+  .sheet {
+    top: 5vh;
+    bottom: auto;
+    max-height: 90vh;
+    max-width: 44rem;
+    padding: 1.5rem 2rem 2rem;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  // On the screen of the map: a card on the right, over the map (the map stays visible on its side)
+  .sheet.side {
+    top: 5.5rem;
+    right: 1.5rem;
+    left: auto;
+    bottom: 1.5rem;
+    width: 26rem;
+    max-width: none;
+    max-height: none;
+    padding: 1.25rem 1.5rem 1.5rem;
+    transform: none;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .sheet.side + .backdrop,
+  .backdrop:has(+ .sheet.side) {
+    background: transparent;
+  }
+
+  .sheet.side .handle {
+    display: none;
+  }
+}

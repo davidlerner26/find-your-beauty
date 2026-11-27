@@ -14,7 +14,7 @@
       }
       <p i18n class="muted">Encontre o serviço que você quer e se cuide</p>
     </div>
-    <a i18n-aria-label class="search-btn" routerLink="/busca" aria-label="Buscar">
+    <a i18n-aria-label class="search-btn" [routerLink]="searchPath()" aria-label="Buscar">
       <mat-icon>search</mat-icon>
       <!-- Only on wide screens -->
       <span i18n class="search-label">Buscar profissionais</span>

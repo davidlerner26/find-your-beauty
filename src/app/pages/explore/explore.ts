@@ -8,7 +8,7 @@ import {
   noFilters,
   search,
 } from '../search/search-filter';
-import { wideScreen } from '../../utils/professional-panel';
+import { wideScreen } from '../../utils/screen';
 import { CarouselArrows } from '../../components/carousel-arrows/carousel-arrows';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';

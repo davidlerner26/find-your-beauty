@@ -26,8 +26,7 @@ import { environment } from '../../../environments/environment';
 import { CatalogPipe } from '../../utils/catalog.pipe';
 import { featuredPro, newSeed } from '../../utils/featured';
 import { PATHS } from '../../utils/paths';
-import { wideScreen } from '../../utils/professional-panel';
-import { ProfessionalLink } from '../../utils/professional-link.directive';
+import { wideScreen } from '../../utils/screen';
 import { nearbyOrder } from '../../utils/nearby';
 import { proSubscriptionEnabled } from '../../utils/features';
 import { ProBadge } from '../../components/pro-badge/pro-badge';
@@ -66,7 +65,6 @@ type Salon = {
     FocusPipe,
     RouterLink,
     ProBadge,
-    ProfessionalLink,
     Spinner,
     MatIconModule,
   ],

@@ -7,52 +7,33 @@ test.beforeAll(async () => {
   await seed();
 });
 
-// Wide screens only (the desktop project): the panel and the map are not on phones
+// Wide screens only (the desktop project): the page of a professional is a card over the map, for everybody. Who only goes to the
+// client's home has no pin: the map goes to where the client is.
 test.describe('page of a professional on a wide screen', () => {
-  test('a home-only professional opens as a panel on the home, with no map', async ({ page }) => {
+  test('a home-only professional opens on the map, not on the home', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('link', { name: PRO_HOME.name }).first().click();
 
-    const panel = page.getByRole('dialog', { name: PRO_HOME.name });
-    await expect(panel).toBeVisible();
-    await expect(panel.getByText('Atendimento a domicílio')).toBeVisible();
     await expect(page).toHaveURL(`/explorar/${PRO_HOME.uid}`);
-    // The home stays underneath and there is no map
-    await expect(page.getByRole('heading', { name: 'Categorias' })).toBeVisible();
-    // The panel takes space of its own: the screen ends where it begins, nothing is covered
-    const screen = await page.locator('.screen').boundingBox();
-    const side = await panel.boundingBox();
-    expect(screen!.x + screen!.width).toBeLessThanOrEqual(side!.x + 1);
-    await expect(page.locator('app-explore')).toHaveCount(0);
-
-    await panel.getByRole('button', { name: 'Voltar' }).click();
-    await expect(panel).toBeHidden();
-    await expect(page).toHaveURL('/');
+    await expect(page.locator('app-explore')).toHaveCount(1);
+    // Her card is on top of the map, and the list has her selected
+    await expect(page.getByRole('dialog').getByText('Atendimento a domicílio')).toBeVisible();
+    await expect(page.locator('.results .offer.selected')).toContainText(PRO_HOME.name);
+    // The home is not there: nothing opened beside it
+    await expect(page.getByRole('heading', { name: 'Categorias' })).toHaveCount(0);
+    // The map goes to where the client is (no pin for her)
+    await expect(page.getByRole('status').filter({ hasText: 'Atende a domicílio' })).toHaveCount(1);
   });
 
-  test('the Back button of the browser closes the panel', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: PRO_HOME.name }).first().click();
-    await expect(page.getByRole('dialog', { name: PRO_HOME.name })).toBeVisible();
-
-    await page.goBack();
-
-    await expect(page.getByRole('dialog', { name: PRO_HOME.name })).toBeHidden();
-    await expect(page).toHaveURL('/');
-  });
-
-  test('a link opened by address is the screen of the map with her card, as for any professional', async ({
-    page,
-  }) => {
+  test('a link opened by address is the same screen of the map', async ({ page }) => {
     await page.goto(`/explorar/${PRO_HOME.uid}`);
 
     await expect(page.locator('app-explore')).toHaveCount(1);
     await expect(page.getByRole('heading', { name: PRO_HOME.name }).first()).toBeVisible();
-    // Who only goes to the home has no pin: the map goes to where the client is
     await expect(page.getByRole('status').filter({ hasText: 'Atende a domicílio' })).toHaveCount(1);
   });
 
-  test('a professional with a place still opens over the map', async ({ page }) => {
+  test('a professional with a place opens over the map too', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('link', { name: PRO.name }).first().click();
 

@@ -10,7 +10,10 @@
       <mat-icon>chevron_left</mat-icon>
     </button>
     <!-- For clients, the photo and the name lead to the page of the professional -->
-    <a class="peer-link" [appProfessionalLink]="peer.professionalId">
+    <a
+      class="peer-link"
+      [routerLink]="peer.professionalId ? ['/explorar', peer.professionalId] : null"
+    >
       @if (peer.image) {
         <img
           loading="lazy"

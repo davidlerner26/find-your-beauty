@@ -104,7 +104,7 @@
 </div>
 
 <ng-template #card let-item>
-  <a class="result" [appProfessionalLink]="item.id">
+  <a class="result" [routerLink]="['/explorar', item.id]">
     <div class="result-image">
       <!-- The photos of the professional: swipe sideways (arrows on wide screens) -->
       <div

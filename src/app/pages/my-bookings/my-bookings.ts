@@ -11,7 +11,6 @@ import { Professionals } from '../../services/professionals';
 import { Feedback } from '../../services/feedback';
 import { copyText } from '../../utils/clipboard';
 import { FocusPipe } from '../../utils/focus.pipe';
-import { ProfessionalLink } from '../../utils/professional-link.directive';
 import { T } from '../../utils/texts';
 import { formatClock } from '../../utils/format-date';
 import { PricePipe } from '../../utils/price.pipe';
@@ -36,7 +35,6 @@ const STATUS_LABEL: Record<BookingStatus, string> = {
     FocusPipe,
     CatalogPipe,
     PricePipe,
-    ProfessionalLink,
     RouterLink,
     Spinner,
     NgTemplateOutlet,

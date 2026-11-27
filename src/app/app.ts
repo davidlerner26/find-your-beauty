@@ -10,7 +10,6 @@ import { Professionals } from './services/professionals';
 import { Feedback } from './services/feedback';
 import { AppUpdates } from './services/app-updates';
 import { Seo } from './services/seo';
-import { ProfessionalPanelView } from './components/professional-panel/professional-panel';
 import { ToastStack } from './components/toast-stack/toast-stack';
 import { environment } from '../environments/environment';
 
@@ -55,7 +54,7 @@ const AUTH_SCREENS = [
 
 @Component({
   selector: 'app-root',
-  imports: [ToastStack, ProfessionalPanelView, RouterOutlet, RouterLink, MatIconModule],
+  imports: [ToastStack, RouterOutlet, RouterLink, MatIconModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

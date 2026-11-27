@@ -1,7 +1,7 @@
 import { MatIconModule } from '@angular/material/icon';
 import { Component, effect, input, signal, inject } from '@angular/core';
 import { FocusPipe } from '../../utils/focus.pipe';
-import { ProfessionalLink } from '../../utils/professional-link.directive';
+import { RouterLink } from '@angular/router';
 import { ReviewsLabelPipe } from '../../utils/reviews-label.pipe';
 import { PricePipe } from '../../utils/price.pipe';
 import { Location, NgTemplateOutlet } from '@angular/common';
@@ -29,7 +29,7 @@ import { SearchStore } from './search.store';
     PricePipe,
     FocusPipe,
     FormsModule,
-    ProfessionalLink,
+    RouterLink,
     NgTemplateOutlet,
     MatIconModule,
   ],

@@ -15,7 +15,7 @@
             <!-- The photo of the professional, beside the name and the date (as in the chat) -->
             <a
               class="avatar-link"
-              [appProfessionalLink]="booking.professionalId"
+              [routerLink]="['/explorar', booking.professionalId]"
               tabindex="-1"
               aria-hidden="true"
             >
@@ -35,7 +35,9 @@
             </a>
             <div class="info">
               <h3>
-                <a [appProfessionalLink]="booking.professionalId">{{ booking.professionalName }}</a>
+                <a [routerLink]="['/explorar', booking.professionalId]">{{
+                  booking.professionalName
+                }}</a>
               </h3>
               <p class="when">{{ dateLabel(booking) }} · {{ clock(booking.startsAt) }}</p>
               @if (atHome(booking)) {
@@ -108,7 +110,7 @@
             <a
               i18n
               class="chat"
-              [appProfessionalLink]="booking.professionalId"
+              [routerLink]="['/explorar', booking.professionalId]"
               fragment="avaliacoes"
               >Avaliar</a
             >

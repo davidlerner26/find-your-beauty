@@ -2,7 +2,7 @@ import { Component, effect, inject, input, signal } from '@angular/core';
 import { Professionals } from '../../services/professionals';
 import { Seo } from '../../services/seo';
 import { environment } from '../../../environments/environment';
-import { WIDE_SCREEN_QUERY } from '../../utils/professional-panel';
+import { WIDE_SCREEN_QUERY } from '../../utils/screen';
 import { professionalJsonLd, professionalTitle, SITE_NAME, truncate } from '../../utils/seo';
 import { ArtistDetails } from '../artist-details/artist-details';
 import { Explore } from '../explore/explore';
